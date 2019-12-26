@@ -56,12 +56,11 @@ ext {
     ]
     libraries = [
             junit                        : "junit:junit:${versions.junit}",
+            test_junit                   : "androidx.test.ext:junit:1.1.0",
             runner                       : "androidx.test:runner:1.1.0",
             espresso                     : "androidx.test.espresso:espresso-core:3.1.1",
             multidex                     : "androidx.multidex:multidex:2.0.0",
 
-            androidx_core_utils          : "androidx.legacy:legacy-support-core-utils:${versions.androidx}",
-            androidx_core_ui             : "androidx.legacy:legacy-support-core-ui:${versions.androidx}",
             support_v4                   : "androidx.legacy:legacy-support-v4:${versions.androidx}",
             appcompat                    : "androidx.appcompat:appcompat:${versions.androidx}",
             recyclerview                 : "androidx.recyclerview:recyclerview:${versions.androidx}",

@@ -29,11 +29,10 @@ dependencies {
     api fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
     api rootProject.ext.libraries.junit
     api rootProject.ext.libraries.runner
+    api rootProject.ext.libraries.test_junit
     api rootProject.ext.libraries.espresso
     api rootProject.ext.libraries.multidex
 
-    api rootProject.ext.libraries.androidx_core_ui
-    api rootProject.ext.libraries.androidx_core_utils
     api rootProject.ext.libraries.support_v4
     api rootProject.ext.libraries.appcompat
     api rootProject.ext.libraries.design
