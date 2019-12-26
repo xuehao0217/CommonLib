@@ -1,0 +1,6 @@
+<resources
+    tools:ignore="ExtraTranslation"
+    xmlns:tools="http://schemas.android.com/tools">
+    <string name="str_loading">loading...</string>
+    <string name="str_no_net_prompts">Please check the network Settings</string>
+</resources>

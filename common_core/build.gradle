@@ -1,0 +1,74 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
+    defaultConfig {
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.android.versionCode
+        versionName rootProject.ext.android.versionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        //buildConfigField "String", "api_env", "\"" + String.valueOf(java.lang.System.properties['api_env']) + "\""
+    }
+    lintOptions {
+        abortOnError false
+    }
+    buildTypes {
+        buildTypes {
+            release {
+                minifyEnabled false
+                proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            }
+        }
+    }
+}
+
+dependencies {
+    api fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+    api rootProject.ext.libraries.junit
+    api rootProject.ext.libraries.runner
+    api rootProject.ext.libraries.espresso
+    api rootProject.ext.libraries.multidex
+
+    api rootProject.ext.libraries.androidx_core_ui
+    api rootProject.ext.libraries.androidx_core_utils
+    api rootProject.ext.libraries.support_v4
+    api rootProject.ext.libraries.appcompat
+    api rootProject.ext.libraries.design
+    api rootProject.ext.libraries.recyclerview
+    api rootProject.ext.libraries.constraint_layout
+    api rootProject.ext.libraries.cardview
+
+    api rootProject.ext.libraries.kotlin_stdlib
+    api rootProject.ext.libraries.anko
+    api rootProject.ext.libraries.coroutines_core
+    api rootProject.ext.libraries.coroutines_android
+    api rootProject.ext.libraries.ktx
+
+    api rootProject.ext.libraries.agentweb
+    api rootProject.ext.libraries.eventbus
+    api rootProject.ext.libraries.greendao
+
+    api rootProject.ext.libraries.rxjava
+    api rootProject.ext.libraries.rxandroid
+    api rootProject.ext.libraries.rxbinding
+
+    api rootProject.ext.libraries.okhttp_logging
+    api rootProject.ext.libraries.okhttp
+    api rootProject.ext.libraries.retrofit
+    api rootProject.ext.libraries.converter_gson
+    api rootProject.ext.libraries.retrofit2_rxjava
+
+    api rootProject.ext.libraries.glide
+    api rootProject.ext.libraries.background
+
+    api rootProject.ext.libraries.SmartRefreshLayout
+    api rootProject.ext.libraries.immersionbar
+    api rootProject.ext.libraries.utilcode
+
+    api(rootProject.ext.libraries.permission) {
+        exclude group: 'com.android.support'
+    }
+}

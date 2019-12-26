@@ -1,0 +1,6 @@
+<resources
+    tools:ignore="ExtraTranslation"
+    xmlns:tools="http://schemas.android.com/tools">
+    <string name="str_loading">加载中...</string>
+    <string name="str_no_net_prompts">网络不给力，请检查网络设置！</string>
+</resources>

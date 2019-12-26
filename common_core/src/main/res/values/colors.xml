@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#fff</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="colorPrimary">#1F1A42</color>
+    <color name="colorPrimaryDark">#ffffff</color>
+    <color name="colorAccent">#ff1f1a42</color>
+
+    <color name="cl_00000000">#00000000</color>
+    <color name="cl_0c000000">#0c000000</color>
+    <color name="cl_22000000">#22000000</color>
+    <color name="cl_66FFFFFF">#66FFFFFF</color>
+</resources>

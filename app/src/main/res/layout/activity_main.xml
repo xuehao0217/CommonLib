@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.MainActivity">
+
+    <com.xueh.comm_core.weight.navigation.CommNavigationBarView
+        android:id="@+id/main_cnb"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:navigationBackground="@color/white"
+        app:navigationHeight="56dp"
+        app:navigation_tabNormalColor="#999999"
+        app:navigation_tabSelectColor="#000"
+        app:navigation_tabTextSize="12sp" />
+</androidx.constraintlayout.widget.ConstraintLayout>
