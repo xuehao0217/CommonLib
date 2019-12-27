@@ -68,4 +68,5 @@ dependencies {
     api rootProject.ext.libraries.utilcode
     api rootProject.ext.libraries.permission
     api rootProject.ext.libraries.UiStatus
+    api rootProject.ext.libraries.titlebar
 }

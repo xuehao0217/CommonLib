@@ -108,6 +108,9 @@ public static java.lang.String TABLENAME;
 }
 -dontwarn com.just.agentweb.**
 
+#bar
+-keep class com.hjq.bar.** {*;}
+
 #统计sdk
 -keep class com.example.statisti_lib.entity.** {*;}
 #permission

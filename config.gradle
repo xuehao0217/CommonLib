@@ -50,10 +50,13 @@ ext {
             permission                   : "2.0.3",
             BaseRecyclerViewAdapterHelper: "3.0.0-beta3",
             walle                        : "1.1.6",
+            titlebar                     : "6.0",
+            UiStatus                     : "1.0.3",
+
 
             PickerView                   : "4.1.9",
             banner                       : "3.0.0",
-            UiStatus                     : "1.0.3",
+
     ]
     libraries = [
             junit                        : "junit:junit:${versions.junit}",
@@ -104,9 +107,8 @@ ext {
             walle                        : "com.meituan.android.walle:library:${versions.walle}",
             banner                       : "cn.bingoogolapple:bga-banner:${versions.banner}@aar",
             UiStatus                     : "com.github.FengChenSunshine:UiStatus:${versions.UiStatus}",
+            titlebar                     : "com.hjq:titlebar:${versions.titlebar}",
 
             PickerView                   : "com.contrarywind:Android-PickerView:${versions.PickerView}",
-
-
     ]
 }
