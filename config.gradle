@@ -53,7 +53,7 @@ ext {
             walle                        : "1.1.6",
             titlebar                     : "6.0",
             UiStatus                     : "1.0.3",
-
+            MagicIndicator               : "1.6.0",
 
             PickerView                   : "4.1.9",
             banner                       : "3.0.0",
@@ -99,7 +99,7 @@ ext {
             fastjson                     : "com.alibaba:fastjson:${versions.fastjson}",
             fastjsonandroid              : "com.alibaba:fastjson:${versions.fastjsonandroid}.android",
 
-            rxlife                         :"com.rxjava.rxlife:rxlife-x:${versions.rxlife}",
+            rxlife                       : "com.rxjava.rxlife:rxlife-x:${versions.rxlife}",
             agentweb                     : "com.just.agentweb:agentweb:${versions.agentweb}",
             SmartRefreshLayout           : "com.scwang.smartrefresh:SmartRefreshLayout:${versions.SmartRefreshLayout}",
             immersionbar                 : "com.gyf.immersionbar:immersionbar:${versions.immersionbar}",
@@ -110,6 +110,7 @@ ext {
             banner                       : "cn.bingoogolapple:bga-banner:${versions.banner}@aar",
             UiStatus                     : "com.github.FengChenSunshine:UiStatus:${versions.UiStatus}",
             titlebar                     : "com.hjq:titlebar:${versions.titlebar}",
+            MagicIndicator               : "com.github.hackware1993:MagicIndicator:${versions.MagicIndicator}",
 
             PickerView                   : "com.contrarywind:Android-PickerView:${versions.PickerView}",
     ]
