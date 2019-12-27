@@ -1,30 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <declare-styleable name="CommTitleView" tools:ignore="ResourceName">
-        <attr name="barStyle">
-            <enum name="light" value="0x10" />
-            <enum name="night" value="0x20" />
-            <enum name="transparent" value="0x30" />
-        </attr>
-        <attr name="title" format="string" />
-        <attr name="titleColor" format="color" />
-        <attr name="titleSize" format="dimension" />
-        <attr name="leftTitle" format="string"/>
-        <attr name="leftIcon" format="reference" />
-        <attr name="backButton" format="boolean" />
-        <attr name="leftColor" format="color" />
-        <attr name="leftSize" format="dimension" />
-        <attr name="leftBackground" format="reference|color" />
-        <attr name="rightTitle" format="string" />
-        <attr name="rightIcon" format="reference" />
-        <attr name="rightColor" format="color" />
-        <attr name="rightSize" format="dimension" />
-        <attr name="rightBackground" format="reference|color" />
-        <attr name="lineVisible" format="boolean" />
-        <attr name="lineColor" format="reference|color" />
-        <attr name="lineSize" format="dimension" />
-    </declare-styleable>
-
     <declare-styleable name="NavigationBar">
         <attr name="navigationHeight" format="dimension" />
         <attr name="navigationBackground" format="color" />

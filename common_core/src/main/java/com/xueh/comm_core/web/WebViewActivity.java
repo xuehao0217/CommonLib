@@ -9,12 +9,13 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
 
+import com.hjq.bar.TitleBar;
 import com.just.agentweb.AgentWeb;
 import com.sunlands.comm_core.R;
 import com.xueh.comm_core.base.BaseViewImpl;
 import com.xueh.comm_core.base.DActivity;
-import com.xueh.comm_core.weight.commtitle.CommTitleView;
-import com.xueh.comm_core.weight.commtitle.OnTitleLeftListener;
+import com.xueh.comm_core.weight.OnTitleLeftListener;
+
 
 /**
  * 创 建 人: xueh
@@ -27,7 +28,7 @@ public class WebViewActivity extends DActivity implements BaseViewImpl.OnClickLi
     private LinearLayout mRv_web_content;
     public static final String TITLE = "title";
     public static final String URL = "url";
-    public CommTitleView mCommtitle;
+    public TitleBar mCommtitle;
     protected String mUrl;
     protected View mView_status_bar;
 
@@ -69,7 +70,7 @@ public class WebViewActivity extends DActivity implements BaseViewImpl.OnClickLi
     @Override
     public void initView(View inflateView, Bundle savedInstanceState) {
         mRv_web_content = findViewById(R.id.rv_web_content);
-        mCommtitle = findViewById(R.id.commtitle);
+        mCommtitle = findViewById(R.id.tb_title_bar);
         mView_status_bar = findViewById(R.id.view_status_bar);
     }
 
