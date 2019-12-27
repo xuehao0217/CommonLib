@@ -4,7 +4,7 @@ package com.xueh.comm_core.base.mvp;
 import androidx.lifecycle.Lifecycle;
 
 import com.blankj.utilcode.util.ActivityUtils;
-import com.xueh.comm_core.base.ibase.IBaseModel;
+import com.xueh.comm_core.base.mvp.ibase.IBaseModel;
 import com.xueh.comm_core.net.BaseModel;
 import com.xueh.comm_core.net.BaseObserver;
 import com.xueh.comm_core.net.MVPModelCallbacks;

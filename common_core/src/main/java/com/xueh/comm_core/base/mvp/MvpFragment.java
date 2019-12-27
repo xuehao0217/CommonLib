@@ -6,8 +6,8 @@ import android.content.Context;
 import androidx.lifecycle.Lifecycle;
 
 import com.xueh.comm_core.base.DFragment;
-import com.xueh.comm_core.base.ibase.IBasePresenter;
-import com.xueh.comm_core.base.ibase.IBaseView;
+import com.xueh.comm_core.base.mvp.ibase.IBasePresenter;
+import com.xueh.comm_core.base.mvp.ibase.IBaseView;
 
 import io.reactivex.subjects.PublishSubject;
 

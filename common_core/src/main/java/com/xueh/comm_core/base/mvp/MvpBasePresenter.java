@@ -3,9 +3,9 @@ package com.xueh.comm_core.base.mvp;
 
 import androidx.lifecycle.LifecycleOwner;
 
-import com.xueh.comm_core.base.ibase.IBaseModel;
-import com.xueh.comm_core.base.ibase.IBasePresenter;
-import com.xueh.comm_core.base.ibase.IBaseView;
+import com.xueh.comm_core.base.mvp.ibase.IBaseModel;
+import com.xueh.comm_core.base.mvp.ibase.IBasePresenter;
+import com.xueh.comm_core.base.mvp.ibase.IBaseView;
 
 /**
  * 类描述：Presenter模块的基类，持有对应的View模块对象

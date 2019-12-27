@@ -1,4 +1,4 @@
-package com.xueh.comm_core.base.ibase;
+package com.xueh.comm_core.base.mvp.ibase;
 
 /**
  * 类描述：Model模块的基类接口

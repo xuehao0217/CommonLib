@@ -1,4 +1,4 @@
-package com.xueh.comm_core.base.ibase;
+package com.xueh.comm_core.base.mvp.ibase;
 
 
 import androidx.lifecycle.Lifecycle;
