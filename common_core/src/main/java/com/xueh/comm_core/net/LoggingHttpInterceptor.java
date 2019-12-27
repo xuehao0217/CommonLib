@@ -4,6 +4,8 @@ import android.os.Build.VERSION_CODES;
 
 import androidx.annotation.RequiresApi;
 
+import com.blankj.utilcode.util.JsonUtils;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -54,6 +56,11 @@ public class LoggingHttpInterceptor implements Interceptor {
 
     private volatile Level level = Level.BODY;
 
+    public void setJson(boolean json) {
+        isJson = json;
+    }
+
+    private volatile boolean isJson = false;
     public LoggingHttpInterceptor setLevel(Level level) {
         if (level == null) throw new NullPointerException("level == null. Use Level.NONE instead.");
         this.level = level;
@@ -194,7 +201,7 @@ public class LoggingHttpInterceptor implements Interceptor {
 
                     if (contentLength != 0) {
                         logger.log("┃");
-                        logger.log("┃ "+(buffer.clone().readString(charset)));
+                        logger.log("┃ "+ (isJson ? JsonUtils.formatJson(buffer.clone().readString(charset)):buffer.clone().readString(charset)));
                     }
 
                     if (gzippedLength != null) {

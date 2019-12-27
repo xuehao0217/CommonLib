@@ -19,7 +19,6 @@ public class HttpUtils {
     public static HashMap<String, String> getHashMap() {
         return mHashMap;
     }
-
     public static HashMap<String, String> mHashMap = new HashMap<>();
 
     public static OkHttpClient getOkHttp() {
@@ -28,7 +27,6 @@ public class HttpUtils {
                 .connectTimeout(TIME_OUT_CONNECT, TimeUnit.SECONDS)
                 .readTimeout(TIME_OUT_READ, TimeUnit.SECONDS)
                 .writeTimeout(TIME_OUT_WRITE, TimeUnit.SECONDS);
-
 
         BasicParamsInterceptor basicParamsInterceptor = new BasicParamsInterceptor.Builder()
 //                .addQueryParamsMap(mHashMap)
@@ -46,19 +44,8 @@ public class HttpUtils {
             }
         });
         loggingHttpInterceptor.setLevel(LoggingHttpInterceptor.Level.BODY);
+        loggingHttpInterceptor.setJson(false);
         builder.addInterceptor(loggingHttpInterceptor);
-
-
-//        HttpLoggingInterceptor logging = new HttpLoggingInterceptor(new Logger() {
-//            @Override
-//            public void log(String message) {
-//                com.sunlands.comm_core.net.Logger.i("HTTP", "" + message);
-//            }
-//        });
-//        logging.setLevel(Level.BODY);
-//        builder.addInterceptor(logging);
-
-
         return builder.build();
     }
 
