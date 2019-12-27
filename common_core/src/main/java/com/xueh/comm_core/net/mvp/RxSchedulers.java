@@ -1,4 +1,4 @@
-package com.xueh.comm_core.net;
+package com.xueh.comm_core.net.mvp;
 
 
 import androidx.lifecycle.Lifecycle;

@@ -44,7 +44,7 @@ public class HttpUtils {
             }
         });
         loggingHttpInterceptor.setLevel(LoggingHttpInterceptor.Level.BODY);
-        loggingHttpInterceptor.setJson(false);
+        loggingHttpInterceptor.setJson(true);
         builder.addInterceptor(loggingHttpInterceptor);
         return builder.build();
     }

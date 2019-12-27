@@ -1,11 +1,15 @@
 package com.xueh.commonlib.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import androidx.lifecycle.Observer
 import com.fengchen.uistatus.annotation.UiStatus
 import com.xueh.comm_core.base.DFragment
+import com.xueh.comm_core.net.ServiceGenerator
 import com.xueh.comm_core.utils.rx.rxjava.RxJavaUtils
 import com.xueh.commonlib.R
+import com.xueh.commonlib.api.RestApi
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
@@ -25,6 +29,10 @@ class HomeFragment : DFragment() {
         RxJavaUtils.delay(3) {
             showState(UiStatus.CONTENT)
         }
+        ServiceGenerator.getService(RestApi::class.java)
+            .bannerList().observe(this, Observer {
+                Log.e("http", "res:${it.data}")
+            })
     }
 
     override fun initDataAfterView() {

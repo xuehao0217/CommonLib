@@ -1,7 +1,10 @@
-package com.xueh.comm_core.net;
+package com.xueh.comm_core.net.mvp;
 
 
 import android.util.Log;
+
+import com.xueh.comm_core.net.BaseModel;
+import com.xueh.comm_core.net.Logger;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -25,7 +28,7 @@ public abstract class BaseObserver<T> implements Observer<BaseModel<T>> {
     public void onNext(BaseModel<T> value) {
         T t;
         if (BaseModel.STATE_SUCCESS == value.getErr()) {
-            t = value.getRet();
+            t = value.getData();
             if (t != null) {
                 Logger.e(TAG, "onSuccess:" + t.toString());
             } else {

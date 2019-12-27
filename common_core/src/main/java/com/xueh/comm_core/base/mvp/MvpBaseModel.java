@@ -6,9 +6,9 @@ import androidx.lifecycle.Lifecycle;
 import com.blankj.utilcode.util.ActivityUtils;
 import com.xueh.comm_core.base.mvp.ibase.IBaseModel;
 import com.xueh.comm_core.net.BaseModel;
-import com.xueh.comm_core.net.BaseObserver;
-import com.xueh.comm_core.net.MVPModelCallbacks;
-import com.xueh.comm_core.net.RxSchedulers;
+import com.xueh.comm_core.net.mvp.BaseObserver;
+import com.xueh.comm_core.net.ModelCallbacks;
+import com.xueh.comm_core.net.mvp.RxSchedulers;
 import com.xueh.comm_core.weight.ViewLoading;
 
 import io.reactivex.Observable;
@@ -37,11 +37,11 @@ public abstract class MvpBaseModel<E> implements IBaseModel {
         return api;
     }
 
-    protected <T> void deploy(Observable mObservable, PublishSubject<Lifecycle.Event> mPublishSubject, final MVPModelCallbacks<T> mvpModelCallbacks) {
-        deploy(mObservable, mPublishSubject, mvpModelCallbacks, true);
+    protected <T> void deploy(Observable mObservable, PublishSubject<Lifecycle.Event> mPublishSubject, final ModelCallbacks<T> modelCallbacks) {
+        deploy(mObservable, mPublishSubject, modelCallbacks, true);
     }
 
-    protected <T> void deploy(Observable mObservable, PublishSubject<Lifecycle.Event> mPublishSubject, final MVPModelCallbacks<T> mvpModelCallbacks, final boolean showLoading) {
+    protected <T> void deploy(Observable mObservable, PublishSubject<Lifecycle.Event> mPublishSubject, final ModelCallbacks<T> modelCallbacks, final boolean showLoading) {
         mObservable
                 .compose(RxSchedulers.<BaseModel<T>>compose(mPublishSubject))
                 .doOnSubscribe(new Consumer<Disposable>() {
@@ -63,19 +63,19 @@ public abstract class MvpBaseModel<E> implements IBaseModel {
                 .subscribe(new BaseObserver<T>() {
                     @Override
                     protected void onSuccess(T mT) {
-                        mvpModelCallbacks.onSuccess(mT);
+                        modelCallbacks.onSuccess(mT);
                     }
 
                     @Override
                     protected void onException(BaseModel model) {
                         super.onException(model);
-                        mvpModelCallbacks.onException(model);
+                        modelCallbacks.onException(model);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
-                        mvpModelCallbacks.onError(e);
+                        modelCallbacks.onError(e);
                     }
 
 
