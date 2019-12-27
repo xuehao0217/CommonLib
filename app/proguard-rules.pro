@@ -21,10 +21,7 @@
 #-renamesourcefileattribute SourceFile
 #-------------------------------------------定制化区域----------------------------------------------
 #---------------------------------1.实体类---------------------------------
--keep class com.sunlands.comm_core.net.**{*;}
--keep class com.sunlands.intl.gre.comm_gre.entity.** {*;}
--keep class com.sunlands.intl.greapp.entity.** {*;}
-
+-keep class com.xueh.comm_core.net.**{*;}
 #-------------------------------------------------------------------------
 
 #---------------------------------2.第三方包-------------------------------
@@ -116,22 +113,10 @@ public static java.lang.String TABLENAME;
 #permission
 -dontwarn com.yanzhenjie.permission.**
 
-#BaseRecyclerViewAdapterHelper
--keep class com.chad.library.adapter.** {
-*;
-}
--keep public class * extends com.chad.library.adapter.base.BaseQuickAdapter
--keep public class * extends com.chad.library.adapter.base.BaseViewHolder
--keepclassmembers  class **$** extends com.chad.library.adapter.base.BaseViewHolder {
-     <init>(...);
-}
 
 #fastjson
 -dontwarn com.alibaba.fastjson.**
 -keep class com.alibaba.fastjson.** { *; }
-
-
-
 
 
 
