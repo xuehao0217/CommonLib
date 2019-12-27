@@ -4,19 +4,14 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import com.blankj.utilcode.util.ToastUtils
+import com.fengchen.uistatus.UiStatusController
+import com.fengchen.uistatus.annotation.UiStatus
 import com.gyf.barlibrary.ImmersionBar
 import com.noober.background.BackgroundLibrary
 import com.sunlands.comm_core.R
-
 import com.xueh.comm_core.helper.EventBusHelper
 import com.xueh.comm_core.helper.hasNetWorkConection
-import com.xueh.comm_core.statemanager.loader.StateRepository
-import com.xueh.comm_core.statemanager.manager.StateChanger
-import com.xueh.comm_core.statemanager.manager.StateEventListener
-import com.xueh.comm_core.statemanager.manager.StateManager
-import com.xueh.comm_core.statemanager.state.StateProperty
 import com.xueh.comm_core.utils.rx.RxBindingUtils
 import com.xueh.comm_core.weight.ViewLoading
 import io.reactivex.disposables.CompositeDisposable
@@ -31,11 +26,10 @@ import org.greenrobot.eventbus.ThreadMode
  * @author: xuehao create time: 2017/7/26 11:29 tag: class//
  * description:二级统一业务型baseActivity
  */
-abstract class DActivity : BaseActivity(), StateChanger,
-    CoroutineScope by MainScope() {
+abstract class DActivity : BaseActivity(), CoroutineScope by MainScope() {
     protected var mImmersionBar: ImmersionBar? = null
     protected var mCompositeDisposable = CompositeDisposable()
-    lateinit var stateManager: StateManager
+    protected lateinit var uiStatusController: UiStatusController
     /**
      * 是否可以使用沉浸式
      * Is immersion bar enabled boolean.
@@ -46,12 +40,12 @@ abstract class DActivity : BaseActivity(), StateChanger,
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         BackgroundLibrary.inject(this)
-        stateManager = StateManager.newInstance(this, StateRepository(this))
         super.onCreate(savedInstanceState)
         if (isImmersionBarEnabled) {
             initImmersionBar()
         }
         EventBusHelper.register(this)
+        uiStatusController = UiStatusController.get()
     }
 
 
@@ -61,7 +55,6 @@ abstract class DActivity : BaseActivity(), StateChanger,
         cancel()
         super.onDestroy()
         //在BaseActivity里销毁
-        stateManager.onDestoryView()
         EventBusHelper.unregister(this)
         mCompositeDisposable.clear()
         mImmersionBar?.let {
@@ -118,33 +111,6 @@ abstract class DActivity : BaseActivity(), StateChanger,
     }
 
 
-
-
-
-
-
-
-    override fun setContentView(view: View) {
-        super.setContentView(stateManager.setContentView(view))
-    }
-
-    override fun setContentView(layoutResID: Int) {
-        super.setContentView(stateManager.setContentView(layoutResID))
-    }
-
-    override fun setContentView(view: View, params: ViewGroup.LayoutParams) {
-        super.setContentView(stateManager.setContentView(view), params)
-    }
-
-    override fun setStateEventListener(listener: StateEventListener) {
-        stateManager.setStateEventListener(listener)
-    }
-
-    override fun showState(state: String) = stateManager.showState(state)
-
-    override fun showState(state: StateProperty) = stateManager.showState(state)
-
-    override fun getState() = stateManager.state
 //    override fun onStart() {
 //        super.onStart()
 //        NetStatusHelper.getInstance().register(this)
@@ -156,10 +122,14 @@ abstract class DActivity : BaseActivity(), StateChanger,
 //    }
 
 
-
-
     fun View.setOnClick(function: (((data: Any) -> Unit))) {
-        addDisposable(RxBindingUtils.setViewClicks(this,function))
+        addDisposable(RxBindingUtils.setViewClicks(this, function))
     }
 
+    fun bindStateView(view: View){
+        uiStatusController.bind(view)
+    }
+    fun showState(@UiStatus state: Int){
+        uiStatusController.changeUiStatusIgnore(state)
+    }
 }

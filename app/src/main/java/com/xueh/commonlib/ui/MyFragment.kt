@@ -15,7 +15,7 @@ class MyFragment : DFragment() {
     override fun initListener() {
     }
 
-    override fun getCreateViewLayoutId()= R.layout.fragment_my
+    override fun getCreateViewLayoutId() = R.layout.fragment_my
 
     override fun initView(inflateView: View?, savedInstanceState: Bundle?) {
     }

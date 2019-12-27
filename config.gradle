@@ -53,6 +53,7 @@ ext {
 
             PickerView                   : "4.1.9",
             banner                       : "3.0.0",
+            UiStatus                     : "1.0.3",
     ]
     libraries = [
             junit                        : "junit:junit:${versions.junit}",
@@ -102,6 +103,7 @@ ext {
             BaseRecyclerViewAdapterHelper: "com.github.CymChad:BaseRecyclerViewAdapterHelper:${versions.BaseRecyclerViewAdapterHelper}",
             walle                        : "com.meituan.android.walle:library:${versions.walle}",
             banner                       : "cn.bingoogolapple:bga-banner:${versions.banner}@aar",
+            UiStatus                     : "com.github.FengChenSunshine:UiStatus:${versions.UiStatus}",
 
             PickerView                   : "com.contrarywind:Android-PickerView:${versions.PickerView}",
 

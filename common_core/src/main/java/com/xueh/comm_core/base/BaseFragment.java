@@ -68,17 +68,6 @@ public abstract class BaseFragment extends Fragment implements IBaseLogic {
         initListener();
     }
 
-    @CallSuper
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @CallSuper
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
 
     @Override
     public void onDetach() {
