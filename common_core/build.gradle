@@ -62,6 +62,7 @@ dependencies {
 
     api rootProject.ext.libraries.glide
     api rootProject.ext.libraries.background
+    api rootProject.ext.libraries.rxlife
 
     api rootProject.ext.libraries.SmartRefreshLayout
     api rootProject.ext.libraries.immersionbar

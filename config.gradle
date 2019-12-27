@@ -39,6 +39,7 @@ ext {
             fastjson                     : "1.2.58",
             fastjsonandroid              : "1.1.71",
 
+            rxlife                       : "1.1.0",
             eventbus                     : "3.1.1",
             greendao                     : "3.2.2",
             greendaoupgrade              : "v2.1.0",
@@ -98,6 +99,7 @@ ext {
             fastjson                     : "com.alibaba:fastjson:${versions.fastjson}",
             fastjsonandroid              : "com.alibaba:fastjson:${versions.fastjsonandroid}.android",
 
+            rxlife                         :"com.rxjava.rxlife:rxlife-x:${versions.rxlife}",
             agentweb                     : "com.just.agentweb:agentweb:${versions.agentweb}",
             SmartRefreshLayout           : "com.scwang.smartrefresh:SmartRefreshLayout:${versions.SmartRefreshLayout}",
             immersionbar                 : "com.gyf.immersionbar:immersionbar:${versions.immersionbar}",
