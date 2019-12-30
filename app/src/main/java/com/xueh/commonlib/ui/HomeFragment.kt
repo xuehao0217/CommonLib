@@ -6,7 +6,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.base.DFragment
-import com.xueh.comm_core.utils.rx.rxjava.RxJavaUtils
 import com.xueh.commonlib.R
 import com.xueh.commonlib.ui.viewmodel.HomeViewModel
 
@@ -32,11 +31,7 @@ class HomeFragment : DFragment() {
         homeViewModel.banners.observe(this, Observer {
             ToastUtils.showShort(it.toString())
         })
-
-        RxJavaUtils.delay(5) {
-            homeViewModel.loadData()
-        }
-
+        homeViewModel.loadData()
     }
 
 

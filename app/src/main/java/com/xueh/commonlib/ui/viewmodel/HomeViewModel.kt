@@ -14,11 +14,10 @@ import com.xueh.commonlib.api.RestApi
 class HomeViewModel : BaseViewModel<RestApi>() {
     override fun initApi() = ServiceGenerator.getService(RestApi::class.java)
     private val refreshTrigger = MutableLiveData<Boolean>()
-    private val bannerList= Transformations.switchMap(refreshTrigger) {
-        //当refreshTrigger的值被设置时，bannerList
+    private val bannerList = Transformations.switchMap(refreshTrigger) {
         api.bannerList()
     }
-    val banners= Transformations.map(bannerList) {
+    val banners = Transformations.map(bannerList) {
         it.data ?: ArrayList()
     }
     fun loadData() {
