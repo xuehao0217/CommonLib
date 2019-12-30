@@ -1,7 +1,7 @@
 package io.github.iamyours.wandroid.net
 
 import androidx.lifecycle.LiveData
-import com.xueh.comm_core.net.BaseModel
+import com.xueh.comm_core.net.BaseResult
 import com.xueh.comm_core.net.livedata.LiveDataCallAdapter
 import retrofit2.CallAdapter
 import retrofit2.CallAdapter.Factory
@@ -15,7 +15,7 @@ class LiveDataCallAdapterFactory : Factory() {
         //获取第一个泛型类型
         val observableType = getParameterUpperBound(0, returnType as ParameterizedType)
         val rawType = getRawType(observableType)
-        if (rawType != BaseModel::class.java) {
+        if (rawType != BaseResult::class.java) {
             throw IllegalArgumentException("type must be ApiResponse")
         }
         if (observableType !is ParameterizedType) {

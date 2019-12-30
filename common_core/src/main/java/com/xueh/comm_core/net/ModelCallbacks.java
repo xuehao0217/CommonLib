@@ -6,6 +6,6 @@ package com.xueh.comm_core.net;
  ************************************************************/
 public interface ModelCallbacks<T>{
     void onSuccess(T data);
-    void onException(BaseModel model);
+    void onException(BaseResult model);
     void onError(Throwable e);
 }

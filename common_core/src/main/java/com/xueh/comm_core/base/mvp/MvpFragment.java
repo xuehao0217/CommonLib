@@ -7,7 +7,7 @@ import androidx.lifecycle.Lifecycle;
 
 import com.xueh.comm_core.base.DFragment;
 import com.xueh.comm_core.base.mvp.ibase.IBasePresenter;
-import com.xueh.comm_core.base.mvp.ibase.IBaseView;
+import com.xueh.comm_core.base.mvp.ibase.IBaseMVPView;
 
 import io.reactivex.subjects.PublishSubject;
 
@@ -15,11 +15,11 @@ import io.reactivex.subjects.PublishSubject;
  * 类描述：MVP架构下的Fragment基类
  * 创建人：xueh
  */
-public abstract class MvpFragment<P extends IBasePresenter> extends DFragment implements IBaseView {
+public abstract class MvpFragment<P extends IBasePresenter> extends DFragment implements IBaseMVPView {
 
     protected P mPresenter;
     protected final PublishSubject<Lifecycle.Event> lifecycleSubject = PublishSubject.create();
-    protected abstract P createPresenter(IBaseView view);
+    protected abstract P createPresenter(IBaseMVPView view);
 
     @Override
     public void onAttach(Context context) {

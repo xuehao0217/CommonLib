@@ -10,7 +10,7 @@ import com.fengchen.uistatus.UiStatusController
 import com.fengchen.uistatus.annotation.UiStatus
 import com.sunlands.comm_core.R
 import com.xueh.comm_core.helper.EventBusHelper
-import com.xueh.comm_core.utils.CommonUtils
+import com.xueh.comm_core.helper.hasNetWorkConection
 import com.xueh.comm_core.utils.rx.RxBindingUtils
 import com.xueh.comm_core.weight.ViewLoading
 import io.reactivex.disposables.CompositeDisposable
@@ -73,7 +73,7 @@ abstract class DFragment : BaseFragment(), CoroutineScope by MainScope() {
 
     protected fun startActivity(clazz: Class<out Activity>, isNet: Boolean) {
         if (isNet) {
-            if (CommonUtils.hasNetWorkConection()) {
+            if (hasNetWorkConection()) {
                 startActivity(clazz)
             } else {
                 ToastUtils.showShort(getString(R.string.str_no_net_prompts))

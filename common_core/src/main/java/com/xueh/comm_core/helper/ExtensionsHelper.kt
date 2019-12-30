@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
+import com.blankj.utilcode.util.NetworkUtils
 import com.blankj.utilcode.util.Utils
 import com.xueh.comm_core.utils.CommonUtils
 import com.xueh.comm_core.utils.GlideUtils
@@ -20,12 +21,16 @@ fun getColor(colorRes: Int) = CommonUtils.getColor(colorRes)
 
 fun getDrawable(@DrawableRes id: Int) = CommonUtils.getDrawable(id)
 
-fun hasNetWorkConection() = CommonUtils.hasNetWorkConection()
+fun hasNetWorkConection() = NetworkUtils.isConnected()
 
 fun getApp() = Utils.getApp()
 
 fun ImageView.loadCircleImg(url: String, circular: Int = 0) {
-    if (circular == 0) GlideUtils.loadCircleImg(this, url) else GlideUtils.loadCircleImg(this, url, circular)
+    if (circular == 0) GlideUtils.loadCircleImg(this, url) else GlideUtils.loadCircleImg(
+        this,
+        url,
+        circular
+    )
 }
 
 fun ImageView.loadImg(url: String) {

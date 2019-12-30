@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import com.hjq.bar.TitleBar;
 import com.just.agentweb.AgentWeb;
 import com.sunlands.comm_core.R;
-import com.xueh.comm_core.base.BaseViewImpl;
 import com.xueh.comm_core.base.DActivity;
 import com.xueh.comm_core.weight.OnTitleLeftListener;
 
@@ -22,7 +21,7 @@ import com.xueh.comm_core.weight.OnTitleLeftListener;
  * 创建日期: 2019/3/11 11:16
  * 备注：一个只用于显示的web页面
  */
-public class WebViewActivity extends DActivity implements BaseViewImpl.OnClickListener {
+public class WebViewActivity extends DActivity  {
 
     public AgentWeb agentWeb;
     private LinearLayout mRv_web_content;
@@ -56,10 +55,6 @@ public class WebViewActivity extends DActivity implements BaseViewImpl.OnClickLi
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public void onClick(View v) {
     }
 
     @Override

@@ -39,6 +39,7 @@ dependencies {
     api rootProject.ext.libraries.recyclerview
     api rootProject.ext.libraries.constraint_layout
     api rootProject.ext.libraries.cardview
+    api rootProject.ext.libraries.lifecycle_extensions
 
     api rootProject.ext.libraries.kotlin_stdlib
     api rootProject.ext.libraries.anko

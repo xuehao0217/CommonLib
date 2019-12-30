@@ -10,7 +10,7 @@ import io.reactivex.subjects.PublishSubject;
  * 创建人：xueh
  * 创建时间：2016/7/6 10:18
  */
-public interface IBaseView {
+public interface IBaseMVPView {
 
     PublishSubject<Lifecycle.Event> getLifecycleSubject();
 

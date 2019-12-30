@@ -8,7 +8,7 @@ import androidx.lifecycle.Lifecycle;
 
 import com.xueh.comm_core.base.DActivity;
 import com.xueh.comm_core.base.mvp.ibase.IBasePresenter;
-import com.xueh.comm_core.base.mvp.ibase.IBaseView;
+import com.xueh.comm_core.base.mvp.ibase.IBaseMVPView;
 
 import io.reactivex.subjects.PublishSubject;
 
@@ -17,7 +17,7 @@ import io.reactivex.subjects.PublishSubject;
  * 类描述：MVP架构下的Activity基类
  * 创建人：xueh
  */
-public abstract class MvpActivity<P extends IBasePresenter> extends DActivity implements IBaseView {
+public abstract class MvpActivity<P extends IBasePresenter> extends DActivity implements IBaseMVPView {
     public final PublishSubject<Lifecycle.Event> lifecycleSubject = PublishSubject.create();
     public P getPresenter() {
         return mPresenter;
@@ -25,7 +25,7 @@ public abstract class MvpActivity<P extends IBasePresenter> extends DActivity im
 
     protected P mPresenter;
 
-    protected abstract P createPresenter(IBaseView view);
+    protected abstract P createPresenter(IBaseMVPView view);
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

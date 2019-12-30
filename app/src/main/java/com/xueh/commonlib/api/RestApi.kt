@@ -1,7 +1,7 @@
 package com.xueh.commonlib.api
 
 import androidx.lifecycle.LiveData
-import com.xueh.comm_core.net.BaseModel
+import com.xueh.comm_core.net.BaseResult
 import com.xueh.commonlib.entity.BannerVO
 import retrofit2.http.GET
 
@@ -12,5 +12,5 @@ import retrofit2.http.GET
  */
 interface RestApi{
     @GET("banner/json")
-    fun bannerList(): LiveData<BaseModel<List<BannerVO>>>
+    fun bannerList(): LiveData<BaseResult<List<BannerVO>>>
 }

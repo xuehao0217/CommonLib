@@ -5,13 +5,13 @@ import androidx.lifecycle.LifecycleOwner;
 
 import com.xueh.comm_core.base.mvp.ibase.IBaseModel;
 import com.xueh.comm_core.base.mvp.ibase.IBasePresenter;
-import com.xueh.comm_core.base.mvp.ibase.IBaseView;
+import com.xueh.comm_core.base.mvp.ibase.IBaseMVPView;
 
 /**
  * 类描述：Presenter模块的基类，持有对应的View模块对象
  * 创建人：xueh
  */
-public abstract class MvpBasePresenter<V extends IBaseView, M extends IBaseModel>
+public abstract class MvpBasePresenter<V extends IBaseMVPView, M extends IBaseModel>
         implements IBasePresenter {
 
     private V mView;

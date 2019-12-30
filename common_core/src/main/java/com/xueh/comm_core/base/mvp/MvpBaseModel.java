@@ -5,7 +5,7 @@ import androidx.lifecycle.Lifecycle;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.xueh.comm_core.base.mvp.ibase.IBaseModel;
-import com.xueh.comm_core.net.BaseModel;
+import com.xueh.comm_core.net.BaseResult;
 import com.xueh.comm_core.net.mvp.BaseObserver;
 import com.xueh.comm_core.net.ModelCallbacks;
 import com.xueh.comm_core.net.mvp.RxSchedulers;
@@ -43,7 +43,7 @@ public abstract class MvpBaseModel<E> implements IBaseModel {
 
     protected <T> void deploy(Observable mObservable, PublishSubject<Lifecycle.Event> mPublishSubject, final ModelCallbacks<T> modelCallbacks, final boolean showLoading) {
         mObservable
-                .compose(RxSchedulers.<BaseModel<T>>compose(mPublishSubject))
+                .compose(RxSchedulers.<BaseResult<T>>compose(mPublishSubject))
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) throws Exception {
@@ -67,7 +67,7 @@ public abstract class MvpBaseModel<E> implements IBaseModel {
                     }
 
                     @Override
-                    protected void onException(BaseModel model) {
+                    protected void onException(BaseResult model) {
                         super.onException(model);
                         modelCallbacks.onException(model);
                     }

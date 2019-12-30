@@ -1,7 +1,7 @@
 package com.xueh.comm_core.net.livedata
 
 import androidx.lifecycle.LiveData
-import com.xueh.comm_core.net.BaseModel
+import com.xueh.comm_core.net.BaseResult
 import retrofit2.Call
 import retrofit2.CallAdapter
 import retrofit2.Callback
@@ -18,7 +18,7 @@ class LiveDataCallAdapter<T>(private val responseType: Type) : CallAdapter<T, Li
                 if (started.compareAndSet(false, true)) {//确保执行一次
                     call.enqueue(object : Callback<T> {
                         override fun onFailure(call: Call<T>, t: Throwable) {
-                            val value = BaseModel<T>(-1, t.message ?: "", null) as T
+                            val value = BaseResult<T>(-1, t.message ?: "", null) as T
                             postValue(value)
                         }
 

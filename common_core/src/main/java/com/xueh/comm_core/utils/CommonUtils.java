@@ -98,20 +98,6 @@ public class CommonUtils {
     }
 
     /**
-     * 判断是否具有网络连接
-     */
-    public static final boolean hasNetWorkConection() {
-        //获取连接活动管理器
-        final ConnectivityManager connectivityManager =
-                (ConnectivityManager) Utils.getApp()
-                        .getSystemService(Context.CONNECTIVITY_SERVICE);
-        //获取连接的网络信息
-        final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        return (networkInfo != null && networkInfo.isAvailable());
-    }
-
-
-    /**
      * 检测是不是全部中文！
      */
     public static boolean containsSpecialChar(@Nullable String source) {

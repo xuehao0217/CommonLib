@@ -3,7 +3,7 @@ package com.xueh.comm_core.net.mvp;
 
 import android.util.Log;
 
-import com.xueh.comm_core.net.BaseModel;
+import com.xueh.comm_core.net.BaseResult;
 import com.xueh.comm_core.net.Logger;
 
 import io.reactivex.Observer;
@@ -13,7 +13,7 @@ import io.reactivex.disposables.Disposable;
  * 创建日期: 2017/7/4 19:19
  * 备注：
  */
-public abstract class BaseObserver<T> implements Observer<BaseModel<T>> {
+public abstract class BaseObserver<T> implements Observer<BaseResult<T>> {
 
     private static final String TAG = "HTTP";
 
@@ -25,9 +25,9 @@ public abstract class BaseObserver<T> implements Observer<BaseModel<T>> {
     }
 
     @Override
-    public void onNext(BaseModel<T> value) {
+    public void onNext(BaseResult<T> value) {
         T t;
-        if (BaseModel.STATE_SUCCESS == value.getErr()) {
+        if (BaseResult.STATE_SUCCESS == value.getErr()) {
             t = value.getData();
             if (t != null) {
                 Logger.e(TAG, "onSuccess:" + t.toString());
@@ -61,7 +61,7 @@ public abstract class BaseObserver<T> implements Observer<BaseModel<T>> {
 
     protected abstract void onSuccess(T t);
 
-    protected void onException(BaseModel model) {
+    protected void onException(BaseResult model) {
         Log.e(TAG, "onException:" + model.toString());
     }
 }
