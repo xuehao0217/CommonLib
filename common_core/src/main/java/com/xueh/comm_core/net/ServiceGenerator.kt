@@ -10,7 +10,7 @@ object ServiceGenerator {
     private val mServiceMap: MutableMap<String, Retrofit> = HashMap()
     private var DOMAIN_BASE=""
     fun setBaeUrl(httpBaseUrl: IHttpBaseUrl) {
-        DOMAIN_BASE = httpBaseUrl.getBaseUrl()
+        DOMAIN_BASE = httpBaseUrl.getHttpBaseUrl()
     }
 
     fun <T> getService(serviceClass: Class<T>): T {

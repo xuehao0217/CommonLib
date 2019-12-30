@@ -26,5 +26,5 @@ class MyApplication : BaseApplication(), IHttpBaseUrl {
             .addUiStatusConfig(UiStatus.NETWORK_ERROR, R.layout.state_net_error)
     }
 
-    override fun getBaseUrl() = "https://www.wanandroid.com/"
+    override fun getHttpBaseUrl() = "https://www.wanandroid.com/"
 }

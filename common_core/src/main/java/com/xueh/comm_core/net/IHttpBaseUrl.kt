@@ -6,5 +6,5 @@ package com.xueh.comm_core.net
  * 备注：
  */
 interface IHttpBaseUrl {
-    fun getBaseUrl():String
+    fun getHttpBaseUrl():String
 }
