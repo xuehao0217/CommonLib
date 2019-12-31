@@ -11,10 +11,14 @@ import retrofit2.http.GET
  * 创建日期: 2019/12/27 15:29
  * 备注：
  */
-interface RestApi{
+interface RestApi {
     @GET("banner/json")
     fun bannerList(): LiveData<BaseResult<List<BannerVO>>>
 
     @GET("banner/json")
     fun bannerList2(): Call<BaseResult<List<BannerVO>>>
+
+    @GET("banner/json")
+    suspend fun bannerList3(): BaseResult<List<BannerVO>>
+
 }

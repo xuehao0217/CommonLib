@@ -6,7 +6,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.blankj.utilcode.util.ToastUtils
 import com.blankj.utilcode.util.Utils
-import com.xueh.comm_core.base.DFragment
+import com.xueh.comm_core.base.mvvm.MVVMFragment
 import com.xueh.commonlib.R
 import com.xueh.commonlib.ui.viewmodel.HomeViewModel
 
@@ -16,7 +16,7 @@ import com.xueh.commonlib.ui.viewmodel.HomeViewModel
  * 创建日期: 2019/11/29 13:29
  * 备注：
  */
-class HomeFragment : DFragment() {
+class HomeFragment : MVVMFragment<HomeViewModel>() {
     override fun initListener() {
     }
 
@@ -28,21 +28,22 @@ class HomeFragment : DFragment() {
 //            showState(UiStatus.CONTENT)
 //        }
 
-        val homeViewModel=  ViewModelProvider.AndroidViewModelFactory.getInstance(Utils.getApp()).create(HomeViewModel::class.java)
+//        val homeViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(Utils.getApp())
+//            .create(HomeViewModel::class.java)
 //        val homeViewModel = ViewModelProviders.of(this)[HomeViewModel::class.java] //这方法已经过期
-        homeViewModel.banners.observe(this, Observer {
+
+        VM.stateBanner.observe(this, Observer {
             ToastUtils.showShort(it.toString())
         })
-        homeViewModel.loadData()
 
-
-
-
-
+        VM.loadData()
     }
 
 
     override fun initDataAfterView() {
     }
 
+    override fun CreateViewModel() =
+        ViewModelProvider.AndroidViewModelFactory.getInstance(Utils.getApp())
+            .create(HomeViewModel::class.java)
 }

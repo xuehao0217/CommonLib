@@ -1,12 +1,10 @@
 package com.xueh.commonlib.ui.viewmodel
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.viewModelScope
 import com.xueh.comm_core.base.mvvm.BaseViewModel
 import com.xueh.comm_core.net.ServiceGenerator
+import com.xueh.comm_core.net.livedata.StateLiveData
 import com.xueh.commonlib.api.RestApi
-import kotlinx.coroutines.launch
+import com.xueh.commonlib.entity.BannerVO
 
 /**
  * 创 建 人: xueh
@@ -15,19 +13,13 @@ import kotlinx.coroutines.launch
  */
 class HomeViewModel : BaseViewModel<RestApi>() {
     override fun initApi() = ServiceGenerator.getService(RestApi::class.java)
-    private val refreshTrigger = MutableLiveData<Boolean>()
-    private val bannerList = Transformations.switchMap(refreshTrigger) {
-        api.bannerList()
-    }
-    val banners = Transformations.map(bannerList) {
-        it.data ?: ArrayList()
-    }
+
+    val stateBanner = StateLiveData<List<BannerVO>?>()
 
     fun loadData() {
-        refreshTrigger.value = true
-
-        viewModelScope.launch {
-
+        launchOnUI {
+            //  stateBanner.postValueAndSuccess(api.bannerList2().await().data)
+            stateBanner.postValueAndSuccess(api.bannerList3().data)
         }
     }
 }
