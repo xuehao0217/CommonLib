@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.blankj.utilcode.util.ToastUtils
 import com.blankj.utilcode.util.Utils
 import com.xueh.comm_core.base.mvvm.MVVMFragment
 import com.xueh.commonlib.R
 import com.xueh.commonlib.ui.viewmodel.HomeViewModel
+import kotlinx.android.synthetic.main.fragment_home.*
 
 
 /**
@@ -33,7 +33,7 @@ class HomeFragment : MVVMFragment<HomeViewModel>() {
 //        val homeViewModel = ViewModelProviders.of(this)[HomeViewModel::class.java] //这方法已经过期
 
         VM.stateBanner.observe(this, Observer {
-            ToastUtils.showShort(it.toString())
+            tv_home.text=it.toString()
         })
 
         VM.loadData()
