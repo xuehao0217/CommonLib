@@ -7,7 +7,9 @@ import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.sunlands.comm_core.R;
+import com.xueh.comm_core.R;
+
+
 /**
  * 创 建 人: xueh
  * 创建日期: 2019/3/6 14:32

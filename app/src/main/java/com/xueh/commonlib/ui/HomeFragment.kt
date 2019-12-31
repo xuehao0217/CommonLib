@@ -43,7 +43,7 @@ class HomeFragment : MVVMFragment<HomeViewModel>() {
     override fun initDataAfterView() {
     }
 
-    override fun CreateViewModel() =
+    override fun CreateViewModel(): HomeViewModel=
         ViewModelProvider.AndroidViewModelFactory.getInstance(Utils.getApp())
             .create(HomeViewModel::class.java)
 }

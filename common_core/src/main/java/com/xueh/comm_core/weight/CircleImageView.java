@@ -23,7 +23,7 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 
-import com.sunlands.comm_core.R;
+import com.xueh.comm_core.R;
 
 
 /**

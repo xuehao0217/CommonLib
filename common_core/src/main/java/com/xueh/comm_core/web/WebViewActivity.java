@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 
 import com.hjq.bar.TitleBar;
 import com.just.agentweb.AgentWeb;
-import com.sunlands.comm_core.R;
+import com.xueh.comm_core.R;
 import com.xueh.comm_core.base.DActivity;
 import com.xueh.comm_core.weight.OnTitleLeftListener;
 

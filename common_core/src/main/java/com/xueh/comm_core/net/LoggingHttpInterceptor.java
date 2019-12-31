@@ -61,6 +61,7 @@ public class LoggingHttpInterceptor implements Interceptor {
     }
 
     private volatile boolean isJson = false;
+
     public LoggingHttpInterceptor setLevel(Level level) {
         if (level == null) throw new NullPointerException("level == null. Use Level.NONE instead.");
         this.level = level;
@@ -97,7 +98,7 @@ public class LoggingHttpInterceptor implements Interceptor {
                 requestStartMessage += " (" + requestBody.contentLength() + "-byte body)";
             }
             logger.log("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-            logger.log("┃ "+requestStartMessage);
+            logger.log("┃ " + requestStartMessage);
 
             if (logHeaders) {
                 if (hasRequestBody) {
@@ -133,7 +134,7 @@ public class LoggingHttpInterceptor implements Interceptor {
 
                     logger.log("┃");
                     if (isPlaintext(buffer)) {
-                        logger.log("┃ "+buffer.readString(charset));
+                        logger.log("┃ " + buffer.readString(charset));
                         logger.log("┃ --> END " + request.method()
                                 + " (" + requestBody.contentLength() + "-byte body)");
                     } else {
@@ -158,7 +159,7 @@ public class LoggingHttpInterceptor implements Interceptor {
             String bodySize = contentLength != -1 ? contentLength + "-byte" : "unknown-length";
             logger.log("┃");
             logger.log("┃ <-- "
-                    +response.code()
+                    + response.code()
                     + (response.message().isEmpty() ? "" : ' ' + response.message())
                     + ' ' + response.request().url()
                     + " (" + tookMs + "ms" + (!logHeaders ? ", " + bodySize + " body" : "") + ')');
@@ -201,7 +202,12 @@ public class LoggingHttpInterceptor implements Interceptor {
 
                     if (contentLength != 0) {
                         logger.log("┃");
-                        logger.log("┃ "+ (isJson ? JsonUtils.formatJson(buffer.clone().readString(charset)):buffer.clone().readString(charset)));
+                        if (isJson) {
+                            logger.log("┃ " + JsonUtils.formatJson(buffer.clone().readString(charset)));
+
+                        } else {
+                            logger.log("┃ " + buffer.clone().readString(charset));
+                        }
                     }
 
                     if (gzippedLength != null) {
@@ -219,7 +225,7 @@ public class LoggingHttpInterceptor implements Interceptor {
 
     private void logHeader(Headers headers, int i) {
         String value = headersToRedact.contains(headers.name(i)) ? "██" : headers.value(i);
-        logger.log("┃ "+headers.name(i) + ": " + value);
+        logger.log("┃ " + headers.name(i) + ": " + value);
     }
 
     static boolean isPlaintext(Buffer buffer) {

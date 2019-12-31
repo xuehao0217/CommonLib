@@ -6,7 +6,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
-import com.sunlands.comm_core.R;
+import com.xueh.comm_core.R;
 
 
 /**

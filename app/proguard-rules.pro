@@ -146,7 +146,7 @@ public static java.lang.String TABLENAME;
 
 #---------------------------------3.与js互相调用的类------------------------
 #Java 注入类不要混淆 ， 例如 sample 里面的 AndroidInterface 类 ， 需要 Keep 。
--keepclassmembers class com.sunlands.intl.greapp.web.js.SupportJS{ *; }
+
 
 
 #-------------------------------------------------------------------------

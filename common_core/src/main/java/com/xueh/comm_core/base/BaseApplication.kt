@@ -11,7 +11,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.fengchen.uistatus.UiStatusNetworkStatusProvider
 import com.hjq.bar.OnTitleBarListener
 import com.hjq.bar.TitleBar
-import com.sunlands.comm_core.R
+import com.xueh.comm_core.R
 import com.xueh.comm_core.helper.hasNetWorkConection
 import com.xueh.comm_core.utils.CommonUtils
 

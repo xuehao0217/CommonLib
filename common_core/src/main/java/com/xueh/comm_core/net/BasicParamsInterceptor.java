@@ -20,7 +20,6 @@ import okhttp3.Response;
 import okio.Buffer;
 
 /**
- * 当前包名: com.sunlands.comm_core.net
  * 创 建 人: xueh
  * 创建日期: 2019/2/19 18:56
  * 备注：

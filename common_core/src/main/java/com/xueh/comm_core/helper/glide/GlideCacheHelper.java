@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * 当前包名: com.sunlands.comm_core.helper.glide
  * 创 建 人: xueh
  * 创建日期: 2019/4/11 14:04
  * 备注：

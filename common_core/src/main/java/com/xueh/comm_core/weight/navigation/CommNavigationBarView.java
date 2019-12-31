@@ -21,7 +21,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.blankj.utilcode.util.ScreenUtils;
-import com.sunlands.comm_core.R;
+import com.xueh.comm_core.R;
 import com.xueh.comm_core.utils.CommonUtils;
 
 import java.util.ArrayList;

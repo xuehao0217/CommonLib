@@ -9,7 +9,7 @@ import com.fengchen.uistatus.UiStatusController
 import com.fengchen.uistatus.annotation.UiStatus
 import com.gyf.barlibrary.ImmersionBar
 import com.noober.background.BackgroundLibrary
-import com.sunlands.comm_core.R
+import com.xueh.comm_core.R
 import com.xueh.comm_core.helper.EventBusHelper
 import com.xueh.comm_core.helper.hasNetWorkConection
 import com.xueh.comm_core.utils.rx.RxBindingUtils

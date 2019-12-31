@@ -17,6 +17,10 @@ class MyApplication : BaseApplication(), IHttpBaseUrl {
         super.onCreate()
         initState()
         ServiceGenerator.setBaeUrl(this)
+//        startKoin {
+//            androidContext(this@MyApplication)
+//            modules(appModule)
+//        }
     }
 
     private fun initState() {

@@ -44,11 +44,15 @@ dependencies {
     api rootProject.ext.libraries.lifecycle_livedata_ktx
     api rootProject.ext.libraries.lifecycle_viewmodel_ktx
 
+    api rootProject.ext.libraries.koin_android
+    api rootProject.ext.libraries.koin_androidx
+    api rootProject.ext.libraries.koin_androidx_viewmodel
+
     api rootProject.ext.libraries.kotlin_stdlib
     api rootProject.ext.libraries.anko
     api rootProject.ext.libraries.coroutines_core
     api rootProject.ext.libraries.coroutines_android
-    api rootProject.ext.libraries.ktx
+    api rootProject.ext.libraries.core_ktx
 
     api rootProject.ext.libraries.agentweb
     api rootProject.ext.libraries.eventbus

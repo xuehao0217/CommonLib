@@ -1,4 +1,4 @@
-package com.sunlands.comm_core.helper.constraint
+package com.xueh.comm_core.helper.constraint
 
 import android.content.Context
 import android.os.Build
