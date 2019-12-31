@@ -40,7 +40,9 @@ abstract class BaseViewModel<E> : AbsViewModel() {
                     VMStateLiveData.clearState()
 //                VMStateLiveData.postValueAndSuccess(false)
                 }
-                loge("BaseViewModel", "invokeOnCompletion---${it}")
+                it?.let {
+                    loge("BaseViewModel", "invokeOnCompletion---${it}")
+                }
             }
         }
     }
