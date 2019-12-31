@@ -2,9 +2,11 @@ package com.xueh.commonlib.ui.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.viewModelScope
 import com.xueh.comm_core.base.mvvm.BaseViewModel
 import com.xueh.comm_core.net.ServiceGenerator
 import com.xueh.commonlib.api.RestApi
+import kotlinx.coroutines.launch
 
 /**
  * 创 建 人: xueh
@@ -20,7 +22,12 @@ class HomeViewModel : BaseViewModel<RestApi>() {
     val banners = Transformations.map(bannerList) {
         it.data ?: ArrayList()
     }
+
     fun loadData() {
         refreshTrigger.value = true
+
+        viewModelScope.launch {
+
+        }
     }
 }

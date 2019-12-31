@@ -3,9 +3,12 @@ buildscript {
     apply from: "config.gradle"
 
     repositories {
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/jcenter' }
-        maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }
+//        maven { url 'https://maven.aliyun.com/repository/google' }
+//        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+//        maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }
+
+        jcenter()
+        google()
         maven { url 'https://www.jitpack.io' }
     }
     dependencies {
@@ -18,9 +21,12 @@ buildscript {
 
 allprojects {
     repositories {
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/jcenter' }
-        maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }
+//        maven { url 'https://maven.aliyun.com/repository/google' }
+//        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+//        maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }
+
+        jcenter()
+        google()
         maven { url 'https://www.jitpack.io' }
     }
 }
