@@ -3,12 +3,11 @@ package com.xueh.commonlib.ui
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import com.blankj.utilcode.util.Utils
 import com.xueh.comm_core.base.mvvm.MVVMFragment
 import com.xueh.commonlib.R
 import com.xueh.commonlib.ui.viewmodel.HomeViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
+import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 
 /**
@@ -43,7 +42,10 @@ class HomeFragment : MVVMFragment<HomeViewModel>() {
     override fun initDataAfterView() {
     }
 
-    override fun CreateViewModel(): HomeViewModel=
-        ViewModelProvider.AndroidViewModelFactory.getInstance(Utils.getApp())
-            .create(HomeViewModel::class.java)
+
+    override fun CreateViewModel(): HomeViewModel=getViewModel()
+
+//    override fun CreateViewModel(): HomeViewModel=
+//        ViewModelProvider.AndroidViewModelFactory.getInstance(Utils.getApp())
+//            .create(HomeViewModel::class.java)
 }

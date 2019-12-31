@@ -5,6 +5,9 @@ import com.fengchen.uistatus.annotation.UiStatus
 import com.xueh.comm_core.base.BaseApplication
 import com.xueh.comm_core.net.IHttpBaseUrl
 import com.xueh.comm_core.net.ServiceGenerator
+import com.xueh.commonlib.di.viewModelModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 
 
 /**
@@ -17,10 +20,11 @@ class MyApplication : BaseApplication(), IHttpBaseUrl {
         super.onCreate()
         initState()
         ServiceGenerator.setBaeUrl(this)
-//        startKoin {
-//            androidContext(this@MyApplication)
-//            modules(appModule)
-//        }
+
+        startKoin {
+            androidContext(this@MyApplication)
+            modules(viewModelModule)
+        }
     }
 
     private fun initState() {
