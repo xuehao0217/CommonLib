@@ -19,21 +19,27 @@ abstract class BaseViewModel<E> : AbsViewModel() {
 
     protected abstract fun initApi(): E
 
-    fun launchOnUI(block: suspend CoroutineScope.() -> Unit) {
+    fun launchOnUI(showLoading: Boolean = true, block: suspend CoroutineScope.() -> Unit) {
         val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
             ToastUtils.showShort(throwable.toString())
-            VMStateLiveData.postError()
+            if (showLoading) {
+                VMStateLiveData.postError()
 //            VMStateLiveData.postValueAndSuccess(false)
+            }
             loge("BaseViewModel", "exceptionHandler---${throwable}")
         }
         viewModelScope.launch(exceptionHandler) {
-            VMStateLiveData.postLoading()
+            if (showLoading) {
+                VMStateLiveData.postLoading()
 //            VMStateLiveData.postValueAndSuccess(true)
+            }
             block()
         }.apply {
             invokeOnCompletion {
-                VMStateLiveData.clearState()
+                if (showLoading) {
+                    VMStateLiveData.clearState()
 //                VMStateLiveData.postValueAndSuccess(false)
+                }
                 loge("BaseViewModel", "invokeOnCompletion---${it}")
             }
         }
