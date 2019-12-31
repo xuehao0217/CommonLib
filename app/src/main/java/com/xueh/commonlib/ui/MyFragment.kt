@@ -2,7 +2,6 @@ package com.xueh.commonlib.ui
 
 import android.os.Bundle
 import android.view.View
-import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.base.DFragment
 import com.xueh.comm_core.net.BaseResult
 import com.xueh.comm_core.net.ServiceGenerator
@@ -35,7 +34,6 @@ class MyFragment : DFragment() {
             getNetData<BaseResult<List<BannerVO>>> {
                 api = ServiceGenerator.getService(RestApi::class.java).bannerList2()
                 onSuccess {
-                    ToastUtils.showShort(it?.data.toString())
                 }
             }
         }
