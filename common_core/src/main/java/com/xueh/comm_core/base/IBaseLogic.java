@@ -6,7 +6,7 @@ import android.view.View;
 import androidx.annotation.LayoutRes;
 
 /**
- * @author: xuehao@duia.com create time: 2017/7/26 11:29
+ * @author: xuehao create time: 2017/7/26 11:29
  * tag: class//
  * description:基础接口
  */
