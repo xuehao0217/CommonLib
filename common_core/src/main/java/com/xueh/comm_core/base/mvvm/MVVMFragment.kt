@@ -12,10 +12,10 @@ import com.xueh.comm_core.net.livedata.StateLiveData
  */
 abstract class MVVMFragment<VM : AbsViewModel> : DFragment() {
     val VM by lazy {
-        CreateViewModel()
+        initViewModel()
     }
 
-    abstract fun CreateViewModel(): VM
+    abstract fun initViewModel(): VM
 
     override fun initDataBeforeView() {
         super.initDataBeforeView()

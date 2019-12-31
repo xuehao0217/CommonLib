@@ -43,9 +43,9 @@ class HomeFragment : MVVMFragment<HomeViewModel>() {
     }
 
 
-    override fun CreateViewModel(): HomeViewModel=getViewModel()
+    override fun initViewModel(): HomeViewModel=getViewModel()
 
-//    override fun CreateViewModel(): HomeViewModel=
+//    override fun initViewModel(): HomeViewModel=
 //        ViewModelProvider.AndroidViewModelFactory.getInstance(Utils.getApp())
 //            .create(HomeViewModel::class.java)
 }
