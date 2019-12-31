@@ -7,12 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.blankj.utilcode.util.ToastUtils
 import com.blankj.utilcode.util.Utils
 import com.xueh.comm_core.base.DFragment
-import com.xueh.comm_core.net.BaseResult
-import com.xueh.comm_core.net.ServiceGenerator
-import com.xueh.comm_core.net.coroutine.getNetData
 import com.xueh.commonlib.R
-import com.xueh.commonlib.api.RestApi
-import com.xueh.commonlib.entity.BannerVO
 import com.xueh.commonlib.ui.viewmodel.HomeViewModel
 
 
