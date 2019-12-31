@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.base.mvvm.ibase.AbsViewModel
 import com.xueh.comm_core.helper.loge
+import com.xueh.comm_core.helper.yes
 import kotlinx.coroutines.*
 
 
@@ -22,21 +23,21 @@ abstract class BaseViewModel<E> : AbsViewModel() {
     fun launchOnUI(showLoading: Boolean = true, block: suspend CoroutineScope.() -> Unit) {
         val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
             ToastUtils.showShort(throwable.toString())
-            if (showLoading) {
+            showLoading.yes {
                 VMStateLiveData.postError()
 //            VMStateLiveData.postValueAndSuccess(false)
             }
             loge("BaseViewModel", "exceptionHandler---${throwable}")
         }
         viewModelScope.launch(exceptionHandler) {
-            if (showLoading) {
+            showLoading.yes {
                 VMStateLiveData.postLoading()
 //            VMStateLiveData.postValueAndSuccess(true)
             }
             block()
         }.apply {
             invokeOnCompletion {
-                if (showLoading) {
+                showLoading.yes {
                     VMStateLiveData.clearState()
 //                VMStateLiveData.postValueAndSuccess(false)
                 }
