@@ -3,10 +3,16 @@ package com.xueh.commonlib.ui
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.blankj.utilcode.util.ToastUtils
+import com.blankj.utilcode.util.Utils
 import com.xueh.comm_core.base.DFragment
+import com.xueh.comm_core.net.BaseResult
+import com.xueh.comm_core.net.ServiceGenerator
+import com.xueh.comm_core.net.coroutine.getNetData
 import com.xueh.commonlib.R
+import com.xueh.commonlib.api.RestApi
+import com.xueh.commonlib.entity.BannerVO
 import com.xueh.commonlib.ui.viewmodel.HomeViewModel
 
 
@@ -27,11 +33,17 @@ class HomeFragment : DFragment() {
 //            showState(UiStatus.CONTENT)
 //        }
 
-        val homeViewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
+        val homeViewModel=  ViewModelProvider.AndroidViewModelFactory.getInstance(Utils.getApp()).create(HomeViewModel::class.java)
+//        val homeViewModel = ViewModelProviders.of(this)[HomeViewModel::class.java] //这方法已经过期
         homeViewModel.banners.observe(this, Observer {
             ToastUtils.showShort(it.toString())
         })
         homeViewModel.loadData()
+
+
+
+
+
     }
 
 
