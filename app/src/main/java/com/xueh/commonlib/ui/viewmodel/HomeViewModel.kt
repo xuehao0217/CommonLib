@@ -14,12 +14,12 @@ import com.xueh.commonlib.entity.BannerVO
 class HomeViewModel : BaseViewModel<RestApi>() {
     override fun initApi() = ServiceGenerator.getService(RestApi::class.java)
 
-    val stateBanner = MutableLiveData<List<BannerVO>?>()
+    val banner = MutableLiveData<List<BannerVO>?>()
 
     fun loadData() {
         launchOnUI {
             //  stateBanner.postValueAndSuccess(api.bannerList2().await().data)
-            stateBanner.postValue(api.bannerList3().data)
+            banner.postValue(api.bannerList3().data)
         }
     }
 }

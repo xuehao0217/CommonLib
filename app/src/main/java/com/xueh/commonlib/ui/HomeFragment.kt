@@ -27,7 +27,7 @@ class HomeFragment : MVVMFragment<HomeViewModel>() {
 //            showState(UiStatus.CONTENT)
 //        }
 
-        VM.stateBanner.observe(this, Observer {
+        VM.banner.observe(this, Observer {
             tv_home.text=it.toString()
         })
 
