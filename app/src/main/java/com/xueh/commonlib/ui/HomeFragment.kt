@@ -27,10 +27,6 @@ class HomeFragment : MVVMFragment<HomeViewModel>() {
 //            showState(UiStatus.CONTENT)
 //        }
 
-//        val homeViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(Utils.getApp())
-//            .create(HomeViewModel::class.java)
-//        val homeViewModel = ViewModelProviders.of(this)[HomeViewModel::class.java] //这方法已经过期
-
         VM.stateBanner.observe(this, Observer {
             tv_home.text=it.toString()
         })
@@ -44,8 +40,4 @@ class HomeFragment : MVVMFragment<HomeViewModel>() {
 
 
     override fun initViewModel(): HomeViewModel=getViewModel()
-
-//    override fun initViewModel(): HomeViewModel=
-//        ViewModelProvider.AndroidViewModelFactory.getInstance(Utils.getApp())
-//            .create(HomeViewModel::class.java)
 }
