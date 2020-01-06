@@ -7,7 +7,7 @@ import com.blankj.utilcode.util.ActivityUtils;
 import com.xueh.comm_core.base.mvp.ibase.IBaseModel;
 import com.xueh.comm_core.net.BaseResult;
 import com.xueh.comm_core.net.mvp.BaseObserver;
-import com.xueh.comm_core.net.ModelCallbacks;
+import com.xueh.comm_core.net.ResultCallbacks;
 import com.xueh.comm_core.net.mvp.RxSchedulers;
 import com.xueh.comm_core.weight.ViewLoading;
 
@@ -37,11 +37,11 @@ public abstract class MvpBaseModel<E> implements IBaseModel {
         return api;
     }
 
-    protected <T> void deploy(Observable mObservable, PublishSubject<Lifecycle.Event> mPublishSubject, final ModelCallbacks<T> modelCallbacks) {
-        deploy(mObservable, mPublishSubject, modelCallbacks, true);
+    protected <T> void deploy(Observable mObservable, PublishSubject<Lifecycle.Event> mPublishSubject, final ResultCallbacks<T> resultCallbacks) {
+        deploy(mObservable, mPublishSubject, resultCallbacks, true);
     }
 
-    protected <T> void deploy(Observable mObservable, PublishSubject<Lifecycle.Event> mPublishSubject, final ModelCallbacks<T> modelCallbacks, final boolean showLoading) {
+    protected <T> void deploy(Observable mObservable, PublishSubject<Lifecycle.Event> mPublishSubject, final ResultCallbacks<T> resultCallbacks, final boolean showLoading) {
         mObservable
                 .compose(RxSchedulers.<BaseResult<T>>compose(mPublishSubject))
                 .doOnSubscribe(new Consumer<Disposable>() {
@@ -63,19 +63,19 @@ public abstract class MvpBaseModel<E> implements IBaseModel {
                 .subscribe(new BaseObserver<T>() {
                     @Override
                     protected void onSuccess(T mT) {
-                        modelCallbacks.onSuccess(mT);
+                        resultCallbacks.onSuccess(mT);
                     }
 
                     @Override
                     protected void onException(BaseResult model) {
                         super.onException(model);
-                        modelCallbacks.onException(model);
+                        resultCallbacks.onException(model);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
-                        modelCallbacks.onError(e);
+                        resultCallbacks.onError(e);
                     }
 
 
