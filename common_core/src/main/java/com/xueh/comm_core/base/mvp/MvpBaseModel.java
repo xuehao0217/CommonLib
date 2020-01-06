@@ -7,7 +7,7 @@ import com.blankj.utilcode.util.ActivityUtils;
 import com.xueh.comm_core.base.mvp.ibase.IBaseModel;
 import com.xueh.comm_core.net.BaseResult;
 import com.xueh.comm_core.net.mvp.BaseObserver;
-import com.xueh.comm_core.net.ResultCallbacks;
+import com.xueh.comm_core.net.mvp.ResultCallbacks;
 import com.xueh.comm_core.net.mvp.RxSchedulers;
 import com.xueh.comm_core.weight.ViewLoading;
 

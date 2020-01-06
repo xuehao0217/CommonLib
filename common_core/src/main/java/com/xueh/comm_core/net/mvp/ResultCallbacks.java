@@ -1,4 +1,6 @@
-package com.xueh.comm_core.net;
+package com.xueh.comm_core.net.mvp;
+
+import com.xueh.comm_core.net.BaseResult;
 
 /************************************************************
  * 创建日: 2017/7/18
