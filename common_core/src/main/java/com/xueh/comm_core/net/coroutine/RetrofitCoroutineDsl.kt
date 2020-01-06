@@ -9,7 +9,7 @@ import retrofit2.Call
  */
 
 class RetrofitCoroutineDsl<ResultType> {
-    var api: (Call<ResultType>)? = null
+    var apiDsl: (Call<ResultType>)? = null
 
     internal var onSuccess: ((ResultType?) -> Unit)? = null
         private set

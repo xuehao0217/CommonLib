@@ -2,7 +2,9 @@ package com.xueh.commonlib.ui.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import com.xueh.comm_core.base.mvvm.BaseViewModel
+import com.xueh.comm_core.net.BaseResult
 import com.xueh.comm_core.net.ServiceGenerator
+import com.xueh.comm_core.net.coroutine.getNetData
 import com.xueh.commonlib.api.RestApi
 import com.xueh.commonlib.entity.BannerVO
 
@@ -18,8 +20,17 @@ class HomeViewModel : BaseViewModel<RestApi>() {
 
     fun loadData() {
         launchOnUI {
-//              banner.postValue(api.bannerList2().await().data)
+            //              banner.postValue(api.bannerList2().await().data)
             banner.postValue(api.bannerList3().data)
+        }
+    }
+
+    fun loadData2() {
+        getNetData<BaseResult<List<BannerVO>>> {
+            apiDsl = api.bannerList2()
+            onSuccess {
+                banner.postValue(it?.data)
+            }
         }
     }
 }
