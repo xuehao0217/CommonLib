@@ -28,7 +28,7 @@ fun <ResultType> CoroutineScope.getNetData(
                 try {
                     it.execute()
                 } catch (e: ConnectException) {
-                    loge("HTTP",e.toString())
+                    loge("HTTP", "CoroutineScope.getNetData-->${e}")
                     retrofitCoroutine.onFailed?.invoke("网络连接出错", -100)
                     null
                 } catch (e: IOException) {
@@ -79,7 +79,7 @@ fun <ResultType> ViewModel.getNetData(
                 try {
                     it.execute()
                 } catch (e: ConnectException) {
-                    loge("HTTP",e.toString())
+                    loge("HTTP", "ViewModel.getNetData-->${e}")
                     retrofitCoroutine.onFailed?.invoke("网络连接出错", -100)
                     null
                 } catch (e: IOException) {
