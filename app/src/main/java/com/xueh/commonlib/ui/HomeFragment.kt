@@ -31,7 +31,7 @@ class HomeFragment : MVVMFragment<HomeViewModel>() {
             tv_home.text=it.toString()
         })
 
-        VM.loadData2()
+        VM.loadData()
     }
 
 
