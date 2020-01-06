@@ -18,7 +18,7 @@ class HomeViewModel : BaseViewModel<RestApi>() {
 
     fun loadData() {
         launchOnUI {
-            //  stateBanner.postValueAndSuccess(api.bannerList2().await().data)
+//              banner.postValue(api.bannerList2().await().data)
             banner.postValue(api.bannerList3().data)
         }
     }
