@@ -20,8 +20,7 @@ fun <ResultType> CoroutineScope.getNetData(
     dsl: RetrofitCoroutineDsl<ResultType>.() -> Unit //传递方法，需要哪个，传递哪个
 ) {
     this.launch(Dispatchers.Main) {
-        val retrofitCoroutine = RetrofitCoroutineDsl<ResultType>()
-        retrofitCoroutine.dsl()
+        val retrofitCoroutine = RetrofitCoroutineDsl<ResultType>().apply(dsl)
         retrofitCoroutine.apiDsl?.let { it ->
             val work = async(Dispatchers.IO) {
                 // io线程执行
@@ -71,8 +70,7 @@ fun <ResultType> ViewModel.getNetData(
     dsl: RetrofitCoroutineDsl<ResultType>.() -> Unit //传递方法，需要哪个，传递哪个
 ) {
     viewModelScope.launch {
-        val retrofitCoroutine = RetrofitCoroutineDsl<ResultType>()
-        retrofitCoroutine.dsl()
+        val retrofitCoroutine = RetrofitCoroutineDsl<ResultType>().apply(dsl)
         retrofitCoroutine.apiDsl?.let { it ->
             val work = async(Dispatchers.IO) {
                 // io线程执行
