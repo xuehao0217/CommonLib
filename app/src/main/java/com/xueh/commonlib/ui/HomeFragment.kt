@@ -17,6 +17,7 @@ import org.koin.androidx.viewmodel.ext.android.getViewModel
  */
 class HomeFragment : MVVMFragment<HomeViewModel>() {
     override fun initListener() {
+        tv_home.setOnClick { VM.loadData() }
     }
 
     override fun getCreateViewLayoutId() = R.layout.fragment_home
@@ -28,7 +29,7 @@ class HomeFragment : MVVMFragment<HomeViewModel>() {
 //        }
 
         VM.banner.observe(this, Observer {
-            tv_home.text=it.toString()
+            tv_home.text = it.toString()
         })
 
         VM.loadData()
@@ -39,5 +40,5 @@ class HomeFragment : MVVMFragment<HomeViewModel>() {
     }
 
 
-    override fun initViewModel(): HomeViewModel=getViewModel()
+    override fun initViewModel(): HomeViewModel = getViewModel()
 }
