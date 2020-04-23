@@ -27,9 +27,6 @@ class HomeViewModel : BaseViewModel<RestApi>() {
             onResponse {
                 banner.postValue(it.data)
             }
-            onStart {
-                true
-            }
         }
     }
 
