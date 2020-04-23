@@ -27,11 +27,6 @@ class HomeFragment : MVVMFragment<HomeViewModel>() {
 //        RxJavaUtils.delay(3) {
 //            showState(UiStatus.CONTENT)
 //        }
-
-        VM.banner.observe(this, Observer {
-            tv_home.text = it.toString()
-        })
-
         VM.loadData()
     }
 
@@ -39,6 +34,11 @@ class HomeFragment : MVVMFragment<HomeViewModel>() {
     override fun initDataAfterView() {
     }
 
-
     override fun initViewModel(): HomeViewModel = getViewModel()
+
+    override fun initLivedata(viewModel: HomeViewModel) {
+        viewModel.banner.observe(this, Observer {
+            tv_home.text=it.toString()
+        })
+    }
 }

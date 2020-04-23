@@ -20,5 +20,4 @@ interface RestApi {
 
     @GET("banner/json")
     suspend fun bannerList3(): BaseResult<List<BannerVO>>
-
 }

@@ -23,6 +23,14 @@ import okio.Buffer;
  * 创 建 人: xueh
  * 创建日期: 2019/2/19 18:56
  * 备注：
+ *
+ *         BasicParamsInterceptor basicParamsInterceptor = new BasicParamsInterceptor.Builder()
+ * //                .addQueryParamsMap(mHashMap)
+ *                 .addHeaderParamsMap(mHashMap) //添加公共参数到 post 请求体
+ * //                .addParamsMap(mHashMap) // 可以添加 Map 格式的参数
+ *                 .build();
+ *
+ *
  */
 public class BasicParamsInterceptor implements Interceptor {
 

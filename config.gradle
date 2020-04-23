@@ -38,6 +38,7 @@ ext {
             retrofit                     : "2.6.0",
             rxbinding                    : "3.0.0",
             okhttp                       : "4.0.0",
+            PersistentCookieJar          : "v1.0.1",
 
             glide                        : "4.10.0",
             background                   : "1.6.2",
@@ -102,6 +103,7 @@ ext {
             retrofit2_rxjava             : "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}",
             okhttp                       : "com.squareup.okhttp3:okhttp:${versions.okhttp}",
             okhttp_logging               : "com.squareup.okhttp3:logging-interceptor:${versions.okhttp}",
+            PersistentCookieJar          : "com.github.franmontiel:PersistentCookieJar:${versions.PersistentCookieJar}",
 
             glide                        : "com.github.bumptech.glide:glide:${versions.glide}",
             background                   : "com.noober.background:core:${versions.background}",

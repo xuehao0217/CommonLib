@@ -1,9 +1,9 @@
 package com.xueh.comm_core.base.mvvm
 
+import android.util.Log
 import androidx.lifecycle.Observer
 import com.xueh.comm_core.base.DFragment
 import com.xueh.comm_core.base.mvvm.ibase.AbsViewModel
-import com.xueh.comm_core.net.livedata.StateLiveData
 
 /**
  * 创 建 人: xueh
@@ -16,14 +16,20 @@ abstract class MVVMFragment<VM : AbsViewModel> : DFragment() {
     }
 
     abstract fun initViewModel(): VM
+    abstract fun initLivedata(viewModel: VM)
 
     override fun initDataBeforeView() {
+        initLivedata(VM)
         super.initDataBeforeView()
-        VM.VMStateLiveData.state.observe(this, Observer {
-            if (it == StateLiveData.State.Loading) {
-                showProgressDialog()
-            } else {
-                hideProgressDialog()
+        VM.apiLoading.observe(this, Observer {
+            it?.let {
+                if(it) showProgressDialog() else hideProgressDialog()
+            }
+        })
+
+        VM.apiException.observe(this, Observer {
+            it?.let {
+                Log.e("BaseViewModel--> ", it?.toString())
             }
         })
     }
