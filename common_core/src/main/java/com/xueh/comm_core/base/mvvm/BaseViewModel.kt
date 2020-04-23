@@ -15,11 +15,11 @@ abstract class BaseViewModel<E> : RequestViewModel() {
 
     protected abstract fun initApi(): E
 
-    private fun showLoading() {
+    protected fun showLoading() {
         apiLoading.postValue(true)
     }
 
-    private fun hideLoading() {
+    protected fun hideLoading() {
         apiLoading.postValue(false)
     }
 
