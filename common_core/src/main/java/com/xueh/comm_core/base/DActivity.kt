@@ -126,10 +126,7 @@ abstract class DActivity : BaseActivity(), CoroutineScope by MainScope() {
         addDisposable(RxBindingUtils.setViewClicks(this, function))
     }
 
-    fun bindStateView(view: View){
-        uiStatusController.bind(view)
-    }
-    fun showState(@UiStatus state: Int){
-        uiStatusController.changeUiStatusIgnore(state)
-    }
+    fun bindStateView(view: View)= uiStatusController.bind(view)
+
+    fun showState(@UiStatus state: Int)=   uiStatusController.changeUiStatusIgnore(state)
 }

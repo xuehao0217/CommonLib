@@ -91,11 +91,7 @@ abstract class DFragment : BaseFragment(), CoroutineScope by MainScope() {
         addDisposable(RxBindingUtils.setViewClicks(this, function))
     }
 
-    fun bindStateView(view: View): UiStatusController {
-        return uiStatusController.apply { bind(view) }
-    }
+    fun bindStateView(view: View) = uiStatusController.apply { bind(view) }
 
-    fun showState(@UiStatus state: Int): UiStatusController {
-        return uiStatusController.apply { changeUiStatusIgnore(state) }
-    }
+    fun showState(@UiStatus state: Int) = uiStatusController.apply { changeUiStatusIgnore(state) }
 }
