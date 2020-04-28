@@ -59,7 +59,7 @@ ext {
             BaseRecyclerViewAdapterHelper: "3.0.0-beta3",
             walle                        : "1.1.6",
             titlebar                     : "6.0",
-            UiStatus                     : "1.0.3",
+            UiStatus                     : "1.0.5",
             MagicIndicator               : "1.6.0",
 
             PickerView                   : "4.1.9",

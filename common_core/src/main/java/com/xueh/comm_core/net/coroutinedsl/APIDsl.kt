@@ -1,4 +1,4 @@
-package com.xueh.comm_core.net.coroutine
+package com.xueh.comm_core.net.coroutinedsl
 
 import androidx.lifecycle.viewModelScope
 import com.xueh.comm_core.base.mvvm.ibase.AbsViewModel

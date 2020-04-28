@@ -1,6 +1,6 @@
 package com.xueh.comm_core.base.mvvm
 
-import com.xueh.comm_core.net.coroutine.RequestViewModel
+import com.xueh.comm_core.net.coroutinedsl.RequestViewModel
 
 
 /**
