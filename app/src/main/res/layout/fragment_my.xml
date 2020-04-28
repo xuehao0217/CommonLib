@@ -1,16 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout android:background="#f0f"
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/cl_my_root"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <TextView
+    <ImageView
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:text="MyFragment"
+        android:id="@+id/iv_my"
+        android:src="@drawable/ic_launcher"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/tv_album"
+        android:layout_width="100dp"
+        android:gravity="center"
+        android:text="图库"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/iv_my"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_height="44dp"/>
+
+    <Button
+        android:id="@+id/tv_carema"
+        android:layout_width="100dp"
+        android:gravity="center"
+        android:text="相机"
+        android:textColor="@color/black"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_my"
+        android:layout_marginRight="20dp"
+        android:layout_height="44dp"/>
+
+
+    <Button
+        android:id="@+id/tv_loading"
+        android:layout_width="100dp"
+        android:gravity="center"
+        android:text="加载"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/tv_carema"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_height="44dp"/>
+
+    <Button
+        android:id="@+id/tv_content"
+        android:layout_width="100dp"
+        android:gravity="center"
+        android:text="内容"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toTopOf="@id/tv_loading"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="20dp"
+        android:layout_height="44dp"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

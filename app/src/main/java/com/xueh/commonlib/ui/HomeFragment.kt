@@ -1,7 +1,6 @@
 package com.xueh.commonlib.ui
 
 import android.os.Bundle
-import android.view.View
 import androidx.lifecycle.Observer
 import com.xueh.comm_core.base.mvvm.MVVMFragment
 import com.xueh.commonlib.R
@@ -17,19 +16,16 @@ import org.koin.androidx.viewmodel.ext.android.getViewModel
  */
 class HomeFragment : MVVMFragment<HomeViewModel>() {
     override fun initListener() {
-        tv_home.setOnClick { VM.loadData() }
+        tv_home.setOnClickListener{
+            VM.loadData()
+        }
     }
 
-    override fun getCreateViewLayoutId() = R.layout.fragment_home
+    override fun getLayoutId()= R.layout.fragment_home
 
-    override fun initView(inflateView: View, savedInstanceState: Bundle?) {
-//        bindStateView(tv_home).changeUiStatusIgnore(UiStatus.LOADING)
-//        RxJavaUtils.delay(3) {
-//            showState(UiStatus.CONTENT)
-//        }
+    override fun initView(savedInstanceState: Bundle?) {
         VM.loadData()
     }
-
 
     override fun initDataAfterView() {
     }

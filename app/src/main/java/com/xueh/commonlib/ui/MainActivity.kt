@@ -1,7 +1,6 @@
 package com.xueh.commonlib.ui
 
 import android.os.Bundle
-import android.view.View
 import com.xueh.comm_core.base.DActivity
 import com.xueh.commonlib.R
 import kotlinx.android.synthetic.main.activity_main.*
@@ -14,12 +13,14 @@ class MainActivity : DActivity() {
     //选中时icon
     private val selectIcon = intArrayOf(R.mipmap.ic_home_select, R.mipmap.ic_my_select)
 
-    override fun initView(inflateView: View?, savedInstanceState: Bundle?) {
+    override fun initView(savedInstanceState: Bundle?) {
         main_cnb.titleItems(tabs).normalIconItems(normalIcon).selectIconItems(selectIcon)
             .fragmentList(fragments.toList())
             .fragmentManager(supportFragmentManager)
             .build()
     }
+
+    override fun getLayoutId() = R.layout.activity_main
 
     override fun initDataAfterView() {
     }
@@ -27,5 +28,4 @@ class MainActivity : DActivity() {
     override fun initListener() {
     }
 
-    override fun getCreateViewLayoutId() = R.layout.activity_main
 }

@@ -47,6 +47,7 @@ abstract class DFragment : BaseFragment(), CoroutineScope by MainScope() {
 //        NetStatusHelper.getInstance().unregister(this)
         mCompositeDisposable.clear()
     }
+    
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 0, sticky = true)
     fun basegetEvent(a: String) {
@@ -91,7 +92,7 @@ abstract class DFragment : BaseFragment(), CoroutineScope by MainScope() {
         addDisposable(RxBindingUtils.setViewClicks(this, function))
     }
 
-    fun bindStateView(view: View) = uiStatusController.apply { bind(view) }
+    fun bindStateView(view: View)= uiStatusController.bind(view)
 
-    fun showState(@UiStatus state: Int) = uiStatusController.apply { changeUiStatusIgnore(state) }
+    fun showState(@UiStatus state: Int)=   uiStatusController.changeUiStatusIgnore(state)
 }
