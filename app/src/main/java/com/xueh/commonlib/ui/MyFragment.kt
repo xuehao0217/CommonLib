@@ -3,6 +3,7 @@ package com.xueh.commonlib.ui
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import com.fengchen.uistatus.annotation.UiStatus
 import com.xueh.comm_core.base.DFragment
 import com.xueh.comm_core.utils.TakePictureUtils
 import com.xueh.commonlib.R
@@ -27,18 +28,19 @@ class MyFragment : DFragment() {
         tv_carema.setOnClickListener {
             takePictureUtils.startTakeWayByCarema()
         }
-//        tv_loading.setOnClickListener {
-//            uiStatusController.bind(iv_my).changeUiStatus(UiStatus.LOADING)
-//        }
-//        tv_content.setOnClickListener {
-//            uiStatusController. changeUiStatusIgnore(UiStatus.CONTENT)
-//        }
+        tv_loading.setOnClickListener {
+            showState(UiStatus.LOADING)
+        }
+        tv_content.setOnClickListener {
+            showState(UiStatus.CONTENT)
+        }
     }
 
     override fun initDataAfterView() {
     }
 
     override fun initView(savedInstanceState: Bundle?) {
+        bindStateView(iv_my)
         takePictureUtils =
             TakePictureUtils(this, object : TakePictureUtils.takePictureCallBackListener {
                 override fun failed(errorCode: Int, deniedPermissions: MutableList<String>?) {

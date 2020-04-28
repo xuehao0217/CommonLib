@@ -94,5 +94,5 @@ abstract class DFragment : BaseFragment(), CoroutineScope by MainScope() {
 
     fun bindStateView(view: View)= uiStatusController.bind(view)
 
-    fun showState(@UiStatus state: Int)=   uiStatusController.changeUiStatusIgnore(state)
+    fun showState(@UiStatus state: Int)=   uiStatusController.changeUiStatus(state)
 }
