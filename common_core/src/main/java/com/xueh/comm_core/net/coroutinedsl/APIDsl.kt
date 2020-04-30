@@ -1,7 +1,11 @@
 package com.xueh.comm_core.net.coroutinedsl
 
 import androidx.lifecycle.viewModelScope
+import com.blankj.utilcode.util.NetworkUtils
+import com.blankj.utilcode.util.ToastUtils
+import com.xueh.comm_core.R
 import com.xueh.comm_core.base.mvvm.ibase.AbsViewModel
+import com.xueh.comm_core.utils.CommonUtils.getString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -47,19 +51,23 @@ class ViewModelDsl<Response> {
 
 
     internal fun launch(viewModelScope: AbsViewModel) {
-        viewModelScope.viewModelScope.launch {
-            onStart?.invoke()
-            try {
-                val response = withContext(Dispatchers.IO) {
-                    request()
+        if(NetworkUtils.isConnected()){
+            viewModelScope.viewModelScope.launch {
+                onStart?.invoke()
+                try {
+                    val response = withContext(Dispatchers.IO) {
+                        request()
+                    }
+                    onResponse?.invoke(response)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    onError?.invoke(e)
+                } finally {
+                    onFinally?.invoke()
                 }
-                onResponse?.invoke(response)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                onError?.invoke(e)
-            } finally {
-                onFinally?.invoke()
             }
+        }else{
+            ToastUtils.showShort(getString(R.string.str_no_net_prompts))
         }
     }
 }
