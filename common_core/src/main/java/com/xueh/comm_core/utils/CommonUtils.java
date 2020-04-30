@@ -27,38 +27,6 @@ import io.reactivex.annotations.Nullable;
  * 备注：常用的工具方法
  */
 public class CommonUtils {
-    /**
-     * 将dip转换为px
-     */
-    public static int dip2px(float dpValue) {
-        final float scale = Utils.getApp().getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale + 0.5f);
-    }
-
-    /**
-     * 将px转换为dip
-     */
-    public static int px2dip(float pxValue) {
-        final float scale = Utils.getApp().getResources().getDisplayMetrics().density;
-        return (int) (pxValue / scale + 0.5f);
-    }
-
-    /**
-     * 将px值转换为sp值，保证文字大小不变
-     */
-    public static int px2sp(float pxValue) {
-        final float fontScale = Utils.getApp().getResources().getDisplayMetrics().scaledDensity;
-        return (int) (pxValue / fontScale + 0.5f);
-    }
-
-    /**
-     * 将sp转换为px
-     */
-    public static int sp2px(float spValue) {
-        final float fontScale = Utils.getApp().getResources()
-                .getDisplayMetrics().scaledDensity;
-        return (int) (spValue * fontScale + 0.5f);
-    }
 
     public static int getColor(int colorId) {
         return ContextCompat.getColor(Utils.getApp(), colorId);
