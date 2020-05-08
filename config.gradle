@@ -25,7 +25,7 @@ ext {
             junit                        : "4.12",
             runner                       : "1.0.2",
             espresso                     : "3.0.2",
-            constraint_layout            : "2.0.0-beta4",
+            constraint_layout            : "2.0.0-beta5",
             appcompat                    : "1.2.0-alpha01",
             androidx                     : "1.0.0",
             design                       : "1.2.0-alpha06",
