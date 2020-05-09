@@ -2,6 +2,7 @@ package com.xueh.comm_core.utils;
 
 import android.widget.ImageView;
 
+import com.blankj.utilcode.util.ConvertUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
@@ -41,7 +42,7 @@ public class GlideUtils {
         Glide.with(view.getContext().getApplicationContext())
                 .load(url)
                 .apply(new RequestOptions()
-                        .transform(new RoundedCorners(CommonUtils.dip2px(circular))).transform(new CenterCrop(), new RoundedCorners(CommonUtils.dip2px(circular))))
+                        .transform(new RoundedCorners(ConvertUtils.dp2px(circular))).transform(new CenterCrop(), new RoundedCorners(ConvertUtils.dp2px(circular))))
                 .into(view);
     }
 }

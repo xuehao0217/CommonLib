@@ -20,9 +20,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
+import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.xueh.comm_core.R;
-import com.xueh.comm_core.utils.CommonUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -201,27 +201,27 @@ public class CommNavigationBarView extends LinearLayout {
 
     //将dp、sp转换成px
     private void toDp() {
-        navigationHeight = CommonUtils.dip2px(navigationHeight);
-        iconSize = CommonUtils.dip2px( iconSize);
-        hintPointSize = CommonUtils.dip2px( hintPointSize);
-        hintPointTop = CommonUtils.dip2px( hintPointTop);
-        hintPointLeft = CommonUtils.dip2px( hintPointLeft);
+        navigationHeight = ConvertUtils.dp2px(navigationHeight);
+        iconSize = ConvertUtils.dp2px( iconSize);
+        hintPointSize = ConvertUtils.dp2px( hintPointSize);
+        hintPointTop = ConvertUtils.dp2px( hintPointTop);
+        hintPointLeft = ConvertUtils.dp2px( hintPointLeft);
 
-        msgPointLeft =CommonUtils.dip2px(msgPointLeft);
-        msgPointTop = CommonUtils.dip2px( msgPointTop);
-        msgPointSize = CommonUtils.dip2px( msgPointSize);
-        msgPointTextSize = CommonUtils.dip2px(msgPointTextSize);
+        msgPointLeft =ConvertUtils.dp2px(msgPointLeft);
+        msgPointTop = ConvertUtils.dp2px( msgPointTop);
+        msgPointSize = ConvertUtils.dp2px( msgPointSize);
+        msgPointTextSize = ConvertUtils.dp2px(msgPointTextSize);
 
-        tabTextTop = CommonUtils.dip2px( tabTextTop);
-        tabTextSize = CommonUtils.dip2px(tabTextSize);
+        tabTextTop = ConvertUtils.dp2px( tabTextTop);
+        tabTextSize = ConvertUtils.dp2px(tabTextSize);
 
 
         //Add
-        addIconSize = CommonUtils.dip2px(addIconSize);
-        addLayoutHeight = CommonUtils.dip2px( addLayoutHeight);
-        addLayoutBottom = CommonUtils.dip2px( addLayoutBottom);
-        addTextSize = CommonUtils.dip2px( addTextSize);
-        addTextTopMargin = CommonUtils.dip2px(addTextTopMargin);
+        addIconSize = ConvertUtils.dp2px(addIconSize);
+        addLayoutHeight = ConvertUtils.dp2px( addLayoutHeight);
+        addLayoutBottom = ConvertUtils.dp2px( addLayoutBottom);
+        addTextSize = ConvertUtils.dp2px( addTextSize);
+        addTextTopMargin = ConvertUtils.dp2px(addTextTopMargin);
     }
 
 
@@ -324,7 +324,7 @@ public class CommNavigationBarView extends LinearLayout {
 
             //消息红点
             TextView msgPoint = itemView.findViewById(R.id.msg_point_tv);
-            msgPoint.setTextSize(CommonUtils.px2sp(msgPointTextSize));
+            msgPoint.setTextSize(ConvertUtils.px2sp(msgPointTextSize));
             RelativeLayout.LayoutParams msgPointParams = (RelativeLayout.LayoutParams) msgPoint.getLayoutParams();
             msgPointParams.bottomMargin = (int) msgPointTop;
             msgPointParams.width = (int) msgPointSize;
@@ -356,7 +356,7 @@ public class CommNavigationBarView extends LinearLayout {
             textParams.topMargin = (int) tabTextTop;
             text.setLayoutParams(textParams);
             text.setText(titleItems[i]);
-            text.setTextSize(CommonUtils.px2sp(tabTextSize));
+            text.setTextSize(ConvertUtils.px2sp(tabTextSize));
 
 
             tabList.add(itemView);
@@ -437,7 +437,7 @@ public class CommNavigationBarView extends LinearLayout {
                 addImage.setLayoutParams(imageParams);
 
                 TextView addText = new TextView(getContext());
-                addText.setTextSize(CommonUtils.px2sp( addTextSize));
+                addText.setTextSize(ConvertUtils.px2sp( addTextSize));
                 LayoutParams addTextParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 addTextParams.topMargin = (int) addTextTopMargin;
                 if (TextUtils.isEmpty(titleItems[i])) {
@@ -546,7 +546,7 @@ public class CommNavigationBarView extends LinearLayout {
                 textParams.topMargin = (int) tabTextTop;
                 text.setLayoutParams(textParams);
                 text.setText(titleItems[index]);
-                text.setTextSize(CommonUtils.px2sp( tabTextSize));
+                text.setTextSize(ConvertUtils.px2sp( tabTextSize));
 
 
                 View hintPoint = itemView.findViewById(R.id.red_point);
@@ -561,7 +561,7 @@ public class CommNavigationBarView extends LinearLayout {
 
                 //消息红点
                 TextView msgPoint = itemView.findViewById(R.id.msg_point_tv);
-                msgPoint.setTextSize(CommonUtils.px2sp( msgPointTextSize));
+                msgPoint.setTextSize(ConvertUtils.px2sp( msgPointTextSize));
                 RelativeLayout.LayoutParams msgPointParams = (RelativeLayout.LayoutParams) msgPoint.getLayoutParams();
                 msgPointParams.bottomMargin = (int) msgPointTop;
                 msgPointParams.width = (int) msgPointSize;
@@ -668,7 +668,7 @@ public class CommNavigationBarView extends LinearLayout {
         textParams.topMargin = (int) tabTextTop;
         text.setLayoutParams(textParams);
         text.setText(titleItems[index]);
-        text.setTextSize(CommonUtils.px2sp( tabTextSize));
+        text.setTextSize(ConvertUtils.px2sp( tabTextSize));
 
 
         View hintPoint = itemView.findViewById(R.id.red_point);
@@ -683,7 +683,7 @@ public class CommNavigationBarView extends LinearLayout {
 
         //消息红点
         TextView msgPoint = itemView.findViewById(R.id.msg_point_tv);
-        msgPoint.setTextSize(CommonUtils.px2sp(msgPointTextSize));
+        msgPoint.setTextSize(ConvertUtils.px2sp(msgPointTextSize));
         RelativeLayout.LayoutParams msgPointParams = (RelativeLayout.LayoutParams) msgPoint.getLayoutParams();
         msgPointParams.bottomMargin = (int) msgPointTop;
         msgPointParams.width = (int) msgPointSize;
@@ -833,7 +833,7 @@ public class CommNavigationBarView extends LinearLayout {
                 textParams.topMargin = (int) tabTextTop;
                 text.setLayoutParams(textParams);
                 text.setText(titleItems[index]);
-                text.setTextSize(CommonUtils.px2sp(tabTextSize));
+                text.setTextSize(ConvertUtils.px2sp(tabTextSize));
 
 
                 View hintPoint = itemView.findViewById(R.id.red_point);
@@ -848,7 +848,7 @@ public class CommNavigationBarView extends LinearLayout {
 
                 //消息红点
                 TextView msgPoint = itemView.findViewById(R.id.msg_point_tv);
-                msgPoint.setTextSize(CommonUtils.px2sp( msgPointTextSize));
+                msgPoint.setTextSize(ConvertUtils.px2sp( msgPointTextSize));
                 RelativeLayout.LayoutParams msgPointParams = (RelativeLayout.LayoutParams) msgPoint.getLayoutParams();
                 msgPointParams.bottomMargin = (int) msgPointTop;
                 msgPointParams.width = (int) msgPointSize;
@@ -1087,7 +1087,7 @@ public class CommNavigationBarView extends LinearLayout {
     }
 
     public CommNavigationBarView addIconSize(int addIconSize) {
-        this.addIconSize = CommonUtils.dip2px( addIconSize);
+        this.addIconSize = ConvertUtils.dp2px( addIconSize);
         return this;
     }
 
@@ -1103,7 +1103,7 @@ public class CommNavigationBarView extends LinearLayout {
     }
 
     public CommNavigationBarView navigationHeight(int navigationHeight) {
-        this.navigationHeight = CommonUtils.dip2px( navigationHeight);
+        this.navigationHeight = ConvertUtils.dp2px( navigationHeight);
         return this;
     }
 
@@ -1128,48 +1128,48 @@ public class CommNavigationBarView extends LinearLayout {
     }
 
     public CommNavigationBarView tabTextSize(int tabTextSize) {
-        this.tabTextSize = CommonUtils.sp2px( tabTextSize);
+        this.tabTextSize = ConvertUtils.sp2px( tabTextSize);
         return this;
     }
 
     public CommNavigationBarView tabTextTop(int tabTextTop) {
-        this.tabTextTop = CommonUtils.dip2px( tabTextTop);
+        this.tabTextTop = ConvertUtils.dp2px( tabTextTop);
         return this;
     }
 
     public CommNavigationBarView msgPointTextSize(int msgPointTextSize) {
-        this.msgPointTextSize = CommonUtils.sp2px( msgPointTextSize);
+        this.msgPointTextSize = ConvertUtils.sp2px( msgPointTextSize);
         return this;
     }
 
     public CommNavigationBarView msgPointSize(int msgPointSize) {
-        this.msgPointSize = CommonUtils.dip2px( msgPointSize);
+        this.msgPointSize = ConvertUtils.dp2px( msgPointSize);
         return this;
     }
 
     public CommNavigationBarView msgPointLeft(int msgPointLeft) {
-        this.msgPointLeft = CommonUtils.dip2px(msgPointLeft);
+        this.msgPointLeft = ConvertUtils.dp2px(msgPointLeft);
         return this;
     }
 
     public CommNavigationBarView msgPointTop(int msgPointTop) {
-        this.msgPointTop = CommonUtils.dip2px( msgPointTop);
+        this.msgPointTop = ConvertUtils.dp2px( msgPointTop);
         return this;
     }
 
 
     public CommNavigationBarView hintPointSize(int hintPointSize) {
-        this.hintPointSize = CommonUtils.dip2px( hintPointSize);
+        this.hintPointSize = ConvertUtils.dp2px( hintPointSize);
         return this;
     }
 
     public CommNavigationBarView hintPointLeft(int hintPointLeft) {
-        this.hintPointLeft = CommonUtils.dip2px( hintPointLeft);
+        this.hintPointLeft = ConvertUtils.dp2px( hintPointLeft);
         return this;
     }
 
     public CommNavigationBarView hintPointTop(int hintPointTop) {
-        this.hintPointTop = CommonUtils.dip2px( hintPointTop);
+        this.hintPointTop = ConvertUtils.dp2px( hintPointTop);
         return this;
     }
 
@@ -1223,12 +1223,12 @@ public class CommNavigationBarView extends LinearLayout {
 
 
     public CommNavigationBarView iconSize(int iconSize) {
-        this.iconSize = CommonUtils.dip2px(iconSize);
+        this.iconSize = ConvertUtils.dp2px(iconSize);
         return this;
     }
 
     public CommNavigationBarView addLayoutBottom(int addLayoutBottom) {
-        this.addLayoutBottom = CommonUtils.dip2px(addLayoutBottom);
+        this.addLayoutBottom = ConvertUtils.dp2px(addLayoutBottom);
         return this;
     }
 
@@ -1243,7 +1243,7 @@ public class CommNavigationBarView extends LinearLayout {
     }
 
     public CommNavigationBarView addTextSize(int addTextSize) {
-        this.addTextSize = CommonUtils.sp2px(addTextSize);
+        this.addTextSize = ConvertUtils.sp2px(addTextSize);
         return this;
     }
 
@@ -1258,7 +1258,7 @@ public class CommNavigationBarView extends LinearLayout {
     }
 
     public CommNavigationBarView addTextTopMargin(int addTextTopMargin) {
-        this.addTextTopMargin = CommonUtils.dip2px( addTextTopMargin);
+        this.addTextTopMargin = ConvertUtils.dp2px( addTextTopMargin);
         return this;
     }
 

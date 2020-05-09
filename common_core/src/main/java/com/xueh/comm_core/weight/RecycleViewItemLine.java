@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blankj.utilcode.util.ConvertUtils;
 import com.xueh.comm_core.utils.CommonUtils;
 
 /**
@@ -64,7 +65,7 @@ public class RecycleViewItemLine extends RecyclerView.ItemDecoration {
      */
     public RecycleViewItemLine(Context context, int orientation, int dividerHeight,  @ColorRes int dividerColor) {
         this(context, orientation);
-        mDividerHeight = CommonUtils.dip2px(dividerHeight);
+        mDividerHeight = ConvertUtils.dp2px(dividerHeight);
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setColor(CommonUtils.getColor(dividerColor));
         mPaint.setStyle(Paint.Style.FILL);

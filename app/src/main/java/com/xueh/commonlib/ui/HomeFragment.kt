@@ -3,6 +3,7 @@ package com.xueh.commonlib.ui
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import com.xueh.comm_core.base.mvvm.MVVMFragment
+import com.xueh.comm_core.helper.setRoundBg
 import com.xueh.commonlib.R
 import com.xueh.commonlib.ui.viewmodel.HomeViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -25,6 +26,7 @@ class HomeFragment : MVVMFragment<HomeViewModel>() {
 
     override fun initView(savedInstanceState: Bundle?) {
         VM.loadData()
+        tv_home.setRoundBg(10, R.color.colorAccent, R.color.white)
     }
 
     override fun initDataAfterView() {

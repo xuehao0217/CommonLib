@@ -3,9 +3,13 @@ package com.xueh.comm_core.helper
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.NetworkUtils
 import com.blankj.utilcode.util.Utils
+import com.noober.background.drawable.DrawableCreator
 import com.xueh.comm_core.utils.CommonUtils
 import com.xueh.comm_core.utils.GlideUtils
 
@@ -15,8 +19,6 @@ import com.xueh.comm_core.utils.GlideUtils
  * 创建日期: 2019/8/16 17:41
  * 备注：
  */
-fun dp2px(dp: Float) = CommonUtils.dip2px(dp)
-
 fun getColor(colorRes: Int) = CommonUtils.getColor(colorRes)
 
 fun getDrawable(@DrawableRes id: Int) = CommonUtils.getDrawable(id)
@@ -49,6 +51,45 @@ fun View.setGone() {
 fun loge(tag: String, content: String) {
     Log.e(tag, content)
 }
+
+
+/**
+ * 设置圆角 View
+ */
+fun View.setRoundBg(
+    CornersRadius: Int, @ColorRes bgColor: Int, @ColorRes tvCollor: Int = 0
+) {
+    val drawable = DrawableCreator.Builder()
+        .setCornersRadius(ConvertUtils.dp2px(CornersRadius.toFloat()).toFloat())
+        .setSolidColor(CommonUtils.getColor(bgColor))
+        .setStrokeColor(CommonUtils.getColor(bgColor))
+        .build()
+    this.background = drawable
+    if (this is TextView) {
+        this.setTextColor(CommonUtils.getColor(tvCollor))
+    }
+}
+
+
+/**
+ * 设置圆线 View
+ */
+fun View.setRoundLineBg(
+    radius: Int, @ColorRes SolidColor: Int, @ColorRes lineColor: Int,
+    width: Int = 1, @ColorRes tvColor: Int = 0
+) {
+    val drawable = DrawableCreator.Builder()
+        .setCornersRadius(ConvertUtils.dp2px(radius.toFloat()).toFloat())
+        .setStrokeColor(CommonUtils.getColor(lineColor))
+        .setStrokeWidth(ConvertUtils.dp2px(width.toFloat()).toFloat())
+        .setSolidColor(CommonUtils.getColor(SolidColor))
+        .build()
+    this.background = drawable
+    if (this is TextView) {
+        this.setTextColor(CommonUtils.getColor(tvColor))
+    }
+}
+
 
 sealed class BooleanExt<out T> constructor(val boolean: Boolean)
 object Otherwise : BooleanExt<Nothing>(true)
