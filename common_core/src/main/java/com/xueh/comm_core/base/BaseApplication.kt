@@ -25,6 +25,7 @@ open class BaseApplication : Application() {
         super.onCreate()
         MultiDex.install(this)
         initToast()
+        registerActivityLifecycle()
         UiStatusNetworkStatusProvider.getInstance()
             .registerOnRequestNetworkStatusEvent { context -> hasNetWorkConection() }
     }
