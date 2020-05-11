@@ -61,6 +61,7 @@ ext {
             titlebar                     : "6.0",
             UiStatus                     : "1.0.5",
             MagicIndicator               : "1.6.0",
+            xpopup                       : "1.9.0",
 
             PickerView                   : "4.1.9",
             banner                       : "3.0.0",
@@ -127,6 +128,7 @@ ext {
             UiStatus                     : "com.github.FengChenSunshine:UiStatus:${versions.UiStatus}",
             titlebar                     : "com.hjq:titlebar:${versions.titlebar}",
             MagicIndicator               : "com.github.hackware1993:MagicIndicator:${versions.MagicIndicator}",
+            xpopup                       : "com.lxj:xpopup:${versions.xpopup}",
 
             PickerView                   : "com.contrarywind:Android-PickerView:${versions.PickerView}",
     ]
