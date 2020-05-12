@@ -18,21 +18,6 @@ MVVM  Kotlin Coroutine 封装
                 }
             }
         }
-
-        fun loadLiveData() =
-            apiLiveData(context = SupervisorJob() + Dispatchers.Main.immediate, timeoutInMs = 2000) {
-                api.bannerList3()
-            }
-
-        fun loadCallback() {
-            apiCallback({
-                api.bannerList3()
-            }, {
-                banner.postValue(it.data)
-            }, onFinally = {
-                false
-            })
-        }
     }
 
 ```
