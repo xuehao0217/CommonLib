@@ -54,7 +54,7 @@ ext {
             SmartRefreshLayout           : "1.1.2",
             MPAndroidChart               : "v3.1.0-alpha",
             immersionbar                 : "2.3.3",
-            utilcode                     : "1.28.3",
+            utilcode                     : "1.28.4",
             permission                   : "2.0.3",
             BaseRecyclerViewAdapterHelper: "3.0.0-beta3",
             walle                        : "1.1.6",
