@@ -4,7 +4,6 @@ import com.fengchen.uistatus.UiStatusManager
 import com.fengchen.uistatus.annotation.UiStatus
 import com.xueh.comm_core.base.BaseApplication
 import com.xueh.comm_core.net.HttpRequest
-import com.xueh.comm_core.net.IHttpBaseUrl
 import com.xueh.commonlib.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -15,13 +14,15 @@ import org.koin.core.context.startKoin
  * 创建日期: 2019/11/29 12:52
  * 备注：
  */
-class MyApplication : BaseApplication(), IHttpBaseUrl {
+class MyApplication : BaseApplication() {
     override fun onCreate() {
         super.onCreate()
         initState()
 
-        HttpRequest.setBaeUrl(this)
-        HttpRequest.putHead("name","xuehao")
+        HttpRequest.apply {
+            setBaseUrl("https://www.wanandroid.com/")
+            putHead("name","xuehao")
+        }
 
         startKoin {
             androidContext(this@MyApplication)
@@ -35,6 +36,4 @@ class MyApplication : BaseApplication(), IHttpBaseUrl {
             .addUiStatusConfig(UiStatus.EMPTY, R.layout.state_empty)
             .addUiStatusConfig(UiStatus.NETWORK_ERROR, R.layout.state_net_error)
     }
-
-    override fun getHttpBaseUrl() = "https://www.wanandroid.com/"
 }

@@ -16,10 +16,10 @@ import javax.net.ssl.SSLContext
 
 object HttpRequest {
     private val mServiceMap: MutableMap<String, Retrofit> = HashMap()
-    private var DOMAIN_BASE=""
+    private var DOMAIN_BASE = ""
 
-    fun setBaeUrl(httpBaseUrl: IHttpBaseUrl) {
-        DOMAIN_BASE = httpBaseUrl.getHttpBaseUrl()
+    fun setBaseUrl(base_url: String) {
+        DOMAIN_BASE = base_url
     }
 
     fun <T> getService(serviceClass: Class<T>): T {
@@ -62,12 +62,7 @@ object HttpRequest {
     }
 
 
-
-
-
-
-
-    private var headers: HeaderInterceptor=HeaderInterceptor()
+    private var headers: HeaderInterceptor = HeaderInterceptor()
     private const val TIME_CONNECT = 60L
 
 
