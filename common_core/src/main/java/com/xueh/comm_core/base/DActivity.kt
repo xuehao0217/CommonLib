@@ -111,17 +111,6 @@ abstract class DActivity : BaseActivity(), CoroutineScope by MainScope() {
     }
 
 
-//    override fun onStart() {
-//        super.onStart()
-//        NetStatusHelper.getInstance().register(this)
-//    }
-//
-//    override fun onStop() {
-//        super.onStop()
-//        NetStatusHelper.getInstance().unregister(this)
-//    }
-
-
     fun View.setOnClick(function: (((data: Any) -> Unit))) {
         addDisposable(RxBindingUtils.setViewClicks(this, function))
     }

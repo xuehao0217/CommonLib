@@ -36,7 +36,6 @@ abstract class DFragment : BaseFragment(), CoroutineScope by MainScope() {
         //在oncreate时还是会多次调用的
         EventBusHelper.register(this)
         uiStatusController = UiStatusController.get()
-//        NetStatusHelper.getInstance().register(this)
     }
 
     override fun onDetach() {
@@ -44,7 +43,6 @@ abstract class DFragment : BaseFragment(), CoroutineScope by MainScope() {
         super.onDetach()
         //在onDestroyView时与activity还没有解绑！
         EventBusHelper.unregister(this)
-//        NetStatusHelper.getInstance().unregister(this)
         mCompositeDisposable.clear()
     }
     
