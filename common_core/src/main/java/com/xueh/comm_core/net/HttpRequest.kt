@@ -2,11 +2,9 @@ package com.xueh.comm_core.net
 
 import com.blankj.utilcode.util.Utils
 import com.xueh.comm_core.BuildConfig
-import io.github.iamyours.wandroid.net.LiveDataCallAdapterFactory
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.security.SecureRandom
 import java.util.*
@@ -16,7 +14,7 @@ import javax.net.ssl.SSLContext
 
 object HttpRequest {
     private val mServiceMap: MutableMap<String, Retrofit> = HashMap()
-    private var DOMAIN_BASE = ""
+    lateinit var DOMAIN_BASE:String
 
     fun setBaseUrl(base_url: String) {
         DOMAIN_BASE = base_url
@@ -39,21 +37,16 @@ object HttpRequest {
                     mServiceMap[domain] = retrofit
                 }
             }
-            return createServiceFrom(retrofit, serviceClass)
+            return retrofit.create(serviceClass)
         }
     }
 
-    private fun <T> createServiceFrom(retrofit: Retrofit, serviceClass: Class<T>): T {
-        return retrofit.create(serviceClass)
-    }
 
     private fun getRetrofit(base_url: String): Retrofit {
         return Retrofit.Builder()
             .baseUrl(base_url)
-            .client(getOkHttp().build()) //   .addConverterFactory(ScalarsConverterFactory.create())
+            .client(getOkHttp().build())
             .addConverterFactory(GsonConverterFactory.create()) //返回内容的转换器
-            .addCallAdapterFactory(LiveDataCallAdapterFactory())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create()) //请求Call的转换器
             .build()
     }
 
@@ -100,4 +93,20 @@ object HttpRequest {
             .writeTimeout(TIME_CONNECT, TimeUnit.SECONDS)
             .cookieJar(com.xueh.comm_core.net.cookie.CookieJar.getInstance())
     }
+}
+
+class RequestDsl {
+
+    internal var buidOkHttp: ((OkHttpClient.Builder) -> OkHttpClient.Builder)? = null
+
+    internal var buidRetrofit: ((Retrofit.Builder) -> Retrofit.Builder)? = null
+
+    infix fun okHttp(builder: ((OkHttpClient.Builder) -> OkHttpClient.Builder)?) {
+        this.buidOkHttp = builder
+    }
+
+    infix fun retrofit(builder: ((Retrofit.Builder) -> Retrofit.Builder)?) {
+        this.buidRetrofit = builder
+    }
+
 }

@@ -6,8 +6,6 @@ import com.xueh.comm_core.net.BaseResult
 import com.xueh.comm_core.net.HttpRequest
 import com.xueh.commonlib.api.RestApi
 import com.xueh.commonlib.entity.BannerVO
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 
 /**
  * 创 建 人: xueh
@@ -28,20 +26,5 @@ class HomeViewModel : BaseViewModel<RestApi>() {
                 banner.postValue(it.data)
             }
         }
-    }
-
-    fun loadLiveData() =
-        apiLiveData(context = SupervisorJob() + Dispatchers.Main.immediate, timeoutInMs = 2000) {
-            api.bannerList3()
-        }
-
-    fun loadCallback() {
-        apiCallback({
-            api.bannerList3()
-        }, {
-            banner.postValue(it.data)
-        }, onFinally = {
-            false
-        })
     }
 }
