@@ -94,19 +94,3 @@ object HttpRequest {
             .cookieJar(com.xueh.comm_core.net.cookie.CookieJar.getInstance())
     }
 }
-
-class RequestDsl {
-
-    internal var buidOkHttp: ((OkHttpClient.Builder) -> OkHttpClient.Builder)? = null
-
-    internal var buidRetrofit: ((Retrofit.Builder) -> Retrofit.Builder)? = null
-
-    infix fun okHttp(builder: ((OkHttpClient.Builder) -> OkHttpClient.Builder)?) {
-        this.buidOkHttp = builder
-    }
-
-    infix fun retrofit(builder: ((Retrofit.Builder) -> Retrofit.Builder)?) {
-        this.buidRetrofit = builder
-    }
-
-}
