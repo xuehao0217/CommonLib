@@ -30,6 +30,7 @@ ext {
             androidx                     : "1.0.0",
             design                       : "1.2.0-alpha06",
             lifecycle_version            : "2.2.0",
+            viewpager2                   : "1.0.0",
 
             koin_android                 : "2.0.1",
 
@@ -80,6 +81,7 @@ ext {
             cardview                     : "androidx.cardview:cardview:${versions.androidx}",
             design                       : "com.google.android.material:material:${versions.design}",
             constraint_layout            : "androidx.constraintlayout:constraintlayout:${versions.constraint_layout}",
+            viewpager2                   : "androidx.viewpager2:viewpager2:${versions.viewpager2}",
 
             lifecycle_extensions         : "androidx.lifecycle:lifecycle-extensions:${versions.lifecycle_version}",
             lifecycle_livedata_ktx       : "androidx.lifecycle:lifecycle-livedata-ktx:${versions.lifecycle_version}",
