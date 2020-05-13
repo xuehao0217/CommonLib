@@ -13,8 +13,9 @@ import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.SSLContext
 /***************************************************************************************************
 //动态配置OkHttp Retrofit
+
 private var requestDSL: (RequestDsl.() -> Unit)? = null
-    fun setting(requestDSL: (RequestDsl.() -> Unit)? = null) {
+fun setting(requestDSL: (RequestDsl.() -> Unit)? = null) {
     this.requestDSL = requestDSL
 }
 
