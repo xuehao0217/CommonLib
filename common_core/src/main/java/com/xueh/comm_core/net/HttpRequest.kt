@@ -48,7 +48,7 @@ class RequestDsl {
 
 }
 
- ***************************************************************************************************/
+****************************************************************************************************/
 object HttpRequest {
     private const val TIME_CONNECT = 60L
     private val mServiceMap: MutableMap<String, Retrofit> = HashMap()
@@ -97,8 +97,6 @@ object HttpRequest {
 
 
     private var headers: HeaderInterceptor = HeaderInterceptor()
-
-
     fun putHead(key: String, value: String): HeaderInterceptor {
         headers.put(key, value)
         return headers
