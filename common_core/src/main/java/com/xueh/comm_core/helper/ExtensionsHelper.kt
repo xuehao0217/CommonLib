@@ -91,6 +91,29 @@ fun View.setRoundLineBg(
 }
 
 
+/***
+ *  notNull(name,age){ name,age->
+ *         doSth(name,age)
+ *  }
+ */
+inline fun <A, B, R> notNull(a: A?, b: B?, block: (A, B) -> R) {
+    if (a != null && b != null) {
+        block(a, b)
+    }
+}
+
+/***
+ *  notNull(name,age){
+ *         doSth(name,age)
+ *  }
+ */
+inline fun <R> notNull(vararg args: Any?, block: () -> R) {
+    when {
+        args.filterNotNull().size == args.size -> block()
+    }
+}
+
+
 sealed class BooleanExt<out T> constructor(val boolean: Boolean)
 object Otherwise : BooleanExt<Nothing>(true)
 class WithData<out T>(val data: T) : BooleanExt<T>(false)
