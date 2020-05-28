@@ -1,9 +1,11 @@
 package com.xueh.commonlib.ui.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.xueh.comm_core.base.mvvm.BaseViewModel
 import com.xueh.comm_core.net.BaseResult
 import com.xueh.comm_core.net.HttpRequest
+import com.xueh.comm_core.net.coroutinedsl.LiveResult
 import com.xueh.commonlib.api.RestApi
 import com.xueh.commonlib.entity.BannerVO
 
@@ -13,6 +15,7 @@ import com.xueh.commonlib.entity.BannerVO
  * 备注：
  */
 class HomeViewModel : BaseViewModel<RestApi>() {
+
     override fun initApi() = HttpRequest.getService(RestApi::class.java)
 
     val banner = MutableLiveData<List<BannerVO>?>()
@@ -25,6 +28,13 @@ class HomeViewModel : BaseViewModel<RestApi>() {
             onResponse {
                 banner.postValue(it.data)
             }
+        }
+    }
+
+
+    fun loadLiveData(): LiveData<LiveResult<BaseResult<List<BannerVO>>>> {
+        return apiLiveData {
+            api.bannerList3()
         }
     }
 }

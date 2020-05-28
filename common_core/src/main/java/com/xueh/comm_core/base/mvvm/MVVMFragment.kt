@@ -10,24 +10,24 @@ import com.xueh.comm_core.base.mvvm.ibase.AbsViewModel
  * 创建日期: 2019/12/31 15:53
  * 备注：
  */
-abstract class MVVMFragment<VM : AbsViewModel> : DFragment() {
-    val VM by lazy {
+abstract class MVVMFragment<viewModel : AbsViewModel> : DFragment() {
+    val viewModel by lazy {
         initViewModel()
     }
 
-    abstract fun initViewModel(): VM
-    abstract fun initLivedata(viewModel: VM)
+    abstract fun initViewModel(): viewModel
+    abstract fun initLivedata(viewModel: viewModel)
 
     override fun initDataBeforeView() {
-        initLivedata(VM)
+        initLivedata(viewModel)
         super.initDataBeforeView()
-        VM.apiLoading.observe(this, Observer {
+        viewModel.apiLoading.observe(this, Observer {
             it?.let {
                 if(it) showProgressDialog() else hideProgressDialog()
             }
         })
 
-        VM.apiException.observe(this, Observer {
+        viewModel.apiException.observe(this, Observer {
             it?.let {
                 Log.e("BaseViewModel--> ", it?.toString())
             }

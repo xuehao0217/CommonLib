@@ -3,7 +3,6 @@ package com.xueh.commonlib.api
 import androidx.lifecycle.LiveData
 import com.xueh.comm_core.net.BaseResult
 import com.xueh.commonlib.entity.BannerVO
-import retrofit2.Call
 import retrofit2.http.GET
 
 /**
@@ -14,9 +13,6 @@ import retrofit2.http.GET
 interface RestApi {
     @GET("banner/json")
     fun bannerList(): LiveData<BaseResult<List<BannerVO>>>
-
-    @GET("banner/json")
-    fun bannerList2(): Call<BaseResult<List<BannerVO>>>
 
     @GET("banner/json")
     suspend fun bannerList3(): BaseResult<List<BannerVO>>
