@@ -1,5 +1,5 @@
 # 公用库适配Androidx
-MVVM  Kotlin Coroutine 封装
+Kotlin 协程 DSL网络请求样式封装
 
 #### BaseViewModel使用
 ```java
