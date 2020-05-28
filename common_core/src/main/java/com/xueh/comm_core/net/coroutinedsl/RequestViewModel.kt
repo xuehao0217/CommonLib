@@ -92,7 +92,7 @@ open class RequestViewModel : AbsViewModel() {
 
 
 /**
- * Result必须加泛型 不然response的泛型就会被擦除!!
+ * LiveDataResult 必须加泛型 不然response的泛型就会被擦除!!
  * damn it
  */
 sealed class LiveDataResult<T> {
