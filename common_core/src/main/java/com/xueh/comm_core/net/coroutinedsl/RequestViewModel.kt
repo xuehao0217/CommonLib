@@ -69,22 +69,22 @@ open class RequestViewModel : AbsViewModel() {
         context: CoroutineContext = EmptyCoroutineContext,
         timeoutInMs: Long = 3000L,
         request: suspend () -> Response
-    ): LiveData<LiveResult<Response>> {
+    ): LiveData<LiveDataResult<Response>> {
 
         return androidx.lifecycle.liveData(context, timeoutInMs) {
             onApiStart()
-            emit(LiveResult.Start())
+            emit(LiveDataResult.Start())
             try {
                 emit(withContext(Dispatchers.IO) {
-                    LiveResult.Response(request())
+                    LiveDataResult.Response(request())
                 })
             } catch (e: Exception) {
                 e.printStackTrace()
                 onApiError(e)
-                emit(LiveResult.Error(e))
+                emit(LiveDataResult.Error(e))
             } finally {
                 onApiFinally()
-                emit(LiveResult.Finally())
+                emit(LiveDataResult.Finally())
             }
         }
     }
@@ -95,9 +95,9 @@ open class RequestViewModel : AbsViewModel() {
  * Result必须加泛型 不然response的泛型就会被擦除!!
  * damn it
  */
-sealed class LiveResult<T> {
-    class Start<T> : LiveResult<T>()
-    class Finally<T> : LiveResult<T>()
-    data class Response<T>(val response: T) : LiveResult<T>()
-    data class Error<T>(val exception: Exception) : LiveResult<T>()
+sealed class LiveDataResult<T> {
+    class Start<T> : LiveDataResult<T>()
+    class Finally<T> : LiveDataResult<T>()
+    data class Response<T>(val response: T) : LiveDataResult<T>()
+    data class Error<T>(val exception: Exception) : LiveDataResult<T>()
 }
