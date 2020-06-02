@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.activity_web_view.*
  * 创建日期: 2019/3/11 11:16
  * 备注：一个只用于显示的web页面
  */
-class WebViewActivity : DActivity() {
+open class WebViewActivity : DActivity() {
 
     companion object {
         const val TITLE = "title"
