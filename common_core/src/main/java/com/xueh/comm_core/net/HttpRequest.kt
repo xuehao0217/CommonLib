@@ -11,8 +11,46 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.SSLContext
+/***************************************************************************************************
+//动态配置OkHttp Retrofit
 
+private var requestDSL: (RequestDsl.() -> Unit)? = null
+fun setting(requestDSL: (RequestDsl.() -> Unit)? = null) {
+    this.requestDSL = requestDSL
+}
+
+
+private fun getRetrofit(base_url: String): Retrofit {
+    val dsl = if (requestDSL != null) RequestDsl().apply(requestDSL!!) else null
+    val finalOkHttpBuilder = dsl?.buidOkHttp?.invoke(HttpRequest.getOkHttp()) ?: HttpRequest.getOkHttp()
+    val retrofitBuilder = Retrofit.Builder()
+    .baseUrl(base_url)
+    .addConverterFactory(GsonConverterFactory.create())
+    .client(finalOkHttpBuilder.build())
+    val finalRetrofitBuilder = dsl?.buidRetrofit?.invoke(retrofitBuilder) ?: retrofitBuilder
+    return finalRetrofitBuilder.build()
+}
+
+
+class RequestDsl {
+
+    internal var buidOkHttp: ((OkHttpClient.Builder) -> OkHttpClient.Builder)? = null
+
+    internal var buidRetrofit: ((Retrofit.Builder) -> Retrofit.Builder)? = null
+
+    infix fun okHttp(builder: ((OkHttpClient.Builder) -> OkHttpClient.Builder)?) {
+        this.buidOkHttp = builder
+    }
+
+    infix fun retrofit(builder: ((Retrofit.Builder) -> Retrofit.Builder)?) {
+        this.buidRetrofit = builder
+    }
+
+}
+
+****************************************************************************************************/
 object HttpRequest {
+    private const val TIME_CONNECT = 60L
     private val mServiceMap: MutableMap<String, Retrofit> = HashMap()
     lateinit var DOMAIN_BASE:String
 
@@ -20,9 +58,11 @@ object HttpRequest {
         DOMAIN_BASE = base_url
     }
 
+
     fun <T> getService(serviceClass: Class<T>): T {
         return getCustomService(DOMAIN_BASE, serviceClass)
     }
+
 
     /**
      * @param domain Retrofit的BaseUrl
@@ -50,15 +90,13 @@ object HttpRequest {
             .build()
     }
 
+
     fun reset() {
         mServiceMap.clear()
     }
 
 
     private var headers: HeaderInterceptor = HeaderInterceptor()
-    private const val TIME_CONNECT = 60L
-
-
     fun putHead(key: String, value: String): HeaderInterceptor {
         headers.put(key, value)
         return headers
@@ -94,3 +132,5 @@ object HttpRequest {
             .cookieJar(com.xueh.comm_core.net.cookie.CookieJar.getInstance())
     }
 }
+
+

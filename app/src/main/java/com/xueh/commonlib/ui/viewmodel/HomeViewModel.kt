@@ -13,6 +13,7 @@ import com.xueh.commonlib.entity.BannerVO
  * 备注：
  */
 class HomeViewModel : BaseViewModel<RestApi>() {
+
     override fun initApi() = HttpRequest.getService(RestApi::class.java)
 
     val banner = MutableLiveData<List<BannerVO>?>()
@@ -26,5 +27,10 @@ class HomeViewModel : BaseViewModel<RestApi>() {
                 banner.postValue(it.data)
             }
         }
+    }
+
+
+    fun loadLiveData()=apiLiveData {
+        api.bannerList3()
     }
 }

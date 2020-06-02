@@ -1,6 +1,11 @@
 package com.xueh.comm_core.net.coroutinedsl
 
+import androidx.lifecycle.LiveData
 import com.xueh.comm_core.base.mvvm.ibase.AbsViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 /**
  * 创 建 人: xueh
@@ -59,4 +64,40 @@ open class RequestViewModel : AbsViewModel() {
         apiLoading.value = false
     }
 
+
+    protected fun <Response> apiLiveData(
+        context: CoroutineContext = EmptyCoroutineContext,
+        timeoutInMs: Long = 3000L,
+        request: suspend () -> Response
+    ): LiveData<LiveDataResult<Response>> {
+
+        return androidx.lifecycle.liveData(context, timeoutInMs) {
+            onApiStart()
+            emit(LiveDataResult.Start())
+            try {
+                emit(withContext(Dispatchers.IO) {
+                    LiveDataResult.Response(request())
+                })
+            } catch (e: Exception) {
+                e.printStackTrace()
+                onApiError(e)
+                emit(LiveDataResult.Error(e))
+            } finally {
+                onApiFinally()
+                emit(LiveDataResult.Finally())
+            }
+        }
+    }
+}
+
+
+/**
+ * LiveDataResult 必须加泛型 不然response的泛型就会被擦除!!
+ * damn it
+ */
+sealed class LiveDataResult<T> {
+    class Start<T> : LiveDataResult<T>()
+    class Finally<T> : LiveDataResult<T>()
+    data class Response<T>(val response: T) : LiveDataResult<T>()
+    data class Error<T>(val exception: Exception) : LiveDataResult<T>()
 }

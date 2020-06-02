@@ -5,11 +5,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Button
+        android:id="@+id/tv_get_dsl"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="15dp"
+        android:text="DSL"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/tv_get_clean"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/tv_get_clean"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:gravity="center"
+        android:text="清除"
+        app:layout_constraintLeft_toRightOf="@id/tv_get_dsl"
+        app:layout_constraintRight_toLeftOf="@id/tv_get_other"
+        app:layout_constraintTop_toTopOf="@id/tv_get_dsl" />
+
+    <Button
+        android:id="@+id/tv_get_other"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:gravity="center"
+        android:text="LiveData"
+        app:layout_constraintLeft_toRightOf="@id/tv_get_clean"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_get_dsl" />
+
     <TextView
         android:id="@+id/tv_home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="HomeFragment"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
