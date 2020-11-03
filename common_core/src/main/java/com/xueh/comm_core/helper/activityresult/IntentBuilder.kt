@@ -28,7 +28,7 @@ class IntentBuilder private constructor(private val context: Context) {
         return this
     }
 
-    fun params(bundle: Bundle?): IntentBuilder {
+    fun params(bundle: Bundle): IntentBuilder {
         intent.putExtras(bundle)
         return this
     }
@@ -91,7 +91,7 @@ class IntentBuilder private constructor(private val context: Context) {
     /**
      * 设置类名
      */
-    fun className(clazz: Class<*>?): IntentBuilder {
+    fun className(clazz: Class<*>): IntentBuilder {
         intent.setClass(context, clazz)
         return this
     }
@@ -99,7 +99,7 @@ class IntentBuilder private constructor(private val context: Context) {
     /**
      * 设置类名
      */
-    fun className(className: String?): IntentBuilder {
+    fun className(className: String): IntentBuilder {
         try {
             className(Class.forName(className))
         } catch (e: ClassNotFoundException) {

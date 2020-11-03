@@ -24,7 +24,6 @@ open class BaseApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         MultiDex.install(this)
-        initToast()
         registerActivityLifecycle()
         UiStatusNetworkStatusProvider.getInstance()
             .registerOnRequestNetworkStatusEvent { context -> hasNetWorkConection() }
@@ -74,11 +73,5 @@ open class BaseApplication : Application() {
 
             }
         })
-    }
-
-    private fun initToast() {
-        ToastUtils.setGravity(Gravity.CENTER, 0, 0)
-        ToastUtils.setBgColor(Color.parseColor("#a0000000"))
-        ToastUtils.setMsgColor(CommonUtils.getColor(R.color.white))
     }
 }

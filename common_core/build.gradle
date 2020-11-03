@@ -72,9 +72,9 @@ dependencies {
 
     api rootProject.ext.libraries.glide
     api rootProject.ext.libraries.background
-//    api rootProject.ext.libraries.rxlife
+    api rootProject.ext.libraries.refresh_layout_kernel
+    api rootProject.ext.libraries.refresh_header_classics
 
-    api rootProject.ext.libraries.SmartRefreshLayout
     api rootProject.ext.libraries.immersionbar
     api rootProject.ext.libraries.utilcode
     api rootProject.ext.libraries.permission
