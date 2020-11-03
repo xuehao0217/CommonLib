@@ -81,7 +81,7 @@ open class RequestViewModel : AbsViewModel() {
             } catch (e: Exception) {
                 e.printStackTrace()
                 onApiError(e)
-                emit(LiveDataResult.Error(e))
+                emit(LiveDataResult.Error<Response>(e))
             } finally {
                 onApiFinally()
                 emit(LiveDataResult.Finally())
