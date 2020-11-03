@@ -52,7 +52,7 @@ ext {
             greendaoupgrade              : "v2.1.0",
             agentweb                     : "4.1.4",
             refresh_layout_kernel        : "2.0.1",
-            MPAndroidChart               : "v3.1.0-alpha",
+
             immersionbar                 : "2.3.3",
             utilcode                     : "1.30.4",
             permission                   : "2.0.3",
