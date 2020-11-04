@@ -8,25 +8,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
     <!-- Base application theme. -->
-    <style name="my_App" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowActionBar">false</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowTitleStyle">@null</item>
-        <item name="android:resizeableActivity">false</item>
+    <style name="MyAppStyle" parent="@style/baseAppStyle">
         <item name="colorPrimary">#F5365A</item>
         <item name="colorPrimaryDark">@color/white</item>
         <item name="colorAccent">#F5365A</item>
-        <item name="android:typeface">monospace</item>
-        <item name="android:windowContentTransitions">true</item>
     </style>
 
-    <style name="AppSplash" parent="android:Theme">
+    <style name="AppSplash" parent="@style/baseSplashStyle">
         <item name="android:windowBackground">@drawable/shape_splash</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowActionBar">false</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowTitleStyle">@null</item>
     </style>
 </resources>
