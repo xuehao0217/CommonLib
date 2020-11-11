@@ -24,7 +24,7 @@ class SplashActivity : DActivity() {
 
     override fun getLayoutId() = R.layout.activity_splash
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.AppSplash)
+        setTheme(R.style.AppStyle)
         super.onCreate(savedInstanceState)
     }
 }

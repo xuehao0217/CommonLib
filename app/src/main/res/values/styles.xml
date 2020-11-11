@@ -8,7 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
     <!-- Base application theme. -->
-    <style name="MyAppStyle" parent="@style/baseAppStyle">
+    <style name="AppStyle" parent="@style/baseAppStyle">
         <item name="colorPrimary">#F5365A</item>
         <item name="colorPrimaryDark">@color/white</item>
         <item name="colorAccent">#F5365A</item>

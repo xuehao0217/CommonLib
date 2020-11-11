@@ -12,11 +12,13 @@
         android:resizeableActivity="false"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/MyAppStyle"
+        android:theme="@style/AppStyle"
         android:usesCleartextTraffic="true"
         tools:replace="android:theme">
         <activity android:name=".ui.MainActivity" />
-        <activity android:name=".ui.SplashActivity">
+        <activity android:name=".ui.SplashActivity"
+            android:theme="@style/AppSplash"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
