@@ -12,10 +12,10 @@ import com.xueh.comm_core.base.mvvm.ibase.AbsViewModel
  */
 abstract class MVVMActivity<VM : AbsViewModel> : DActivity() {
     val VM by lazy {
-        CreateViewModel()
+        initViewModel()
     }
 
-    abstract fun CreateViewModel(): VM
+    abstract fun initViewModel(): VM
     abstract fun initLiveData(viewModel: VM)
 
     override fun initDataBeforeView() {
