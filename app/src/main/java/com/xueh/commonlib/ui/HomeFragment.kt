@@ -54,7 +54,7 @@ class HomeFragment : MVVMFragment<HomeViewModel>() {
     override fun initDataAfterView() {
     }
 
-    override fun initViewModel(): HomeViewModel = getViewModel()
+    override fun initViewModel() = getViewModel<HomeViewModel>()
 
     override fun initLivedata(viewModel: HomeViewModel) {
         viewModel.banner.observe(this, Observer {
