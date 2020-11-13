@@ -1,5 +1,6 @@
 package com.xueh.commonlib.ui
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import com.xueh.comm_core.base.mvvm.MVVMFragment
@@ -32,6 +33,15 @@ class HomeFragment : MVVMFragment<HomeViewModel>() {
         }
         tv_get_clean.setOnClickListener {
             tv_home.text=""
+        }
+        tv_home.setOnClickListener {
+            if(activity?.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+                //切换竖屏
+                activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+            }else{
+                //切换横屏
+                activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+            }
         }
     }
 

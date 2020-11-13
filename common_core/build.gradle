@@ -2,6 +2,9 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 android {
+    kotlinOptions{
+        jvmTarget=1.8
+    }
     compileSdkVersion rootProject.ext.android.compileSdkVersion
     buildToolsVersion rootProject.ext.android.buildToolsVersion
     defaultConfig {
@@ -41,6 +44,7 @@ dependencies {
     api rootProject.ext.libraries.cardview
     api rootProject.ext.libraries.viewpager2
 
+    api rootProject.ext.libraries.fragment_ktx
     api rootProject.ext.libraries.lifecycle_extensions
     api rootProject.ext.libraries.lifecycle_livedata_ktx
     api rootProject.ext.libraries.lifecycle_viewmodel_ktx
