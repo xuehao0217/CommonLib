@@ -74,6 +74,7 @@ dependencies {
     api rootProject.ext.libraries.retrofit2_rxjava
     api rootProject.ext.libraries.PersistentCookieJar
 
+    api rootProject.ext.libraries.BaseRecyclerViewAdapterHelper
     api rootProject.ext.libraries.glide
     api rootProject.ext.libraries.background
     api rootProject.ext.libraries.refresh_layout_kernel
@@ -86,5 +87,4 @@ dependencies {
     api rootProject.ext.libraries.titlebar
     api rootProject.ext.libraries.MagicIndicator
     api rootProject.ext.libraries.xpopup
-
 }
