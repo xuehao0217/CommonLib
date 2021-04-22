@@ -2,6 +2,7 @@ package com.xueh.comm_core.base.mvvm
 
 import android.util.Log
 import androidx.lifecycle.Observer
+import androidx.viewbinding.ViewBinding
 import com.xueh.comm_core.base.DFragment
 import com.xueh.comm_core.base.mvvm.ibase.AbsViewModel
 
@@ -10,7 +11,7 @@ import com.xueh.comm_core.base.mvvm.ibase.AbsViewModel
  * 创建日期: 2019/12/31 15:53
  * 备注：
  */
-abstract class MVVMFragment<viewModel : AbsViewModel> : DFragment() {
+abstract class MVVMFragment<VB:ViewBinding,viewModel : AbsViewModel> : DFragment<VB>() {
     val viewModel by lazy {
         initViewModel()
     }

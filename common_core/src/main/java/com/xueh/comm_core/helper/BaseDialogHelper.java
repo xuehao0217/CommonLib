@@ -45,7 +45,7 @@ public abstract class BaseDialogHelper extends DialogFragment {
     private boolean mCanceledBack = true;//是否返回键关闭
     private float mWidth = -1f;//对话框宽度，范围：0-1；1整屏宽
     //    private int[] mPadding;//对话框与屏幕边缘距离
-//    private int mAnimStyle;//显示动画
+    private int mAnimStyle;//显示动画
     private boolean isDimEnabled = true;
 //    private int mBackgroundColor = Color.TRANSPARENT;//对话框的背景色
 //    private int mRadius = CircleDimen.RADIUS;//对话框的圆角半径
@@ -63,7 +63,7 @@ public abstract class BaseDialogHelper extends DialogFragment {
             mCanceledBack = savedInstanceState.getBoolean(SAVED_CANCELED_BACK);
             mWidth = savedInstanceState.getFloat(SAVED_WIDTH);
 //            mPadding = savedInstanceState.getIntArray(SAVED_PADDING);
-//            mAnimStyle = savedInstanceState.getInt(SAVED_ANIM_STYLE);
+            mAnimStyle = savedInstanceState.getInt(SAVED_ANIM_STYLE);
             isDimEnabled = savedInstanceState.getBoolean(SAVED_DIM_ENABLED);
 //            mBackgroundColor = savedInstanceState.getInt(SAVED_BACKGROUND_COLOR);
 //            mRadius = savedInstanceState.getInt(SAVED_RADIUS);
@@ -81,7 +81,7 @@ public abstract class BaseDialogHelper extends DialogFragment {
         outState.putBoolean(SAVED_CANCELED_BACK, mCanceledBack);
         outState.putFloat(SAVED_WIDTH, mWidth);
 //        if (mPadding != null) outState.putIntArray(SAVED_PADDING, mPadding);
-//        outState.putInt(SAVED_ANIM_STYLE, mAnimStyle);
+        outState.putInt(SAVED_ANIM_STYLE, mAnimStyle);
         outState.putBoolean(SAVED_DIM_ENABLED, isDimEnabled);
 //        outState.putInt(SAVED_BACKGROUND_COLOR, mBackgroundColor);
 //        outState.putInt(SAVED_RADIUS, mRadius);
@@ -142,7 +142,7 @@ public abstract class BaseDialogHelper extends DialogFragment {
 //                    .scaleValue(padding[3]));
 //        }
 //        //动画
-//        if (mAnimStyle != 0) window.setWindowAnimations(mAnimStyle);
+        if (mAnimStyle != 0) mWindow.setWindowAnimations(mAnimStyle);
 
         if (isDimEnabled) mWindow.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         else mWindow.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
@@ -234,9 +234,9 @@ public abstract class BaseDialogHelper extends DialogFragment {
      *
      * @param animStyle StyleRes
      */
-//    protected void setAnimations(int animStyle) {
-//        mAnimStyle = animStyle;
-//    }
+    protected void setAnimations(int animStyle) {
+        mAnimStyle = animStyle;
+    }
 
 
     /**

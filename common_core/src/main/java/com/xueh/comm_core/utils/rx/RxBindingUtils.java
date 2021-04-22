@@ -34,6 +34,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import kotlin.Unit;
 
 /**
  * RxBinding工具
@@ -56,7 +57,7 @@ public final class RxBindingUtils {
      * @param v 监听控件
      * @return
      */
-    public static Observable<Object> setViewClicks(View v) {
+    public static Observable<Unit> setViewClicks(View v) {
         return setViewClicks(v, 1, TimeUnit.SECONDS);
     }
 
@@ -68,7 +69,7 @@ public final class RxBindingUtils {
      * @param unit     时间间隔单位
      * @return
      */
-    public static Observable<Object> setViewClicks(View v, long duration, TimeUnit unit) {
+    public static Observable<Unit> setViewClicks(View v, long duration, TimeUnit unit) {
         return RxView.clicks(v)
                 .compose(RxOperationUtils._throttleFirst(duration, unit))
                 .observeOn(AndroidSchedulers.mainThread());

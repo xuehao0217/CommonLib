@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.viewbinding.ViewBinding
 import com.blankj.utilcode.util.ToastUtils
 import com.fengchen.uistatus.UiStatusController
 import com.fengchen.uistatus.annotation.UiStatus
@@ -26,7 +27,7 @@ import org.greenrobot.eventbus.ThreadMode
  * @author: xuehao create time: 2017/7/26 11:29 tag: class//
  * description:二级统一业务型baseActivity
  */
-abstract class DActivity : BaseActivity(), CoroutineScope by MainScope() {
+abstract class DActivity<VB : ViewBinding> : BaseActivity<VB>(), CoroutineScope by MainScope() {
     protected var mImmersionBar: ImmersionBar? = null
     protected var mCompositeDisposable = CompositeDisposable()
     protected lateinit var uiStatusController: UiStatusController

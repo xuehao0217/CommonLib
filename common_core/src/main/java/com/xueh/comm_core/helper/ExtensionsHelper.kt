@@ -8,6 +8,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.NetworkUtils
+import com.blankj.utilcode.util.ObjectUtils
 import com.blankj.utilcode.util.Utils
 import com.noober.background.drawable.DrawableCreator
 import com.xueh.comm_core.utils.CommonUtils
@@ -96,20 +97,45 @@ fun View.setRoundLineBg(
  *         doSth(name,age)
  *  }
  */
-inline fun <A, B, R> notNull(a: A?, b: B?, block: (A, B) -> R) {
-    if (a != null && b != null) {
-        block(a, b)
+inline fun <A, B> notNull(a: A?, b: B?, block: (A, B) -> Unit) {
+    if (ObjectUtils.isNotEmpty(a) && ObjectUtils.isNotEmpty(b)) {
+        block(a!!, b!!)
     }
 }
 
-/***
- *  notNull(name,age){
- *         doSth(name,age)
+
+/**
+ *  notNullOrNull(a, b) {
+ *      notNull { s, s2 ->
+ *          println("不为空")
+ *      }
+ *      isNull {
+ *          println("是空")
+ *      }
  *  }
  */
-inline fun <R> notNull(vararg args: Any?, block: () -> R) {
-    when {
-        args.filterNotNull().size == args.size -> block()
+
+
+inline fun <A, B> notNullOrNull(a: A, b: B, notnull: notNullDsl<A, B>.() -> Unit) {
+    if (ObjectUtils.isNotEmpty(a) && ObjectUtils.isNotEmpty(b)) {
+        notNullDsl<A, B>().apply(notnull).notNull?.invoke(a, b)
+    } else {
+        notNullDsl<A, B>().apply(notnull).isNull?.invoke()
+    }
+}
+
+
+class notNullDsl<A, B> {
+    var notNull: ((A, B) -> Unit?)? = null
+
+    var isNull: (() -> Unit?)? = null
+
+    infix fun notNull(notNull: ((A, B) -> Unit?)) {
+        this.notNull = notNull
+    }
+
+    infix fun isNull(onNull: (() -> Unit?)) {
+        this.isNull = onNull
     }
 }
 

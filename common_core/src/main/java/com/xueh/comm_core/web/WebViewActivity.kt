@@ -10,22 +10,21 @@ import android.widget.LinearLayout
 import com.just.agentweb.AgentWeb
 import com.xueh.comm_core.R
 import com.xueh.comm_core.base.DActivity
+import com.xueh.comm_core.databinding.ActivityWebViewBinding
 import com.xueh.comm_core.weight.OnTitleLeftListener
-import kotlinx.android.synthetic.main.activity_web_view.*
 
 /**
  * 创 建 人: xueh
  * 创建日期: 2019/3/11 11:16
  * 备注：一个只用于显示的web页面
  */
-open class WebViewActivity : DActivity() {
+open class WebViewActivity : DActivity<ActivityWebViewBinding>() {
 
     companion object {
         const val TITLE = "title"
         const val URL = "url"
     }
 
-    override fun getLayoutId() = R.layout.activity_web_view
 
     lateinit var agentWeb: AgentWeb
 
@@ -51,11 +50,12 @@ open class WebViewActivity : DActivity() {
     }
 
     override fun initDataAfterView() {
-        tb_title_bar.title = intent?.getStringExtra(TITLE)
+        binding.tbTitleBar.title = intent?.getStringExtra(TITLE)
         agentWeb = AgentWeb.with(this)
-            .setAgentWebParent(rv_web_content, LinearLayout.LayoutParams(-1, -1))
-            .useDefaultIndicator() //                .setWebChromeClient(mWebChromeClient)
-//            .setWebViewClient(mWebViewClient)
+            .setAgentWebParent(binding.rvWebContent, LinearLayout.LayoutParams(-1, -1))
+            .useDefaultIndicator()
+//          .setWebChromeClient(mWebChromeClient)
+//          .setWebViewClient(mWebViewClient)
             .setSecurityType(AgentWeb.SecurityType.STRICT_CHECK)
             .createAgentWeb()
             .ready()
@@ -67,7 +67,7 @@ open class WebViewActivity : DActivity() {
     }
 
     override fun initListener() {
-        tb_title_bar!!.setOnTitleBarListener(object : OnTitleLeftListener() {
+        binding.tbTitleBar.setOnTitleBarListener(object : OnTitleLeftListener() {
             override fun onLeftClick(v: View) {
                 finish()
             }
@@ -83,12 +83,12 @@ open class WebViewActivity : DActivity() {
             ) {
                 var title = title
                 super.onReceivedTitle(view, title)
-                if (tb_title_bar != null && !TextUtils.isEmpty(title)) {
+                if ( binding.tbTitleBar != null && !TextUtils.isEmpty(title)) {
                     if (title.length > 10) {
                         title = title.substring(0, 10) + "..."
                     }
                 }
-                tb_title_bar.title = title
+                binding.tbTitleBar.title = title
             }
         }
 }

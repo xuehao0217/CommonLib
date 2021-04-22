@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.view.View
+import androidx.viewbinding.ViewBinding
 import com.blankj.utilcode.util.IntentUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.fengchen.uistatus.UiStatusController
@@ -26,7 +27,7 @@ import org.greenrobot.eventbus.ThreadMode
  * tag: class//
  * description:  二级统一业务baseFragment
  */
-abstract class DFragment : BaseFragment(), CoroutineScope by MainScope() {
+abstract class DFragment<VB:ViewBinding> : BaseFragment<VB>(), CoroutineScope by MainScope() {
     protected var mCompositeDisposable = CompositeDisposable()
     protected lateinit var uiStatusController: UiStatusController
 

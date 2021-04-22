@@ -1,11 +1,13 @@
 package com.xueh.commonlib.ui
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import com.xueh.comm_core.base.DActivity
 import com.xueh.commonlib.R
-import kotlinx.android.synthetic.main.activity_main.*
+import com.xueh.commonlib.databinding.ActivityMainBinding
 
-class MainActivity : DActivity() {
+class MainActivity : DActivity<ActivityMainBinding>() {
+
     private val fragments = arrayOf(HomeFragment(), MyFragment())
     private val tabs = arrayOf("首页", "我的")
     //未选中icon
@@ -14,13 +16,12 @@ class MainActivity : DActivity() {
     private val selectIcon = intArrayOf(R.mipmap.ic_home_select, R.mipmap.ic_my_select)
 
     override fun initView(savedInstanceState: Bundle?) {
-        main_cnb.titleItems(tabs).normalIconItems(normalIcon).selectIconItems(selectIcon)
-            .fragmentList(fragments.toList())
+        binding.mainCnb.titleItems(tabs).normalIconItems(normalIcon).selectIconItems(selectIcon)
+            .fragmentList(fragments.toList() as MutableList<Fragment>?)
             .fragmentManager(supportFragmentManager)
             .build()
     }
 
-    override fun getLayoutId() = R.layout.activity_main
 
     override fun initDataAfterView() {
     }
