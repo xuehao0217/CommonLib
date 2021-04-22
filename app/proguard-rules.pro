@@ -20,9 +20,21 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 #-------------------------------------------定制化区域----------------------------------------------
+
+#---------------------------------ViewBinding---------------------------------
+-keepclassmembers class * implements androidx.viewbinding.ViewBinding {
+  public static * inflate(android.view.LayoutInflater);
+  public static * inflate(android.view.LayoutInflater, android.view.ViewGroup, boolean);
+  public static * bind(android.view.View);
+}
+#-------------------------------------------------------------------------
+
 #---------------------------------1.实体类---------------------------------
 -keep class com.xueh.comm_core.net.**{*;}
+
+
 #-------------------------------------------------------------------------
+
 
 #---------------------------------2.第三方包-------------------------------
 -ignorewarnings
