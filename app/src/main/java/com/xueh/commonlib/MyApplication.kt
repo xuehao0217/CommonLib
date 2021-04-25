@@ -24,10 +24,10 @@ class MyApplication : BaseApplication() {
             putHead("name","xuehao")
         }
 
-        startKoin {
-            androidContext(this@MyApplication)
-            modules(viewModelModule)
-        }
+//        startKoin {
+//            androidContext(this@MyApplication)
+//            modules(viewModelModule)
+//        }
     }
 
     private fun initState() {

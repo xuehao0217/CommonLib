@@ -2,6 +2,7 @@ package com.xueh.commonlib.ui
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.xueh.comm_core.base.mvvm.MVVMFragment
 import com.xueh.comm_core.helper.setRoundBg
@@ -18,6 +19,9 @@ import org.koin.androidx.viewmodel.ext.android.getViewModel
  * 备注：
  */
 class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
+
+    val  VM by viewModels<HomeViewModel>()
+
     override fun initListener() {
         with(binding) {
             tvGetDsl.setOnClickListener {
@@ -58,7 +62,7 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
     override fun initDataAfterView() {
     }
 
-    override fun initViewModel() = getViewModel<HomeViewModel>()
+    override fun initViewModel() =VM
 
     override fun initLivedata(viewModel: HomeViewModel) {
         viewModel.banner.observe(this, Observer {
