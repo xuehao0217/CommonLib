@@ -5,12 +5,14 @@ import android.os.Bundle
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.xueh.comm_core.base.mvvm.MVVMFragment
+import com.xueh.comm_core.helper.bindingData
+import com.xueh.comm_core.helper.linear
 import com.xueh.comm_core.helper.setRoundBg
 import com.xueh.comm_core.net.coroutinedsl.LiveDataResult
 import com.xueh.commonlib.R
 import com.xueh.commonlib.databinding.FragmentHomeBinding
+import com.xueh.commonlib.databinding.ItemLayoutBinding
 import com.xueh.commonlib.ui.viewmodel.HomeViewModel
-import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 
 /**
@@ -20,7 +22,6 @@ import org.koin.androidx.viewmodel.ext.android.getViewModel
  */
 class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
 
-    val  VM by viewModels<HomeViewModel>()
 
     override fun initListener() {
         with(binding) {
@@ -49,6 +50,7 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
                     activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
                 }
             }
+
         }
 
 
@@ -57,12 +59,14 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
 
     override fun initView(savedInstanceState: Bundle?) {
         binding.tvHome.setRoundBg(10, R.color.colorAccent, R.color.white)
+        binding.rv.linear()
+            .bindingData(ItemLayoutBinding::inflate, mutableListOf("1", "2", "3")) { vb, s ->
+                vb.tvItem.setRoundBg(10, R.color.colorAccent, R.color.white)
+            }
     }
 
     override fun initDataAfterView() {
     }
-
-    override fun initViewModel() =VM
 
     override fun initLivedata(viewModel: HomeViewModel) {
         viewModel.banner.observe(this, Observer {
