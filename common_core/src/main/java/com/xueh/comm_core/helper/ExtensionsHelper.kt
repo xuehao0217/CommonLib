@@ -116,9 +116,9 @@ inline fun <A, B> notNull(a: A?, b: B?, block: (A, B) -> Unit) {
  */
 
 
-inline fun <A, B> notNullOrNull(a: A, b: B, notnull: notNullDsl<A, B>.() -> Unit) {
+inline fun <A, B> notNullOrNull(a: A?, b: B?, notnull: notNullDsl<A, B>.() -> Unit) {
     if (ObjectUtils.isNotEmpty(a) && ObjectUtils.isNotEmpty(b)) {
-        notNullDsl<A, B>().apply(notnull).notNull?.invoke(a, b)
+        notNullDsl<A, B>().apply(notnull).notNull?.invoke(a!!, b!!)
     } else {
         notNullDsl<A, B>().apply(notnull).isNull?.invoke()
     }
