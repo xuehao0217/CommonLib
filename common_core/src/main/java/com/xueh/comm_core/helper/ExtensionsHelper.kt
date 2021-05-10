@@ -140,6 +140,19 @@ class notNullDsl<A, B> {
 }
 
 
+/***
+ *  notNull(name,age){
+ *         doSth(name,age)
+ *  }
+ */
+inline fun <R> notNull(vararg args: Any?, block: () -> R) {
+    when {
+        args.filterNotNull().size == args.size -> block()
+    }
+}
+
+
+
 sealed class BooleanExt<out T> constructor(val boolean: Boolean)
 object Otherwise : BooleanExt<Nothing>(true)
 class WithData<out T>(val data: T) : BooleanExt<T>(false)
