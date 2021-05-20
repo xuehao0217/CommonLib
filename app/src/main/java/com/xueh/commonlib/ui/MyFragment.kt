@@ -36,10 +36,13 @@ class MyFragment : DFragment<FragmentMyBinding>() {
                 showState(UiStatus.CONTENT)
             }
             btStartTime.setOnClickListener {
-                interval.resume()
+                interval.start()
             }
             btStartPause.setOnClickListener {
                 interval.pause()
+            }
+            btStartResume.setOnClickListener {
+                interval.resume()
             }
         }
 
@@ -67,14 +70,14 @@ class MyFragment : DFragment<FragmentMyBinding>() {
             0,
             1,
             TimeUnit.SECONDS,
-            30
+            20
         ).life(this) // 自定义计数器个数的轮循器, 当[start]]比[end]值大, 且end不等于-1时, 即为倒计时
         // interval = Interval(1, TimeUnit.SECONDS) // 每秒回调一次, 不会自动结束
         interval.subscribe {
             binding.tvTime.text = it.toString()
         }.finish {
             binding.tvTime.text = "计时完成"
-        }.start()
+        }
     }
 
     override fun onRequestPermissionsResult(

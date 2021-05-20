@@ -57,7 +57,6 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginRight="20dp"
         android:layout_height="44dp"/>
-
     <Button
         android:id="@+id/bt_start_time"
         android:text="开始"
@@ -65,9 +64,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <Button
+        android:id="@+id/bt_start_resume"
+        android:text="恢复"
+        app:layout_constraintTop_toBottomOf="@id/bt_start_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <Button
         android:id="@+id/bt_start_pause"
         android:text="暂停"
-        app:layout_constraintTop_toBottomOf="@id/bt_start_time"
+        app:layout_constraintTop_toBottomOf="@id/bt_start_resume"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
