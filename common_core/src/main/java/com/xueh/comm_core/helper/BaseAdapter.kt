@@ -90,7 +90,7 @@ fun <T, VB : ViewBinding> RecyclerView.bindingData(
     inflate: (LayoutInflater, ViewGroup, Boolean) -> VB,
     list: MutableList<T>? = null,
     itembind: (VB, T) -> Unit
-) {
+) : BaseBindingQuickAdapter<T, VB>{
     adapter = object : BaseBindingQuickAdapter<T, VB>(inflate) {
         override fun convert(holder: BaseBindingHolder, item: T) {
             holder.getViewBinding<VB>().apply {
@@ -101,7 +101,7 @@ fun <T, VB : ViewBinding> RecyclerView.bindingData(
     }.apply {
         setNewInstance(list)
     }
-
+    return getBindAdapter()
 }
 
 fun <T, VB : ViewBinding> RecyclerView.getBindAdapter() = adapter as BaseBindingQuickAdapter<T, VB>
