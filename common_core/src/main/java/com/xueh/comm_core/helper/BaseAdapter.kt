@@ -8,9 +8,12 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.viewbinding.ViewBinding
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.xueh.comm_core.weight.GridItemDecoration
+import com.xueh.comm_core.weight.SpacesItemDecoration
 
 /**
  * 创 建 人: xueh
@@ -33,6 +36,50 @@ fun RecyclerView.linearH(): RecyclerView {
 
 fun RecyclerView.grid(spanCount: Int): RecyclerView {
     layoutManager = GridLayoutManager(context, spanCount)
+    return this
+}
+
+fun RecyclerView.staggeredGrid(
+    spanCount: Int,
+    orientation: Int = StaggeredGridLayoutManager.VERTICAL
+): RecyclerView {
+    layoutManager = StaggeredGridLayoutManager(spanCount, orientation)
+    return this
+}
+
+/**
+ * 直接设置分割线颜色等，不设置drawable
+ *
+ * @param dividerColor         分割线颜色
+ * @param dividerSpacing       分割线间距
+ * @param leftTopPaddingDp     如果是横向 - 左边距
+ *                             如果是纵向 - 上边距
+ * @param rightBottomPaddingDp 如果是横向 - 右边距
+ *                             如果是纵向 - 下边距
+ */
+fun RecyclerView.addLinearItemDecoration(
+    dividerColor: Int,
+    dividerSpacing: Int,
+    leftTopPaddingDp: Float = 0f,
+    rightBottomPaddingDp: Float = 0f
+): RecyclerView {
+    if (layoutManager is LinearLayoutManager) {
+        addItemDecoration(
+            SpacesItemDecoration(
+                context,
+                (layoutManager as LinearLayoutManager).orientation
+            ).setParam(dividerColor, dividerSpacing, leftTopPaddingDp, rightBottomPaddingDp)
+        )
+    }
+    return this
+}
+
+/**
+ * @param edgeMargin   左右边距，单位dp
+ * @param dividerWidth 中间间距，单位dp
+ */
+fun RecyclerView.addGridItemDecoration(edgeMargin: Float, dividerWidth: Float): RecyclerView {
+    addItemDecoration(GridItemDecoration(edgeMargin, dividerWidth))
     return this
 }
 
@@ -89,12 +136,12 @@ abstract class BaseBindingQuickAdapter<T, VB : ViewBinding>(
 fun <T, VB : ViewBinding> RecyclerView.bindingData(
     inflate: (LayoutInflater, ViewGroup, Boolean) -> VB,
     list: MutableList<T>? = null,
-    itembind: (VB, T) -> Unit
-) : BaseBindingQuickAdapter<T, VB>{
+    itembind: (BaseBindingQuickAdapter.BaseBindingHolder, VB, T) -> Unit
+): BaseBindingQuickAdapter<T, VB> {
     adapter = object : BaseBindingQuickAdapter<T, VB>(inflate) {
         override fun convert(holder: BaseBindingHolder, item: T) {
             holder.getViewBinding<VB>().apply {
-                itembind.invoke(this, item)
+                itembind.invoke(holder, this, item)
             }
         }
 

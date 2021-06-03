@@ -2,13 +2,13 @@ package com.xueh.commonlib.ui
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.xueh.comm_core.base.mvvm.MVVMFragment
-import com.xueh.comm_core.helper.bindingData
-import com.xueh.comm_core.helper.linear
-import com.xueh.comm_core.helper.setRoundBg
+import com.xueh.comm_core.helper.*
 import com.xueh.comm_core.net.coroutinedsl.LiveDataResult
+import com.xueh.comm_core.weight.GridItemDecoration
+import com.xueh.comm_core.weight.SpacesItemDecoration
 import com.xueh.commonlib.R
 import com.xueh.commonlib.databinding.FragmentHomeBinding
 import com.xueh.commonlib.databinding.ItemLayoutBinding
@@ -59,8 +59,13 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
 
     override fun initView(savedInstanceState: Bundle?) {
         binding.tvHome.setRoundBg(10, R.color.colorAccent, R.color.white)
-        binding.rv.linear()
-            .bindingData(ItemLayoutBinding::inflate, mutableListOf("1", "2", "3")) { vb, s ->
+        binding.rv.grid(4)
+            .linear()
+            .addLinearItemDecoration(R.color.white, 3, 15f)
+            .bindingData(
+                ItemLayoutBinding::inflate,
+                mutableListOf("1", "2", "3")
+            ) { vh, vb, s ->
                 vb.tvItem.setRoundBg(10, R.color.colorAccent, R.color.white)
             }
     }
