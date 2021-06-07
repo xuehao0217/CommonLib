@@ -147,18 +147,6 @@ public static java.lang.String TABLENAME;
 -keep class com.alibaba.fastjson.** { *; }
 
 
-
-
-# ServiceLoader support
--keepnames class kotlinx.coroutines.internal.MainDispatcherFactory {}
--keepnames class kotlinx.coroutines.CoroutineExceptionHandler {}
--keepnames class kotlinx.coroutines.android.AndroidExceptionPreHandler {}
--keepnames class kotlinx.coroutines.android.AndroidDispatcherFactory {}
-
-# Most of volatile fields are updated with AFU and should not be mangled
--keepclassmembernames class kotlinx.** {
-    volatile <fields>;
-}
 # AndroidX 防止混淆
 -keep class com.google.android.material.** {*;}
 -keep class androidx.** {*;}
