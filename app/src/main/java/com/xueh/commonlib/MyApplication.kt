@@ -4,9 +4,6 @@ import com.fengchen.uistatus.UiStatusManager
 import com.fengchen.uistatus.annotation.UiStatus
 import com.xueh.comm_core.base.BaseApplication
 import com.xueh.comm_core.net.HttpRequest
-import com.xueh.commonlib.di.viewModelModule
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.startKoin
 
 
 /**
@@ -24,10 +21,6 @@ class MyApplication : BaseApplication() {
             putHead("name","xuehao")
         }
 
-//        startKoin {
-//            androidContext(this@MyApplication)
-//            modules(viewModelModule)
-//        }
     }
 
     private fun initState() {

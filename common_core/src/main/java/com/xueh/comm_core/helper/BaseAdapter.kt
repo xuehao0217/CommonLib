@@ -83,6 +83,7 @@ fun RecyclerView.addGridItemDecoration(edgeMargin: Float, dividerWidth: Float): 
     return this
 }
 
+
 fun <T> RecyclerView.bindData(
     data: MutableList<T>? = null,
     @LayoutRes layoutId: Int,
@@ -95,6 +96,7 @@ fun <T> RecyclerView.bindData(
     }
     return this
 }
+
 
 
 fun <T> RecyclerView.itemClick(itemClick: (data: T, view: View, pos: Int) -> Unit): RecyclerView {
