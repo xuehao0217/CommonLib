@@ -102,7 +102,6 @@ public static java.lang.String TABLENAME;
 -keep class com.google.gson.stream.** { *; }
 -keep class com.google.gson.examples.android.model.** { *; }
 
--keep public class cn.xueh.MediaSystem {*; }
 #barlibrary
 -keep class com.gyf.barlibrary.* {*;}
 -dontwarn com.gyf.barlibrary.**
