@@ -29,4 +29,8 @@ class HeaderInterceptor : Interceptor {
         this.headers.putAll(headers)
         return this
     }
+
+    fun clearHead(){
+        headers.clear()
+    }
 }

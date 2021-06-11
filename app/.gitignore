@@ -19,3 +19,42 @@ gradle/
 .externalNativeBuild
 .cxx
 local.properties
+
+
+# built application files
+#*.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+*.iml
+
+# Java class files
+*.class
+
+# generated files
+bin/
+build/
+gen/
+target/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+#忽略singleRun.gradle,不将自定义配置合并到主干
+singleRun.gradle
+
+
+# Eclipse project files
+.classpath
+.project
+.idea
+.gradle
+
+# Mac os
+.DS_Store
+gen-external-apklibs
+captures/
+app/bugly/
+app/src/androidTest/
+netcore/bugly/

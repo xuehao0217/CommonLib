@@ -18,7 +18,7 @@ class MyApplication : BaseApplication() {
 
         HttpRequest.apply {
             setBaseUrl("https://www.wanandroid.com/")
-            putHead("name","xuehao")
+            putHead(hashMapOf("name" to "xuehao"))
         }
 
     }

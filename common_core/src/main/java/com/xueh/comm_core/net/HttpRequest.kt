@@ -11,48 +11,49 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.SSLContext
+
 /***************************************************************************************************
 //动态配置OkHttp Retrofit
 
 private var requestDSL: (RequestDsl.() -> Unit)? = null
 fun setting(requestDSL: (RequestDsl.() -> Unit)? = null) {
-    this.requestDSL = requestDSL
+this.requestDSL = requestDSL
 }
 
 
 private fun getRetrofit(base_url: String): Retrofit {
-    val dsl = if (requestDSL != null) RequestDsl().apply(requestDSL!!) else null
-    val finalOkHttpBuilder = dsl?.buidOkHttp?.invoke(HttpRequest.getOkHttp()) ?: HttpRequest.getOkHttp()
-    val retrofitBuilder = Retrofit.Builder()
-    .baseUrl(base_url)
-    .addConverterFactory(GsonConverterFactory.create())
-    .client(finalOkHttpBuilder.build())
-    val finalRetrofitBuilder = dsl?.buidRetrofit?.invoke(retrofitBuilder) ?: retrofitBuilder
-    return finalRetrofitBuilder.build()
+val dsl = if (requestDSL != null) RequestDsl().apply(requestDSL!!) else null
+val finalOkHttpBuilder = dsl?.buidOkHttp?.invoke(HttpRequest.getOkHttp()) ?: HttpRequest.getOkHttp()
+val retrofitBuilder = Retrofit.Builder()
+.baseUrl(base_url)
+.addConverterFactory(GsonConverterFactory.create())
+.client(finalOkHttpBuilder.build())
+val finalRetrofitBuilder = dsl?.buidRetrofit?.invoke(retrofitBuilder) ?: retrofitBuilder
+return finalRetrofitBuilder.build()
 }
 
 
 class RequestDsl {
 
-    internal var buidOkHttp: ((OkHttpClient.Builder) -> OkHttpClient.Builder)? = null
+internal var buidOkHttp: ((OkHttpClient.Builder) -> OkHttpClient.Builder)? = null
 
-    internal var buidRetrofit: ((Retrofit.Builder) -> Retrofit.Builder)? = null
+internal var buidRetrofit: ((Retrofit.Builder) -> Retrofit.Builder)? = null
 
-    infix fun okHttp(builder: ((OkHttpClient.Builder) -> OkHttpClient.Builder)?) {
-        this.buidOkHttp = builder
-    }
+infix fun okHttp(builder: ((OkHttpClient.Builder) -> OkHttpClient.Builder)?) {
+this.buidOkHttp = builder
+}
 
-    infix fun retrofit(builder: ((Retrofit.Builder) -> Retrofit.Builder)?) {
-        this.buidRetrofit = builder
-    }
+infix fun retrofit(builder: ((Retrofit.Builder) -> Retrofit.Builder)?) {
+this.buidRetrofit = builder
+}
 
 }
 
-****************************************************************************************************/
+ ****************************************************************************************************/
 object HttpRequest {
     private const val TIME_CONNECT = 60L
     private val mServiceMap: MutableMap<String, Retrofit> = HashMap()
-    lateinit var DOMAIN_BASE:String
+    lateinit var DOMAIN_BASE: String
 
     fun setBaseUrl(base_url: String) {
         DOMAIN_BASE = base_url
@@ -90,18 +91,21 @@ object HttpRequest {
             .build()
     }
 
+    //***************************************公用参数*****************************************
 
-    fun reset() {
-        mServiceMap.clear()
+    private var headers = HeaderInterceptor()
+
+    fun putHead(header: HashMap<String, String>) {
+        headers.put(header)
     }
 
+    fun clearHead() = headers.clearHead()
 
-    private var headers: HeaderInterceptor = HeaderInterceptor()
-    fun putHead(key: String, value: String): HeaderInterceptor {
-        headers.put(key, value)
-        return headers
-    }
+    //****************************************公用参数********************************************
 
+
+
+    //***************************************OkHttp*****************************************
 
     private fun getOkHttp(): OkHttpClient.Builder {
         val builder: OkHttpClient.Builder = OkHttpClient.Builder()
@@ -131,6 +135,9 @@ object HttpRequest {
             .writeTimeout(TIME_CONNECT, TimeUnit.SECONDS)
             .cookieJar(com.xueh.comm_core.net.cookie.CookieJar.getInstance())
     }
+
+    //********************************************************************************
+
 }
 
 
