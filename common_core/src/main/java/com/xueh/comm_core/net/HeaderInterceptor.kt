@@ -20,17 +20,15 @@ class HeaderInterceptor : Interceptor {
         return chain.proceed(requestBuilder.build())
     }
 
-    fun put(key: String, value: String): HeaderInterceptor {
+    fun put(key: String, value: String) {
         headers[key] = value
-        return this
     }
 
-    fun put(headers: HashMap<String, String>): HeaderInterceptor {
+    fun put(headers: HashMap<String, String>) {
         this.headers.putAll(headers)
-        return this
     }
 
-    fun clearHead(){
+    fun clearHead() {
         headers.clear()
     }
 }
