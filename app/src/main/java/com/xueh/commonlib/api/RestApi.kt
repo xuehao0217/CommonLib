@@ -4,10 +4,9 @@ import androidx.lifecycle.LiveData
 import com.xueh.comm_core.net.BaseResult
 import com.xueh.commonlib.entity.BannerVO
 import okhttp3.MultipartBody
-import retrofit2.http.GET
-import retrofit2.http.Multipart
-import retrofit2.http.POST
-import retrofit2.http.Part
+import okhttp3.ResponseBody
+import retrofit2.Response
+import retrofit2.http.*
 
 /**
  * 创 建 人: xueh
@@ -15,8 +14,6 @@ import retrofit2.http.Part
  * 备注：
  */
 interface RestApi {
-    @GET("banner/json")
-    fun bannerList(): LiveData<BaseResult<List<BannerVO>>>
 
     @GET("banner/json")
     suspend fun bannerList3(): BaseResult<List<BannerVO>>
@@ -27,4 +24,8 @@ interface RestApi {
     suspend fun uploadFiles(
         @Part file: MultipartBody.Part
     ): BaseResult<String>
+
+    @Streaming
+    @GET
+    suspend fun downloadFile(@Url url:String): Response<ResponseBody>
 }

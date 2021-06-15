@@ -4,6 +4,7 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.base.mvvm.MVVMFragment
 import com.xueh.comm_core.helper.*
 import com.xueh.comm_core.net.coroutinedsl.LiveDataResult
@@ -29,36 +30,23 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
                 viewModel.loadData()
             }
 
-            tvGetOther.setOnClickListener {
+            tvDownload.setOnClickListener {
                 viewModel.loadLiveData().observe(this@HomeFragment, Observer {
                     when (it) {
                         is LiveDataResult.Response -> {
-                            tvHome.text = it.response.data.toString()
+                            ToastUtils.showShort(it.response.data.toString())
                         }
                     }
                 })
             }
             tvGetClean.setOnClickListener {
-                tvHome.text = ""
+                viewModel.downloadFile()
             }
-            tvHome.setOnClickListener {
-                if (activity?.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-                    //切换竖屏
-                    activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-                } else {
-                    //切换横屏
-                    activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-                }
-            }
-
         }
-
-
     }
 
 
     override fun initView(savedInstanceState: Bundle?) {
-        binding.tvHome.setRoundBg(10, R.color.colorAccent, R.color.white)
         binding.rv.grid(4)
             .linear()
             .addLinearItemDecoration(R.color.white, 3, 15f)
@@ -74,8 +62,8 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
     }
 
     override fun initLivedata(viewModel: HomeViewModel) {
-        viewModel.banner.observe(this, Observer {
-            binding.tvHome.text = it.toString()
+        viewModel.progressLiveData.observe(this, {
+            binding.tvDownloadProgress.text="下载进度:${it.percent},下载速度:${it.speed} byte"
         })
     }
 }

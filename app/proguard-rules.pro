@@ -71,6 +71,10 @@ public static java.lang.String TABLENAME;
     <init>(java.lang.Throwable);
 }
 
+#progressmanager
+ -keep class me.jessyan.progressmanager.** { *; }
+ -keep interface me.jessyan.progressmanager.** { *; }
+
 # OkHttp3
 -dontwarn okhttp3.logging.**
 -keep class okhttp3.internal.**{*;}

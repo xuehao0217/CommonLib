@@ -4,6 +4,7 @@ import com.fengchen.uistatus.UiStatusManager
 import com.fengchen.uistatus.annotation.UiStatus
 import com.xueh.comm_core.base.BaseApplication
 import com.xueh.comm_core.net.HttpRequest
+import me.jessyan.progressmanager.ProgressManager
 
 
 /**
@@ -17,6 +18,14 @@ class MyApplication : BaseApplication() {
         initState()
 
         HttpRequest.apply {
+            setting {
+                okHttp {
+                    ProgressManager.getInstance().with(it)
+                        .build()
+                    it
+                }
+            }
+
             setBaseUrl("https://www.wanandroid.com/")
             putHead(hashMapOf("name" to "xuehao"))
         }

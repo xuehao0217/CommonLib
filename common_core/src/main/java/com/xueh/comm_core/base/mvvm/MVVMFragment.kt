@@ -23,17 +23,17 @@ abstract class MVVMFragment<VB : ViewBinding, VM : AbsViewModel> : DFragment<VB>
         initLivedata(viewModel)
         super.initDataBeforeView()
 
-        viewModel.apiLoading.observe(this, Observer {
+        viewModel.apiLoading.observe(this) {
             it?.let {
                 if (it) showProgressDialog() else hideProgressDialog()
             }
-        })
+        }
 
-        viewModel.apiException.observe(this, Observer {
+        viewModel.apiException.observe(this) {
             it?.let {
                 Log.e("BaseViewModel--> ", it?.toString())
             }
-        })
+        }
     }
 
 }

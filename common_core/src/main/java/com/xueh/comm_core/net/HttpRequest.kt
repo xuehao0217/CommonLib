@@ -2,6 +2,7 @@ package com.xueh.comm_core.net
 
 import com.blankj.utilcode.util.Utils
 import com.xueh.comm_core.BuildConfig
+import me.jessyan.progressmanager.ProgressManager
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -83,14 +84,52 @@ object HttpRequest {
     }
 
 
-    private fun getRetrofit(base_url: String): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(base_url)
-            .client(getOkHttp().build())
-            .addConverterFactory(GsonConverterFactory.create()) //返回内容的转换器
-            .build()
+//    private fun getRetrofit(base_url: String): Retrofit {
+//
+//        return Retrofit.Builder()
+//            .baseUrl(base_url)
+//            .client(
+//                ProgressManager.getInstance().with(getOkHttp())
+//                    .build()
+//            )
+//            .addConverterFactory(GsonConverterFactory.create()) //返回内容的转换器
+//            .build()
+//    }
+
+    //******************************** 动态配置OkHttp Retrofit **************************************
+    private var requestDSL: (RequestDsl.() -> Unit)? = null
+    fun setting(requestDSL: (RequestDsl.() -> Unit)? = null) {
+        this.requestDSL = requestDSL
     }
 
+
+    private fun getRetrofit(base_url: String): Retrofit {
+        val dsl = if (requestDSL != null) RequestDsl().apply(requestDSL!!) else null
+        val finalOkHttpBuilder = dsl?.buidOkHttp?.invoke(getOkHttp()) ?: getOkHttp()
+        val retrofitBuilder = Retrofit.Builder()
+            .baseUrl(base_url)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(finalOkHttpBuilder.build())
+        val finalRetrofitBuilder = dsl?.buidRetrofit?.invoke(retrofitBuilder) ?: retrofitBuilder
+        return finalRetrofitBuilder.build()
+    }
+
+
+    class RequestDsl {
+
+        internal var buidOkHttp: ((OkHttpClient.Builder) -> OkHttpClient.Builder)? = null
+
+        internal var buidRetrofit: ((Retrofit.Builder) -> Retrofit.Builder)? = null
+
+        infix fun okHttp(builder: ((OkHttpClient.Builder) -> OkHttpClient.Builder)?) {
+            this.buidOkHttp = builder
+        }
+
+        infix fun retrofit(builder: ((Retrofit.Builder) -> Retrofit.Builder)?) {
+            this.buidRetrofit = builder
+        }
+
+    }
     //***************************************公用参数*****************************************
 
     private var headers = HeaderInterceptor()
@@ -102,7 +141,6 @@ object HttpRequest {
     fun clearHead() = headers.clearHead()
 
     //****************************************公用参数********************************************
-
 
 
     //***************************************OkHttp*****************************************
@@ -137,7 +175,6 @@ object HttpRequest {
     }
 
     //********************************************************************************
-
 }
 
 
