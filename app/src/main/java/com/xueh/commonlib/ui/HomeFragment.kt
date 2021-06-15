@@ -65,5 +65,8 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
         viewModel.progressLiveData.observe(this, {
             binding.tvDownloadProgress.text="下载进度:${it.percent},下载速度:${it.speed} byte"
         })
+        viewModel.banner.observe(this){
+            ToastUtils.showShort(it.toString())
+        }
     }
 }
