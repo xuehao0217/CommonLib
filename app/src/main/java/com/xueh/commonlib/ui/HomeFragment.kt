@@ -47,12 +47,12 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
 
 
     override fun initView(savedInstanceState: Bundle?) {
-        binding.rv.grid(4)
-            .linear()
-            .addLinearItemDecoration(R.color.white, 3, 15f)
+        binding.rv
+            .grid(4).addGridItemDecoration(15f, 10f)
+//            .linear().addLinearItemDecoration(R.color.white, 3, 15f)
             .bindingData(
                 ItemLayoutBinding::inflate,
-                mutableListOf("1", "2", "3")
+                mutableListOf("1", "2", "3", "4", "1", "2", "3", "4")
             ) { vh, vb, s ->
                 vb.tvItem.setRoundBg(10, R.color.colorAccent, R.color.white)
             }
@@ -63,9 +63,9 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
 
     override fun initLivedata(viewModel: HomeViewModel) {
         viewModel.progressLiveData.observe(this, {
-            binding.tvDownloadProgress.text="下载进度:${it.percent},下载速度:${it.speed} byte"
+            binding.tvDownloadProgress.text = "下载进度:${it.percent},下载速度:${it.speed} byte"
         })
-        viewModel.banner.observe(this){
+        viewModel.banner.observe(this) {
             ToastUtils.showShort(it.toString())
         }
     }
