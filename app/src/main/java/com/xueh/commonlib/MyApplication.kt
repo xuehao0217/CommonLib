@@ -2,9 +2,11 @@ package com.xueh.commonlib
 
 import com.fengchen.uistatus.UiStatusManager
 import com.fengchen.uistatus.annotation.UiStatus
+import com.hjq.gson.factory.GsonFactory
 import com.xueh.comm_core.base.BaseApplication
 import com.xueh.comm_core.net.HttpRequest
 import me.jessyan.progressmanager.ProgressManager
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 /**
@@ -20,9 +22,15 @@ class MyApplication : BaseApplication() {
         HttpRequest.apply {
             setting {
                 okHttp {
-                    ProgressManager.getInstance().with(it)
-                        .build()
-                    it
+                    it.apply {
+                        ProgressManager.getInstance().with(this)
+                            .build()
+                    }
+                }
+                retrofit {
+                    it.apply {
+                        addConverterFactory(GsonConverterFactory.create(GsonFactory.getSingletonGson()))
+                    }
                 }
             }
 
