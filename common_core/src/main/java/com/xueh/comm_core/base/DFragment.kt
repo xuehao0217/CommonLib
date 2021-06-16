@@ -27,16 +27,19 @@ import org.greenrobot.eventbus.ThreadMode
  * tag: class//
  * description:  二级统一业务baseFragment
  */
-abstract class DFragment<VB:ViewBinding> : BaseFragment<VB>(), CoroutineScope by MainScope() {
-    protected var mCompositeDisposable = CompositeDisposable()
-    protected lateinit var uiStatusController: UiStatusController
+abstract class DFragment<VB : ViewBinding> : BaseFragment<VB>(), CoroutineScope by MainScope() {
+    protected val mCompositeDisposable by lazy {
+        CompositeDisposable()
+    }
+    protected val uiStatusController by lazy {
+        UiStatusController.get()
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         //该方法与onDetach对应,只有当对象完全销毁时解除事件绑定！
         //在oncreate时还是会多次调用的
         EventBusHelper.register(this)
-        uiStatusController = UiStatusController.get()
     }
 
     override fun onDetach() {
@@ -46,7 +49,7 @@ abstract class DFragment<VB:ViewBinding> : BaseFragment<VB>(), CoroutineScope by
         EventBusHelper.unregister(this)
         mCompositeDisposable.clear()
     }
-    
+
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 0, sticky = true)
     fun basegetEvent(a: String) {
@@ -57,15 +60,15 @@ abstract class DFragment<VB:ViewBinding> : BaseFragment<VB>(), CoroutineScope by
     }
 
     protected fun showProgressDialog() {
-        ViewLoading.show(getActivity())
+        ViewLoading.show(activity)
     }
 
     protected fun hideProgressDialog() {
-        ViewLoading.dismiss(getActivity())
+        ViewLoading.dismiss(activity)
     }
 
     protected fun startActivity(clazz: Class<out Activity>) {
-        val intent = Intent(getActivity(), clazz)
+        val intent = Intent(activity, clazz)
         if (IntentUtils.isIntentAvailable(intent)) {
             startActivity(intent)
         }
@@ -91,7 +94,7 @@ abstract class DFragment<VB:ViewBinding> : BaseFragment<VB>(), CoroutineScope by
         addDisposable(RxBindingUtils.setViewClicks(this, function))
     }
 
-    fun bindStateView(view: View)= uiStatusController.bind(view)
+    fun bindStateView(view: View) = uiStatusController.bind(view)
 
-    fun showState(@UiStatus state: Int)=   uiStatusController.changeUiStatus(state)
+    fun showState(@UiStatus state: Int) = uiStatusController.changeUiStatus(state)
 }

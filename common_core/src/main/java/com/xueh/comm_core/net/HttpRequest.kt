@@ -85,7 +85,6 @@ object HttpRequest {
 
 
 //    private fun getRetrofit(base_url: String): Retrofit {
-//
 //        return Retrofit.Builder()
 //            .baseUrl(base_url)
 //            .client(

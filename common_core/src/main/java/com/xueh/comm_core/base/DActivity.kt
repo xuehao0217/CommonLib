@@ -29,8 +29,13 @@ import org.greenrobot.eventbus.ThreadMode
  */
 abstract class DActivity<VB : ViewBinding> : BaseActivity<VB>(), CoroutineScope by MainScope() {
     protected var mImmersionBar: ImmersionBar? = null
-    protected var mCompositeDisposable = CompositeDisposable()
-    protected lateinit var uiStatusController: UiStatusController
+    protected val mCompositeDisposable by lazy {
+        CompositeDisposable()
+    }
+    protected val uiStatusController by lazy {
+        UiStatusController.get()
+    }
+
     /**
      * 是否可以使用沉浸式
      * Is immersion bar enabled boolean.
@@ -46,7 +51,6 @@ abstract class DActivity<VB : ViewBinding> : BaseActivity<VB>(), CoroutineScope 
             initImmersionBar()
         }
         EventBusHelper.register(this)
-        uiStatusController = UiStatusController.get()
     }
 
 
@@ -116,7 +120,7 @@ abstract class DActivity<VB : ViewBinding> : BaseActivity<VB>(), CoroutineScope 
         addDisposable(RxBindingUtils.setViewClicks(this, function))
     }
 
-    fun bindStateView(view: View)= uiStatusController.bind(view)
+    fun bindStateView(view: View) = uiStatusController.bind(view)
 
-    fun showState(@UiStatus state: Int)=   uiStatusController.changeUiStatusIgnore(state)
+    fun showState(@UiStatus state: Int) = uiStatusController.changeUiStatusIgnore(state)
 }
