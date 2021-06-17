@@ -1,14 +1,19 @@
 package com.xueh.comm_core.helper
 
+import android.Manifest
+import android.graphics.Bitmap
+import android.net.Uri
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.ComponentActivity
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import androidx.core.content.FileProvider
 import com.blankj.utilcode.util.*
 import com.noober.background.drawable.DrawableCreator
-import com.xueh.comm_core.R
 import com.xueh.comm_core.utils.CommonUtils
 import com.xueh.comm_core.utils.GlideUtils
 import me.jessyan.progressmanager.ProgressListener
@@ -18,7 +23,6 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
-import java.lang.Exception
 
 
 /**
@@ -45,7 +49,7 @@ fun Float.px2dp() = ConvertUtils.px2dp(this)
 //*********************************************************************************************************
 
 
-// *****************************************常用判空***********************************************************
+//*****************************************常用判空***********************************************************
 
 /***
  *  notNull(name,age){ name,age->
@@ -205,6 +209,76 @@ fun String.getDownloadProgress(block: (ProgressInfo) -> Unit) = ProgressManager.
         }
 
     })
+//*********************************************************************************************************
+
+
+//****************************************************意图相关**************************************************
+
+//用于请求单个权限  Manifest.permission.CAMERA,
+fun ComponentActivity.requestPermission(permission: String, block: (Boolean) -> Unit) {
+    registerForActivityResult(ActivityResultContracts.RequestPermission(), block).launch(
+        permission
+    )
+}
+
+// 用于请求一组权限
+// arrayOf(
+//            Manifest.permission.CAMERA,
+//            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//            Manifest.permission.READ_EXTERNAL_STORAGE
+//        )
+fun ComponentActivity.requestMultiplePermissions(
+    vararg permissions: String,
+    block: (Boolean) -> Unit
+) {
+    registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+        block.invoke(it.filter { it.value }.isNotEmpty())
+    }.launch(
+        permissions
+    )
+}
+
+
+//调用拍照，返回值为Bitmap图片
+fun ComponentActivity.takePicturePreview(block: (Bitmap) -> Unit) {
+    requestMultiplePermissions(
+        Manifest.permission.CAMERA,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    ) {
+        if (it) {
+            //权限全部通过
+            registerForActivityResult(ActivityResultContracts.TakePicturePreview(), block).launch(
+                null
+            )
+        }
+    }
+}
+
+
+//调用拍照，并将图片保存到给定的Uri地址，返回true表示保存成功
+fun ComponentActivity.takePicture(
+    imgName: String = "pictureSave.${Bitmap.CompressFormat.PNG}",
+    block: (Boolean) -> Unit
+) {
+    requestMultiplePermissions(
+        Manifest.permission.CAMERA,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    ) {
+        if (it) {
+            //权限全部通过
+            registerForActivityResult(ActivityResultContracts.TakePicture(), block).launch(
+                FileProvider.getUriForFile(
+                    this,
+                    this.packageName + ".utilcode.provider",
+                    File(PathUtils.getExternalAppCachePath(), imgName)
+                )
+            )
+        }
+    }
+}
+
 //*********************************************************************************************************
 
 

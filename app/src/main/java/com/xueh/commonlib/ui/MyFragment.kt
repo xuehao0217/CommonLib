@@ -1,13 +1,17 @@
 package com.xueh.commonlib.ui
 
+import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
+import com.blankj.utilcode.util.ToastUtils
 import com.fengchen.uistatus.annotation.UiStatus
 import com.xueh.comm_core.base.DFragment
+import com.xueh.comm_core.helper.takePicture
+import com.xueh.comm_core.helper.takePicturePreview
 import com.xueh.comm_core.utils.TakePictureUtils
 import com.xueh.comm_core.utils.time.Interval
-import com.xueh.commonlib.R
 import com.xueh.commonlib.databinding.FragmentMyBinding
 import java.io.File
 import java.util.concurrent.TimeUnit
@@ -36,7 +40,11 @@ class MyFragment : DFragment<FragmentMyBinding>() {
                 takePictureUtils.startTakeWayByAlbum()
             }
             tvCarema.setOnClickListener {
-                takePictureUtils.startTakeWayByCarema()
+//                takePictureUtils.startTakeWayByCarema()
+                activity?.takePicturePreview {
+                    showState(UiStatus.CONTENT)
+                    binding.ivMy.setImageBitmap(it)
+                }
             }
             btStartTime.setOnClickListener {
                 interval.start()
@@ -65,7 +73,6 @@ class MyFragment : DFragment<FragmentMyBinding>() {
     private lateinit var interval: Interval
     override fun initView(savedInstanceState: Bundle?) {
         bindStateView(binding.ivMy)
-
         interval = Interval(
             0,
             1,
