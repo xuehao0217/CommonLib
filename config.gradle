@@ -56,7 +56,7 @@ ext {
             agentweb                     : "4.1.4",
             refresh_layout_kernel        : "2.0.1",
 
-            immersionbar                 : "2.3.3",
+            immersionbar                 : "3.0.0",
             utilcode                     : "1.30.6",
             permission                   : "2.0.3",
             BaseRecyclerViewAdapterHelper: "3.0.6",

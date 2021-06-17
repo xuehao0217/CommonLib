@@ -75,6 +75,10 @@ public static java.lang.String TABLENAME;
  -keep class me.jessyan.progressmanager.** { *; }
  -keep interface me.jessyan.progressmanager.** { *; }
 
+#immersionbar
+ -keep class com.gyf.immersionbar.* {*;}
+ -dontwarn com.gyf.immersionbar.**
+
 # OkHttp3
 -dontwarn okhttp3.logging.**
 -keep class okhttp3.internal.**{*;}

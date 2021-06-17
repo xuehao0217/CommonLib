@@ -3,19 +3,18 @@ package com.xueh.comm_core.base
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.view.View
 import androidx.viewbinding.ViewBinding
 import com.blankj.utilcode.util.IntentUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.fengchen.uistatus.UiStatusController
 import com.fengchen.uistatus.annotation.UiStatus
+import com.gyf.immersionbar.ImmersionBar
 import com.xueh.comm_core.R
 import com.xueh.comm_core.helper.EventBusHelper
 import com.xueh.comm_core.helper.hasNetWorkConection
-import com.xueh.comm_core.utils.rx.RxBindingUtils
 import com.xueh.comm_core.weight.ViewLoading
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
@@ -28,13 +27,6 @@ import org.greenrobot.eventbus.ThreadMode
  * description:  二级统一业务baseFragment
  */
 abstract class DFragment<VB : ViewBinding> : BaseFragment<VB>(), CoroutineScope by MainScope() {
-    private val mCompositeDisposable by lazy {
-        CompositeDisposable()
-    }
-    private val uiStatusController by lazy {
-        UiStatusController.get()
-    }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         //该方法与onDetach对应,只有当对象完全销毁时解除事件绑定！
@@ -47,7 +39,9 @@ abstract class DFragment<VB : ViewBinding> : BaseFragment<VB>(), CoroutineScope 
         super.onDetach()
         //在onDestroyView时与activity还没有解绑！
         EventBusHelper.unregister(this)
-        mCompositeDisposable.clear()
+        mImmersionBar?.let {
+            it == null
+        }
     }
 
 
@@ -86,11 +80,41 @@ abstract class DFragment<VB : ViewBinding> : BaseFragment<VB>(), CoroutineScope 
         }
     }
 
-    protected fun addDisposable(disposable: Disposable) {
-        mCompositeDisposable.add(disposable)
+    private val uiStatusController by lazy {
+        UiStatusController.get()
     }
 
     fun bindStateView(view: View) = uiStatusController.bind(view)
 
     fun showState(@UiStatus state: Int) = uiStatusController.changeUiStatus(state)
+
+
+    var mImmersionBar: ImmersionBar? = null
+    protected fun initImmersionBar() {
+        //在BaseActivity里初始化
+        mImmersionBar = ImmersionBar.with(this).apply {
+            fitsSystemWindows(true)
+            statusBarColor(R.color.white)
+            statusBarDarkFont(true, 0.2f)
+            autoStatusBarDarkModeEnable(true, 0.3f)
+            autoDarkModeEnable(true, 0.2f)
+            navigationBarEnable(false)
+            init()
+        }
+    }
+
+    /**
+     * 是否可以使用沉浸式
+     * Is immersion bar enabled boolean.
+     *
+     * @return the boolean
+     */
+    protected val isImmersionBarEnabled = true
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if (isImmersionBarEnabled) {
+            initImmersionBar()
+        }
+    }
 }

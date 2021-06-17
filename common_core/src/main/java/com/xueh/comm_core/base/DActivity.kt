@@ -8,15 +8,12 @@ import androidx.viewbinding.ViewBinding
 import com.blankj.utilcode.util.ToastUtils
 import com.fengchen.uistatus.UiStatusController
 import com.fengchen.uistatus.annotation.UiStatus
-import com.gyf.barlibrary.ImmersionBar
+import com.gyf.immersionbar.ImmersionBar
 import com.noober.background.BackgroundLibrary
 import com.xueh.comm_core.R
 import com.xueh.comm_core.helper.EventBusHelper
 import com.xueh.comm_core.helper.hasNetWorkConection
-import com.xueh.comm_core.utils.rx.RxBindingUtils
 import com.xueh.comm_core.weight.ViewLoading
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
@@ -28,22 +25,6 @@ import org.greenrobot.eventbus.ThreadMode
  * description:二级统一业务型baseActivity
  */
 abstract class DActivity<VB : ViewBinding> : BaseActivity<VB>(), CoroutineScope by MainScope() {
-    protected var mImmersionBar: ImmersionBar? = null
-    val mCompositeDisposable by lazy {
-        CompositeDisposable()
-    }
-    val uiStatusController by lazy {
-        UiStatusController.get()
-    }
-
-    /**
-     * 是否可以使用沉浸式
-     * Is immersion bar enabled boolean.
-     *
-     * @return the boolean
-     */
-    protected val isImmersionBarEnabled = true
-
     public override fun onCreate(savedInstanceState: Bundle?) {
         BackgroundLibrary.inject(this)
         super.onCreate(savedInstanceState)
@@ -53,7 +34,6 @@ abstract class DActivity<VB : ViewBinding> : BaseActivity<VB>(), CoroutineScope 
         EventBusHelper.register(this)
     }
 
-
     override fun initDataBeforeView() {}
 
     override fun onDestroy() {
@@ -61,9 +41,7 @@ abstract class DActivity<VB : ViewBinding> : BaseActivity<VB>(), CoroutineScope 
         super.onDestroy()
         //在BaseActivity里销毁
         EventBusHelper.unregister(this)
-        mCompositeDisposable.clear()
         mImmersionBar?.let {
-            it.destroy()
             it == null
         }
     }
@@ -71,20 +49,6 @@ abstract class DActivity<VB : ViewBinding> : BaseActivity<VB>(), CoroutineScope 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 0, sticky = true)
     fun basegetEvent(a: String) {
     }
-
-    protected fun initImmersionBar() {
-        //在BaseActivity里初始化
-        mImmersionBar = ImmersionBar.with(this).apply {
-            fitsSystemWindows(true)
-            statusBarColor(R.color.white)
-            statusBarDarkFont(true, 0.2f)
-            autoStatusBarDarkModeEnable(true, 0.3f)
-            autoDarkModeEnable(true, 0.2f)
-            navigationBarEnable(false)
-            init()
-        }
-    }
-
 
     protected fun showProgressDialog() {
         ViewLoading.show(this)
@@ -111,11 +75,33 @@ abstract class DActivity<VB : ViewBinding> : BaseActivity<VB>(), CoroutineScope 
         startActivity(Intent(this, clazz), isNet)
     }
 
-    protected fun addDisposable(disposable: Disposable) {
-        mCompositeDisposable.add(disposable)
+    val uiStatusController by lazy {
+        UiStatusController.get()
     }
 
     fun bindStateView(view: View) = uiStatusController.bind(view)
 
     fun showState(@UiStatus state: Int) = uiStatusController.changeUiStatusIgnore(state)
+
+
+    /**
+     * 是否可以使用沉浸式
+     * Is immersion bar enabled boolean.
+     *
+     * @return the boolean
+     */
+    protected val isImmersionBarEnabled = true
+    var mImmersionBar: ImmersionBar? = null
+    protected fun initImmersionBar() {
+        //在BaseActivity里初始化
+        mImmersionBar = ImmersionBar.with(this).apply {
+            fitsSystemWindows(true)
+            statusBarColor(R.color.white)
+            statusBarDarkFont(true, 0.2f)
+            autoStatusBarDarkModeEnable(true, 0.3f)
+            autoDarkModeEnable(true, 0.2f)
+            navigationBarEnable(false)
+            init()
+        }
+    }
 }

@@ -70,9 +70,9 @@ dependencies {
     api rootProject.ext.libraries.eventbus
     api rootProject.ext.libraries.greendao
 
-    api rootProject.ext.libraries.rxjava
-    api rootProject.ext.libraries.rxandroid
-    api rootProject.ext.libraries.rxbinding
+//    api rootProject.ext.libraries.rxjava
+//    api rootProject.ext.libraries.rxandroid
+//    api rootProject.ext.libraries.rxbinding
 
     api rootProject.ext.libraries.okhttp_logging
     api rootProject.ext.libraries.okhttp
