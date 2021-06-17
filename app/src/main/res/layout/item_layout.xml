@@ -5,6 +5,12 @@
 
     <TextView
         android:id="@+id/tv_item"
+        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="50dp" />
+
+    <ImageView
+        android:id="@+id/iv_image"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

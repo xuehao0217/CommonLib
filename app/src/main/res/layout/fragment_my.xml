@@ -1,86 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cl_my_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/cl_my_root"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <ImageView
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:id="@+id/iv_my"
-        android:src="@drawable/ic_launcher"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <Button
-        android:id="@+id/tv_album"
-        android:layout_width="100dp"
-        android:gravity="center"
-        android:text="图库"
-        android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/iv_my"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginLeft="20dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_height="44dp"/>
-
-    <Button
-        android:id="@+id/tv_carema"
-        android:layout_width="100dp"
-        android:gravity="center"
-        android:text="相机"
-        android:textColor="@color/black"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_my"
         android:layout_marginRight="20dp"
-        android:layout_height="44dp"/>
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/bt_start_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="开始" />
+
+        <Button
+            android:id="@+id/bt_start_resume"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="恢复" />
+
+        <Button
+            android:id="@+id/bt_start_pause"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="暂停" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/tv_album"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:gravity="center"
+            android:text="图库"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/tv_carema"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:gravity="center"
+            android:text="相机"
+            android:textColor="@color/black" />
 
 
-    <Button
-        android:id="@+id/tv_loading"
-        android:layout_width="100dp"
-        android:gravity="center"
-        android:text="加载"
-        android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/tv_carema"
-        android:layout_marginLeft="20dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_height="44dp"/>
+        <Button
+            android:id="@+id/tv_loading"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:gravity="center"
+            android:text="加载"
+            android:textColor="@color/black" />
 
-    <Button
-        android:id="@+id/tv_content"
-        android:layout_width="100dp"
-        android:gravity="center"
-        android:text="内容"
-        android:textColor="@color/black"
-        app:layout_constraintTop_toTopOf="@id/tv_loading"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginRight="20dp"
-        android:layout_height="44dp"/>
-    <Button
-        android:id="@+id/bt_start_time"
-        android:text="开始"
-        app:layout_constraintTop_toBottomOf="@id/tv_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <Button
-        android:id="@+id/bt_start_resume"
-        android:text="恢复"
-        app:layout_constraintTop_toBottomOf="@id/bt_start_time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <Button
-        android:id="@+id/bt_start_pause"
-        android:text="暂停"
-        app:layout_constraintTop_toBottomOf="@id/bt_start_resume"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:gravity="center"
+            android:text="内容"
+            android:textColor="@color/black" />
 
-    <TextView
-        android:id="@+id/tv_time"
-        android:textSize="18sp"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/bt_start_pause"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/iv_my"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_launcher"
+            app:layout_constraintTop_toBottomOf="@id/tv_content" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

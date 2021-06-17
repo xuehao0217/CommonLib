@@ -29,10 +29,10 @@ import org.greenrobot.eventbus.ThreadMode
  */
 abstract class DActivity<VB : ViewBinding> : BaseActivity<VB>(), CoroutineScope by MainScope() {
     protected var mImmersionBar: ImmersionBar? = null
-    protected val mCompositeDisposable by lazy {
+    val mCompositeDisposable by lazy {
         CompositeDisposable()
     }
-    protected val uiStatusController by lazy {
+    val uiStatusController by lazy {
         UiStatusController.get()
     }
 
@@ -113,11 +113,6 @@ abstract class DActivity<VB : ViewBinding> : BaseActivity<VB>(), CoroutineScope 
 
     protected fun addDisposable(disposable: Disposable) {
         mCompositeDisposable.add(disposable)
-    }
-
-
-    fun View.setOnClick(function: (((data: Any) -> Unit))) {
-        addDisposable(RxBindingUtils.setViewClicks(this, function))
     }
 
     fun bindStateView(view: View) = uiStatusController.bind(view)

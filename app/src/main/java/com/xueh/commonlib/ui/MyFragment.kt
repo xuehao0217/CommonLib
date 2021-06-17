@@ -19,7 +19,16 @@ import java.util.concurrent.TimeUnit
  * 备注：
  */
 class MyFragment : DFragment<FragmentMyBinding>() {
-    lateinit var takePictureUtils: TakePictureUtils
+    val takePictureUtils by lazy {
+        TakePictureUtils(this, object : TakePictureUtils.takePictureCallBackListener {
+            override fun failed(errorCode: Int, deniedPermissions: MutableList<String>?) {
+            }
+
+            override fun successful(isTailor: Boolean, outFile: File?, filePath: Uri?) {
+                binding.ivMy.setImageURI(Uri.fromFile(outFile?.absoluteFile))
+            }
+        })
+    }
 
     override fun initListener() {
         with(binding) {
@@ -29,12 +38,6 @@ class MyFragment : DFragment<FragmentMyBinding>() {
             tvCarema.setOnClickListener {
                 takePictureUtils.startTakeWayByCarema()
             }
-            tvLoading.setOnClickListener {
-                showState(UiStatus.LOADING)
-            }
-            tvContent.setOnClickListener {
-                showState(UiStatus.CONTENT)
-            }
             btStartTime.setOnClickListener {
                 interval.start()
             }
@@ -43,6 +46,14 @@ class MyFragment : DFragment<FragmentMyBinding>() {
             }
             btStartResume.setOnClickListener {
                 interval.resume()
+            }
+
+
+            tvLoading.setOnClickListener {
+                showState(UiStatus.LOADING)
+            }
+            tvContent.setOnClickListener {
+                showState(UiStatus.CONTENT)
             }
         }
 
@@ -54,17 +65,6 @@ class MyFragment : DFragment<FragmentMyBinding>() {
     private lateinit var interval: Interval
     override fun initView(savedInstanceState: Bundle?) {
         bindStateView(binding.ivMy)
-        takePictureUtils =
-            TakePictureUtils(this, object : TakePictureUtils.takePictureCallBackListener {
-                override fun failed(errorCode: Int, deniedPermissions: MutableList<String>?) {
-                }
-
-                override fun successful(isTailor: Boolean, outFile: File?, filePath: Uri?) {
-                    binding.ivMy.setImageURI(Uri.fromFile(outFile?.absoluteFile))
-                }
-            })
-
-
 
         interval = Interval(
             0,

@@ -45,6 +45,7 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
         }
     }
 
+    val URL = "https://lh3.googleusercontent.com/-vFBVjRp14wam3b974OJcM2jQzu7Z-WJ_cDv4hijwcUhtmvJGjHVowXtasz2214O3MSD82dWUA=w128-h128-e365-rj-sc0x00ffffff"
 
     override fun initView(savedInstanceState: Bundle?) {
         binding.rv
@@ -54,7 +55,33 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
                 ItemLayoutBinding::inflate,
                 mutableListOf("1", "2", "3", "4", "1", "2", "3", "4")
             ) { vh, vb, s ->
-                vb.tvItem.setRoundBg(10, R.color.colorAccent, R.color.white)
+                vb.tvItem.text = s
+                when (vh.layoutPosition) {
+                    0 -> {
+                        vb.tvItem.setRoundBg(10, R.color.colorAccent)
+                    }
+                    1 -> {
+                        vb.tvItem.setRoundLineBg(
+                            10,
+                            R.color.white,
+                            R.color.colorAccent,
+                        )
+                    }
+                    2 -> {
+                        vb.ivImage.setBackgroundColor(getColor(R.color.colorAccent))
+                        vb.ivImage.loadImg(URL)
+                    }
+
+                    3 -> {
+                        vb.ivImage.setBackgroundColor(getColor(R.color.colorAccent))
+                        vb.ivImage.loadCircleImg(URL)
+                    }
+
+                    4 -> {
+                        vb.ivImage.setBackgroundColor(getColor(R.color.colorAccent))
+                        vb.ivImage.loadCircleImg(URL, 5)
+                    }
+                }
             }
     }
 

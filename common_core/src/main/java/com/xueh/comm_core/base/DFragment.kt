@@ -28,10 +28,10 @@ import org.greenrobot.eventbus.ThreadMode
  * description:  二级统一业务baseFragment
  */
 abstract class DFragment<VB : ViewBinding> : BaseFragment<VB>(), CoroutineScope by MainScope() {
-    protected val mCompositeDisposable by lazy {
+    private val mCompositeDisposable by lazy {
         CompositeDisposable()
     }
-    protected val uiStatusController by lazy {
+    private val uiStatusController by lazy {
         UiStatusController.get()
     }
 
@@ -88,10 +88,6 @@ abstract class DFragment<VB : ViewBinding> : BaseFragment<VB>(), CoroutineScope 
 
     protected fun addDisposable(disposable: Disposable) {
         mCompositeDisposable.add(disposable)
-    }
-
-    fun View.setOnClick(function: (((data: Any) -> Unit))) {
-        addDisposable(RxBindingUtils.setViewClicks(this, function))
     }
 
     fun bindStateView(view: View) = uiStatusController.bind(view)

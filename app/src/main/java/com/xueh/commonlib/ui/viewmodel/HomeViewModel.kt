@@ -4,10 +4,11 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.blankj.utilcode.util.*
 import com.xueh.comm_core.base.mvvm.BaseViewModel
+import com.xueh.comm_core.helper.getDownloadProgress
+import com.xueh.comm_core.helper.getPart
 import com.xueh.comm_core.helper.loge
 import com.xueh.comm_core.net.BaseResult
 import com.xueh.comm_core.net.HttpRequest
-import com.xueh.comm_core.net.getPart
 import com.xueh.commonlib.api.RestApi
 import com.xueh.commonlib.entity.BannerVO
 import me.jessyan.progressmanager.ProgressListener
@@ -81,17 +82,9 @@ class HomeViewModel : BaseViewModel<RestApi>() {
                 }
             }
             onStart {
-                ProgressManager.getInstance()
-                    .addResponseListener(Url, object :
-                        ProgressListener {
-                        override fun onProgress(progressInfo: ProgressInfo?) {
-                            progressLiveData.postValue(progressInfo)
-                        }
-
-                        override fun onError(id: Long, e: Exception?) {
-                        }
-
-                    })
+                Url.getDownloadProgress {
+                    progressLiveData.postValue(it)
+                }
                 //true 表示拦截 可以在这里进行自定义 不展示loading
                 true
             }
