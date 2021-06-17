@@ -96,4 +96,5 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
             ToastUtils.showShort(it.toString())
         }
     }
+
 }

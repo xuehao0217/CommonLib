@@ -18,8 +18,6 @@ import com.xueh.comm_core.weight.ViewLoading
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 
 
 /**
@@ -27,26 +25,27 @@ import org.greenrobot.eventbus.ThreadMode
  * description:  二级统一业务baseFragment
  */
 abstract class DFragment<VB : ViewBinding> : BaseFragment<VB>(), CoroutineScope by MainScope() {
+
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         //该方法与onDetach对应,只有当对象完全销毁时解除事件绑定！
         //在oncreate时还是会多次调用的
-        EventBusHelper.register(this)
+        if (isRegisterEventBus()) {
+            EventBusHelper.register(this)
+        }
     }
 
     override fun onDetach() {
         cancel()
         super.onDetach()
         //在onDestroyView时与activity还没有解绑！
-        EventBusHelper.unregister(this)
+        if (isRegisterEventBus()) {
+            EventBusHelper.unregister(this)
+        }
         mImmersionBar?.let {
             it == null
         }
-    }
-
-
-    @Subscribe(threadMode = ThreadMode.POSTING, priority = 0, sticky = true)
-    fun basegetEvent(a: String) {
     }
 
     override fun initDataBeforeView() {
@@ -117,4 +116,6 @@ abstract class DFragment<VB : ViewBinding> : BaseFragment<VB>(), CoroutineScope 
             initImmersionBar()
         }
     }
+
+    protected open fun isRegisterEventBus() = false
 }

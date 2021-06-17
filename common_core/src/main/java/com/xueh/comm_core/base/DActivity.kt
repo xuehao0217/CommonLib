@@ -31,7 +31,9 @@ abstract class DActivity<VB : ViewBinding> : BaseActivity<VB>(), CoroutineScope 
         if (isImmersionBarEnabled) {
             initImmersionBar()
         }
-        EventBusHelper.register(this)
+        if (isRegisterEventBus()) {
+            EventBusHelper.register(this)
+        }
     }
 
     override fun initDataBeforeView() {}
@@ -40,14 +42,12 @@ abstract class DActivity<VB : ViewBinding> : BaseActivity<VB>(), CoroutineScope 
         cancel()
         super.onDestroy()
         //在BaseActivity里销毁
-        EventBusHelper.unregister(this)
+        if (isRegisterEventBus()) {
+            EventBusHelper.unregister(this)
+        }
         mImmersionBar?.let {
             it == null
         }
-    }
-
-    @Subscribe(threadMode = ThreadMode.POSTING, priority = 0, sticky = true)
-    fun basegetEvent(a: String) {
     }
 
     protected fun showProgressDialog() {
@@ -104,4 +104,6 @@ abstract class DActivity<VB : ViewBinding> : BaseActivity<VB>(), CoroutineScope 
             init()
         }
     }
+
+    protected open fun isRegisterEventBus() = false
 }
