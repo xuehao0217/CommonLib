@@ -212,7 +212,7 @@ fun String.getDownloadProgress(block: (ProgressInfo) -> Unit) = ProgressManager.
 //*********************************************************************************************************
 
 
-//****************************************************意图相关**************************************************
+//****************************************************ActivityResultAPI相关**************************************************
 
 //用于请求单个权限  Manifest.permission.CAMERA,
 fun ComponentActivity.requestPermission(permission: String, block: (Boolean) -> Unit) {
