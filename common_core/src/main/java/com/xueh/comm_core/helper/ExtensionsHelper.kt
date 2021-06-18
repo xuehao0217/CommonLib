@@ -297,17 +297,20 @@ fun ComponentActivity.takePicturePreview(block: (Bitmap) -> Unit) {
 
 //裁剪图片 block返回图片URI
 fun ComponentActivity.cropImageActivityResult(
-    uri: Uri,
+    uri: Uri?,
     block: (Uri) -> Unit
 ) {
-    registerForActivityResult(CropImageActivityResult()) {
-        block.invoke(it)
-    }.launch(
-        CropImageResult(uri)
-    )
+    uri?.let {
+        registerForActivityResult(CropImageActivityResult()) { cropImage ->
+            block.invoke(cropImage)
+        }.launch(
+            CropImageResult(it)
+        )
+    }
+
 }
 
-//调用拍照，并将图片保存到给定的Uri地址，，block返回图片URI
+//调用拍照，并将图片保存到给定的Uri地址，block返回图片URI
 fun ComponentActivity.takePicture(
     isCrop: Boolean = true,
     imgName: String = "pictureSaveImg.${Bitmap.CompressFormat.PNG}",
@@ -347,13 +350,15 @@ fun ComponentActivity.startTakeWayByAlbum(
     block: (Uri) -> Unit
 ) {
     registerForActivityResult(AlbumActivityResul()) { uri ->
-        isCrop.yes {
-            cropImageActivityResult(uri) {
+        uri?.let {
+            isCrop.yes {
+                cropImageActivityResult(uri) { cropImage ->
+                    block.invoke(cropImage)
+                }
+            }
+            isCrop.no {
                 block.invoke(it)
             }
-        }
-        isCrop.no {
-            block.invoke(uri)
         }
     }.launch(
         null

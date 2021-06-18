@@ -25,14 +25,14 @@ class MyFragment : DFragment<FragmentMyBinding>() {
     override fun initListener() {
         with(binding) {
             tvAlbum.setOnClickListener {
-                activity?.startTakeWayByAlbum(false) {
+                activity?.startTakeWayByAlbum(true) {
                     showState(UiStatus.CONTENT)
                     ToastUtils.showShort("${UriUtils.uri2File(it)}")
                     binding.ivMy.setImageURI(it)
                 }
             }
             tvCarema.setOnClickListener {
-                activity?.takePicture(false) {
+                activity?.takePicture(true) {
                     showState(UiStatus.CONTENT)
                     ToastUtils.showShort("${UriUtils.uri2File(it)}")
                     binding.ivMy.setImageURI(it)
