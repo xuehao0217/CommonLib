@@ -350,14 +350,14 @@ fun ComponentActivity.startTakeWayByAlbum(
     block: (Uri) -> Unit
 ) {
     registerForActivityResult(AlbumActivityResul()) { uri ->
-        uri?.let {
+        uri?.isNotEmpty()?.yes {
             isCrop.yes {
                 cropImageActivityResult(uri) { cropImage ->
                     block.invoke(cropImage)
                 }
             }
             isCrop.no {
-                block.invoke(it)
+                block.invoke(uri)
             }
         }
     }.launch(
