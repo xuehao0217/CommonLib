@@ -232,7 +232,7 @@ fun ComponentActivity.requestMultiplePermissions(
     block: (Boolean) -> Unit
 ) {
     registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-        block.invoke(it.filter { it.value }.isNotEmpty())
+        block.invoke(it.filter { it.value==false }.isEmpty())
     }.launch(
         permissions
     )
