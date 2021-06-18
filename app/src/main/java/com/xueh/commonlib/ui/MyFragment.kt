@@ -21,16 +21,6 @@ import java.util.concurrent.TimeUnit
  * 备注：
  */
 class MyFragment : DFragment<FragmentMyBinding>() {
-    val takePictureUtils by lazy {
-        TakePictureUtils(this, object : TakePictureUtils.takePictureCallBackListener {
-            override fun failed(errorCode: Int, deniedPermissions: MutableList<String>?) {
-            }
-
-            override fun successful(isTailor: Boolean, outFile: File?, filePath: Uri?) {
-                binding.ivMy.setImageURI(Uri.fromFile(outFile?.absoluteFile))
-            }
-        })
-    }
 
     override fun initListener() {
         with(binding) {
@@ -89,18 +79,30 @@ class MyFragment : DFragment<FragmentMyBinding>() {
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        takePictureUtils.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int,
+//        permissions: Array<out String>,
+//        grantResults: IntArray
+//    ) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//        takePictureUtils.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//    }
+//
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        takePictureUtils.attachToActivityForResult(requestCode, resultCode, data)
+//    }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        takePictureUtils.attachToActivityForResult(requestCode, resultCode, data)
-    }
+
+//    val takePictureUtils by lazy {
+//        TakePictureUtils(this, object : TakePictureUtils.takePictureCallBackListener {
+//            override fun failed(errorCode: Int, deniedPermissions: MutableList<String>?) {
+//            }
+//
+//            override fun successful(isTailor: Boolean, outFile: File?, filePath: Uri?) {
+//                binding.ivMy.setImageURI(Uri.fromFile(outFile?.absoluteFile))
+//            }
+//        })
+//    }
 
 }
