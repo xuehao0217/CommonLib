@@ -18,7 +18,7 @@ import java.io.File
  * 备注：
  */
 
-class CropImageActivityResul : ActivityResultContract<CropImageResult, Uri>() {
+class CropImageActivityResult : ActivityResultContract<CropImageResult, Uri>() {
     var outUri: Uri? = null
 
     //构建意图

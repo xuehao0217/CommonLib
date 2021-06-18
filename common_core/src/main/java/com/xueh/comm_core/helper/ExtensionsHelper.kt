@@ -19,10 +19,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import com.blankj.utilcode.util.*
 import com.noober.background.drawable.DrawableCreator
-import com.xueh.comm_core.helper.activityresult.AlbumActivityResul
-import com.xueh.comm_core.helper.activityresult.CropImageActivityResul
-import com.xueh.comm_core.helper.activityresult.CropImageResult
-import com.xueh.comm_core.helper.activityresult.IntentBuilder
+import com.xueh.comm_core.helper.activityresult.*
 import com.xueh.comm_core.utils.CommonUtils
 import com.xueh.comm_core.utils.GlideUtils
 import me.jessyan.progressmanager.ProgressListener
@@ -298,21 +295,21 @@ fun ComponentActivity.takePicturePreview(block: (Bitmap) -> Unit) {
 }
 
 
-//调用拍照，然后裁剪 block返回图片URI
-fun ComponentActivity.takePictureAndCropImage(
+//裁剪图片 block返回图片URI
+fun ComponentActivity.cropImageActivityResult(
+    uri: Uri,
     block: (Uri) -> Unit
 ) {
-    takePicture { uri ->
-        registerForActivityResult(CropImageActivityResul()) {
-            block.invoke(it)
-        }.launch(
-            CropImageResult(uri)
-        )
-    }
+    registerForActivityResult(CropImageActivityResult()) {
+        block.invoke(it)
+    }.launch(
+        CropImageResult(uri)
+    )
 }
 
-//调用拍照，并将图片保存到给定的Uri地址，返回true表示保存成功，block返回图片URI
+//调用拍照，并将图片保存到给定的Uri地址，，block返回图片URI
 fun ComponentActivity.takePicture(
+    isCrop: Boolean = true,
     imgName: String = "pictureSaveImg.${Bitmap.CompressFormat.PNG}",
     block: (Uri) -> Unit
 ) {
@@ -321,12 +318,20 @@ fun ComponentActivity.takePicture(
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
         Manifest.permission.READ_EXTERNAL_STORAGE
     ) {
-        var uri = File(PathUtils.getExternalAppCachePath(), imgName).getUriForFile()
         it.yes {
+            var uri = File(PathUtils.getExternalAppCachePath(), imgName).getUriForFile()
             //权限全部通过
             registerForActivityResult(ActivityResultContracts.TakePicture()) {
+                //返回true表示保存成功
                 it.yes {
-                    block.invoke(uri)
+                    isCrop.yes {
+                        cropImageActivityResult(uri) { cropUri ->
+                            block.invoke(cropUri)
+                        }
+                    }
+                    isCrop.no {
+                        block.invoke(uri)
+                    }
                 }
             }.launch(
                 uri
@@ -343,11 +348,9 @@ fun ComponentActivity.startTakeWayByAlbum(
 ) {
     registerForActivityResult(AlbumActivityResul()) { uri ->
         isCrop.yes {
-            registerForActivityResult(CropImageActivityResul()) {
+            cropImageActivityResult(uri) {
                 block.invoke(it)
-            }.launch(
-                CropImageResult(uri)
-            )
+            }
         }
         isCrop.no {
             block.invoke(uri)

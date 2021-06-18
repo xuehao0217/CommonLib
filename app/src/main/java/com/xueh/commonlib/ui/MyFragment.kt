@@ -1,29 +1,18 @@
 package com.xueh.commonlib.ui
 
-import android.R.attr.bitmap
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
-import androidx.activity.result.contract.ActivityResultContract
-import androidx.core.content.FileProvider
-import com.blankj.utilcode.util.ImageUtils
-import com.blankj.utilcode.util.PathUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.blankj.utilcode.util.UriUtils
 import com.fengchen.uistatus.annotation.UiStatus
 import com.xueh.comm_core.base.DFragment
 import com.xueh.comm_core.helper.*
-import com.xueh.comm_core.helper.activityresult.AlbumActivityResul
-import com.xueh.comm_core.helper.activityresult.CropImageActivityResul
-import com.xueh.comm_core.helper.activityresult.CropImageResult
 import com.xueh.comm_core.utils.TakePictureUtils
 import com.xueh.comm_core.utils.time.Interval
 import com.xueh.commonlib.databinding.FragmentMyBinding
 import java.io.File
 import java.util.concurrent.TimeUnit
-import kotlin.math.absoluteValue
 
 
 /**
@@ -46,14 +35,14 @@ class MyFragment : DFragment<FragmentMyBinding>() {
     override fun initListener() {
         with(binding) {
             tvAlbum.setOnClickListener {
-                activity?.startTakeWayByAlbum {
+                activity?.startTakeWayByAlbum(false) {
                     showState(UiStatus.CONTENT)
                     ToastUtils.showShort("${UriUtils.uri2File(it)}")
                     binding.ivMy.setImageURI(it)
                 }
             }
             tvCarema.setOnClickListener {
-                activity?.takePictureAndCropImage {
+                activity?.takePicture(false) {
                     showState(UiStatus.CONTENT)
                     ToastUtils.showShort("${UriUtils.uri2File(it)}")
                     binding.ivMy.setImageURI(it)
