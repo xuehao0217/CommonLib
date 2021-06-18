@@ -44,6 +44,12 @@ class MyApplication : BaseApplication() {
         UiStatusManager.getInstance()
             .addUiStatusConfig(UiStatus.LOADING, R.layout.state_loading)
             .addUiStatusConfig(UiStatus.EMPTY, R.layout.state_empty)
-            .addUiStatusConfig(UiStatus.NETWORK_ERROR, R.layout.state_net_error)
+            //添加R.id.tv_net_error 点击事件
+            .addUiStatusConfig(
+                UiStatus.NETWORK_ERROR,
+                R.layout.state_net_error,
+                R.id.tv_net_error,
+                null
+            )
     }
 }

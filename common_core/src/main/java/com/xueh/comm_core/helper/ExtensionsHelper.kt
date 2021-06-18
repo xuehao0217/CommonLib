@@ -19,6 +19,9 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import com.blankj.utilcode.util.*
 import com.noober.background.drawable.DrawableCreator
+import com.xueh.comm_core.helper.activityresult.AlbumActivityResul
+import com.xueh.comm_core.helper.activityresult.CropImageActivityResul
+import com.xueh.comm_core.helper.activityresult.CropImageResult
 import com.xueh.comm_core.helper.activityresult.IntentBuilder
 import com.xueh.comm_core.utils.CommonUtils
 import com.xueh.comm_core.utils.GlideUtils
@@ -52,6 +55,7 @@ fun loge(tag: String, content: String) {
 fun Float.dp2px() = ConvertUtils.dp2px(this)
 
 fun Float.px2dp() = ConvertUtils.px2dp(this)
+
 //*********************************************************************************************************
 
 
@@ -203,6 +207,13 @@ fun File.getPart() = MultipartBody.Part.createFormData(
     this.asRequestBody("image/jpeg".toMediaTypeOrNull())
 )
 
+//FileProvider 适配
+fun File.getUriForFile() = FileProvider.getUriForFile(
+    Utils.getApp(),
+    Utils.getApp().packageName + ".utilcode.provider",
+    this
+)
+
 //获取URL下载进度
 fun String.getDownloadProgress(block: (ProgressInfo) -> Unit) = ProgressManager.getInstance()
     .addResponseListener(this, object :
@@ -227,7 +238,6 @@ fun ComponentActivity.setResult(intent: IntentBuilder, isFinish: Boolean = true)
         this.finish()
     }
 }
-
 
 //StartActivityForResult  block 返回Intent
 fun ComponentActivity.startActivityForResult(
@@ -278,7 +288,7 @@ fun ComponentActivity.takePicturePreview(block: (Bitmap) -> Unit) {
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
         Manifest.permission.READ_EXTERNAL_STORAGE
     ) {
-        if (it) {
+        it.yes {
             //权限全部通过
             registerForActivityResult(ActivityResultContracts.TakePicturePreview(), block).launch(
                 null
@@ -288,28 +298,65 @@ fun ComponentActivity.takePicturePreview(block: (Bitmap) -> Unit) {
 }
 
 
-//调用拍照，并将图片保存到给定的Uri地址，返回true表示保存成功
+//调用拍照，然后裁剪 block返回图片URI
+fun ComponentActivity.takePictureAndCropImage(
+    block: (Uri) -> Unit
+) {
+    takePicture { uri ->
+        registerForActivityResult(CropImageActivityResul()) {
+            block.invoke(it)
+        }.launch(
+            CropImageResult(uri)
+        )
+    }
+}
+
+//调用拍照，并将图片保存到给定的Uri地址，返回true表示保存成功，block返回图片URI
 fun ComponentActivity.takePicture(
-    imgName: String = "pictureSave.${Bitmap.CompressFormat.PNG}",
-    block: (Boolean) -> Unit
+    imgName: String = "pictureSaveImg.${Bitmap.CompressFormat.PNG}",
+    block: (Uri) -> Unit
 ) {
     requestMultiplePermissions(
         Manifest.permission.CAMERA,
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
         Manifest.permission.READ_EXTERNAL_STORAGE
     ) {
-        if (it) {
+        var uri = File(PathUtils.getExternalAppCachePath(), imgName).getUriForFile()
+        it.yes {
             //权限全部通过
-            registerForActivityResult(ActivityResultContracts.TakePicture(), block).launch(
-                FileProvider.getUriForFile(
-                    this,
-                    this.packageName + ".utilcode.provider",
-                    File(PathUtils.getExternalAppCachePath(), imgName)
-                )
+            registerForActivityResult(ActivityResultContracts.TakePicture()) {
+                it.yes {
+                    block.invoke(uri)
+                }
+            }.launch(
+                uri
             )
         }
     }
 }
+
+
+//调用图库 isCrop  是否裁剪  block返回图片URI
+fun ComponentActivity.startTakeWayByAlbum(
+    isCrop: Boolean = true,
+    block: (Uri) -> Unit
+) {
+    registerForActivityResult(AlbumActivityResul()) { uri ->
+        isCrop.yes {
+            registerForActivityResult(CropImageActivityResul()) {
+                block.invoke(it)
+            }.launch(
+                CropImageResult(uri)
+            )
+        }
+        isCrop.no {
+            block.invoke(uri)
+        }
+    }.launch(
+        null
+    )
+}
+
 
 //*********************************************************************************************************
 

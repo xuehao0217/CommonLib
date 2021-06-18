@@ -8,6 +8,7 @@ import androidx.viewbinding.ViewBinding
 import com.blankj.utilcode.util.ToastUtils
 import com.fengchen.uistatus.UiStatusController
 import com.fengchen.uistatus.annotation.UiStatus
+import com.fengchen.uistatus.listener.OnCompatRetryListener
 import com.gyf.immersionbar.ImmersionBar
 import com.noober.background.BackgroundLibrary
 import com.xueh.comm_core.R
@@ -83,6 +84,20 @@ abstract class DActivity<VB : ViewBinding> : BaseActivity<VB>(), CoroutineScope 
 
     fun showState(@UiStatus state: Int) = uiStatusController.changeUiStatusIgnore(state)
 
+
+    fun setRetryListener(block: () -> Unit) {
+        /**
+         * 重试.
+         *
+         * @param uiStatus   UiStatus.
+         * @param target     bind Object.
+         * @param controller 当前视图状态控制器.
+         * @param trigger    重试触发控件.
+         */
+        uiStatusController.setOnCompatRetryListener { i, any, iUiStatusController, view ->
+            block.invoke()
+        }
+    }
 
     /**
      * 是否可以使用沉浸式
