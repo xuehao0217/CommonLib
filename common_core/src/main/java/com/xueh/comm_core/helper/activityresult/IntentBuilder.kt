@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
+import com.blankj.utilcode.util.ActivityUtils
+import com.blankj.utilcode.util.Utils
 import java.io.Serializable
 
 /**
@@ -122,17 +124,10 @@ class IntentBuilder private constructor(private val context: Context) {
         context.startActivity(build())
     }
 
-    /**
-     * 启动Activity带结果返回的
-     */
-    fun start(requestCode: Int) {
-        (context as Activity).startActivityForResult(build(), requestCode)
-    }
-
     companion object {
         @JvmStatic
-        fun builder(context: Context): IntentBuilder {
-            return IntentBuilder(context)
+        fun builder(): IntentBuilder {
+            return IntentBuilder(ActivityUtils.getTopActivity())
         }
     }
 

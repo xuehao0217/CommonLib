@@ -1,6 +1,8 @@
 package com.xueh.comm_core.helper
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
@@ -12,8 +14,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.core.content.FileProvider
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import com.blankj.utilcode.util.*
 import com.noober.background.drawable.DrawableCreator
+import com.xueh.comm_core.helper.activityresult.IntentBuilder
 import com.xueh.comm_core.utils.CommonUtils
 import com.xueh.comm_core.utils.GlideUtils
 import me.jessyan.progressmanager.ProgressListener
@@ -214,14 +220,40 @@ fun String.getDownloadProgress(block: (ProgressInfo) -> Unit) = ProgressManager.
 
 //****************************************************ActivityResultAPI相关**************************************************
 
-//用于请求单个权限  Manifest.permission.CAMERA,
+// setResult(IntentBuilder.builder().params("key1","key1").params("key2","key3"))
+fun ComponentActivity.setResult(intent: IntentBuilder, isFinish: Boolean = true) {
+    setResult(Activity.RESULT_OK, intent.build())
+    if (isFinish) {
+        this.finish()
+    }
+}
+
+
+//StartActivityForResult  block 返回Intent
+fun ComponentActivity.startActivityForResult(
+    activity: Class<out Activity>,
+    block: (Intent) -> Unit
+) {
+    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        when (it.resultCode) {
+            Activity.RESULT_OK -> {
+                it.data?.let {
+                    block.invoke(it)
+                }
+            }
+        }
+    }.launch(Intent(this, activity))
+}
+
+
+//用于请求单个权限  Manifest.permission.CAMERA, block 返回是否授权
 fun ComponentActivity.requestPermission(permission: String, block: (Boolean) -> Unit) {
     registerForActivityResult(ActivityResultContracts.RequestPermission(), block).launch(
         permission
     )
 }
 
-// 用于请求一组权限
+// 用于请求一组权限 block 返回是否全部授权
 // arrayOf(
 //            Manifest.permission.CAMERA,
 //            Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -232,7 +264,7 @@ fun ComponentActivity.requestMultiplePermissions(
     block: (Boolean) -> Unit
 ) {
     registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-        block.invoke(it.filter { it.value==false }.isEmpty())
+        block.invoke(it.filter { it.value == false }.isEmpty())
     }.launch(
         permissions
     )
@@ -282,32 +314,38 @@ fun ComponentActivity.takePicture(
 //*********************************************************************************************************
 
 
-sealed class BooleanExt<out T> constructor(val boolean: Boolean)
-object Otherwise : BooleanExt<Nothing>(true)
-class WithData<out T>(val data: T) : BooleanExt<T>(false)
-
-inline fun <T> Boolean.yes(block: () -> T): BooleanExt<T> = when {
-    this -> {
-        WithData(block())
-    }
-    else -> Otherwise
-}
-
-inline fun <T> Boolean.no(block: () -> T) = when {
-    this -> Otherwise
-    else -> {
-        WithData(block())
+fun Boolean.yes(block: () -> Unit) {
+    if (this) {
+        block.invoke()
     }
 }
 
-inline infix fun <T> BooleanExt<T>.otherwise(block: () -> T): T {
-    return when (this) {
-        is Otherwise -> block()
-        is WithData<T> -> this.data
-        else -> {
-            throw IllegalAccessException()
-        }
+fun Boolean.no(block: () -> Unit) {
+    if (!this) {
+        block.invoke()
     }
 }
 
-inline operator fun <T> Boolean.invoke(block: () -> T) = yes(block)
+class yesOrNoDsl {
+    var isTrue: (() -> Unit?)? = null
+
+    var isFalse: (() -> Unit?)? = null
+
+    infix fun yes(isTrue: (() -> Unit?)) {
+        this.isTrue = isTrue
+    }
+
+    infix fun no(isFalse: (() -> Unit?)) {
+        this.isFalse = isFalse
+    }
+}
+
+
+inline fun yesOrNo(a: Boolean, crossinline yesOrNo: yesOrNoDsl.() -> Unit) {
+    a.yes {
+        yesOrNoDsl().apply(yesOrNo)?.isTrue?.invoke()
+    }
+    a.no {
+        yesOrNoDsl().apply(yesOrNo)?.isFalse?.invoke()
+    }
+}
