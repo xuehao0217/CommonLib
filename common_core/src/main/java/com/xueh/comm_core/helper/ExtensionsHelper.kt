@@ -345,7 +345,7 @@ fun ComponentActivity.takePicture(
 
 
 //调用图库 isCrop  是否裁剪  block返回图片URI
-fun ComponentActivity.startTakeWayByAlbum(
+fun ComponentActivity.takeAlbum(
     isCrop: Boolean = true,
     block: (Uri) -> Unit
 ) {

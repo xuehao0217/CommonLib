@@ -25,7 +25,7 @@ class MyFragment : DFragment<FragmentMyBinding>() {
     override fun initListener() {
         with(binding) {
             tvAlbum.setOnClickListener {
-                activity?.startTakeWayByAlbum(true) {
+                activity?.takeAlbum(true) {
                     showState(UiStatus.CONTENT)
                     ToastUtils.showShort("${UriUtils.uri2File(it)}")
                     binding.ivMy.setImageURI(it)
