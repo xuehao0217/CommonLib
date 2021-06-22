@@ -1,17 +1,12 @@
 package com.xueh.commonlib.ui
-
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import com.blankj.utilcode.util.ToastUtils
 import com.blankj.utilcode.util.UriUtils
 import com.fengchen.uistatus.annotation.UiStatus
 import com.xueh.comm_core.base.DFragment
 import com.xueh.comm_core.helper.*
-import com.xueh.comm_core.utils.TakePictureUtils
 import com.xueh.comm_core.utils.time.Interval
 import com.xueh.commonlib.databinding.FragmentMyBinding
-import java.io.File
 import java.util.concurrent.TimeUnit
 
 
@@ -78,31 +73,5 @@ class MyFragment : DFragment<FragmentMyBinding>() {
             binding.tvTime.text = "计时完成"
         }
     }
-
-//    override fun onRequestPermissionsResult(
-//        requestCode: Int,
-//        permissions: Array<out String>,
-//        grantResults: IntArray
-//    ) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        takePictureUtils.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//    }
-//
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        takePictureUtils.attachToActivityForResult(requestCode, resultCode, data)
-//    }
-
-
-//    val takePictureUtils by lazy {
-//        TakePictureUtils(this, object : TakePictureUtils.takePictureCallBackListener {
-//            override fun failed(errorCode: Int, deniedPermissions: MutableList<String>?) {
-//            }
-//
-//            override fun successful(isTailor: Boolean, outFile: File?, filePath: Uri?) {
-//                binding.ivMy.setImageURI(Uri.fromFile(outFile?.absoluteFile))
-//            }
-//        })
-//    }
 
 }
