@@ -45,7 +45,7 @@ dependencies {
 
     api rootProject.ext.libraries.support_v4
     api rootProject.ext.libraries.appcompat
-    api rootProject.ext.libraries.design
+    api rootProject.ext.libraries.material
     api rootProject.ext.libraries.recyclerview
     api rootProject.ext.libraries.constraint_layout
     api rootProject.ext.libraries.cardview
