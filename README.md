@@ -2,7 +2,7 @@
 Kotlin 协程 DSL网络请求样式封装
 
 #### BaseViewModel使用
-```java
+```kotlin
     class HomeViewModel : BaseViewModel<RestApi>() {
         override fun initApi() = HttpRequest.getService(RestApi::class.java)
 
@@ -22,7 +22,7 @@ Kotlin 协程 DSL网络请求样式封装
 
 ```
 
-```java
+```kotlin
 
      override fun initLivedata(viewModel: HomeViewModel) {
          viewModel.banner.observe(this, Observer {
