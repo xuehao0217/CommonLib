@@ -15,20 +15,21 @@ import androidx.activity.result.contract.ActivityResultContracts
 /*
 
 launcher.lunch<SecondActivity>(
-setIntent = {
-    //配置请求 intent
-    it.putExtra("Configs.LOCATION_RESULT", "value form Main")
-},
-onSuccess = {
-    val location = it?.getStringExtra("Configs.LOCATION_RESULT")
-    Log.i(TAG, "startActivityForResultClick: $location")
-}
+    setIntent = {
+        //配置请求 intent
+        it.putExtra("Configs.LOCATION_RESULT", "value form Main")
+    },
+    onSuccess = {
+        val location = it?.getStringExtra("Configs.LOCATION_RESULT")
+        Log.i(TAG, "startActivityForResultClick: $location")
+    }
 )
 
 
 setResult(){
    it.putExtra("aaa","bbb")
 }
+
 */
 
 
