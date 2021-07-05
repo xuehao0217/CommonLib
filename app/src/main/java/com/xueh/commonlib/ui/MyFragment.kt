@@ -1,10 +1,16 @@
 package com.xueh.commonlib.ui
+
+import android.Manifest
 import android.os.Bundle
 import com.blankj.utilcode.util.ToastUtils
 import com.blankj.utilcode.util.UriUtils
 import com.fengchen.uistatus.annotation.UiStatus
 import com.xueh.comm_core.base.DFragment
 import com.xueh.comm_core.helper.*
+import com.xueh.comm_core.helper.activityresult.AlbumLauncher
+import com.xueh.comm_core.helper.activityresult.TakePictureLauncher
+import com.xueh.comm_core.helper.activityresult.TakePicturePreviewLauncher
+import com.xueh.comm_core.helper.activityresult.permission.PermissionLauncher
 import com.xueh.comm_core.utils.time.Interval
 import com.xueh.commonlib.databinding.FragmentMyBinding
 import java.util.concurrent.TimeUnit
@@ -17,17 +23,22 @@ import java.util.concurrent.TimeUnit
  */
 class MyFragment : DFragment<FragmentMyBinding>() {
 
+    private val pictureLauncher by lazy { TakePictureLauncher() }
+    private val albumLauncher by lazy { AlbumLauncher() }
+    private val previewLauncher by lazy { TakePicturePreviewLauncher() }
+    private val permissionLauncher by lazy { PermissionLauncher() }
+    
     override fun initListener() {
         with(binding) {
             tvAlbum.setOnClickListener {
-                activity?.takeAlbum(true) {
+                albumLauncher.lunch {
                     showState(UiStatus.CONTENT)
                     ToastUtils.showShort("${UriUtils.uri2File(it)}")
                     binding.ivMy.setImageURI(it)
                 }
             }
             tvCarema.setOnClickListener {
-                activity?.takePicture(true) {
+                pictureLauncher.lunch {
                     showState(UiStatus.CONTENT)
                     ToastUtils.showShort("${UriUtils.uri2File(it)}")
                     binding.ivMy.setImageURI(it)
@@ -43,7 +54,6 @@ class MyFragment : DFragment<FragmentMyBinding>() {
                 interval.resume()
             }
 
-
             tvLoading.setOnClickListener {
                 showState(UiStatus.LOADING)
             }
@@ -55,6 +65,14 @@ class MyFragment : DFragment<FragmentMyBinding>() {
     }
 
     override fun initDataAfterView() {
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        lifecycle.addObserver(pictureLauncher)
+        lifecycle.addObserver(albumLauncher)
+        lifecycle.addObserver(previewLauncher)
+        lifecycle.addObserver(permissionLauncher)
     }
 
     private lateinit var interval: Interval

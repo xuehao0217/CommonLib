@@ -52,6 +52,7 @@ dependencies {
     api rootProject.ext.libraries.viewpager2
 
     api rootProject.ext.libraries.fragment_ktx
+    api rootProject.ext.libraries.lifecycle_common
     api rootProject.ext.libraries.lifecycle_extensions
     api rootProject.ext.libraries.lifecycle_livedata_ktx
     api rootProject.ext.libraries.lifecycle_viewmodel_ktx

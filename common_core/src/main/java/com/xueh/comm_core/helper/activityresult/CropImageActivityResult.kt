@@ -15,7 +15,7 @@ import java.io.File
 /**
  * 创 建 人: xueh
  * 创建日期: 2021/6/18 15:12
- * 备注：
+ * 备注：裁剪图片
  */
 
 class CropImageActivityResult : ActivityResultContract<CropImageResult, Uri>() {

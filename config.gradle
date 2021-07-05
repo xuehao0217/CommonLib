@@ -69,23 +69,23 @@ ext {
     ]
     libraries = [
             junit                        : "junit:junit:4.12",
+            material                     : "com.google.android.material:material:${versions.design}",
             test_junit                   : "androidx.test.ext:junit:1.1.1",
             runner                       : "androidx.test:runner:1.2.0",
             espresso                     : "androidx.test.espresso:espresso-core:3.2.0",
             multidex                     : "androidx.multidex:multidex:2.0.1",
-
             support_v4                   : "androidx.legacy:legacy-support-v4:${versions.androidx}",
             appcompat                    : "androidx.appcompat:appcompat:${versions.appcompat}",
             recyclerview                 : "androidx.recyclerview:recyclerview:${versions.androidx}",
             cardview                     : "androidx.cardview:cardview:${versions.androidx}",
-            material                     : "com.google.android.material:material:${versions.design}",
             constraint_layout            : "androidx.constraintlayout:constraintlayout:${versions.constraint_layout}",
             viewpager2                   : "androidx.viewpager2:viewpager2:${versions.viewpager2}",
-
             fragment_ktx                 : "androidx.fragment:fragment-ktx:${versions.fragment_ktx}",
+            lifecycle_common             : "androidx.lifecycle:lifecycle-common-java8:${versions.lifecycle_version}",
             lifecycle_extensions         : "androidx.lifecycle:lifecycle-extensions:${versions.lifecycle_version}",
             lifecycle_livedata_ktx       : "androidx.lifecycle:lifecycle-livedata-ktx:${versions.lifecycle_version}",
             lifecycle_viewmodel_ktx      : "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions.lifecycle_version}",
+
 
             koin_android                 : "org.koin:koin-android:${versions.koin_android}",
             koin_androidx                : "org.koin:koin-androidx-scope:${versions.koin_android}",
