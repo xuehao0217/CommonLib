@@ -3,6 +3,7 @@ package com.xueh.comm_core.helper.activityresult
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
+import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 
@@ -24,7 +25,10 @@ onSuccess = {
 }
 )
 
-setResult(IntentBuilder.builder().params("key1","key1").params("key2","key3"))
+
+setResult(){
+   it.putExtra("aaa","bbb")
+}
 */
 
 
@@ -49,5 +53,17 @@ class ActivityResultLauncher :
     override fun onActivityResult(result: ActivityResult?) {
         if (Activity.RESULT_OK == result?.resultCode) onSuccess.invoke(result.data)
         else onError.invoke(result?.resultCode ?: Activity.RESULT_CANCELED)
+    }
+}
+
+fun ComponentActivity.setResult(
+    isFinish: Boolean = true,
+    setIntent: (intent: Intent) -> Unit = {},
+) {
+    val intent = Intent()
+    setIntent.invoke(intent)
+    setResult(Activity.RESULT_OK, intent)
+    if (isFinish) {
+        this.finish()
     }
 }
