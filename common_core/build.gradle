@@ -41,8 +41,8 @@ dependencies {
     api rootProject.ext.libraries.runner
     api rootProject.ext.libraries.test_junit
     api rootProject.ext.libraries.espresso
+    api rootProject.ext.libraries.core_ktx
     api rootProject.ext.libraries.multidex
-
     api rootProject.ext.libraries.support_v4
     api rootProject.ext.libraries.appcompat
     api rootProject.ext.libraries.material
@@ -50,7 +50,6 @@ dependencies {
     api rootProject.ext.libraries.constraint_layout
     api rootProject.ext.libraries.cardview
     api rootProject.ext.libraries.viewpager2
-
     api rootProject.ext.libraries.fragment_ktx
     api rootProject.ext.libraries.lifecycle_common
     api rootProject.ext.libraries.lifecycle_extensions
@@ -65,7 +64,6 @@ dependencies {
     api rootProject.ext.libraries.anko
     api rootProject.ext.libraries.coroutines_core
     api rootProject.ext.libraries.coroutines_android
-    api rootProject.ext.libraries.core_ktx
 
     api rootProject.ext.libraries.agentweb
     api rootProject.ext.libraries.eventbus
@@ -94,7 +92,7 @@ dependencies {
 
     api rootProject.ext.libraries.immersionbar
     api rootProject.ext.libraries.utilcode
-    api rootProject.ext.libraries.permission
+//    api rootProject.ext.libraries.permission
     api rootProject.ext.libraries.UiStatus
     api rootProject.ext.libraries.titlebar
     api rootProject.ext.libraries.MagicIndicator
