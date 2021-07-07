@@ -77,6 +77,7 @@ class MyFragment : DFragment<FragmentMyBinding>() {
 
     private lateinit var interval: Interval
     override fun initView(savedInstanceState: Bundle?) {
+        //调用这个方法就会默认展示loading 需要show content
         bindStateView(binding.ivMy)
         interval = Interval(
             0,
