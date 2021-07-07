@@ -1,5 +1,7 @@
 package com.xueh.commonlib
 
+import com.blankj.utilcode.util.LogUtils
+import com.blankj.utilcode.util.PathUtils
 import com.fengchen.uistatus.UiStatusManager
 import com.fengchen.uistatus.annotation.UiStatus
 import com.hjq.gson.factory.GsonFactory
@@ -18,7 +20,7 @@ class MyApplication : BaseApplication() {
     override fun onCreate() {
         super.onCreate()
         initState()
-
+        initLog()
         HttpRequest.apply {
             setting {
                 okHttp {
@@ -38,6 +40,14 @@ class MyApplication : BaseApplication() {
             putHead(hashMapOf("name" to "xuehao"))
         }
 
+    }
+
+    private fun initLog() {
+        LogUtils.getConfig()
+            .setLog2FileSwitch(true)
+            .setSaveDays(7)
+            .setFilePrefix("log")
+            .dir = PathUtils.getExternalAppCachePath()
     }
 
     private fun initState() {
