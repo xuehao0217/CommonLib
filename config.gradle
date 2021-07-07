@@ -39,6 +39,7 @@ ext {
             okhttp                       : "4.5.0",
             PersistentCookieJar          : "v1.0.1",
 
+            spiderman                    : "v1.1.8",
             glide                        : "4.11.0",
             background                   : "1.6.5",
             progressmanager              : "1.5.0",
@@ -62,7 +63,6 @@ ext {
             UiStatus                     : "1.0.5",
             MagicIndicator               : "1.7.0",
             xpopup                       : "2.1.16",
-
             PickerView                   : "4.1.9",
             banner                       : "3.0.0",
 
@@ -108,6 +108,7 @@ ext {
             okhttp_logging               : "com.squareup.okhttp3:logging-interceptor:${versions.okhttp}",
             PersistentCookieJar          : "com.github.franmontiel:PersistentCookieJar:${versions.PersistentCookieJar}",
 
+            spiderman                    : "com.github.simplepeng.SpiderMan:spiderman:${versions.spiderman}",
             glide                        : "com.github.bumptech.glide:glide:${versions.glide}",
             progressmanager              : "me.jessyan:progressmanager:${versions.progressmanager}",
             background                   : "com.noober.background:core:${versions.background}",

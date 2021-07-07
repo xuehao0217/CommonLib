@@ -30,8 +30,8 @@ android {
         enabled = true
     }
 
-    kotlinOptions{
-        jvmTarget=1.8
+    kotlinOptions {
+        jvmTarget = 1.8
     }
 }
 
@@ -80,6 +80,9 @@ dependencies {
     api rootProject.ext.libraries.retrofit2_rxjava
     api rootProject.ext.libraries.PersistentCookieJar
 
+    debugImplementation(rootProject.ext.libraries.spiderman) {
+        exclude group: "androidx.appcompat"
+    }
     api rootProject.ext.libraries.BaseRecyclerViewAdapterHelper
     api rootProject.ext.libraries.glide
     api rootProject.ext.libraries.background

@@ -50,6 +50,18 @@
 
 
 #---------------------------------2.第三方包-------------------------------
+#spiderman
+-keep class com.simple.spiderman.** { *; }
+-keepnames class com.simple.spiderman.** { *; }
+-keep public class * extends android.app.Activity
+-keep class * implements Android.os.Parcelable {
+    public static final Android.os.Parcelable$Creator *;
+}
+# androidx
+-keep public class * extends androidx.annotation.** { *; }
+-keep public class * extends androidx.core.content.FileProvider
+
+#greendao
 -ignorewarnings
 -keep class com.tencent.** { *; }
 -keepclassmembers class * extends org.greenrobot.greendao.AbstractDao {
@@ -94,19 +106,13 @@ public static java.lang.String TABLENAME;
     long producerIndex;
     long consumerIndex;
 }
--keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
-    rx.internal.util.atomic.LinkedQueueNode producerNode;
-}
--keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
-    rx.internal.util.atomic.LinkedQueueNode consumerNode;
-}
+
 # Gson
 -keep class com.google.gson.stream.** { *; }
 -keepattributes EnclosingMethod
 -keep class org.xz_sale.entity.**{*;}
 -keep class com.google.gson.** {*;}
 -keep class com.google.**{*;}
--keep class sun.misc.Unsafe { *; }
 -keep class com.google.gson.stream.** { *; }
 -keep class com.google.gson.examples.android.model.** { *; }
 
