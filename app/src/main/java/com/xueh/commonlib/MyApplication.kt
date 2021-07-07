@@ -21,6 +21,10 @@ class MyApplication : BaseApplication() {
         super.onCreate()
         initState()
         initLog()
+        initNet()
+    }
+
+    private fun initNet() {
         HttpRequest.apply {
             setting {
                 okHttp {
@@ -39,7 +43,6 @@ class MyApplication : BaseApplication() {
             setBaseUrl("https://www.wanandroid.com/")
             putHead(hashMapOf("name" to "xuehao"))
         }
-
     }
 
     private fun initLog() {
