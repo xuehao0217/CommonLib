@@ -83,6 +83,8 @@ dependencies {
     debugImplementation(rootProject.ext.libraries.spiderman) {
         exclude group: "androidx.appcompat"
     }
+    api rootProject.ext.libraries.coil
+    api rootProject.ext.libraries.coil_gif
     api rootProject.ext.libraries.BaseRecyclerViewAdapterHelper
     api rootProject.ext.libraries.glide
     api rootProject.ext.libraries.background
