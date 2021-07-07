@@ -4,9 +4,12 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Outline
+import android.graphics.Rect
 import android.net.Uri
 import android.util.Log
 import android.view.View
+import android.view.ViewOutlineProvider
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
@@ -190,6 +193,24 @@ fun View.setRoundLineBg(
     this.background = drawable
     if (this is TextView && tvColor != 0) {
         this.setTextColor(CommonUtils.getColor(tvColor))
+    }
+}
+
+/**
+ * 裁剪成圆角 View
+ * radius 圆角
+ */
+fun View.clipRoundBg(radius: Float){
+    clipToOutline = true
+    outlineProvider = object : ViewOutlineProvider() {
+        override fun getOutline(view: View, outline: Outline) {
+            //圆角
+            outline.setRoundRect(0, 0, view.width, view.height, radius.dp2px().toFloat())
+            //矩形
+            //outline.setRect(Rect(0,0,view.width,view.width))
+            //圆形
+            //outline.setOval(0, 0, view.width, view.width)
+        }
     }
 }
 
