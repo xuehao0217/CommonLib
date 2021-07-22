@@ -17,7 +17,7 @@ class MainActivity : DActivity<ActivityMainBinding>() {
 
     override fun initView(savedInstanceState: Bundle?) {
         binding.mainCnb.titleItems(tabs).normalIconItems(normalIcon).selectIconItems(selectIcon)
-            .fragmentList(fragments.toList() as MutableList<Fragment>?)
+            .fragmentList(fragments.toList())
             .fragmentManager(supportFragmentManager)
             .build()
     }
