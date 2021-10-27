@@ -200,7 +200,7 @@ fun View.setRoundLineBg(
  * 裁剪成圆角 View
  * radius 圆角
  */
-fun View.clipRoundBg(radius: Float) {
+fun View.clipRoundBg(radius: Float){
     clipToOutline = true
     outlineProvider = object : ViewOutlineProvider() {
         override fun getOutline(view: View, outline: Outline) {
@@ -280,16 +280,5 @@ inline fun yesOrNo(a: Boolean, crossinline yesOrNo: yesOrNoDsl.() -> Unit) {
     }
     a.no {
         yesOrNoDsl().apply(yesOrNo)?.isFalse?.invoke()
-    }
-}
-
-
-inline fun View.setClick(crossinline action: () -> Unit) {
-    var lastClick = 0L
-    setOnClickListener {
-        val gap = System.currentTimeMillis() - lastClick
-        lastClick = System.currentTimeMillis()
-        if (gap < 1500)
-            return@setOnClickListener action.invoke()
     }
 }
