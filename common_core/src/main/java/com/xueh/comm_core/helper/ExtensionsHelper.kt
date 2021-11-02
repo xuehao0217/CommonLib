@@ -17,9 +17,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.core.content.FileProvider
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.*
 import com.blankj.utilcode.util.*
 import com.noober.background.drawable.DrawableCreator
 import com.xueh.comm_core.helper.activityresult.*
@@ -200,7 +199,7 @@ fun View.setRoundLineBg(
  * 裁剪成圆角 View
  * radius 圆角
  */
-fun View.clipRoundBg(radius: Float){
+fun View.clipRoundBg(radius: Float) {
     clipToOutline = true
     outlineProvider = object : ViewOutlineProvider() {
         override fun getOutline(view: View, outline: Outline) {
@@ -281,4 +280,36 @@ inline fun yesOrNo(a: Boolean, crossinline yesOrNo: yesOrNoDsl.() -> Unit) {
     a.no {
         yesOrNoDsl().apply(yesOrNo)?.isFalse?.invoke()
     }
+}
+
+
+
+class lifecycleEventDsl {
+    var onResume: (() -> Unit)? = null
+
+    var onDestroy: (() -> Unit)? = null
+
+    infix fun onDestroy(onDestroy: (() -> Unit)) {
+        this.onDestroy = onDestroy
+    }
+
+    infix fun onResume(onResume: (() -> Unit)) {
+        this.onResume = onResume
+    }
+}
+
+inline fun FragmentActivity.lifecycleEvent(crossinline lifecycleDsl: lifecycleEventDsl.() -> Unit) {
+    lifecycle.addObserver(object : LifecycleEventObserver {
+        override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+            when (event) {
+                Lifecycle.Event.ON_RESUME -> {
+                    lifecycleEventDsl().apply(lifecycleDsl)?.onResume?.invoke()
+                }
+                Lifecycle.Event.ON_DESTROY -> {
+                    lifecycle.removeObserver(this)
+                    lifecycleEventDsl().apply(lifecycleDsl)?.onDestroy?.invoke()
+                }
+            }
+        }
+    })
 }
