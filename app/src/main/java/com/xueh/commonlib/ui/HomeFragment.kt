@@ -3,6 +3,7 @@ package com.xueh.commonlib.ui
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.base.mvvm.MVVMFragment
@@ -14,6 +15,8 @@ import com.xueh.commonlib.R
 import com.xueh.commonlib.databinding.FragmentHomeBinding
 import com.xueh.commonlib.databinding.ItemLayoutBinding
 import com.xueh.commonlib.ui.viewmodel.HomeViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 
 /**
@@ -27,7 +30,12 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
     override fun initListener() {
         with(binding) {
             tvGetDsl.setOnClickListener {
-                viewModel.loadData()
+                launch {
+                    viewModel.loadFlowDsl()
+//                    viewModel.loadFlow().collect {
+//                        ToastUtils.showLong("${it.data.toString()}")
+//                    }
+                }
             }
 
             tvDownload.setOnClickListener {
@@ -45,7 +53,8 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
         }
     }
 
-    val URL = "https://lh3.googleusercontent.com/-vFBVjRp14wam3b974OJcM2jQzu7Z-WJ_cDv4hijwcUhtmvJGjHVowXtasz2214O3MSD82dWUA=w128-h128-e365-rj-sc0x00ffffff"
+    val URL =
+        "https://lh3.googleusercontent.com/-vFBVjRp14wam3b974OJcM2jQzu7Z-WJ_cDv4hijwcUhtmvJGjHVowXtasz2214O3MSD82dWUA=w128-h128-e365-rj-sc0x00ffffff"
 
     override fun initView(savedInstanceState: Bundle?) {
         binding.rv

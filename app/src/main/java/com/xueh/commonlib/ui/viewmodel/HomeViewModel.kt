@@ -34,7 +34,7 @@ class HomeViewModel : BaseViewModel<RestApi>() {
     val banner = MutableLiveData<List<BannerVO>>()
     val progressLiveData = MutableLiveData<ProgressInfo>()
 
-    fun loadData() {
+    fun loadDsl() {
         apiDSL<BaseResult<List<BannerVO>>> {
             onRequest {
                 api.bannerList3()
@@ -45,8 +45,22 @@ class HomeViewModel : BaseViewModel<RestApi>() {
         }
     }
 
+    fun loadFlowDsl() {
+        apiFlowDSL<BaseResult<List<BannerVO>>> {
+            onRequest {
+                api.bannerList3()
+            }
+            onResponse {
+                banner.postValue(it.data)
+            }
+        }
+    }
 
     fun loadLiveData() = apiLiveData {
+        api.bannerList3()
+    }
+
+    fun loadFlow() = apiFlow {
         api.bannerList3()
     }
 

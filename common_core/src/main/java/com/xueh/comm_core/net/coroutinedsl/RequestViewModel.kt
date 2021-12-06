@@ -1,8 +1,12 @@
 package com.xueh.comm_core.net.coroutinedsl
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.viewModelScope
 import com.xueh.comm_core.base.mvvm.ibase.AbsViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
@@ -13,45 +17,7 @@ import kotlin.coroutines.EmptyCoroutineContext
  * 备注：
  */
 open class RequestViewModel : AbsViewModel() {
-
-    private fun <Response> api(apiDSL: ViewModelDsl<Response>.() -> Unit) {
-        ViewModelDsl<Response>().apply(apiDSL).launch(this)
-    }
-
-    protected fun <Response> apiDSL(apiDSL: ViewModelDsl<Response>.() -> Unit) {
-        api<Response> {
-            onRequest {
-                ViewModelDsl<Response>().apply(apiDSL).request()
-            }
-            onResponse {
-                ViewModelDsl<Response>().apply(apiDSL).onResponse?.invoke(it)
-            }
-            onStart {
-                val override = ViewModelDsl<Response>().apply(apiDSL).onStart?.invoke()
-                if (override == null || !override) {
-                    onApiStart()
-                }
-                override
-            }
-            onError { error ->
-                val override = ViewModelDsl<Response>().apply(apiDSL).onError?.invoke(error)
-                if (override == null || !override) {
-                    onApiError(error)
-                }
-                override
-
-            }
-            onFinally {
-                val override = ViewModelDsl<Response>().apply(apiDSL).onFinally?.invoke()
-                if (override == null || !override) {
-                    onApiFinally()
-                }
-                override
-            }
-        }
-    }
-
-    protected fun <Response> apiFlowDSL(apiDSL: ViewModelDsl<Response>.() -> Unit) {
+    private fun <Response> dslApi(apiDSL: ViewModelDsl<Response>.() -> Unit) =
         ViewModelDsl<Response>().apply {
             onRequest {
                 ViewModelDsl<Response>().apply(apiDSL).request()
@@ -81,7 +47,14 @@ open class RequestViewModel : AbsViewModel() {
                 }
                 override
             }
-        }.launchFlow(this)
+        }
+
+    protected fun <Response> apiDSL(apiDSL: ViewModelDsl<Response>.() -> Unit) {
+        dslApi(apiDSL).launch(this)
+    }
+
+    protected fun <Response> apiFlowDSL(apiDSL: ViewModelDsl<Response>.() -> Unit) {
+        dslApi(apiDSL).launchFlow(this)
     }
 
     protected open fun onApiStart() {
@@ -103,7 +76,6 @@ open class RequestViewModel : AbsViewModel() {
         timeoutInMs: Long = 3000L,
         request: suspend () -> Response
     ): LiveData<LiveDataResult<Response>> {
-
         return androidx.lifecycle.liveData(context, timeoutInMs) {
             onApiStart()
             emit(LiveDataResult.Start())
@@ -119,6 +91,20 @@ open class RequestViewModel : AbsViewModel() {
                 onApiFinally()
                 emit(LiveDataResult.Finally())
             }
+        }
+    }
+
+    protected fun <Response> apiFlow(
+        request: suspend () -> Response
+    ): Flow<Response> {
+        return flow {
+            emit(request())
+        }.flowOn(Dispatchers.IO).onStart {
+            onApiStart()
+        }.onCompletion {
+            onApiFinally()
+        }.catch {
+            onApiError(Exception(it.message))
         }
     }
 }
