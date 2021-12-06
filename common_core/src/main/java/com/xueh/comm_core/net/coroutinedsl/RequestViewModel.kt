@@ -70,6 +70,19 @@ open class RequestViewModel : AbsViewModel() {
         apiLoading.value = false
     }
 
+    protected fun <Response> apiFlow(
+        request: suspend () -> Response
+    ): Flow<Response> {
+        return flow {
+            emit(request())
+        }.flowOn(Dispatchers.IO).onStart {
+            onApiStart()
+        }.onCompletion {
+            onApiFinally()
+        }.catch {
+            onApiError(Exception(it.message))
+        }
+    }
 
     protected fun <Response> apiLiveData(
         context: CoroutineContext = EmptyCoroutineContext,
@@ -91,20 +104,6 @@ open class RequestViewModel : AbsViewModel() {
                 onApiFinally()
                 emit(LiveDataResult.Finally())
             }
-        }
-    }
-
-    protected fun <Response> apiFlow(
-        request: suspend () -> Response
-    ): Flow<Response> {
-        return flow {
-            emit(request())
-        }.flowOn(Dispatchers.IO).onStart {
-            onApiStart()
-        }.onCompletion {
-            onApiFinally()
-        }.catch {
-            onApiError(Exception(it.message))
         }
     }
 }
