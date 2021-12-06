@@ -7,6 +7,7 @@ import com.xueh.comm_core.R
 import com.xueh.comm_core.base.mvvm.ibase.AbsViewModel
 import com.xueh.comm_core.utils.CommonUtils.getString
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -51,23 +52,35 @@ class ViewModelDsl<Response> {
 
 
     internal fun launch(viewModelScope: AbsViewModel) {
-        if(NetworkUtils.isConnected()){
-            viewModelScope.viewModelScope.launch {
-                onStart?.invoke()
-                try {
-                    val response = withContext(Dispatchers.IO) {
-                        request()
-                    }
-                    onResponse?.invoke(response)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    onError?.invoke(e)
-                } finally {
-                    onFinally?.invoke()
+        viewModelScope.viewModelScope.launch {
+            onStart?.invoke()
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    request()
                 }
+                onResponse?.invoke(response)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                onError?.invoke(e)
+            } finally {
+                onFinally?.invoke()
             }
-        }else{
-            ToastUtils.showShort(getString(R.string.str_no_net_prompts))
+        }
+    }
+
+    internal fun launchFlow(viewModelScope: AbsViewModel) {
+        viewModelScope.viewModelScope.launch {
+            flow {
+                emit(request())
+            }.flowOn(Dispatchers.IO).onStart {
+                onStart?.invoke()
+            }.onCompletion {
+                onFinally?.invoke()
+            }.catch {
+                onError?.invoke(Exception(it.message))
+            }.collect {
+                onResponse?.invoke(it)
+            }
         }
     }
 }

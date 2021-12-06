@@ -51,6 +51,39 @@ open class RequestViewModel : AbsViewModel() {
         }
     }
 
+    protected fun <Response> apiFlowDSL(apiDSL: ViewModelDsl<Response>.() -> Unit) {
+        ViewModelDsl<Response>().apply {
+            onRequest {
+                ViewModelDsl<Response>().apply(apiDSL).request()
+            }
+            onResponse {
+                ViewModelDsl<Response>().apply(apiDSL).onResponse?.invoke(it)
+            }
+            onStart {
+                val override = ViewModelDsl<Response>().apply(apiDSL).onStart?.invoke()
+                if (override == null || !override) {
+                    onApiStart()
+                }
+                override
+            }
+            onError { error ->
+                val override = ViewModelDsl<Response>().apply(apiDSL).onError?.invoke(error)
+                if (override == null || !override) {
+                    onApiError(error)
+                }
+                override
+
+            }
+            onFinally {
+                val override = ViewModelDsl<Response>().apply(apiDSL).onFinally?.invoke()
+                if (override == null || !override) {
+                    onApiFinally()
+                }
+                override
+            }
+        }.launchFlow(this)
+    }
+
     protected open fun onApiStart() {
         apiLoading.value = true
     }
