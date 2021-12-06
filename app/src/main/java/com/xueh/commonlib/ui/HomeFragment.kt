@@ -31,7 +31,7 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
         with(binding) {
             tvGetDsl.setOnClickListener {
                 launch {
-                    viewModel.loadFlowDsl()
+                    viewModel.loadDslData()
 //                    viewModel.loadFlow().collect {
 //                        ToastUtils.showLong("${it.data.toString()}")
 //                    }
@@ -41,9 +41,9 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
             tvDownload.setOnClickListener {
                 viewModel.loadLiveData().observe(this@HomeFragment, Observer {
                     when (it) {
-                        is LiveDataResult.Response -> {
-                            ToastUtils.showShort(it.response.data.toString())
-                        }
+//                        is LiveDataResult.Response -> {
+//                            ToastUtils.showShort(it.response.data.toString())
+//                        }
                     }
                 })
             }

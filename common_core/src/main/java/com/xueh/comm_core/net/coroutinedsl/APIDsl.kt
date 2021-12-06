@@ -5,6 +5,7 @@ import com.blankj.utilcode.util.NetworkUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.R
 import com.xueh.comm_core.base.mvvm.ibase.AbsViewModel
+import com.xueh.comm_core.net.BaseResult
 import com.xueh.comm_core.utils.CommonUtils.getString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -68,6 +69,7 @@ class ViewModelDsl<Response> {
         }
     }
 
+
     internal fun launchFlow(viewModelScope: AbsViewModel) {
         viewModelScope.viewModelScope.launch {
             flow {
@@ -80,6 +82,62 @@ class ViewModelDsl<Response> {
                 onError?.invoke(Exception(it.message))
             }.collect {
                 onResponse?.invoke(it)
+            }
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////
+
+    internal lateinit var requestData: suspend () -> BaseResult<Response>
+    infix fun onRequestData(request: suspend () -> BaseResult<Response>) {
+        this.requestData = request
+    }
+
+    internal var onResponseData: ((Response) -> Unit)? = null
+    infix fun onResponseData(onResponse: ((Response) -> Unit)?) {
+        this.onResponseData = onResponse
+    }
+    /////////////////////////////////////////////////////////////////////////////////////
+
+
+    internal fun launchData(viewModelScope: AbsViewModel) {
+        viewModelScope.viewModelScope.launch {
+            onStart?.invoke()
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    requestData()
+                }
+                response?.data?.let {
+                    onResponseData?.invoke(it)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                onError?.invoke(e)
+            } finally {
+                onFinally?.invoke()
+            }
+        }
+    }
+
+
+    internal fun launchFlowData(viewModelScope: AbsViewModel) {
+        viewModelScope.viewModelScope.launch {
+            flow {
+                requestData?.let {
+                    emit(it.invoke())
+                }
+            }.flowOn(Dispatchers.IO).onStart {
+                onStart?.invoke()
+            }.onCompletion {
+                onFinally?.invoke()
+            }.catch {
+                onError?.invoke(Exception(it.message))
+            }.collect { baseResult ->
+                onResponseData?.let { onResponse ->
+                    baseResult?.data?.let {
+                        onResponse?.invoke(it)
+                    }
+                }
             }
         }
     }

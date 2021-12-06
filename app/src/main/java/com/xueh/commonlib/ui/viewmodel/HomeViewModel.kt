@@ -40,7 +40,30 @@ class HomeViewModel : BaseViewModel<RestApi>() {
                 api.bannerList3()
             }
             onResponse {
-                banner.postValue(it.data)
+                banner.postValue(it.data!!)
+            }
+        }
+    }
+
+
+    fun loadDslData() {
+        apiDSLData<List<BannerVO>> {
+            onRequestData {
+                api.bannerList3()
+            }
+            onResponseData {
+                banner.postValue(it)
+            }
+        }
+    }
+
+    fun loadFlowDslData() {
+        apiFlowDSLData<List<BannerVO>> {
+            onRequestData {
+                api.bannerList3()
+            }
+            onResponseData {
+                banner.postValue(it)
             }
         }
     }
@@ -51,10 +74,11 @@ class HomeViewModel : BaseViewModel<RestApi>() {
                 api.bannerList3()
             }
             onResponse {
-                banner.postValue(it.data)
+                banner.postValue(it.data!!)
             }
         }
     }
+
 
     fun loadLiveData() = apiLiveData {
         api.bannerList3()
