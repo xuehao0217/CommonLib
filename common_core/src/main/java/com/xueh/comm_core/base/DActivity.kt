@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
+import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.fengchen.uistatus.UiStatusController
 import com.fengchen.uistatus.annotation.UiStatus
@@ -14,12 +15,10 @@ import com.gyf.immersionbar.ImmersionBar
 import com.noober.background.BackgroundLibrary
 import com.xueh.comm_core.R
 import com.xueh.comm_core.helper.EventBusHelper
+import com.xueh.comm_core.helper.GlobalCoroutineExceptionHandler
 import com.xueh.comm_core.helper.hasNetWorkConection
 import com.xueh.comm_core.weight.ViewLoading
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
@@ -125,7 +124,7 @@ abstract class DActivity<VB : ViewBinding> : BaseActivity<VB>(), CoroutineScope 
     protected open fun isRegisterEventBus() = false
 
     protected open fun launchLifecycle(block: suspend (CoroutineScope) -> Unit) {
-        lifecycleScope.launch {
+        lifecycleScope.launch(GlobalCoroutineExceptionHandler()) {
             block.invoke(this)
         }
     }
