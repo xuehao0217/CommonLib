@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import com.blankj.utilcode.util.IntentUtils
 import com.blankj.utilcode.util.ToastUtils
@@ -19,6 +20,7 @@ import com.xueh.comm_core.weight.ViewLoading
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
 
 /**
@@ -134,4 +136,11 @@ abstract class DFragment<VB : ViewBinding> : BaseFragment<VB>(), CoroutineScope 
     }
 
     protected open fun isRegisterEventBus() = false
+
+
+    protected open fun launchLifecycle(block: suspend (CoroutineScope) -> Unit){
+        lifecycleScope.launch {
+            block.invoke(this)
+        }
+    }
 }
