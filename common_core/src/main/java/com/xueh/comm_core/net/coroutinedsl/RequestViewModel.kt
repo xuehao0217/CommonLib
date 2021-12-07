@@ -26,11 +26,8 @@ open class RequestViewModel : AbsViewModel() {
                 ViewModelDsl<Response>().apply(apiDSL).onResponse?.invoke(it)
             }
 
-            onRequestData {
-                ViewModelDsl<Response>().apply(apiDSL).requestData()
-            }
-            onResponseData {
-                ViewModelDsl<Response>().apply(apiDSL).onResponseData?.invoke(it)
+            onResponseSuspend {
+                ViewModelDsl<Response>().apply(apiDSL).onResponseSuspend?.invoke(it)
             }
 
             onStart {
@@ -65,14 +62,6 @@ open class RequestViewModel : AbsViewModel() {
         dslApi(apiDSL).launchFlow(this)
     }
 
-    protected fun <Response> apiDSLData(apiDSL: ViewModelDsl<Response>.() -> Unit) {
-        dslApi(apiDSL).launchData(this)
-    }
-
-    protected fun <Response> apiFlowDSLData(apiDSL: ViewModelDsl<Response>.() -> Unit) {
-        dslApi(apiDSL).launchFlowData(this)
-    }
-
     protected open fun onApiStart() {
         apiLoading.value = true
     }
@@ -87,16 +76,21 @@ open class RequestViewModel : AbsViewModel() {
     }
 
     protected fun <Response> apiFlow(
-        request: suspend () -> Response
-    ): Flow<Response> {
-        return flow {
-            emit(request())
-        }.flowOn(Dispatchers.IO).onStart {
-            onApiStart()
-        }.onCompletion {
-            onApiFinally()
-        }.catch {
-            onApiError(Exception(it.message))
+        request: suspend () -> Response,
+        block: suspend (Response) -> Unit
+    ) {
+        viewModelScope.launch {
+            flow {
+                emit(request())
+            }.flowOn(Dispatchers.IO).onStart {
+                onApiStart()
+            }.onCompletion {
+                onApiFinally()
+            }.catch {
+                onApiError(Exception(it.message))
+            }.collect {
+                block.invoke(it)
+            }
         }
     }
 

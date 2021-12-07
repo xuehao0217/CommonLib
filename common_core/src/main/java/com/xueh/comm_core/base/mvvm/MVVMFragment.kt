@@ -16,11 +16,11 @@ import com.xueh.comm_core.helper.ViewModelHelper
 abstract class MVVMFragment<VB : ViewBinding, VM : AbsViewModel> : DFragment<VB>() {
     lateinit var viewModel: VM
 
-    abstract fun initLivedata(viewModel: VM)
+    abstract fun initLiveData(viewModel: VM)
 
     override fun initDataBeforeView() {
         viewModel = ViewModelHelper.getFragmentViewModel(this.javaClass, this)
-        initLivedata(viewModel)
+        initLiveData(viewModel)
         super.initDataBeforeView()
 
         viewModel.apiLoading.observe(this) {

@@ -60,6 +60,7 @@ class ViewModelDsl<Response> {
                     request()
                 }
                 onResponse?.invoke(response)
+                onResponseSuspend?.invoke(response)
             } catch (e: Exception) {
                 e.printStackTrace()
                 onError?.invoke(e)
@@ -82,63 +83,17 @@ class ViewModelDsl<Response> {
                 onError?.invoke(Exception(it.message))
             }.collect {
                 onResponse?.invoke(it)
+                onResponseSuspend?.invoke(it)
             }
         }
     }
 
     /////////////////////////////////////////////////////////////////////////////////////
 
-    internal lateinit var requestData: suspend () -> BaseResult<Response>
-    infix fun onRequestData(request: suspend () -> BaseResult<Response>) {
-        this.requestData = request
-    }
-
-    internal var onResponseData: ((Response) -> Unit)? = null
-    infix fun onResponseData(onResponse: ((Response) -> Unit)?) {
-        this.onResponseData = onResponse
+    internal var onResponseSuspend: (suspend (Response) -> Unit)? = null
+    infix fun onResponseSuspend(onResponse: (suspend (Response) -> Unit)?) {
+        this.onResponseSuspend = onResponse
     }
     /////////////////////////////////////////////////////////////////////////////////////
 
-
-    internal fun launchData(viewModelScope: AbsViewModel) {
-        viewModelScope.viewModelScope.launch {
-            onStart?.invoke()
-            try {
-                val response = withContext(Dispatchers.IO) {
-                    requestData()
-                }
-                response?.data?.let {
-                    onResponseData?.invoke(it)
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                onError?.invoke(e)
-            } finally {
-                onFinally?.invoke()
-            }
-        }
-    }
-
-
-    internal fun launchFlowData(viewModelScope: AbsViewModel) {
-        viewModelScope.viewModelScope.launch {
-            flow {
-                requestData?.let {
-                    emit(it.invoke())
-                }
-            }.flowOn(Dispatchers.IO).onStart {
-                onStart?.invoke()
-            }.onCompletion {
-                onFinally?.invoke()
-            }.catch {
-                onError?.invoke(Exception(it.message))
-            }.collect { baseResult ->
-                onResponseData?.let { onResponse ->
-                    baseResult?.data?.let {
-                        onResponse?.invoke(it)
-                    }
-                }
-            }
-        }
-    }
 }

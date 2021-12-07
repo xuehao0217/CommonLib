@@ -1,7 +1,10 @@
 package com.xueh.commonlib.ui.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
+import androidx.lifecycle.viewModelScope
 import com.blankj.utilcode.util.*
 import com.xueh.comm_core.base.mvvm.BaseViewModel
 import com.xueh.comm_core.helper.getDownloadProgress
@@ -11,6 +14,11 @@ import com.xueh.comm_core.net.BaseResult
 import com.xueh.comm_core.net.HttpRequest
 import com.xueh.commonlib.api.RestApi
 import com.xueh.commonlib.entity.BannerVO
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowWith
+import kotlinx.coroutines.launch
 import me.jessyan.progressmanager.ProgressListener
 import me.jessyan.progressmanager.ProgressManager
 import me.jessyan.progressmanager.body.ProgressInfo
@@ -34,47 +42,26 @@ class HomeViewModel : BaseViewModel<RestApi>() {
     val banner = MutableLiveData<List<BannerVO>>()
     val progressLiveData = MutableLiveData<ProgressInfo>()
 
+    var stateFlowDada = MutableStateFlow<List<BannerVO>>(emptyList())
+
     fun loadDsl() {
-        apiDSL<BaseResult<List<BannerVO>>> {
+        apiDSL<List<BannerVO>> {
             onRequest {
-                api.bannerList3()
+                api.bannerList3().data
             }
             onResponse {
-                banner.postValue(it.data!!)
-            }
-        }
-    }
-
-
-    fun loadDslData() {
-        apiDSLData<List<BannerVO>> {
-            onRequestData {
-                api.bannerList3()
-            }
-            onResponseData {
-                banner.postValue(it)
-            }
-        }
-    }
-
-    fun loadFlowDslData() {
-        apiFlowDSLData<List<BannerVO>> {
-            onRequestData {
-                api.bannerList3()
-            }
-            onResponseData {
                 banner.postValue(it)
             }
         }
     }
 
     fun loadFlowDsl() {
-        apiFlowDSL<BaseResult<List<BannerVO>>> {
+        apiFlowDSL<List<BannerVO>> {
             onRequest {
-                api.bannerList3()
+                api.bannerList3().data
             }
             onResponse {
-                banner.postValue(it.data!!)
+                banner.postValue(it)
             }
         }
     }
@@ -84,8 +71,13 @@ class HomeViewModel : BaseViewModel<RestApi>() {
         api.bannerList3()
     }
 
-    fun loadFlow() = apiFlow {
-        api.bannerList3()
+    fun loadStateFlow() {
+        apiFlow({
+            api.bannerList3().data
+        }, {
+            stateFlowDada.emit(it)
+//            banner.postValue(it)
+        })
     }
 
     //上传头像

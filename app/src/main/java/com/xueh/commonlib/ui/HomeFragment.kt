@@ -4,6 +4,7 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.base.mvvm.MVVMFragment
@@ -30,23 +31,19 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
     override fun initListener() {
         with(binding) {
             tvGetDsl.setOnClickListener {
-                launch {
-                    viewModel.loadDslData()
-//                    viewModel.loadFlow().collect {
-//                        ToastUtils.showLong("${it.data.toString()}")
-//                    }
-                }
+                viewModel.loadStateFlow()
             }
 
             tvDownload.setOnClickListener {
                 viewModel.loadLiveData().observe(this@HomeFragment, Observer {
                     when (it) {
-//                        is LiveDataResult.Response -> {
-//                            ToastUtils.showShort(it.response.data.toString())
-//                        }
+                        is LiveDataResult.Response -> {
+                            ToastUtils.showShort(it.response.data.toString())
+                        }
                     }
                 })
             }
+
             tvGetClean.setOnClickListener {
                 viewModel.downloadFile()
             }
@@ -65,45 +62,23 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
                 mutableListOf("1", "2", "3", "4", "1", "2", "3", "4")
             ) { vh, vb, s ->
                 vb.tvItem.text = s
-                when (vh.layoutPosition) {
-                    0 -> {
-                        vb.tvItem.setRoundBg(10, R.color.colorAccent)
-                    }
-                    1 -> {
-                        vb.tvItem.setRoundLineBg(
-                            10,
-                            R.color.white,
-                            R.color.colorAccent,
-                        )
-                    }
-                    2 -> {
-                        vb.ivImage.setBackgroundColor(getColor(R.color.colorAccent))
-                        vb.ivImage.loadImg(URL)
-                    }
-
-                    3 -> {
-                        vb.ivImage.setBackgroundColor(getColor(R.color.colorAccent))
-                        vb.ivImage.loadCircleImg(URL)
-                    }
-
-                    4 -> {
-                        vb.ivImage.setBackgroundColor(getColor(R.color.colorAccent))
-                        vb.ivImage.loadCircleImg(URL, 5)
-                    }
-                }
             }
     }
 
     override fun initDataAfterView() {
     }
 
-    override fun initLivedata(viewModel: HomeViewModel) {
+    override fun initLiveData(viewModel: HomeViewModel) {
         viewModel.progressLiveData.observe(this, {
             binding.tvDownloadProgress.text = "下载进度:${it.percent},下载速度:${it.speed} byte"
         })
         viewModel.banner.observe(this) {
             ToastUtils.showShort(it.toString())
         }
+        launch {
+            viewModel.stateFlowDada.collect {
+                ToastUtils.showShort(it.toString())
+            }
+        }
     }
-
 }
