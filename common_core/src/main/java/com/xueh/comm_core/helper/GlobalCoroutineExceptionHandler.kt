@@ -22,7 +22,7 @@ class GlobalCoroutineExceptionHandler : CoroutineExceptionHandler {
         )
     }
 
-    fun getStackTrace(throwable: Throwable): String? {
+    fun getStackTrace(throwable: Throwable): String {
         val sw = StringWriter()
         val pw = PrintWriter(sw)
         return try {
@@ -30,6 +30,7 @@ class GlobalCoroutineExceptionHandler : CoroutineExceptionHandler {
             sw.toString()
         } finally {
             pw.close()
+            sw.close()
         }
     }
 }
