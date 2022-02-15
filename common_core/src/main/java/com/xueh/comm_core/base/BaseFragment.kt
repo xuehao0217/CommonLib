@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import com.xueh.comm_core.helper.inflateBindingWithGeneric
+import com.xueh.comm_core.helper.ViewBindingUtil
 
 /**
  * @author: xuehao create time: 2017/7/26 11:28
@@ -14,16 +14,15 @@ import com.xueh.comm_core.helper.inflateBindingWithGeneric
  * description:  三级统一结构basefragment
  */
 abstract class BaseFragment<VB : ViewBinding> : BaseVisibilityFragment(), IBaseLogic {
-
-    private var _binding: VB? = null
-    val binding: VB get() = _binding!!
+    val binding :VB by lazy {
+        ViewBindingUtil.inflateWithGeneric(this, layoutInflater)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = inflateBindingWithGeneric(layoutInflater, container, false)
         return binding.root
     }
 
@@ -34,11 +33,5 @@ abstract class BaseFragment<VB : ViewBinding> : BaseVisibilityFragment(), IBaseL
         initDataAfterView()
         initListener()
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
 }
 
