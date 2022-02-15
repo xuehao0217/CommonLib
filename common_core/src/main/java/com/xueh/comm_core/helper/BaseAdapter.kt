@@ -140,17 +140,20 @@ fun <T, VB : ViewBinding> RecyclerView.bindingData(
     list: MutableList<T>? = null,
     itembind: (BaseBindingQuickAdapter.BaseBindingHolder, VB, T) -> Unit
 ): BaseBindingQuickAdapter<T, VB> {
-    adapter = object : BaseBindingQuickAdapter<T, VB>(inflate) {
-        override fun convert(holder: BaseBindingHolder, item: T) {
-            holder.getViewBinding<VB>().apply {
-                itembind.invoke(holder, this, item)
+    val bindingAdapter by lazy {
+        object : BaseBindingQuickAdapter<T, VB>(inflate) {
+            override fun convert(holder: BaseBindingHolder, item: T) {
+                holder.getViewBinding<VB>().apply {
+                    itembind.invoke(holder, this, item)
+                }
             }
-        }
 
-    }.apply {
+        }
+    }
+    adapter = bindingAdapter.apply {
         setNewInstance(list)
     }
-    return getBindAdapter()
+    return bindingAdapter
 }
 
 fun <T, VB : ViewBinding> RecyclerView.getBindAdapter() = adapter as BaseBindingQuickAdapter<T, VB>
