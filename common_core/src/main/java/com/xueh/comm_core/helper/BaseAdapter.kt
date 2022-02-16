@@ -98,7 +98,6 @@ fun <T> RecyclerView.bindData(
 }
 
 
-
 fun <T> RecyclerView.itemClick(itemClick: (data: T, view: View, pos: Int) -> Unit): RecyclerView {
     adapter?.let {
         (it as BaseAdapter<T>).setOnItemClickListener { adapter, view, position ->
@@ -112,15 +111,36 @@ fun <T> RecyclerView.getAdapter() = adapter as BaseAdapter<T>
 
 
 //-----------------------------------------ViewBinding--------------------------------------------------------------//
-//不使用反射版本
-abstract class BaseBindingQuickAdapter<T, VB : ViewBinding>(
-    private val inflate: (LayoutInflater, ViewGroup, Boolean) -> VB,
-    layoutResId: Int = -1
-) :
+
+/*
+//用法
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+  super.onViewCreated(view, savedInstanceState)
+  adapter.data.addAll(list)
+  binding.recyclerView.adapter = adapter
+}
+
+private val adapter = baseQuickAdapter<ItemFooBinding, String> { item ->
+  textView.text = item
+}
+ */
+
+
+/*
+        val onBindAdapter = binding.rv
+            .grid(4).addGridItemDecoration(15f, 10f)
+//            .linear().addLinearItemDecoration(R.color.white, 3, 15f)
+            .onBindAdapter<ItemLayoutBinding, String> { item ->
+                tvItem.text = item
+            }.apply {
+                setNewInstance(list)
+            }
+ */
+abstract class BaseBindingQuickAdapter<T, VB : ViewBinding>(layoutResId: Int = -1) :
     BaseQuickAdapter<T, BaseBindingQuickAdapter.BaseBindingHolder>(layoutResId) {
 
     override fun onCreateDefViewHolder(parent: ViewGroup, viewType: Int) =
-        BaseBindingHolder(inflate(LayoutInflater.from(parent.context), parent, false))
+        BaseBindingHolder(ViewBindingUtil.inflateWithGeneric<VB>(this, parent))
 
     class BaseBindingHolder(private val binding: ViewBinding) : BaseViewHolder(binding.root) {
         constructor(itemView: View) : this(ViewBinding { itemView })
@@ -130,30 +150,11 @@ abstract class BaseBindingQuickAdapter<T, VB : ViewBinding>(
     }
 }
 
-/*
-//rv.linear().binding(ItemBinding::inflate,list) { vb, s ->
-//    vb.tvItem.text=s
-//}
- */
-fun <T, VB : ViewBinding> RecyclerView.bindingData(
-    inflate: (LayoutInflater, ViewGroup, Boolean) -> VB,
-    list: MutableList<T>? = null,
-    itembind: (BaseBindingQuickAdapter.BaseBindingHolder, VB, T) -> Unit
-): BaseBindingQuickAdapter<T, VB> {
-    val bindingAdapter by lazy {
-        object : BaseBindingQuickAdapter<T, VB>(inflate) {
-            override fun convert(holder: BaseBindingHolder, item: T) {
-                holder.getViewBinding<VB>().apply {
-                    itembind.invoke(holder, this, item)
-                }
-            }
-
+inline fun <VB : ViewBinding, T> RecyclerView.onBindAdapter(crossinline convert: VB.(T) -> Unit) =
+    object : BaseBindingQuickAdapter<T, VB>() {
+        override fun convert(holder: BaseBindingHolder, item: T) {
+            convert(holder.getViewBinding(), item)
         }
+    }.also {
+        adapter = it
     }
-    adapter = bindingAdapter.apply {
-        setNewInstance(list)
-    }
-    return bindingAdapter
-}
-
-fun <T, VB : ViewBinding> RecyclerView.getBindAdapter() = adapter as BaseBindingQuickAdapter<T, VB>

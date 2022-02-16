@@ -54,14 +54,12 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
         "https://lh3.googleusercontent.com/-vFBVjRp14wam3b974OJcM2jQzu7Z-WJ_cDv4hijwcUhtmvJGjHVowXtasz2214O3MSD82dWUA=w128-h128-e365-rj-sc0x00ffffff"
 
     override fun initView(savedInstanceState: Bundle?) {
-        binding.rv
+        val onBindAdapter = binding.rv
             .grid(4).addGridItemDecoration(15f, 10f)
-//            .linear().addLinearItemDecoration(R.color.white, 3, 15f)
-            .bindingData(
-                ItemLayoutBinding::inflate,
-                mutableListOf("1", "2", "3", "4", "1", "2", "3", "4")
-            ) { vh, vb, s ->
-                vb.tvItem.text = s
+            .onBindAdapter<ItemLayoutBinding, String> { item ->
+                tvItem.text = item
+            }.apply {
+                setNewInstance(mutableListOf("1", "1", "1", "1", "1", "1", "1", "1", "1", "1"))
             }
     }
 
@@ -69,9 +67,9 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
     }
 
     override fun initLiveData(viewModel: HomeViewModel) {
-        viewModel.progressLiveData.observe(this, {
+        viewModel.progressLiveData.observe(this) {
             binding.tvDownloadProgress.text = "下载进度:${it.percent},下载速度:${it.speed} byte"
-        })
+        }
         viewModel.banner.observe(this) {
             ToastUtils.showShort(it.toString())
         }
