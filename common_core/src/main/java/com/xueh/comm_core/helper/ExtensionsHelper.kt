@@ -31,6 +31,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
+import kotlin.properties.Delegates
 
 
 /**
@@ -51,9 +52,20 @@ fun loge(tag: String, content: String) {
     Log.e(tag, content)
 }
 
-fun Float.dp2px() = ConvertUtils.dp2px(this)
+fun Float.px() = ConvertUtils.dp2px(this)
 
-fun Float.px2dp() = ConvertUtils.px2dp(this)
+fun Float.dp() = ConvertUtils.px2dp(this)
+
+fun View.click(time: Long = 800L, onclick: View.OnClickListener) {
+    var clickTime by Delegates.observable(0L) { pre, old, new ->
+        if (new - old >= time) {
+            onclick.onClick(this)
+        }
+    }
+    setOnClickListener {
+        clickTime = System.currentTimeMillis()
+    }
+}
 
 //*********************************************************************************************************
 
@@ -204,7 +216,7 @@ fun View.clipRoundBg(radius: Float) {
     outlineProvider = object : ViewOutlineProvider() {
         override fun getOutline(view: View, outline: Outline) {
             //圆角
-            outline.setRoundRect(0, 0, view.width, view.height, radius.dp2px().toFloat())
+            outline.setRoundRect(0, 0, view.width, view.height, radius.px().toFloat())
             //矩形
             //outline.setRect(Rect(0,0,view.width,view.width))
             //圆形
@@ -281,7 +293,6 @@ inline fun yesOrNo(a: Boolean, crossinline yesOrNo: yesOrNoDsl.() -> Unit) {
         yesOrNoDsl().apply(yesOrNo)?.isFalse?.invoke()
     }
 }
-
 
 
 class lifecycleEventDsl {
