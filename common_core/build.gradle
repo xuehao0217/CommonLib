@@ -34,6 +34,18 @@ android {
     kotlinOptions {
         jvmTarget = 1.8
     }
+
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion rootProject.ext.compose_version
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
 }
 
 dependencies {
@@ -54,6 +66,15 @@ dependencies {
     api rootProject.ext.libraries.lifecycle_extensions
     api rootProject.ext.libraries.lifecycle_livedata_ktx
     api rootProject.ext.libraries.lifecycle_viewmodel_ktx
+
+    api rootProject.ext.libraries.compose_ui
+    api rootProject.ext.libraries.compose_material3
+    api rootProject.ext.libraries.compose_preview
+    api rootProject.ext.libraries.compose_tooling
+    api rootProject.ext.libraries.compose_manifest
+    api rootProject.ext.libraries.activity_compose
+    api rootProject.ext.libraries.compose_material
+
 
 //    api rootProject.ext.libraries.koin_android
 //    api rootProject.ext.libraries.koin_androidx

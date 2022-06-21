@@ -15,6 +15,10 @@
         android:theme="@style/AppStyle"
         android:usesCleartextTraffic="true"
         tools:replace="android:theme">
+        <activity
+            android:name=".ui.ComposeActivity"
+            android:exported="false"
+            android:theme="@style/AppStyle" />
         <activity android:name=".ui.MainActivity" />
         <activity
             android:name=".ui.SplashActivity"
