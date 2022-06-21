@@ -23,28 +23,24 @@ import com.xueh.comm_core.weight.SpacesItemDecoration
 abstract class BaseAdapter<T>(@LayoutRes layoutResId: Int, data: MutableList<T>? = null) :
     BaseQuickAdapter<T, BaseViewHolder>(layoutResId, data)
 
-fun RecyclerView.linear(): RecyclerView {
-    layoutManager = LinearLayoutManager(this.context)
-    return this
+fun RecyclerView.linear() = also {
+    it.layoutManager = LinearLayoutManager(this.context)
 }
 
-fun RecyclerView.linearH(): RecyclerView {
-    layoutManager =
+fun RecyclerView.linearH() = also {
+    it.layoutManager =
         LinearLayoutManager(context).apply { orientation = LinearLayoutManager.HORIZONTAL }
-    return this
 }
 
-fun RecyclerView.grid(spanCount: Int): RecyclerView {
-    layoutManager = GridLayoutManager(context, spanCount)
-    return this
+fun RecyclerView.grid(spanCount: Int) = also {
+    it.layoutManager = GridLayoutManager(context, spanCount)
 }
 
 fun RecyclerView.staggeredGrid(
     spanCount: Int,
     orientation: Int = StaggeredGridLayoutManager.VERTICAL
-): RecyclerView {
-    layoutManager = StaggeredGridLayoutManager(spanCount, orientation)
-    return this
+) = also {
+    it.layoutManager = StaggeredGridLayoutManager(spanCount, orientation)
 }
 
 /**
@@ -62,7 +58,7 @@ fun RecyclerView.addLinearItemDecoration(
     dividerSpacing: Int,
     leftTopPaddingDp: Float = 0f,
     rightBottomPaddingDp: Float = 0f
-): RecyclerView {
+) = also {
     if (layoutManager is LinearLayoutManager) {
         addItemDecoration(
             SpacesItemDecoration(
@@ -71,42 +67,34 @@ fun RecyclerView.addLinearItemDecoration(
             ).setParam(dividerColor, dividerSpacing, leftTopPaddingDp, rightBottomPaddingDp)
         )
     }
-    return this
 }
 
 /**
  * @param edgeMargin   左右边距，单位dp
  * @param dividerWidth 中间间距，单位dp
  */
-fun RecyclerView.addGridItemDecoration(edgeMargin: Float, dividerWidth: Float): RecyclerView {
-    addItemDecoration(GridItemDecoration(edgeMargin, dividerWidth))
-    return this
+fun RecyclerView.addGridItemDecoration(edgeMargin: Float, dividerWidth: Float) = also {
+    it.addItemDecoration(GridItemDecoration(edgeMargin, dividerWidth))
 }
-
 
 fun <T> RecyclerView.bindData(
     data: MutableList<T>? = null,
     @LayoutRes layoutId: Int,
     bindItem: (holder: BaseViewHolder, item: T) -> Unit
-): RecyclerView {
-    adapter = object : BaseAdapter<T>(layoutId, data) {
+) = also {
+    it.adapter = object : BaseAdapter<T>(layoutId, data) {
         override fun convert(holder: BaseViewHolder, item: T) {
             bindItem(holder, item)
         }
     }
-    return this
 }
 
 
-fun <T> RecyclerView.itemClick(itemClick: (data: T, view: View, pos: Int) -> Unit): RecyclerView {
-    adapter?.let {
-        (it as BaseAdapter<T>).setOnItemClickListener { adapter, view, position ->
-            itemClick(adapter.data[position] as T, view, position)
-        }
+fun <T> RecyclerView.itemClick(itemClick: (data: T, view: View, pos: Int) -> Unit)=adapter?.let {
+    (it as BaseAdapter<T>).setOnItemClickListener { adapter, view, position ->
+        itemClick(adapter.data[position] as T, view, position)
     }
-    return this
 }
-
 fun <T> RecyclerView.getAdapter() = adapter as BaseAdapter<T>
 
 
