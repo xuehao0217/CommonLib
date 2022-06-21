@@ -4,7 +4,6 @@ plugins {
 }
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
-    buildToolsVersion rootProject.ext.android.buildToolsVersion
     defaultConfig {
         minSdkVersion rootProject.ext.android.minSdkVersion
         targetSdkVersion rootProject.ext.android.targetSdkVersion
@@ -40,8 +39,6 @@ android {
 dependencies {
     api fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
     api rootProject.ext.libraries.junit
-    api rootProject.ext.libraries.runner
-    api rootProject.ext.libraries.test_junit
     api rootProject.ext.libraries.espresso
     api rootProject.ext.libraries.core_ktx
     api rootProject.ext.libraries.multidex
