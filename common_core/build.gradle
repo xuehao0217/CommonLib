@@ -1,5 +1,7 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+}
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
     buildToolsVersion rootProject.ext.android.buildToolsVersion
@@ -61,7 +63,6 @@ dependencies {
 //    api rootProject.ext.libraries.koin_androidx_viewmodel
 
     api rootProject.ext.libraries.kotlin_stdlib
-    api rootProject.ext.libraries.anko
     api rootProject.ext.libraries.coroutines_core
     api rootProject.ext.libraries.coroutines_android
 
