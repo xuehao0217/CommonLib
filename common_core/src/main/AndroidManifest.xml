@@ -31,12 +31,7 @@
             android:name="notch.config"
             android:value="portrait|landscape" />
 
-        <activity android:name="com.xueh.comm_core.web.WebViewActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+        <activity android:name="com.xueh.comm_core.web.WebViewActivity"/>
     </application>
 
 </manifest>
