@@ -1,4 +1,4 @@
-package com.xueh.commonlib.ui.ui.theme
+package com.xueh.comm_core.base.compose.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes

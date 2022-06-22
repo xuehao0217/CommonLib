@@ -77,26 +77,6 @@ fun RecyclerView.addGridItemDecoration(edgeMargin: Float, dividerWidth: Float) =
     it.addItemDecoration(GridItemDecoration(edgeMargin, dividerWidth))
 }
 
-fun <T> RecyclerView.bindData(
-    data: MutableList<T>? = null,
-    @LayoutRes layoutId: Int,
-    bindItem: (holder: BaseViewHolder, item: T) -> Unit
-) = also {
-    it.adapter = object : BaseAdapter<T>(layoutId, data) {
-        override fun convert(holder: BaseViewHolder, item: T) {
-            bindItem(holder, item)
-        }
-    }
-}
-
-
-fun <T> RecyclerView.itemClick(itemClick: (data: T, view: View, pos: Int) -> Unit)=adapter?.let {
-    (it as BaseAdapter<T>).setOnItemClickListener { adapter, view, position ->
-        itemClick(adapter.data[position] as T, view, position)
-    }
-}
-fun <T> RecyclerView.getAdapter() = adapter as BaseAdapter<T>
-
 
 //-----------------------------------------ViewBinding--------------------------------------------------------------//
 

@@ -1,5 +1,4 @@
-package com.xueh.commonlib.ui.ui.theme
-
+package com.xueh.comm_core.base.compose.theme
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
