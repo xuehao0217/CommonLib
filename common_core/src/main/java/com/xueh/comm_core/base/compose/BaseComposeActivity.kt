@@ -5,12 +5,14 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
 import com.xueh.comm_core.base.IBaseLogic
+import com.xueh.comm_core.base.compose.theme.CommonLibTheme
 import com.xueh.comm_core.base.mvvm.ibase.AbsViewModel
 import com.xueh.comm_core.helper.ViewModelHelper
 import com.xueh.comm_core.weight.compose.ComposeTitleView
@@ -56,21 +58,22 @@ abstract class MVVMComposeActivity<VM : AbsViewModel> : BaseComposeActivity() {
     protected open fun contentRoot(
         component: @Composable (BoxScope.() -> Unit)
     ) {
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White)
-        ) {
-            ComposeTitleView(getTitleText(), {
-                this@MVVMComposeActivity.finish()
-            })
-            Box(
+        CommonLibTheme {
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(color = Color.White)
+                    .background(Color.White)
             ) {
-                component.invoke(this)
+                ComposeTitleView(getTitleText(), {
+                    this@MVVMComposeActivity.finish()
+                })
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color = Color.White)
+                ) {
+                    component.invoke(this)
+                }
             }
         }
     }
