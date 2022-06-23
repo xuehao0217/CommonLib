@@ -14,6 +14,7 @@ import com.xueh.comm_core.base.IBaseLogic
 import com.xueh.comm_core.base.mvvm.ibase.AbsViewModel
 import com.xueh.comm_core.helper.ViewModelHelper
 import com.xueh.comm_core.weight.compose.ComposeTitleView
+import okhttp3.internal.wait
 
 
 abstract class BaseComposeActivity : ComponentActivity(), IBaseLogic {
@@ -67,7 +68,7 @@ abstract class MVVMComposeActivity<VM : AbsViewModel> : BaseComposeActivity() {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(color = Color.Red)
+                    .background(color = Color.White)
             ) {
                 component.invoke(this)
             }
