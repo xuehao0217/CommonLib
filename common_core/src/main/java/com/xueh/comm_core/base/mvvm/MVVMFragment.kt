@@ -1,5 +1,6 @@
 package com.xueh.comm_core.base.mvvm
 
+import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.viewbinding.ViewBinding
@@ -18,10 +19,9 @@ abstract class MVVMFragment<VB : ViewBinding, VM : AbsViewModel> : DFragment<VB>
 
     abstract fun initLiveData(viewModel: VM)
 
-    override fun initDataBeforeView() {
+    override fun initView(savedInstanceState: Bundle?) {
         viewModel = ViewModelHelper.getFragmentViewModel(this.javaClass, this)
         initLiveData(viewModel)
-        super.initDataBeforeView()
 
         viewModel.apiLoading.observe(this) {
             it?.let {
@@ -35,5 +35,4 @@ abstract class MVVMFragment<VB : ViewBinding, VM : AbsViewModel> : DFragment<VB>
             }
         }
     }
-
 }

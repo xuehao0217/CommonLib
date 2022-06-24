@@ -50,10 +50,6 @@ abstract class DFragment<VB : ViewBinding> : BaseFragment<VB>(), CoroutineScope 
         }
     }
 
-    override fun initDataBeforeView() {
-
-    }
-
     protected fun showProgressDialog() {
         ViewLoading.show(activity)
     }
@@ -137,7 +133,7 @@ abstract class DFragment<VB : ViewBinding> : BaseFragment<VB>(), CoroutineScope 
     protected open fun isRegisterEventBus() = false
 
 
-    protected open fun launchLifecycle(block: suspend (CoroutineScope) -> Unit){
+    protected open fun launchLifecycle(block: suspend (CoroutineScope) -> Unit) {
         lifecycleScope.launch(GlobalCoroutineExceptionHandler()) {
             block.invoke(this)
         }

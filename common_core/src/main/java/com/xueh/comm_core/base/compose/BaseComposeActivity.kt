@@ -22,10 +22,9 @@ import okhttp3.internal.wait
 abstract class BaseComposeActivity : ComponentActivity(), IBaseLogic {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initDataBeforeView()
         initView(savedInstanceState)
         initListener()
-        initDataAfterView()
+        initData()
     }
 }
 
@@ -33,7 +32,10 @@ abstract class BaseComposeActivity : ComponentActivity(), IBaseLogic {
 abstract class MVVMComposeActivity<VM : AbsViewModel> : BaseComposeActivity() {
     lateinit var viewModel: VM
 
-    override fun initDataBeforeView() {
+    override fun initListener() {
+    }
+
+    override fun initView(savedInstanceState: Bundle?) {
         viewModel = ViewModelHelper.getViewModel(this.javaClass, this)
         viewModel.apiLoading.observe(this) {
             it?.let {
@@ -46,12 +48,6 @@ abstract class MVVMComposeActivity<VM : AbsViewModel> : BaseComposeActivity() {
                 Log.e("BaseViewModel--> ", it?.toString())
             }
         }
-    }
-
-    override fun initListener() {
-    }
-
-    override fun initView(savedInstanceState: Bundle?) {
     }
 
     @Composable

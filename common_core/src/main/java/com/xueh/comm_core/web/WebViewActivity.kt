@@ -33,6 +33,10 @@ open class WebViewActivity : DActivity<ActivityWebViewBinding>() {
         super.onPause()
     }
 
+    override fun initData() {
+
+    }
+
     public override fun onResume() {
         agentWeb.webLifeCycle.onResume()
         super.onResume()
@@ -49,7 +53,8 @@ open class WebViewActivity : DActivity<ActivityWebViewBinding>() {
         } else super.onKeyDown(keyCode, event)
     }
 
-    override fun initDataAfterView() {
+
+    override fun initView(savedInstanceState: Bundle?) {
         binding.tbTitleBar.title = intent?.getStringExtra(TITLE)
         agentWeb = AgentWeb.with(this)
             .setAgentWebParent(binding.rvWebContent, LinearLayout.LayoutParams(-1, -1))
@@ -60,10 +65,6 @@ open class WebViewActivity : DActivity<ActivityWebViewBinding>() {
             .createAgentWeb()
             .ready()
             .go(intent.getStringExtra(URL))
-    }
-
-    override fun initView(savedInstanceState: Bundle?) {
-
     }
 
     override fun initListener() {

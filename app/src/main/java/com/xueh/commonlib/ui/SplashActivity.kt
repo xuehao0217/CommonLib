@@ -28,8 +28,7 @@ class SplashActivity : DActivity<ActivitySplashBinding>() {
             .start()
     }
 
-    override fun initDataAfterView() {
-    }
+
 
     override fun initListener() {
     }
@@ -37,6 +36,10 @@ class SplashActivity : DActivity<ActivitySplashBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppStyle)
         super.onCreate(savedInstanceState)
+    }
+
+    override fun initData() {
+
     }
 
 }

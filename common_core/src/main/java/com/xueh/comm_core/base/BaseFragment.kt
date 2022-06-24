@@ -28,10 +28,9 @@ abstract class BaseFragment<VB : ViewBinding> : BaseVisibilityFragment(), IBaseL
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initDataBeforeView()
         initView(savedInstanceState)
-        initDataAfterView()
         initListener()
+        initData()
     }
 }
 

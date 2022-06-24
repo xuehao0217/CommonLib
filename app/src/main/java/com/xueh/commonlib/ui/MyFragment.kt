@@ -64,8 +64,6 @@ class MyFragment : DFragment<FragmentMyBinding>() {
 
     }
 
-    override fun initDataAfterView() {
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +71,10 @@ class MyFragment : DFragment<FragmentMyBinding>() {
         lifecycle.addObserver(albumLauncher)
         lifecycle.addObserver(previewLauncher)
         lifecycle.addObserver(permissionLauncher)
+    }
+
+    override fun initData() {
+
     }
 
     private lateinit var interval: Interval

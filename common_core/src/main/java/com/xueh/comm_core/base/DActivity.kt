@@ -38,7 +38,6 @@ abstract class DActivity<VB : ViewBinding> : BaseActivity<VB>(), CoroutineScope 
         }
     }
 
-    override fun initDataBeforeView() {}
 
     override fun onDestroy() {
         cancel()

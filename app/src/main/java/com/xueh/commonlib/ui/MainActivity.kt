@@ -10,10 +10,15 @@ class MainActivity : DActivity<ActivityMainBinding>() {
 
     private val fragments = arrayOf(HomeFragment(), MyFragment())
     private val tabs = arrayOf("首页", "我的")
+
     //未选中icon
     private val normalIcon = intArrayOf(R.mipmap.ic_home_normal, R.mipmap.ic_my_normal)
+
     //选中时icon
     private val selectIcon = intArrayOf(R.mipmap.ic_home_select, R.mipmap.ic_my_select)
+
+    override fun initData() {
+    }
 
     override fun initView(savedInstanceState: Bundle?) {
         binding.mainCnb.titleItems(tabs).normalIconItems(normalIcon).selectIconItems(selectIcon)
@@ -22,9 +27,6 @@ class MainActivity : DActivity<ActivityMainBinding>() {
             .build()
     }
 
-
-    override fun initDataAfterView() {
-    }
 
     override fun initListener() {
     }

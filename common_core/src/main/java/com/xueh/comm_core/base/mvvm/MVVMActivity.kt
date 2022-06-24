@@ -1,5 +1,6 @@
 package com.xueh.comm_core.base.mvvm
 
+import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.viewbinding.ViewBinding
@@ -17,10 +18,9 @@ abstract class MVVMActivity<VB : ViewBinding, VM : AbsViewModel> : DActivity<VB>
 
     abstract fun initLiveData(viewModel: VM)
 
-    override fun initDataBeforeView() {
+    override fun initView(savedInstanceState: Bundle?) {
         viewModel = ViewModelHelper.getViewModel(this.javaClass, this)
         initLiveData(viewModel)
-        super.initDataBeforeView()
         viewModel.apiLoading.observe(this) {
             it?.let {
                 if (it) showProgressDialog() else hideProgressDialog()

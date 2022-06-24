@@ -29,8 +29,6 @@ import kotlinx.coroutines.launch
  * 备注：
  */
 class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
-
-
     override fun initListener() {
         with(binding) {
             tvGetDsl.setOnClickListener {
@@ -56,6 +54,10 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
     val URL =
         "https://lh3.googleusercontent.com/-vFBVjRp14wam3b974OJcM2jQzu7Z-WJ_cDv4hijwcUhtmvJGjHVowXtasz2214O3MSD82dWUA=w128-h128-e365-rj-sc0x00ffffff"
 
+    override fun initData() {
+
+    }
+
     override fun initView(savedInstanceState: Bundle?) {
         val onBindAdapter = binding.rv
             .grid(4).addGridItemDecoration(15f, 10f)
@@ -67,9 +69,6 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
                     startActivity(ComposeActivity::class.java)
                 }
             }
-    }
-
-    override fun initDataAfterView() {
     }
 
     override fun initLiveData(viewModel: HomeViewModel) {

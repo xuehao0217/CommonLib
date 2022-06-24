@@ -74,6 +74,7 @@ dependencies {
     api rootProject.ext.libraries.compose_manifest
     api rootProject.ext.libraries.activity_compose
     api rootProject.ext.libraries.compose_material
+//    api rootProject.ext.libraries.compose_livedata
 
 
 //    api rootProject.ext.libraries.koin_android

@@ -23,9 +23,8 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), IBaseLogic 
         window.requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        initDataBeforeView()
         initView(savedInstanceState)
         initListener()
-        initDataAfterView()
+        initData()
     }
 }

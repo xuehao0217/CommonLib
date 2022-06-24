@@ -1,5 +1,7 @@
 package com.xueh.commonlib.ui
 
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
@@ -20,39 +22,38 @@ import androidx.compose.ui.unit.dp
 import com.blankj.utilcode.util.ResourceUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.base.compose.MVVMComposeActivity
+import com.xueh.comm_core.base.mvvm.BaseViewModel
 import com.xueh.comm_core.weight.compose.ComposeTitleView
 import com.xueh.commonlib.R
+import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
 import com.xueh.commonlib.ui.viewmodel.HomeViewModel
 
-class ComposeActivity : MVVMComposeActivity<HomeViewModel>() {
-
-    override fun initDataAfterView() {
-        viewModel.banner.observe(this) {
-            ToastUtils.showShort(it.toString())
-        }
-    }
-
-    override fun initDataBeforeView() {
-        super.initDataBeforeView()
-        viewModel.loadDsl()
-    }
+class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
 
     override fun getTitleText() = "我是标题"
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+
+    override fun initView(savedInstanceState: Bundle?) {
+        super.initView(savedInstanceState)
         setContent {
             DefaultPreview()
         }
     }
 
+    override fun initData() {
+        viewModel.loadDsl()
+    }
+
+
     @Preview(showBackground = true)
     @Composable
     fun DefaultPreview() {
+        val bannerDatas by viewModel.bannerLiveData.observeAsState()
+
         contentRoot {
             LazyColumn() {
-                items(100) { index ->
-                    itemView("HHHHHHHHHHHH") {
+                items(viewModel.bannerMutableState.size) { index ->
+                    itemView(viewModel.bannerMutableState[index].title) {
                         ToastUtils.showShort("点击了 ${index}")
                     }
                 }

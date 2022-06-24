@@ -17,7 +17,6 @@ import com.xueh.commonlib.entity.BannerVO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.flowWith
 import kotlinx.coroutines.launch
 import me.jessyan.progressmanager.ProgressListener
 import me.jessyan.progressmanager.ProgressManager
