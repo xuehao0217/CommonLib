@@ -65,6 +65,7 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
     private fun itemView(item: String, clickEvent: () -> Unit) {
         Box(
             modifier = Modifier
+                .clickable(onClick = clickEvent)
                 .fillMaxWidth()
                 .height(50.dp)
                 .background(Color.Blue),
@@ -72,8 +73,6 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
         ) {
             Text(
                 text = item,
-                modifier = Modifier
-                    .clickable(onClick = clickEvent),
                 textAlign = TextAlign.Center
             )
         }
