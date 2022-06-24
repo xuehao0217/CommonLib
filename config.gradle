@@ -1,10 +1,12 @@
 ext {
+    java_version = JavaVersion.VERSION_1_8
 
-    sourceCompatVer = JavaVersion.VERSION_1_8
-    targetCompatVer = JavaVersion.VERSION_1_8
     compose_version = "1.2.0-rc01"
+
+    kotlin_version = "1.6.21"
+
     //android开发版本配置
-    android = [
+    android_config = [
             compileSdkVersion: 32,
             applicationId    : "com.xueh.commonlib",
             minSdkVersion    : 21,
@@ -15,8 +17,7 @@ ext {
     ]
     //version配置
     versions = [
-            kotlin_version               : "1.6.21",
-            coroutines                   : "1.5.0",
+            coroutines                   : "1.6.3",
             core_ktx                     : "1.7.0",
 
             support                      : "28.0.0",
@@ -98,7 +99,7 @@ ext {
             koin_androidx                : "org.koin:koin-androidx-scope:${versions.koin_android}",
             koin_androidx_viewmodel      : "org.koin:koin-androidx-viewmodel:${versions.koin_android}",
 
-            kotlin_stdlib                : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin_version}",
+            kotlin_stdlib                : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
             coroutines_core              : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.coroutines}",
             coroutines_android           : "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.coroutines}",
 

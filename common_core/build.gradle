@@ -3,12 +3,12 @@ plugins {
     id 'kotlin-android'
 }
 android {
-    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    compileSdkVersion android_config.compileSdkVersion
     defaultConfig {
-        minSdkVersion rootProject.ext.android.minSdkVersion
-        targetSdkVersion rootProject.ext.android.targetSdkVersion
-        versionCode rootProject.ext.android.versionCode
-        versionName rootProject.ext.android.versionName
+        minSdkVersion android_config.minSdkVersion
+        targetSdkVersion android_config.targetSdkVersion
+        versionCode android_config.versionCode
+        versionName android_config.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         //buildConfigField "String", "api_env", "\"" + String.valueOf(java.lang.System.properties['api_env']) + "\""
     }
@@ -24,22 +24,24 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility  java_version
+        targetCompatibility  java_version
     }
     viewBinding {
         enabled = true
     }
 
     kotlinOptions {
-        jvmTarget = 1.8
+        jvmTarget = java_version
     }
 
     buildFeatures {
         compose true
+        viewBinding true
     }
+
     composeOptions {
-        kotlinCompilerExtensionVersion rootProject.ext.compose_version
+        kotlinCompilerExtensionVersion compose_version
     }
     packagingOptions {
         resources {
@@ -50,76 +52,76 @@ android {
 
 dependencies {
     api fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
-    api rootProject.ext.libraries.junit
-    api rootProject.ext.libraries.espresso
-    api rootProject.ext.libraries.core_ktx
-    api rootProject.ext.libraries.multidex
-    api rootProject.ext.libraries.support_v4
-    api rootProject.ext.libraries.appcompat
-    api rootProject.ext.libraries.material
-    api rootProject.ext.libraries.recyclerview
-    api rootProject.ext.libraries.constraint_layout
-    api rootProject.ext.libraries.cardview
-    api rootProject.ext.libraries.viewpager2
-    api rootProject.ext.libraries.fragment_ktx
-    api rootProject.ext.libraries.lifecycle_common
-    api rootProject.ext.libraries.lifecycle_extensions
-    api rootProject.ext.libraries.lifecycle_livedata_ktx
-    api rootProject.ext.libraries.lifecycle_viewmodel_ktx
+    api libraries.junit
+    api libraries.espresso
+    api libraries.core_ktx
+    api libraries.multidex
+    api libraries.support_v4
+    api libraries.appcompat
+    api libraries.material
+    api libraries.recyclerview
+    api libraries.constraint_layout
+    api libraries.cardview
+    api libraries.viewpager2
+    api libraries.fragment_ktx
+    api libraries.lifecycle_common
+    api libraries.lifecycle_extensions
+    api libraries.lifecycle_livedata_ktx
+    api libraries.lifecycle_viewmodel_ktx
 
-    api rootProject.ext.libraries.compose_ui
-    api rootProject.ext.libraries.compose_material3
-    api rootProject.ext.libraries.compose_preview
-    api rootProject.ext.libraries.compose_tooling
-    api rootProject.ext.libraries.compose_manifest
-    api rootProject.ext.libraries.activity_compose
-    api rootProject.ext.libraries.compose_material
-//    api rootProject.ext.libraries.compose_livedata
+    api libraries.compose_ui
+    api libraries.compose_material3
+    api libraries.compose_preview
+    api libraries.compose_tooling
+    api libraries.compose_manifest
+    api libraries.activity_compose
+    api libraries.compose_material
+//    api libraries.compose_livedata
 
 
-//    api rootProject.ext.libraries.koin_android
-//    api rootProject.ext.libraries.koin_androidx
-//    api rootProject.ext.libraries.koin_androidx_viewmodel
+//    api libraries.koin_android
+//    api libraries.koin_androidx
+//    api libraries.koin_androidx_viewmodel
 
-    api rootProject.ext.libraries.kotlin_stdlib
-    api rootProject.ext.libraries.coroutines_core
-    api rootProject.ext.libraries.coroutines_android
+    api libraries.kotlin_stdlib
+    api libraries.coroutines_core
+    api libraries.coroutines_android
 
-    api rootProject.ext.libraries.agentweb
-    api rootProject.ext.libraries.eventbus
-    api rootProject.ext.libraries.greendao
+    api libraries.agentweb
+    api libraries.eventbus
+    api libraries.greendao
 
-//    api rootProject.ext.libraries.rxjava
-//    api rootProject.ext.libraries.rxandroid
-//    api rootProject.ext.libraries.rxbinding
+//    api libraries.rxjava
+//    api libraries.rxandroid
+//    api libraries.rxbinding
 
-    api rootProject.ext.libraries.okhttp_logging
-    api rootProject.ext.libraries.okhttp
-    api rootProject.ext.libraries.retrofit
-    api rootProject.ext.libraries.converter_gson
-    api rootProject.ext.libraries.retrofit2_rxjava
-    api rootProject.ext.libraries.PersistentCookieJar
+    api libraries.okhttp_logging
+    api libraries.okhttp
+    api libraries.retrofit
+    api libraries.converter_gson
+    api libraries.retrofit2_rxjava
+    api libraries.PersistentCookieJar
 
-    debugImplementation(rootProject.ext.libraries.spiderman) {
+    debugImplementation(libraries.spiderman) {
         exclude group: "androidx.appcompat"
     }
-    api rootProject.ext.libraries.coil
-    api rootProject.ext.libraries.coil_gif
-    api rootProject.ext.libraries.BaseRecyclerViewAdapterHelper
-    api rootProject.ext.libraries.glide
-    api rootProject.ext.libraries.background
-    api rootProject.ext.libraries.progressmanager
-    api rootProject.ext.libraries.gson
-    api rootProject.ext.libraries.GsonFactory
+    api libraries.coil
+    api libraries.coil_gif
+    api libraries.BaseRecyclerViewAdapterHelper
+    api libraries.glide
+    api libraries.background
+    api libraries.progressmanager
+    api libraries.gson
+    api libraries.GsonFactory
 
-    api rootProject.ext.libraries.refresh_layout_kernel
-    api rootProject.ext.libraries.refresh_header_classics
+    api libraries.refresh_layout_kernel
+    api libraries.refresh_header_classics
 
-    api rootProject.ext.libraries.immersionbar
-    api rootProject.ext.libraries.utilcode
-//    api rootProject.ext.libraries.permission
-    api rootProject.ext.libraries.UiStatus
-    api rootProject.ext.libraries.titlebar
-    api rootProject.ext.libraries.MagicIndicator
-    api rootProject.ext.libraries.xpopup
+    api libraries.immersionbar
+    api libraries.utilcode
+//    api libraries.permission
+    api libraries.UiStatus
+    api libraries.titlebar
+    api libraries.MagicIndicator
+    api libraries.xpopup
 }
