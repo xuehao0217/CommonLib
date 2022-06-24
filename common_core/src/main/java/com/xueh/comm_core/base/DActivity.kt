@@ -12,7 +12,6 @@ import com.fengchen.uistatus.UiStatusController
 import com.fengchen.uistatus.annotation.UiStatus
 import com.fengchen.uistatus.listener.OnCompatRetryListener
 import com.gyf.immersionbar.ImmersionBar
-import com.noober.background.BackgroundLibrary
 import com.xueh.comm_core.R
 import com.xueh.comm_core.helper.EventBusHelper
 import com.xueh.comm_core.helper.GlobalCoroutineExceptionHandler
@@ -28,7 +27,6 @@ import org.greenrobot.eventbus.ThreadMode
  */
 abstract class DActivity<VB : ViewBinding> : BaseActivity<VB>(), CoroutineScope by MainScope() {
     public override fun onCreate(savedInstanceState: Bundle?) {
-        BackgroundLibrary.inject(this)
         super.onCreate(savedInstanceState)
         if (isImmersionBarEnabled) {
             initImmersionBar()
