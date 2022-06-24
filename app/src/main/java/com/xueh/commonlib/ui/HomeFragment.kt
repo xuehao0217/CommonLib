@@ -59,6 +59,7 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
     }
 
     override fun initView(savedInstanceState: Bundle?) {
+        super.initView(savedInstanceState)
         val onBindAdapter = binding.rv
             .grid(4).addGridItemDecoration(15f, 10f)
             .onBindAdapter<ItemLayoutBinding, String> { item ->
