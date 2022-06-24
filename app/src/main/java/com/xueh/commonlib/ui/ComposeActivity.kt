@@ -1,8 +1,8 @@
 package com.xueh.commonlib.ui
 
-import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
-import android.content.Context
+//import androidx.compose.runtime.*
+//import androidx.compose.runtime.livedata.observeAsState
+//import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.setContent
@@ -48,7 +48,7 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
     @Preview(showBackground = true)
     @Composable
     fun DefaultPreview() {
-        val bannerDatas by viewModel.bannerLiveData.observeAsState()
+//        val bannerDatas by viewModel.bannerLiveData.observeAsState()
 
         contentRoot {
             LazyColumn() {

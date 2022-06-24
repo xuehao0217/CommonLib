@@ -29,54 +29,6 @@ abstract class BaseComposeActivity : ComponentActivity(), IBaseLogic {
 }
 
 
-abstract class MVVMComposeActivity<VM : AbsViewModel> : BaseComposeActivity() {
-    lateinit var viewModel: VM
-
-    override fun initListener() {
-    }
-
-    override fun initView(savedInstanceState: Bundle?) {
-        viewModel = ViewModelHelper.getViewModel(this.javaClass, this)
-        viewModel.apiLoading.observe(this) {
-            it?.let {
-//                if (it) showProgressDialog() else hideProgressDialog()
-            }
-        }
-
-        viewModel.apiException.observe(this) {
-            it?.let {
-                Log.e("BaseViewModel--> ", it?.toString())
-            }
-        }
-    }
-
-    @Composable
-    protected open fun contentRoot(
-        component: @Composable (BoxScope.() -> Unit)
-    ) {
-        CommonLibTheme {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.White)
-            ) {
-                ComposeTitleView(getTitleText(), {
-                    this@MVVMComposeActivity.finish()
-                })
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(color = Color.White)
-                ) {
-                    component.invoke(this)
-                }
-            }
-        }
-    }
-
-    protected open fun getTitleText() = ""
-
-}
 
 
 
