@@ -16,6 +16,7 @@ import com.xueh.commonlib.entity.BannerVO
 class ComposeViewModel : BaseViewModel<RestApi>() {
     override fun initApi() = HttpRequest.getService(RestApi::class.java)
 
+    // val bannerDatas by viewModel.bannerLiveData.observeAsState()
     val bannerLiveData = MutableLiveData<List<BannerVO>>()
 
     var bannerMutableState by mutableStateOf<List<BannerVO>>(listOf())
