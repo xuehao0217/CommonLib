@@ -18,4 +18,6 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowTitleStyle">@null</item>
     </style>
+
+    <style name="common_textview_style" parent="Widget.MaterialComponents.Button.UnelevatedButton" />
 </resources>

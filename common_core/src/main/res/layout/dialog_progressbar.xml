@@ -1,39 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_gravity="center"
-    android:gravity="center"
-    android:orientation="vertical"
     android:padding="18dp">
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:gravity="center"
-        app:bl_corners_radius="5dp"
-        app:bl_solid_color="#a0000000"
-        android:orientation="vertical"
-        tools:ignore="MissingPrefix">
+        android:elevation="0dp"
+        app:cardBackgroundColor="#a0000000"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="0dp">
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="@android:style/Widget.Holo.Light.ProgressBar.Inverse"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
-            android:layout_gravity="center_horizontal"
-            android:visibility="visible" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:ignore="MissingPrefix">
 
-        <TextView
-            android:id="@+id/tv_show"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:text="@string/str_loading"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
-    </LinearLayout>
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="@android:style/Widget.Holo.Light.ProgressBar.Inverse"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:layout_gravity="center_horizontal"
+                android:visibility="visible" />
 
-</LinearLayout>
+            <TextView
+                android:id="@+id/tv_show"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/str_loading"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</FrameLayout>
