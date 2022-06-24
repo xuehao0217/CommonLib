@@ -7,13 +7,25 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -63,19 +75,30 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
 
     @Composable
     private fun itemView(item: String, clickEvent: () -> Unit) {
-        Box(
-            modifier = Modifier
-                .clickable(onClick = clickEvent)
-                .fillMaxWidth()
-                .height(50.dp)
-                .background(Color.Blue),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = item,
-                textAlign = TextAlign.Center
-            )
+        Surface(
+//            shape = RoundedCornerShape(10.dp),
+//            shadowElevation = 5.dp,
+            modifier = Modifier.padding(all = 8.dp)
+        ){
+            Box(
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .background(Color.Blue)
+                    .clickable(onClick = clickEvent)
+                    .fillMaxWidth()
+                    .height(50.dp)
+                    .border(1.5.dp, MaterialTheme.colors.secondary, shape = CircleShape),
+
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = item,
+                    color=Color.White,
+                    textAlign = TextAlign.Center,
+                )
+            }
         }
+
     }
 
 }
