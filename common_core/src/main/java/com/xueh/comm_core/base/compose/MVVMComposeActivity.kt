@@ -53,7 +53,7 @@ abstract class MVVMComposeActivity<VM : AbsViewModel> : BaseComposeActivity() {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(color = Color.White)
+                        .background(color = Color.White),
                 ) {
                     component.invoke(this)
                 }

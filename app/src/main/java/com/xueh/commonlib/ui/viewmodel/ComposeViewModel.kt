@@ -21,6 +21,7 @@ class ComposeViewModel : BaseViewModel<RestApi>() {
 
     var bannerMutableState by mutableStateOf<List<BannerVO>>(listOf())
 
+    var bannerMutableStates = mutableListOf<BannerVO>()
     fun loadDsl() {
         apiDSL<List<BannerVO>> {
             onRequest {
@@ -28,7 +29,10 @@ class ComposeViewModel : BaseViewModel<RestApi>() {
             }
             onResponse {
                 bannerLiveData.postValue(it)
-                bannerMutableState = it
+                (0..5).forEach {index->
+                    bannerMutableStates.addAll(it)
+                }
+                bannerMutableState = bannerMutableStates
             }
         }
     }

@@ -4,8 +4,10 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -13,9 +15,11 @@ import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -32,6 +36,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.coroutineScope
 import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import com.blankj.utilcode.util.ResourceUtils
@@ -44,6 +50,7 @@ import com.xueh.comm_core.weight.compose.ImageLoadCompose
 import com.xueh.commonlib.R
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
 import com.xueh.commonlib.ui.viewmodel.HomeViewModel
+import kotlinx.coroutines.launch
 
 class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
 
@@ -67,10 +74,49 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
     fun DefaultPreview() {
         val bannerDatas by viewModel.bannerLiveData.observeAsState()
         contentRoot {
-            LazyColumn() {
-                items(viewModel.bannerMutableState.size) { index ->
-                    itemView(viewModel.bannerMutableState[index].title) {
-                        ToastUtils.showShort("点击了 ${index}")
+            Box(
+                contentAlignment = Alignment.BottomEnd,
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                val scope = rememberCoroutineScope()
+                val listState = rememberLazyListState()
+                var isScroll by remember {
+                    mutableStateOf(false)
+                }
+
+                if (listState.isScrollInProgress) {
+                    DisposableEffect(Unit) {
+                        isScroll = true
+                        onDispose {
+                            isScroll = false
+                        }
+                    }
+                }
+
+                val showButton by remember {
+                    derivedStateOf { listState.firstVisibleItemIndex > 0 && !isScroll }
+                }
+
+                LazyColumn(state = listState) {
+                    items(viewModel.bannerMutableState.size) { index ->
+                        itemView(viewModel.bannerMutableState[index].title) {
+                            ToastUtils.showShort("点击了 ${index}")
+                        }
+                    }
+                }
+
+
+                AnimatedVisibility(visible = showButton, modifier = Modifier.padding(15.dp)) {
+                    FloatingActionButton(
+                        modifier = Modifier.size(40.dp),
+                        onClick = {
+                            scope.launch {
+                                listState.animateScrollToItem(0)
+                            }
+                        }
+                    ) {
+                        Text(text = "置顶", color = Color.White, fontSize = 12.sp)
                     }
                 }
             }
@@ -82,7 +128,9 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
         Surface(
 //            shape = RoundedCornerShape(10.dp),
 //            shadowElevation = 5.dp,
-            modifier = Modifier.padding(all = 8.dp).shadow(4.dp, shape = RoundedCornerShape(10))
+            modifier = Modifier
+                .padding(all = 8.dp)
+                .shadow(4.dp, shape = RoundedCornerShape(10))
         ) {
             Column() {
                 ImageLoadCompose("https://pic-go-bed.oss-cn-beijing.aliyuncs.com/img/20220316151929.png")
