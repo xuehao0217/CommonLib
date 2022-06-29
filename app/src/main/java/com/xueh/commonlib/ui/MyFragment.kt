@@ -2,15 +2,9 @@ package com.xueh.commonlib.ui
 
 import android.Manifest
 import android.os.Bundle
-import com.blankj.utilcode.util.ToastUtils
-import com.blankj.utilcode.util.UriUtils
+import com.dylanc.activityresult.launcher.*
 import com.fengchen.uistatus.annotation.UiStatus
 import com.xueh.comm_core.base.DFragment
-import com.xueh.comm_core.helper.*
-import com.xueh.comm_core.helper.activityresult.AlbumLauncher
-import com.xueh.comm_core.helper.activityresult.TakePictureLauncher
-import com.xueh.comm_core.helper.activityresult.TakePicturePreviewLauncher
-import com.xueh.comm_core.helper.activityresult.permission.PermissionLauncher
 import com.xueh.comm_core.utils.time.Interval
 import com.xueh.commonlib.databinding.FragmentMyBinding
 import java.util.concurrent.TimeUnit
@@ -22,27 +16,50 @@ import java.util.concurrent.TimeUnit
  * 备注：
  */
 class MyFragment : DFragment<FragmentMyBinding>() {
+    private val requestMultiplePermissionsLauncher = RequestMultiplePermissionsLauncher(this)
 
-    private val pictureLauncher by lazy { TakePictureLauncher() }
-    private val albumLauncher by lazy { AlbumLauncher() }
-    private val previewLauncher by lazy { TakePicturePreviewLauncher() }
-    private val permissionLauncher by lazy { PermissionLauncher() }
-    
+    private val cropPictureLauncher = CropPictureLauncher(this)
+    private val takePictureLauncher = TakePictureLauncher(this)
+    private val requestPermissionLauncher = RequestPermissionLauncher(this)
+    private val pickContentLauncher = PickContentLauncher(this)
     override fun initListener() {
         with(binding) {
             tvAlbum.setOnClickListener {
-                albumLauncher.lunch {
-                    showState(UiStatus.CONTENT)
-                    ToastUtils.showShort("${UriUtils.uri2File(it)}")
-                    binding.ivMy.setImageURI(it)
-                }
+                showState(UiStatus.CONTENT)
+                pickContentLauncher.launchForImage(
+                    onActivityResult = { uri ->
+                        binding.ivMy.setImageURI(uri)
+                    },
+                    onPermissionDenied = { settingsLauncher ->
+
+                    },
+                    onExplainRequestPermission = {
+
+                    }
+                )
             }
             tvCarema.setOnClickListener {
-                pictureLauncher.lunch {
-                    showState(UiStatus.CONTENT)
-                    ToastUtils.showShort("${UriUtils.uri2File(it)}")
-                    binding.ivMy.setImageURI(it)
-                }
+                requestMultiplePermissionsLauncher.launch(
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    onAllGranted = {
+                        showState(UiStatus.CONTENT)
+                        takePictureLauncher.launch { uri ->
+                            if (uri != null) {
+                                cropPictureLauncher.launch(uri) { croppedUri ->
+                                    activity?.contentResolver?.delete(uri, null, null)
+                                    binding.ivMy.setImageURI(croppedUri)
+                                }
+                            }
+                        }
+                    },
+                    onDenied = { list, settingsLauncher ->
+                    },
+                    onExplainRequest = { list ->
+                    }
+                )
+
             }
             btStartTime.setOnClickListener {
                 interval.start()
@@ -62,15 +79,6 @@ class MyFragment : DFragment<FragmentMyBinding>() {
             }
         }
 
-    }
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        lifecycle.addObserver(pictureLauncher)
-        lifecycle.addObserver(albumLauncher)
-        lifecycle.addObserver(previewLauncher)
-        lifecycle.addObserver(permissionLauncher)
     }
 
     override fun initData() {

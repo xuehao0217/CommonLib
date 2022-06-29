@@ -68,6 +68,7 @@ dependencies {
     api libraries.lifecycle_extensions
     api libraries.lifecycle_livedata_ktx
     api libraries.lifecycle_viewmodel_ktx
+    api libraries.ActivityResultLauncher
 
     api libraries.compose_ui
     api libraries.compose_material3

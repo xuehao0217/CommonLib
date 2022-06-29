@@ -1,7 +1,7 @@
 ext {
     java_version = JavaVersion.VERSION_1_8
 
-    compose_version = "1.2.0-rc01"
+    compose_version = '1.2.0-rc02'
 
     kotlin_version = "1.6.21"
 
@@ -25,7 +25,7 @@ ext {
             appcompat                    : "1.4.2",
             androidx                     : "1.0.0",
             material                     : '1.6.1',
-            lifecycle_version            : "2.2.0",
+            lifecycle_version            : '2.2.0',
             viewpager2                   : "1.0.0",
             fragment_ktx                 : "1.4.1",
             recyclerview                 : "1.2.1",
@@ -36,11 +36,11 @@ ext {
             rxandroid                    : "2.1.1",
             retrofit                     : '2.9.0',
             rxbinding                    : "3.0.0",
-            okhttp                       : "4.5.0",
+            okhttp                       : '5.0.0-alpha.10',
             PersistentCookieJar          : "v1.0.1",
 
             spiderman                    : "v1.1.8",
-            coil                         : "1.2.2",
+            coil                         : '2.1.0',
             coil_compose                 : "2.1.0",
             glide                        : '4.13.2',
             background                   : "1.7.4",
@@ -51,7 +51,7 @@ ext {
             fastjsonandroid              : "1.1.71",
 
             eventbus                     : '3.3.1',
-            greendao                     : "3.2.2",
+            greendao                     : '3.3.0',
             greendaoupgrade              : "v2.1.0",
             agentweb                     : "4.1.4",
             refresh_layout_kernel        : "2.0.1",
@@ -96,6 +96,7 @@ ext {
             compose_material             : "androidx.compose.material:material:$compose_version",
             compose_livedata             : "androidx.compose.runtime:runtime-livedata:$compose_version",
             compose_constraintlayout     : "androidx.constraintlayout:constraintlayout-compose:1.0.1",
+            ActivityResultLauncher       : 'com.github.DylanCaiCoding:ActivityResultLauncher:1.1.2',
 
             koin_android                 : "org.koin:koin-android:${versions.koin_android}",
             koin_androidx                : "org.koin:koin-androidx-scope:${versions.koin_android}",

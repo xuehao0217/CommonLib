@@ -27,7 +27,7 @@ import okio.Okio;
 
 import static java.net.HttpURLConnection.HTTP_NOT_MODIFIED;
 import static java.net.HttpURLConnection.HTTP_NO_CONTENT;
-import static okhttp3.internal.http.StatusLine.HTTP_CONTINUE;
+//import static okhttp3.internal.http.StatusLine.HTTP_CONTINUE;
 /**
  * 创 建 人: xueh
  * 创建日期: 2019/4/18 17:20
@@ -181,7 +181,7 @@ public final class LoggingInterceptor implements Interceptor {
             return false;
         }
         int responseCode = response.code();
-        if ((responseCode < HTTP_CONTINUE || responseCode >= 200)
+        if (( responseCode >= 200)
                 && responseCode != HTTP_NO_CONTENT
                 && responseCode != HTTP_NOT_MODIFIED) {
             return true;
