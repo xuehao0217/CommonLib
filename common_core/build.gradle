@@ -76,8 +76,8 @@ dependencies {
     api libraries.compose_manifest
     api libraries.activity_compose
     api libraries.compose_material
-//    api libraries.compose_livedata
-
+    api libraries.compose_livedata
+    api libraries.coil_compose
 
 //    api libraries.koin_android
 //    api libraries.koin_androidx

@@ -41,6 +41,7 @@ ext {
 
             spiderman                    : "v1.1.8",
             coil                         : "1.2.2",
+            coil_compose                 : "2.1.0",
             glide                        : "4.11.0",
             background                   : "1.7.4",
             progressmanager              : "1.5.0",
@@ -117,6 +118,8 @@ ext {
             spiderman                    : "com.github.simplepeng.SpiderMan:spiderman:${versions.spiderman}",
             coil                         : "io.coil-kt:coil:${versions.coil}",
             coil_gif                     : "io.coil-kt:coil-gif:${versions.coil}",
+            coil_compose                 : "io.coil-kt:coil-compose:${versions.coil_compose}",
+
             glide                        : "com.github.bumptech.glide:glide:${versions.glide}",
             progressmanager              : "me.jessyan:progressmanager:${versions.progressmanager}",
             background                   : "com.github.JavaNoober.BackgroundLibrary:library:${versions.background}",
