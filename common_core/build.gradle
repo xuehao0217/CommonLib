@@ -94,12 +94,12 @@ dependencies {
 //    api libraries.rxjava
 //    api libraries.rxandroid
 //    api libraries.rxbinding
+//    api libraries.retrofit2_rxjava
 
     api libraries.okhttp_logging
     api libraries.okhttp
     api libraries.retrofit
     api libraries.converter_gson
-    api libraries.retrofit2_rxjava
     api libraries.PersistentCookieJar
 
     debugImplementation(libraries.spiderman) {
