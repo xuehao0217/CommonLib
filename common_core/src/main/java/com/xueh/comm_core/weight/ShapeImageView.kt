@@ -16,6 +16,7 @@ app:shapeAppearance="@style/CircleStyle"
 实现圆角
 app:shapeAppearance="@style/RoundedStyle"
 
+变宽颜色和变宽宽度
 app:strokeColor="@color/red"
 app:strokeWidth="4dp"
  */
