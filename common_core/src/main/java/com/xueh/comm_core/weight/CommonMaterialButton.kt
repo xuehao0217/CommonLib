@@ -10,7 +10,7 @@ import com.google.android.material.button.MaterialButton
 import com.xueh.comm_core.R
 import com.xueh.comm_core.helper.px
 
-class CommonTextView @JvmOverloads constructor(
+class CommonMaterialButton @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : MaterialButton(context, attrs, R.style.common_textview_style) {
     init {
