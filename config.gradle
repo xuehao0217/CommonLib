@@ -87,6 +87,9 @@ ext {
             lifecycle_livedata_ktx       : "androidx.lifecycle:lifecycle-livedata-ktx:${versions.lifecycle_version}",
             lifecycle_viewmodel_ktx      : "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions.lifecycle_version}",
 
+            spiderman                    : "com.github.simplepeng.SpiderMan:spiderman:${versions.spiderman}",
+            ActivityResultLauncher       : 'com.github.DylanCaiCoding:ActivityResultLauncher:1.1.2',
+
             compose_ui                   : "androidx.compose.ui:ui:$compose_version",
             compose_material3            : "androidx.compose.material3:material3:1.0.0-alpha13",
             compose_preview              : "androidx.compose.ui:ui-tooling-preview:$compose_version",
@@ -96,7 +99,6 @@ ext {
             compose_material             : "androidx.compose.material:material:$compose_version",
             compose_livedata             : "androidx.compose.runtime:runtime-livedata:$compose_version",
             compose_constraintlayout     : "androidx.constraintlayout:constraintlayout-compose:1.0.1",
-            ActivityResultLauncher       : 'com.github.DylanCaiCoding:ActivityResultLauncher:1.1.2',
 
             koin_android                 : "org.koin:koin-android:${versions.koin_android}",
             koin_androidx                : "org.koin:koin-androidx-scope:${versions.koin_android}",
@@ -116,8 +118,7 @@ ext {
             okhttp                       : "com.squareup.okhttp3:okhttp:${versions.okhttp}",
             okhttp_logging               : "com.squareup.okhttp3:logging-interceptor:${versions.okhttp}",
             PersistentCookieJar          : "com.github.franmontiel:PersistentCookieJar:${versions.PersistentCookieJar}",
-
-            spiderman                    : "com.github.simplepeng.SpiderMan:spiderman:${versions.spiderman}",
+            
             coil                         : "io.coil-kt:coil:${versions.coil}",
             coil_gif                     : "io.coil-kt:coil-gif:${versions.coil}",
             coil_compose                 : "io.coil-kt:coil-compose:${versions.coil_compose}",
