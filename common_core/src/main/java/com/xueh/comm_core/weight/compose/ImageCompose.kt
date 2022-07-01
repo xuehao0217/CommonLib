@@ -20,7 +20,6 @@ fun ImageLoadCompose(
 ) = AsyncImage(
     model = ImageRequest.Builder(LocalContext.current)
         .data(url)
-        .crossfade(true)
         .build(),
     modifier = modifier,
     contentScale = ContentScale.Crop,
