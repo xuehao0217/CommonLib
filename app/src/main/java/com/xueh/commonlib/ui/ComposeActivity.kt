@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -75,7 +76,7 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
         setContent {
-            learnConstraintSet()
+            DefaultPreview()
         }
     }
 
@@ -87,7 +88,7 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
     fun learnConstraintSet() {
 
 
-        val orientation = remember { mutableStateOf(1)}
+        val orientation = remember { mutableStateOf(1) }
         ConstraintLayout(
             getConstraintLayout(orientation),
             Modifier
@@ -103,10 +104,10 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
                     .layoutId("imageRef")
                     .fillMaxWidth()
                     .clickable {
-                        if (orientation.value==0){
-                            orientation.value=1
-                        }else{
-                            orientation.value=0
+                        if (orientation.value == 0) {
+                            orientation.value = 1
+                        } else {
+                            orientation.value = 0
                         }
                     }
                     .clip(shape = RoundedCornerShape(5)),
@@ -118,59 +119,56 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
                 fontSize = 18.sp,
                 textAlign = TextAlign.Left,
                 overflow = TextOverflow.Ellipsis,
-                maxLines =if (orientation.value==0) Int.MAX_VALUE else 4,)
+                maxLines = if (orientation.value == 0) Int.MAX_VALUE else 4,
+            )
         }
     }
 
 
-
-
-    private fun getConstraintLayout(orientation:MutableState<Int>): androidx.constraintlayout.compose.ConstraintSet {
+    private fun getConstraintLayout(orientation: MutableState<Int>): androidx.constraintlayout.compose.ConstraintSet {
 
 
         return ConstraintSet {
-            val imageRef= createRefFor("imageRef")
-            val titleRef= createRefFor("titleRef")
+            val imageRef = createRefFor("imageRef")
+            val titleRef = createRefFor("titleRef")
 
 
-            if (orientation.value==0){
-                constrain(imageRef){
+            if (orientation.value == 0) {
+                constrain(imageRef) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     top.linkTo(parent.top)
                 }
-                constrain(titleRef){
+                constrain(titleRef) {
                     start.linkTo(imageRef.start)
                     end.linkTo(imageRef.end)
-                    top.linkTo(imageRef.bottom,16.dp)
-                    width= Dimension.fillToConstraints
+                    top.linkTo(imageRef.bottom, 16.dp)
+                    width = Dimension.fillToConstraints
                 }
-            }else{
-                constrain(imageRef){
+            } else {
+                constrain(imageRef) {
                     start.linkTo(parent.start)
                     top.linkTo(parent.top)
-                    width=Dimension.value(100.dp)
-                    height=Dimension.value(100.dp)
+                    width = Dimension.value(100.dp)
+                    height = Dimension.value(100.dp)
                 }
-                constrain(titleRef){
-                    start.linkTo(imageRef.end,8.dp)
-                    top.linkTo(imageRef.top,2.dp)
+                constrain(titleRef) {
+                    start.linkTo(imageRef.end, 8.dp)
+                    top.linkTo(imageRef.top, 2.dp)
                     end.linkTo(parent.end)
-                    bottom.linkTo(imageRef.bottom,8.dp)
-                    width= Dimension.fillToConstraints
-                    height= Dimension.fillToConstraints
+                    bottom.linkTo(imageRef.bottom, 8.dp)
+                    width = Dimension.fillToConstraints
+                    height = Dimension.fillToConstraints
                 }
             }
         }
     }
 
 
-
-
     @ExperimentalMaterialApi
     @Preview()
     @Composable
-    fun scrollableTabRowTest(){
+    fun scrollableTabRowTest() {
         val tabIndex = remember {
             mutableStateOf(0)
         }
@@ -204,9 +202,8 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
                 )
             },
             tabs = {
-                tabDatas.forEachIndexed{
-                        index, s ->
-                    leadingIconTabView(index,s,tabIndex)
+                tabDatas.forEachIndexed { index, s ->
+                    leadingIconTabView(index, s, tabIndex)
                 }
             })
     }
@@ -214,22 +211,22 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
 
     @ExperimentalMaterialApi
     @Composable
-    fun leadingIconTabView(index:Int,text:String,tabIndex:MutableState<Int>){
+    fun leadingIconTabView(index: Int, text: String, tabIndex: MutableState<Int>) {
         val interactionSource = remember {
             MutableInteractionSource()
         }
         val isPress = interactionSource.collectIsPressedAsState().value
-        val imageVector = when(index){
-            0-> Icons.Filled.Home
-            1-> Icons.Filled.Send
-            2-> Icons.Filled.Favorite
-            3-> Icons.Filled.Search
-            4-> Icons.Filled.Home
-            5-> Icons.Filled.Share
-            6-> Icons.Filled.Favorite
-            7-> Icons.Filled.Favorite
-            8-> Icons.Filled.Add
-            else ->Icons.Filled.Person
+        val imageVector = when (index) {
+            0 -> Icons.Filled.Home
+            1 -> Icons.Filled.Send
+            2 -> Icons.Filled.Favorite
+            3 -> Icons.Filled.Search
+            4 -> Icons.Filled.Home
+            5 -> Icons.Filled.Share
+            6 -> Icons.Filled.Favorite
+            7 -> Icons.Filled.Favorite
+            8 -> Icons.Filled.Add
+            else -> Icons.Filled.Person
         }
         LeadingIconTab(
             selected = index == tabIndex.value,
@@ -237,12 +234,22 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
                 tabIndex.value = index
             },
             text = {
-                Text(text = text,color = if(isPress || index == tabIndex.value) Color.Red else Color.Black)
+                Text(
+                    text = text,
+                    color = if (isPress || index == tabIndex.value) Color.Red else Color.Black
+                )
             },
             icon = {
-                Icon(imageVector, contentDescription = "icon图标",tint = if(isPress || index == tabIndex.value) Color.Red else Color.Black)
+                Icon(
+                    imageVector,
+                    contentDescription = "icon图标",
+                    tint = if (isPress || index == tabIndex.value) Color.Red else Color.Black
+                )
             },
-            modifier = Modifier.wrapContentWidth().fillMaxHeight().background(Color.White),
+            modifier = Modifier
+                .wrapContentWidth()
+                .fillMaxHeight()
+                .background(Color.White),
             enabled = true,
             interactionSource = interactionSource,
             selectedContentColor = Color.Red,
@@ -251,11 +258,9 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
     }
 
 
-
-
     @Preview()
     @Composable
-    fun tabRowTest(){
+    fun tabRowTest() {
         val tabIndex = remember {
             mutableStateOf(0)
         }
@@ -282,15 +287,14 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
                 )
             }
         ) {
-            tabDatas.forEachIndexed{
-                    index, s ->
-                tabView(index,s,tabIndex)
+            tabDatas.forEachIndexed { index, s ->
+                tabView(index, s, tabIndex)
             }
         }
     }
 
     @Composable
-    fun tabView(index:Int,text:String,tabIndex:MutableState<Int>){
+    fun tabView(index: Int, text: String, tabIndex: MutableState<Int>) {
         val interactionSource = remember {
             MutableInteractionSource()
         }
@@ -303,12 +307,15 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
             modifier = Modifier
                 .wrapContentWidth()
                 .fillMaxHeight(),
-            enabled =true,
+            enabled = true,
             interactionSource = interactionSource,
             selectedContentColor = Color.Red,
             unselectedContentColor = Color.Black
         ) {
-            Text(text = text,color = if(isPress || index == tabIndex.value) Color.Red else Color.Black)
+            Text(
+                text = text,
+                color = if (isPress || index == tabIndex.value) Color.Red else Color.Black
+            )
         }
     }
 
@@ -320,17 +327,20 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
     @Preview
     @Composable
     fun constraintTest() {
-        ConstraintLayout(modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.Red)) {
-            val ( tv) = createRefs()
+        ConstraintLayout(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.Red)
+        ) {
+            val (tv) = createRefs()
             Text(modifier = Modifier
                 .background(Color.Blue)
                 .constrainAs(tv) {
                     end.linkTo(parent.end)
                     start.linkTo(parent.start)
                     width = Dimension.fillToConstraints
-                }, text = "2222222")
+                }, text = "2222222"
+            )
         }
 
     }
@@ -405,11 +415,14 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
                 }
 
                 LazyColumn(state = listState) {
-                    items(viewModel.bannerMutableState.size) { index ->
-                        itemView(viewModel.bannerMutableState[index].title) {
-                            ToastUtils.showShort("点击了 ${index}")
+                    itemsIndexed(viewModel.bannerMutableState) { _, item ->
+                        itemView(item.title) {
+                            ToastUtils.showShort("点击了 ${item.title}")
                         }
                     }
+//                    items(viewModel.bannerMutableState.size) { index ->
+//
+//                    }
                 }
 
 
@@ -436,7 +449,7 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
 //            shadowElevation = 5.dp,
             modifier = Modifier
                 .padding(all = 8.dp)
-                .shadow(4.dp, shape = RoundedCornerShape(10))
+                .shadow(4.dp, shape = RoundedCornerShape(5))
         ) {
             Column() {
                 ImageLoadCompose(imageUrl)
