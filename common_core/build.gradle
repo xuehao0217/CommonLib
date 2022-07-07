@@ -1,14 +1,16 @@
+import buildsrc.*
+
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
 }
 android {
-    compileSdkVersion android_config.compileSdkVersion
+    compileSdkVersion ProjectBuildConfig.compileSdkVersion
     defaultConfig {
-        minSdkVersion android_config.minSdkVersion
-        targetSdkVersion android_config.targetSdkVersion
-        versionCode android_config.versionCode
-        versionName android_config.versionName
+        minSdkVersion ProjectBuildConfig.minSdkVersion
+        targetSdkVersion ProjectBuildConfig.targetSdkVersion
+        versionCode ProjectBuildConfig.versionCode
+        versionName ProjectBuildConfig.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         //buildConfigField "String", "api_env", "\"" + String.valueOf(java.lang.System.properties['api_env']) + "\""
     }
@@ -24,15 +26,15 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility  java_version
-        targetCompatibility  java_version
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     viewBinding {
         enabled = true
     }
 
     kotlinOptions {
-        jvmTarget = java_version
+        jvmTarget = JavaVersion.VERSION_1_8
     }
 
     buildFeatures {
@@ -41,7 +43,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerExtensionVersion Deps.Version.compose.toString()
     }
     packagingOptions {
         resources {
@@ -52,79 +54,69 @@ android {
 
 dependencies {
     api fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
-    api libraries.junit
-    api libraries.espresso
-    api libraries.core_ktx
-    api libraries.multidex
-    api libraries.support_v4
-    api libraries.appcompat
-    api libraries.material
-    api libraries.recyclerview
-    api libraries.constraint_layout
-    api libraries.cardview
-    api libraries.viewpager2
-    api libraries.fragment_ktx
-    api libraries.lifecycle_common
-    api libraries.lifecycle_extensions
-    api libraries.lifecycle_livedata_ktx
-    api libraries.lifecycle_viewmodel_ktx
-    api libraries.ActivityResultLauncher
+    api Deps.Androidx.junit
+    api Deps.Androidx.espresso
+    api Deps.Androidx.core_ktx
+    api Deps.Androidx.multidex
+    api Deps.Androidx.support_v4
+    api Deps.Androidx.appcompat
+    api Deps.Androidx.material
+    api Deps.Androidx.recyclerview
+    api Deps.Androidx.constraint_layout
+    api Deps.Androidx.cardview
+    api Deps.Androidx.viewpager2
+    api Deps.Androidx.fragment_ktx
+    api Deps.Androidx.lifecycle_common
+    api Deps.Androidx.lifecycle_extensions
+    api Deps.Androidx.lifecycle_livedata_ktx
+    api Deps.Androidx.lifecycle_viewmodel_ktx
+    api Deps.Github.ActivityResultLauncher
 
-    api libraries.compose_ui
-    api libraries.compose_material3
-    api libraries.compose_preview
-    api libraries.compose_tooling
-    api libraries.compose_manifest
-    api libraries.activity_compose
-    api libraries.compose_material
-    api libraries.compose_livedata
-    api libraries.coil_compose
-    api libraries.compose_constraintlayout
+    api Deps.Compose.compose_ui
+    api Deps.Compose.compose_material3
+    api Deps.Compose.compose_preview
+    api Deps.Compose.compose_tooling
+    api Deps.Compose.compose_manifest
+    api Deps.Compose.activity_compose
+    api Deps.Compose.compose_material
+    api Deps.Compose.compose_livedata
+    api Deps.Compose.coil_compose
+    api Deps.Compose.compose_constraintlayout
 
 
-//    api libraries.koin_android
-//    api libraries.koin_androidx
-//    api libraries.koin_androidx_viewmodel
+    api Deps.Kotlin.kotlin_stdlib
+    api Deps.Kotlin.kotlin_coroutines
+    api Deps.Kotlin.kotlin_coroutines_android
 
-    api libraries.kotlin_stdlib
-    api libraries.coroutines_core
-    api libraries.coroutines_android
+    api Deps.Github.agentweb
+    api Deps.Github.eventbus
+    api Deps.Github.greendao
 
-    api libraries.agentweb
-    api libraries.eventbus
-    api libraries.greendao
+    api Deps.Github.okhttp_logging
+    api Deps.Github.okhttp
+    api Deps.Github.retrofit
+    api Deps.Github.converter_gson
+    api Deps.Github.PersistentCookieJar
 
-//    api libraries.rxjava
-//    api libraries.rxandroid
-//    api libraries.rxbinding
-//    api libraries.retrofit2_rxjava
-
-    api libraries.okhttp_logging
-    api libraries.okhttp
-    api libraries.retrofit
-    api libraries.converter_gson
-    api libraries.PersistentCookieJar
-
-    debugImplementation(libraries.spiderman) {
+    debugImplementation(Deps.Github.spiderman) {
         exclude group: "androidx.appcompat"
     }
-    api libraries.coil
-    api libraries.coil_gif
-    api libraries.BaseRecyclerViewAdapterHelper
-    api libraries.glide
-    api libraries.background
-    api libraries.progressmanager
-    api libraries.gson
-    api libraries.GsonFactory
+    api Deps.Github.coil
+    api Deps.Github.coil_gif
+    api Deps.Github.AdapterHelper
+    api Deps.Github.glide
+    api Deps.Github.background
+    api Deps.Github.progressmanager
+    api Deps.Github.gson
+    api Deps.Github.GsonFactory
 
-    api libraries.refresh_layout_kernel
-    api libraries.refresh_header_classics
+    api Deps.Github.refresh_layout_kernel
+    api Deps.Github.refresh_header_classics
 
-    api libraries.immersionbar
-    api libraries.utilcode
-//    api libraries.permission
-    api libraries.UiStatus
-    api libraries.titlebar
-    api libraries.MagicIndicator
-    api libraries.xpopup
+    api Deps.Github.immersionbar
+    api Deps.Github.utilcode
+    api Deps.Github.UiStatus
+    api Deps.Github.titlebar
+    api Deps.Github.MagicIndicator
+    api Deps.Github.xpopup
 }

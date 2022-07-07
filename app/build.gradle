@@ -1,19 +1,18 @@
+import buildsrc.*
+//apply from: '../module_common_config.gradle'
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
 }
 android {
-    compileSdkVersion android_config.compileSdkVersion
+    compileSdkVersion ProjectBuildConfig.compileSdkVersion
     defaultConfig {
-        applicationId android_config.applicationId
-        minSdkVersion android_config.minSdkVersion
-        targetSdkVersion android_config.targetSdkVersion
-        versionCode android_config.versionCode
-        versionName android_config.versionName
+        applicationId ProjectBuildConfig.applicationId
+        minSdkVersion ProjectBuildConfig.minSdkVersion
+        targetSdkVersion ProjectBuildConfig.targetSdkVersion
+        versionCode ProjectBuildConfig.versionCode
+        versionName ProjectBuildConfig.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary true
-        }
     }
 
     buildTypes {
@@ -23,28 +22,30 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility  java_version
-        targetCompatibility  java_version
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     viewBinding {
         enabled = true
     }
 
     kotlinOptions {
-        jvmTarget = java_version
+        jvmTarget = JavaVersion.VERSION_1_8
     }
+
     buildFeatures {
         compose true
+        viewBinding true
     }
+
     composeOptions {
-        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerExtensionVersion Deps.Version.compose.toString()
     }
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
-
 }
 
 dependencies {
