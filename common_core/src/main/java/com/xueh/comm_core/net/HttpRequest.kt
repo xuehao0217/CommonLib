@@ -70,17 +70,15 @@ object HttpRequest {
      * @param domain Retrofit的BaseUrl
      */
     fun <T> getCustomService(domain: String, serviceClass: Class<T>): T {
-        synchronized(HttpRequest::class.java) {
-            var retrofit = mServiceMap[domain]
-            if (retrofit == null) {
-                retrofit = getRetrofit(domain)
-                //只缓存最常用的
-                if (DOMAIN_BASE == domain) {
-                    mServiceMap[domain] = retrofit
-                }
+        var retrofit = mServiceMap[domain]
+        if (retrofit == null) {
+            retrofit = getRetrofit(domain)
+            //只缓存最常用的
+            if (DOMAIN_BASE == domain) {
+                mServiceMap[domain] = retrofit
             }
-            return retrofit.create(serviceClass)
         }
+        return retrofit.create(serviceClass)
     }
 
 
