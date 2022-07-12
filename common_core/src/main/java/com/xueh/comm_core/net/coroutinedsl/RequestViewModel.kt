@@ -77,7 +77,7 @@ open class RequestViewModel : AbsViewModel() {
 
     protected fun <Response> apiFlow(
         request: suspend () -> Response,
-        block: (Response) -> Unit
+        block: suspend (Response) -> Unit
     ) {
         viewModelScope.launch {
             flow {
