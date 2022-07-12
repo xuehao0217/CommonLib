@@ -77,7 +77,7 @@ open class RequestViewModel : AbsViewModel() {
 
     protected fun <Response> apiFlow(
         request: suspend () -> Response,
-        block:  (Response) -> Unit
+        block: (Response) -> Unit
     ) {
         viewModelScope.launch {
             flow {
@@ -98,22 +98,20 @@ open class RequestViewModel : AbsViewModel() {
         context: CoroutineContext = EmptyCoroutineContext,
         timeoutInMs: Long = 3000L,
         request: suspend () -> Response
-    ): LiveData<LiveDataResult<Response>> {
-        return androidx.lifecycle.liveData(context, timeoutInMs) {
-            onApiStart()
-            emit(LiveDataResult.Start())
-            try {
-                emit(withContext(Dispatchers.IO) {
-                    LiveDataResult.Response(request())
-                })
-            } catch (e: Exception) {
-                e.printStackTrace()
-                onApiError(e)
-                emit(LiveDataResult.Error<Response>(e))
-            } finally {
-                onApiFinally()
-                emit(LiveDataResult.Finally())
-            }
+    ) = androidx.lifecycle.liveData(context, timeoutInMs) {
+        onApiStart()
+        emit(LiveDataResult.Start())
+        try {
+            emit(withContext(Dispatchers.IO) {
+                LiveDataResult.Response(request())
+            })
+        } catch (e: Exception) {
+            e.printStackTrace()
+            onApiError(e)
+            emit(LiveDataResult.Error<Response>(e))
+        } finally {
+            onApiFinally()
+            emit(LiveDataResult.Finally())
         }
     }
 }
