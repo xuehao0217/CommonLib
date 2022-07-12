@@ -89,7 +89,7 @@ class ViewModelDsl<Response> {
     }
 
     /////////////////////////////////////////////////////////////////////////////////////
-    //使用flow 需要Suspend 在协程 中操作
+    //使用flow 需要Suspend 在协程 中操作  MutableStateFlow<List<BannerVO>>(emptyList())
     internal var onResponseSuspend: (suspend (Response) -> Unit)? = null
     infix fun onResponseSuspend(onResponse: (suspend (Response) -> Unit)?) {
         this.onResponseSuspend = onResponse
