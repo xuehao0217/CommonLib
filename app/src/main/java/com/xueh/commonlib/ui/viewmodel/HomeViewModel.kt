@@ -71,8 +71,8 @@ class HomeViewModel : BaseViewModel<RestApi>() {
     }
 
     fun loadStateFlow() {
-        apiFlow({
-            api.bannerList3().data
+        apiFlowBaseResult({
+            api.bannerList3()
         }, {
             stateFlowDada.emit(it)
 //            banner.postValue(it)
