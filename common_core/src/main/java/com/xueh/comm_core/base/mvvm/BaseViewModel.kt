@@ -1,7 +1,9 @@
 package com.xueh.comm_core.base.mvvm
 
+import android.util.Log
 import com.xueh.comm_core.net.BaseResult
 import com.xueh.comm_core.net.coroutinedsl.RequestViewModel
+import com.xueh.comm_core.net.coroutinedsl.ViewModelDsl
 
 
 /**
@@ -30,7 +32,29 @@ abstract class BaseViewModel<E> : RequestViewModel() {
         block: suspend (Response) -> Unit
     ) {
         apiFlow({ request.invoke() }) {
-            block.invoke(it.data)
+            if (it.isSuccess()) {
+                block.invoke(it.data)
+            } else {
+                Log.e("HTTP", "BaseViewModel--> ${it.errorMsg}")
+            }
+        }
+    }
+
+    protected fun <Response> apiDslBaseResult(
+        request: suspend () -> BaseResult<Response>,
+        block: (Response) -> Unit
+    ) {
+        apiDSL<BaseResult<Response>> {
+            onRequest {
+                request.invoke()
+            }
+            onResponse {
+                if (it.isSuccess()) {
+                    block.invoke(it.data)
+                } else {
+                    Log.e("HTTP", "BaseViewModel--> ${it.errorMsg}")
+                }
+            }
         }
     }
 }
