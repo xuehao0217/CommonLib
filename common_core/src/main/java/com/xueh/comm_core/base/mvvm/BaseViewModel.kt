@@ -1,5 +1,6 @@
 package com.xueh.comm_core.base.mvvm
 
+import com.xueh.comm_core.net.BaseResult
 import com.xueh.comm_core.net.coroutinedsl.RequestViewModel
 
 
@@ -24,4 +25,12 @@ abstract class BaseViewModel<E> : RequestViewModel() {
     }
 
 
+    protected fun <Response> apiFlowBaseResult(
+        request: suspend () -> BaseResult<Response>,
+        block: suspend (Response) -> Unit
+    ) {
+        apiFlow({ request.invoke() }) {
+            block.invoke(it.data)
+        }
+    }
 }

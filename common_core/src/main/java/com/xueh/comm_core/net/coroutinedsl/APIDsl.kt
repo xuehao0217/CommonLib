@@ -60,6 +60,7 @@ class ViewModelDsl<Response> {
                     request()
                 }
                 onResponse?.invoke(response)
+                onResponseSuspend?.invoke(response)
             } catch (e: Exception) {
                 e.printStackTrace()
                 onError?.invoke(e)
@@ -82,8 +83,17 @@ class ViewModelDsl<Response> {
                 onError?.invoke(Exception(it.message))
             }.collect {
                 onResponse?.invoke(it)
+                onResponseSuspend?.invoke(it)
             }
         }
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////
+    //使用flow 需要Suspend 在协程 中操作
+    internal var onResponseSuspend: (suspend (Response) -> Unit)? = null
+    infix fun onResponseSuspend(onResponse: (suspend (Response) -> Unit)?) {
+        this.onResponseSuspend = onResponse
+    }
+    /////////////////////////////////////////////////////////////////////////////////////
 
 }

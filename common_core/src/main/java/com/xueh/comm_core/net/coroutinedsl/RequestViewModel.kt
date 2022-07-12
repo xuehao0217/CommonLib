@@ -25,6 +25,11 @@ open class RequestViewModel : AbsViewModel() {
             onResponse {
                 ViewModelDsl<Response>().apply(apiDSL).onResponse?.invoke(it)
             }
+
+            onResponseSuspend {
+                ViewModelDsl<Response>().apply(apiDSL).onResponseSuspend?.invoke(it)
+            }
+
             onStart {
                 val override = ViewModelDsl<Response>().apply(apiDSL).onStart?.invoke()
                 if (override == null || !override) {
