@@ -41,7 +41,6 @@ object Deps {
 
         const val immersionbar = "3.0.0"
         const val utilcode = "1.31.0"
-        const val permission = "2.0.3"
         const val BaseRecyclerViewAdapterHelper = "3.0.6"
         const val walle = "1.1.6"
         const val titlebar = "8.0"
