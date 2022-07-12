@@ -44,14 +44,22 @@ class HomeViewModel : BaseViewModel<RestApi>() {
     var stateFlowDada = MutableStateFlow<List<BannerVO>>(emptyList())
 
     fun loadDsl() {
-        apiDSL<List<BannerVO>> {
+        apiDslBaseResult<List<BannerVO>> {
             onRequest {
-                api.bannerList3().data
+                api.bannerList3()
             }
             onResponse {
                 banner.postValue(it)
             }
         }
+//        apiDSL<List<BannerVO>> {
+//            onRequest {
+//                api.bannerList3().data
+//            }
+//            onResponse {
+//                banner.postValue(it)
+//            }
+//        }
     }
 
     fun loadFlowDsl() {

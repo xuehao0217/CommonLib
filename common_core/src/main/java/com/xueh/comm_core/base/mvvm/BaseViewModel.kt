@@ -41,20 +41,33 @@ abstract class BaseViewModel<E> : RequestViewModel() {
     }
 
     protected fun <Response> apiDslBaseResult(
-        request: suspend () -> BaseResult<Response>,
-        block: (Response) -> Unit
+        apiDSL: ApiDslBaseResult<Response>.() -> Unit
     ) {
         apiDSL<BaseResult<Response>> {
             onRequest {
-                request.invoke()
+                ApiDslBaseResult<Response>().apply(apiDSL).onRequest()
             }
             onResponse {
                 if (it.isSuccess()) {
-                    block.invoke(it.data)
+                    ApiDslBaseResult<Response>().apply(apiDSL)?.onResponse?.invoke(it.data)
                 } else {
                     Log.e("HTTP", "BaseViewModel--> ${it.errorMsg}")
                 }
             }
         }
     }
+
+
+    class ApiDslBaseResult<Response> {
+        lateinit var onRequest: suspend () -> BaseResult<Response>
+        infix fun onRequest(request: suspend () -> BaseResult<Response>) {
+            this.onRequest = request
+        }
+
+        internal var onResponse: ((Response) -> Unit)? = null
+        infix fun onResponse(onResponse: ((Response) -> Unit)?) {
+            this.onResponse = onResponse
+        }
+    }
+
 }
