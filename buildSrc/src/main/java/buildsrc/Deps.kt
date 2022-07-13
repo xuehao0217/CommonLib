@@ -7,6 +7,10 @@ object Deps {
         const val kotlin = "1.6.21"
         const val coroutines = "1.6.3"
 
+        const val pagingVersion = "3.1.0-rc01"
+        const val pagingComposeVersion = "1.0.0-alpha14"
+        const val accompanistVersion = "0.18.0"
+
         const val core_ktx = "1.8.0"
         const val support = "28.0.0"
         const val constraint_layout = "2.1.4"
@@ -143,6 +147,34 @@ object Deps {
         const val compose_constraintlayout =
             "androidx.constraintlayout:constraintlayout-compose:1.0.1"
         const val coil_compose = "io.coil-kt:coil-compose:${Version.coil_compose}"
+
+
+        //paging分页库
+        const val compose_paging_runtime = "androidx.paging:paging-runtime:${Version.pagingVersion}"
+        const val compose_paging_common = "androidx.paging:paging-common:${Version.pagingVersion}"
+        const val compose_paging_compose =
+            "androidx.paging:paging-compose:${Version.pagingComposeVersion}"
+
+
+        //viewPager
+        const val accompanist_pager = "com.google.accompanist:accompanist-pager:0.20.2"
+        const val accompanist_pager_indicators =
+            "com.google.accompanist:accompanist-pager-indicators:${Version.accompanistVersion}"
+
+        /** accompanist辅助插件 */
+        const val accompanist_insets =
+            "com.google.accompanist:accompanist-insets:${Version.accompanistVersion}"
+
+        //        const val accompanist_coil="com.google.accompanist:accompanist-coil:0.15.0"
+        //系统ui控制器
+        const val accompanist_systemuicontroller =
+            "com.google.accompanist:accompanist-systemuicontroller:${Version.accompanistVersion}"
+
+        //下拉刷新
+        const val accompanist_swiperefresh =
+            "com.google.accompanist:accompanist-swiperefresh:${Version.accompanistVersion}"
+
+        const val compose_refreshlayout="io.github.shenzhen2017:compose-refreshlayout:1.0.0"
     }
 
 
