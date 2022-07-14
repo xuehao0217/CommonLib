@@ -77,6 +77,7 @@ object Deps {
             "androidx.lifecycle:lifecycle-livedata-ktx:${Version.lifecycle_version}"
         const val lifecycle_viewmodel_ktx =
             "androidx.lifecycle:lifecycle-viewmodel-ktx:${Version.lifecycle_version}"
+        const val datastore="androidx.datastore:datastore-preferences:1.0.0"
     }
 
     object Github {

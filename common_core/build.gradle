@@ -73,6 +73,7 @@ dependencies {
     api Deps.Androidx.lifecycle_extensions
     api Deps.Androidx.lifecycle_livedata_ktx
     api Deps.Androidx.lifecycle_viewmodel_ktx
+    api Deps.Androidx.datastore
     api Deps.Github.ActivityResultLauncher
 
     api Deps.Compose.compose_ui

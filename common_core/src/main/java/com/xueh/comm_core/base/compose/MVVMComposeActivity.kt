@@ -47,9 +47,11 @@ abstract class MVVMComposeActivity<VM : AbsViewModel> : BaseComposeActivity() {
                     .fillMaxSize()
                     .background(Color.White)
             ) {
-                ComposeTitleView(getTitleText(), {
-                    this@MVVMComposeActivity.finish()
-                })
+                if (!getTitleText().isEmpty()) {
+                    ComposeTitleView(getTitleText(), {
+                        this@MVVMComposeActivity.finish()
+                    })
+                }
                 Box(
                     modifier = Modifier
                         .fillMaxSize()

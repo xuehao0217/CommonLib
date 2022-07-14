@@ -1,12 +1,14 @@
 package com.xueh.commonlib.api
 
-import androidx.lifecycle.LiveData
 import com.xueh.comm_core.net.BaseResult
 import com.xueh.commonlib.entity.BannerVO
+import com.xueh.commonlib.entity.HomeEntity
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
+
 
 /**
  * 创 建 人: xueh
@@ -27,5 +29,10 @@ interface RestApi {
 
     @Streaming
     @GET
-    suspend fun downloadFile(@Url url:String): Response<ResponseBody>
+    suspend fun downloadFile(@Url url: String): Response<ResponseBody>
+
+
+    @GET("article/list/{page}/json")
+    suspend fun getHome(@Path("page") int: Int): BaseResult<HomeEntity>
+
 }

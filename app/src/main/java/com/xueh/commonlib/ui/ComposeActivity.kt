@@ -55,10 +55,14 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.coroutineScope
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemsIndexed
 import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import com.blankj.utilcode.util.ResourceUtils
 import com.blankj.utilcode.util.ToastUtils
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.xueh.comm_core.base.compose.MVVMComposeActivity
 import com.xueh.comm_core.base.mvvm.BaseViewModel
 import com.xueh.comm_core.weight.compose.*
@@ -76,12 +80,39 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
         setContent {
-            DefaultPreview()
+            refreshLoadUse()
         }
     }
 
     override fun initData() {
         viewModel.loadDsl()
+    }
+
+
+    @Composable
+    fun refreshLoadUse() {
+        val homeDatas = viewModel.datas.collectAsLazyPagingItems()
+        RefreshList( lazyPagingItems = homeDatas) {
+            itemsIndexed(homeDatas) { _, item ->
+                Box(
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .clip(CircleShape)
+                        .background(Color.Blue)
+                        .fillMaxWidth()
+                        .height(50.dp)
+                        .border(1.5.dp, MaterialTheme.colors.secondary, shape = CircleShape),
+
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = item!!.title,
+                        color = Color.White,
+                        textAlign = TextAlign.Center,
+                    )
+                }
+            }
+        }
     }
 
     @Composable
@@ -333,13 +364,14 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
                 .background(Color.Red)
         ) {
             val (tv) = createRefs()
-            Text(modifier = Modifier
-                .background(Color.Blue)
-                .constrainAs(tv) {
-                    end.linkTo(parent.end)
-                    start.linkTo(parent.start)
-                    width = Dimension.fillToConstraints
-                }, text = "2222222"
+            Text(
+                modifier = Modifier
+                    .background(Color.Blue)
+                    .constrainAs(tv) {
+                        end.linkTo(parent.end)
+                        start.linkTo(parent.start)
+                        width = Dimension.fillToConstraints
+                    }, text = "2222222"
             )
         }
 
