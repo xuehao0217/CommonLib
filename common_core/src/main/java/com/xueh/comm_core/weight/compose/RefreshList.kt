@@ -31,7 +31,6 @@ import kotlinx.coroutines.delay
 @Composable
 fun <T : Any> RefreshList(
     lazyPagingItems: LazyPagingItems<T>,
-    onRefresh: (() -> Unit) = {},
     listState: LazyListState = rememberLazyListState(),
     itemContent: LazyListScope.() -> Unit,
 ) {
@@ -46,7 +45,6 @@ fun <T : Any> RefreshList(
 
     SwipeRefreshLayout(isRefreshing = isRefreshing, onRefresh = {
         isRefreshing = true
-        onRefresh.invoke()
         lazyPagingItems.refresh()
     }) {
         //刷新状态

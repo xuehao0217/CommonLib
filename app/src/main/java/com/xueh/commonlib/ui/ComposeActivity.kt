@@ -91,8 +91,8 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
 
     @Composable
     fun refreshLoadUse() {
-        val homeDatas = viewModel.datas.collectAsLazyPagingItems()
-        RefreshList( lazyPagingItems = homeDatas) {
+        val homeDatas = viewModel.getListDatas().collectAsLazyPagingItems()
+        RefreshList(lazyPagingItems = homeDatas) {
             itemsIndexed(homeDatas) { _, item ->
                 Box(
                     modifier = Modifier
@@ -117,8 +117,6 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
 
     @Composable
     fun learnConstraintSet() {
-
-
         val orientation = remember { mutableStateOf(1) }
         ConstraintLayout(
             getConstraintLayout(orientation),

@@ -16,8 +16,9 @@
 
 package com.xueh.comm_core.helper
 
-import androidx.paging.PagingSource
-import androidx.paging.PagingState
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.*
 
 
 abstract class BasePagingSource<T : Any> : PagingSource<Int, T>() {
@@ -41,3 +42,23 @@ abstract class BasePagingSource<T : Any> : PagingSource<Int, T>() {
 
     abstract suspend fun getDataList(page: Int): List<T>
 }
+
+
+
+
+//val datas = Pager(PagingConfig(pageSize = 20)) {
+//    object : BasePagingSource<HomeEntity.Data>() {
+//        override suspend fun getDataList(page: Int) = api.getHome(page).data.datas
+//    }
+//}.flow.cachedIn(viewModelScope)
+
+fun <T : Any> ViewModel.pager(
+    pagingConfig: ((PagingConfig) -> Unit) = { },
+    getDatas: suspend (page: Int) -> List<T>
+) = Pager(PagingConfig(pageSize = 20).apply {
+    pagingConfig.invoke(this)
+}) {
+    object : BasePagingSource<T>() {
+        override suspend fun getDataList(page: Int) = getDatas.invoke(page)
+    }
+}.flow.cachedIn(viewModelScope)
