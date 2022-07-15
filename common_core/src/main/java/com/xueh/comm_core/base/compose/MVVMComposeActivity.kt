@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.xueh.comm_core.base.compose.theme.CommonLibTheme
 import com.xueh.comm_core.base.compose.theme.GrayAppAdapter
 import com.xueh.comm_core.base.compose.theme.themeTypeState
@@ -51,6 +52,11 @@ abstract class MVVMComposeActivity<VM : AbsViewModel> : BaseComposeActivity() {
         component: @Composable (BoxScope.() -> Unit)
     ) {
         CommonLibTheme(themeTypeState.value) {
+            rememberSystemUiController().run {
+                setStatusBarColor(Color.Blue, false)
+                setSystemBarsColor(Color.Red, false)
+                setNavigationBarColor(Color.Yellow, false)
+            }
             GrayAppAdapter {
                 Column(
                     modifier = Modifier
