@@ -55,6 +55,7 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.lifecycleScope
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import coil.compose.AsyncImage
@@ -64,11 +65,14 @@ import com.blankj.utilcode.util.ToastUtils
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.xueh.comm_core.base.compose.MVVMComposeActivity
+import com.xueh.comm_core.base.compose.theme.DarkColors
+import com.xueh.comm_core.base.compose.theme.themeTypeState
 import com.xueh.comm_core.base.mvvm.BaseViewModel
 import com.xueh.comm_core.weight.compose.*
 import com.xueh.commonlib.R
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
 import com.xueh.commonlib.ui.viewmodel.HomeViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
@@ -80,7 +84,14 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
         setContent {
-            refreshLoadUse()
+            contentRoot {
+                refreshLoadUse()
+            }
+        }
+
+        lifecycleScope.launch {
+            delay(4000)
+            themeTypeState.value = DarkColors()
         }
     }
 

@@ -48,16 +48,6 @@ fun ComposeTitleView(
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun ComposeTitleViewPreview() {
-    CommonLibTheme {
-        ComposeTitleView("Android", {
-
-        })
-    }
-}
-
 
 
 @Composable
