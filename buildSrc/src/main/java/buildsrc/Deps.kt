@@ -78,6 +78,10 @@ object Deps {
         const val lifecycle_viewmodel_ktx =
             "androidx.lifecycle:lifecycle-viewmodel-ktx:${Version.lifecycle_version}"
         const val datastore="androidx.datastore:datastore-preferences:1.0.0"
+
+        //paging分页库
+        const val paging_runtime = "androidx.paging:paging-runtime:${Version.pagingVersion}"
+        const val paging_common = "androidx.paging:paging-common:${Version.pagingVersion}"
     }
 
     object Github {
@@ -149,10 +153,6 @@ object Deps {
             "androidx.constraintlayout:constraintlayout-compose:1.0.1"
         const val coil_compose = "io.coil-kt:coil-compose:${Version.coil_compose}"
 
-
-        //paging分页库
-        const val compose_paging_runtime = "androidx.paging:paging-runtime:${Version.pagingVersion}"
-        const val compose_paging_common = "androidx.paging:paging-common:${Version.pagingVersion}"
         const val compose_paging_compose =
             "androidx.paging:paging-compose:${Version.pagingComposeVersion}"
 
