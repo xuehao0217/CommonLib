@@ -59,6 +59,6 @@ fun CommonLibTheme(
 /**
  * 主题状态
  */
-val themeTypeState by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+val themeTypeState by lazy {
     mutableStateOf(LightColors())
 }
