@@ -77,6 +77,7 @@ dependencies {
     api Deps.Androidx.paging_runtime
     api Deps.Androidx.paging_common
     api Deps.Github.ActivityResultLauncher
+    api Deps.Github.EasyNavigation
 
     api Deps.Compose.compose_ui
     api Deps.Compose.compose_material3

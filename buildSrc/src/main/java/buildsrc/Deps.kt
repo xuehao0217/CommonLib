@@ -18,7 +18,7 @@ object Deps {
         const val androidx = "1.0.0"
         const val material = "1.6.1"
         const val lifecycle_version = "2.2.0"
-        const val viewpager2 = "1.0.0"
+        const val viewpager2 = "1.1.0-alpha01"
         const val fragment_ktx = "1.4.1"
         const val recyclerview = "1.2.1"
 
@@ -77,7 +77,7 @@ object Deps {
             "androidx.lifecycle:lifecycle-livedata-ktx:${Version.lifecycle_version}"
         const val lifecycle_viewmodel_ktx =
             "androidx.lifecycle:lifecycle-viewmodel-ktx:${Version.lifecycle_version}"
-        const val datastore="androidx.datastore:datastore-preferences:1.0.0"
+        const val datastore = "androidx.datastore:datastore-preferences:1.0.0"
 
         //paging分页库
         const val paging_runtime = "androidx.paging:paging-runtime:${Version.pagingVersion}"
@@ -94,7 +94,7 @@ object Deps {
         const val okhttp_logging = "com.squareup.okhttp3:logging-interceptor:${Version.okhttp}"
         const val PersistentCookieJar =
             "com.github.franmontiel:PersistentCookieJar:${Version.PersistentCookieJar}"
-
+        const val EasyNavigation = "com.github.Vincent7Wong:EasyNavigation:2.0.5"
 
         const val coil = "io.coil-kt:coil:${Version.coil}"
         const val coil_gif = "io.coil-kt:coil-gif:${Version.coil}"
@@ -175,7 +175,7 @@ object Deps {
         const val accompanist_swiperefresh =
             "com.google.accompanist:accompanist-swiperefresh:${Version.accompanistVersion}"
 
-        const val compose_refreshlayout="io.github.shenzhen2017:compose-refreshlayout:1.0.0"
+        const val compose_refreshlayout = "io.github.shenzhen2017:compose-refreshlayout:1.0.0"
     }
 
 

@@ -5,14 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity">
-
-    <com.xueh.comm_core.weight.navigation.CommNavigationBarView
-        android:id="@+id/main_cnb"
+    <com.next.easynavigation.view.EasyNavigationBar
+        android:id="@+id/navigationBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:navigationBackground="@color/white"
-        app:navigationHeight="56dp"
-        app:navigation_tabNormalColor="#999999"
-        app:navigation_tabSelectColor="#000"
-        app:navigation_tabTextSize="12sp" />
+        android:layout_height="match_parent">
+    </com.next.easynavigation.view.EasyNavigationBar>
 </androidx.constraintlayout.widget.ConstraintLayout>
