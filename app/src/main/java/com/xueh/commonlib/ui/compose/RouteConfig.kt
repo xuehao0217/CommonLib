@@ -12,6 +12,7 @@ object RouteConfig {
     const val SCROLLABLETABROW="scrollableTabRow"
 
     const val LAZYVERTICALGRID="lazyVerticalGrid"
+    const val LAZYCOLUMNPAGE="LazyColumnPage"
     const val ACTION_LIST="actionLIst"
 
 }
