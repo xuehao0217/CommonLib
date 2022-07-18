@@ -94,7 +94,7 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
                 )
                 LazyColumn() {
                     itemsIndexed(str) { _, item ->
-                        itemView(item.str) {
+                        itemView(item.str,false) {
                             navController.navigate(item.router)
                         }
                     }
@@ -185,7 +185,6 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
         return ConstraintSet {
             val imageRef = createRefFor("imageRef")
             val titleRef = createRefFor("titleRef")
-
 
             if (orientation.value == 0) {
                 constrain(imageRef) {
@@ -498,7 +497,7 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
     }
 
     @Composable
-    private fun itemView(item: String, clickEvent: () -> Unit) {
+    private fun itemView( item: String,showimg: Boolean = true, clickEvent: () -> Unit) {
         Surface(
 //            shape = RoundedCornerShape(10.dp),
 //            shadowElevation = 5.dp,
@@ -507,7 +506,9 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
                 .shadow(4.dp, shape = RoundedCornerShape(5))
         ) {
             Column() {
-                ImageLoadCompose(imageUrl)
+                if (showimg) {
+                    ImageLoadCompose(imageUrl)
+                }
                 Box(
                     modifier = Modifier
                         .clip(CircleShape)
