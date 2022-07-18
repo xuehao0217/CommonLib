@@ -96,6 +96,7 @@ dependencies {
     api Deps.Compose.accompanist_systemuicontroller
     api Deps.Compose.accompanist_swiperefresh
     api Deps.Compose.compose_refreshlayout
+    api Deps.Compose.navigation_compose
 
     api Deps.Kotlin.kotlin_stdlib
     api Deps.Kotlin.kotlin_coroutines

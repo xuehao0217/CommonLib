@@ -156,7 +156,7 @@ object Deps {
         const val compose_paging_compose =
             "androidx.paging:paging-compose:${Version.pagingComposeVersion}"
 
-
+        const val navigation_compose="androidx.navigation:navigation-compose:2.5.0"
         //viewPager
         const val accompanist_pager = "com.google.accompanist:accompanist-pager:0.20.2"
         const val accompanist_pager_indicators =
