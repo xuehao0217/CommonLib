@@ -30,9 +30,11 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import com.blankj.utilcode.util.ToastUtils
@@ -61,10 +63,10 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
             }
         }
 
-        lifecycleScope.launch {
-            delay(4000)
-            themeTypeState.value = DarkColors()
-        }
+//        lifecycleScope.launch {
+//            delay(4000)
+//            themeTypeState.value = DarkColors()
+//        }
     }
 
     override fun initData() {
@@ -84,11 +86,16 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
                     ItemData("scrollableTab使用", RouteConfig.SCROLLABLETABROW),
                     ItemData("lazyVerticalGrid使用", RouteConfig.LAZYVERTICALGRID),
                     ItemData("LazyColumnPage", RouteConfig.LAZYCOLUMNPAGE),
+                    ItemData("路由传参", RouteConfig.PARAMETER),
                 )
                 LazyColumn() {
                     itemsIndexed(str) { _, item ->
-                        itemView(item.str,false) {
-                            navController.navigate(item.router)
+                        itemView(item.str, false) {
+                            if (item.router==RouteConfig.PARAMETER){
+                                navController.navigate("${RouteConfig.PARAMETER}/Kevin")
+                            }else{
+                                navController.navigate("${item.router}")
+                            }
                         }
                     }
                 }
@@ -109,13 +116,15 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
                 LazyColumnPage(viewModel)
             }
 
+            composable(
+                "${RouteConfig.PARAMETER}/{${RouteConfig.name}}"
+            ) {
+                val name = it.arguments?.getString(RouteConfig.name)
+                PageTwo(navController, name ?: "NULL")
+            }
+
         }
     }
-
-
-
-
-
 
 
     @ExperimentalMaterialApi

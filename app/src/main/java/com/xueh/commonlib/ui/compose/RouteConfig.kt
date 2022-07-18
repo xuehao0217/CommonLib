@@ -15,4 +15,8 @@ object RouteConfig {
     const val LAZYCOLUMNPAGE="LazyColumnPage"
     const val ACTION_LIST="actionLIst"
 
+    const val PARAMETER="parameter/xuehao"
+
+
+    const val name="name"
 }
