@@ -91,9 +91,9 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
                 LazyColumn() {
                     itemsIndexed(str) { _, item ->
                         itemView(item.str, false) {
-                            if (item.router==RouteConfig.PARAMETER){
+                            if (item.router == RouteConfig.PARAMETER) {
                                 navController.navigate("${RouteConfig.PARAMETER}/Kevin")
-                            }else{
+                            } else {
                                 navController.navigate("${item.router}")
                             }
                         }
@@ -117,10 +117,19 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
             }
 
             composable(
-                "${RouteConfig.PARAMETER}/{${RouteConfig.name}}"
+                "${RouteConfig.PARAMETER}/{${RouteConfig.name}}"+"" +
+                        "?${RouteConfig.age}={${RouteConfig.age}} ",
+                arguments = listOf(
+                    navArgument("age") {
+                        type = NavType.IntType  //类型
+                        defaultValue = 18  //默认值
+//                        nullable = true //是否可空
+                    }
+                )
             ) {
                 val name = it.arguments?.getString(RouteConfig.name)
-                PageTwo(navController, name ?: "NULL")
+                val age = it.arguments?.getInt(RouteConfig.age)
+                PageTwo(navController, name ?: "NULL", age?:0)
             }
 
         }

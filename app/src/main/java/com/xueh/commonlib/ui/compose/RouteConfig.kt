@@ -19,4 +19,5 @@ object RouteConfig {
 
 
     const val name="name"
+    const val age="age"
 }

@@ -17,11 +17,11 @@ import androidx.navigation.NavController
  * 备注：
  */
 @Composable
-fun PageTwo(navController: NavController, name: String) {
+fun PageTwo(navController: NavController, name: String, age: Int) {
     Column(modifier = Modifier.fillMaxSize()) {
         Text(text = "这是页面2")
         Spacer(modifier = Modifier.height(20.dp))
-        Text(text = "我是$name")
+        Text(text = "我是$name 今年$age 岁")
         Spacer(modifier = Modifier.height(20.dp))
         Button(onClick = {
             //点击返回页面1
