@@ -2,13 +2,9 @@ package com.xueh.commonlib.ui
 
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -21,57 +17,40 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemsIndexed
-import coil.compose.AsyncImage
-import coil.compose.SubcomposeAsyncImage
-import com.blankj.utilcode.util.ResourceUtils
 import com.blankj.utilcode.util.ToastUtils
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.xueh.comm_core.base.compose.MVVMComposeActivity
 import com.xueh.comm_core.base.compose.theme.DarkColors
 import com.xueh.comm_core.base.compose.theme.themeTypeState
-import com.xueh.comm_core.base.mvvm.BaseViewModel
 import com.xueh.comm_core.weight.compose.*
 import com.xueh.commonlib.R
+import com.xueh.commonlib.ui.compose.RouteConfig
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
-import com.xueh.commonlib.ui.viewmodel.HomeViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -79,13 +58,14 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
 
     override fun getTitleText() = "我是标题"
 
+    data class ItemData(var str: String, var router: String)
 
     @OptIn(ExperimentalMaterialApi::class)
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
         setContent {
             contentRoot {
-                refreshLoadUse()
+                NavHost()
             }
         }
 
@@ -97,6 +77,42 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
 
     override fun initData() {
         viewModel.loadDsl()
+    }
+
+
+    @OptIn(ExperimentalMaterialApi::class)
+    @Composable
+    fun NavHost() {
+        val navController = rememberNavController()
+        NavHost(navController = navController, startDestination = RouteConfig.ACTION_LIST) {
+            composable(RouteConfig.ACTION_LIST) {
+                var str = listOf(
+                    ItemData("下拉加载使用", RouteConfig.REFRESHLOADUSE),
+                    ItemData("ConstraintSet使用", RouteConfig.CONSTRAINTSET),
+                    ItemData("scrollableTab使用", RouteConfig.SCROLLABLETABROW),
+                    ItemData("lazyVerticalGrid使用", RouteConfig.LAZYVERTICALGRID),
+                )
+                LazyColumn() {
+                    itemsIndexed(str) { _, item ->
+                        itemView(item.str) {
+                            navController.navigate(item.router)
+                        }
+                    }
+                }
+            }
+            composable(RouteConfig.REFRESHLOADUSE) {
+                refreshLoadUse()
+            }
+            composable(RouteConfig.CONSTRAINTSET) {
+                ConstraintSet()
+            }
+            composable(RouteConfig.SCROLLABLETABROW) {
+                scrollableTabRow()
+            }
+            composable(RouteConfig.LAZYVERTICALGRID) {
+                lazyVerticalGrid()
+            }
+        }
     }
 
 
@@ -127,7 +143,7 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
     }
 
     @Composable
-    fun learnConstraintSet() {
+    fun ConstraintSet() {
         val orientation = remember { mutableStateOf(1) }
         ConstraintLayout(
             getConstraintLayout(orientation),
@@ -166,8 +182,6 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
 
 
     private fun getConstraintLayout(orientation: MutableState<Int>): androidx.constraintlayout.compose.ConstraintSet {
-
-
         return ConstraintSet {
             val imageRef = createRefFor("imageRef")
             val titleRef = createRefFor("titleRef")
@@ -208,7 +222,7 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
     @ExperimentalMaterialApi
     @Preview()
     @Composable
-    fun scrollableTabRowTest() {
+    fun scrollableTabRow() {
         val tabIndex = remember {
             mutableStateOf(0)
         }
@@ -300,7 +314,7 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
 
     @Preview()
     @Composable
-    fun tabRowTest() {
+    fun tabRow() {
         val tabIndex = remember {
             mutableStateOf(0)
         }
@@ -366,7 +380,7 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
     @Preview(showBackground = true)
     @Preview
     @Composable
-    fun constraintTest() {
+    fun constraint() {
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxWidth()
@@ -389,7 +403,7 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
 
     @Preview()
     @Composable
-    fun lazyVerticalGridTest2() {
+    fun lazyVerticalGrid() {
         val scope = rememberCoroutineScope()
         var images = mutableListOf<String>()
         (0..60).forEach {
@@ -428,7 +442,7 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
 
     @Preview(showBackground = true)
     @Composable
-    fun DefaultPreview() {
+    fun LazyColumn() {
         val bannerDatas by viewModel.bannerLiveData.observeAsState()
         contentRoot {
             Box(
@@ -516,6 +530,7 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
         }
 
     }
+
 
 }
 
