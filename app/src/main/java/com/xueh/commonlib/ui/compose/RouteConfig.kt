@@ -16,6 +16,7 @@ object RouteConfig {
     const val ACTION_LIST="actionLIst"
 
     const val PARAMETER="parameter"
+    const val SCROLLABLEAPPBAR="ScrollableAppBar"
 
 
     const val name="name"

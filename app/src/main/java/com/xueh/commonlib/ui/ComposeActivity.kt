@@ -13,40 +13,18 @@ import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.layoutId
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.ConstraintSet
-import androidx.constraintlayout.compose.Dimension
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemsIndexed
-import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.base.compose.MVVMComposeActivity
-import com.xueh.comm_core.base.compose.theme.DarkColors
-import com.xueh.comm_core.base.compose.theme.themeTypeState
-import com.xueh.comm_core.weight.compose.*
-import com.xueh.commonlib.R
 import com.xueh.commonlib.ui.compose.*
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
 
@@ -87,6 +65,7 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
                     ItemData("lazyVerticalGrid使用", RouteConfig.LAZYVERTICALGRID),
                     ItemData("LazyColumnPage", RouteConfig.LAZYCOLUMNPAGE),
                     ItemData("路由传参", RouteConfig.PARAMETER),
+                    ItemData("ScrollableAppBar", RouteConfig.SCROLLABLEAPPBAR),
                 )
                 LazyColumn() {
                     itemsIndexed(str) { _, item ->
@@ -115,9 +94,8 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
             composable(RouteConfig.LAZYCOLUMNPAGE) {
                 LazyColumnPage(viewModel)
             }
-
             composable(
-                "${RouteConfig.PARAMETER}/{${RouteConfig.name}}"+"" +
+                "${RouteConfig.PARAMETER}/{${RouteConfig.name}}" + "" +
                         "?${RouteConfig.age}={${RouteConfig.age}} ",
                 arguments = listOf(
                     navArgument("age") {
@@ -129,9 +107,11 @@ class ComposeActivity : MVVMComposeActivity<ComposeViewModel>() {
             ) {
                 val name = it.arguments?.getString(RouteConfig.name)
                 val age = it.arguments?.getInt(RouteConfig.age)
-                PageTwo(navController, name ?: "NULL", age?:0)
+                PageTwo(navController, name ?: "NULL", age ?: 0)
             }
-
+            composable(RouteConfig.SCROLLABLEAPPBAR) {
+                BarPage()
+            }
         }
     }
 
