@@ -97,6 +97,9 @@ dependencies {
     api Deps.Compose.accompanist_swiperefresh
     api Deps.Compose.compose_refreshlayout
     api Deps.Compose.navigation_compose
+    debugImplementation Deps.Compose.customview
+    debugImplementation Deps.Compose.customview_poolingcontainer
+
 
     api Deps.Kotlin.kotlin_stdlib
     api Deps.Kotlin.kotlin_coroutines
@@ -133,4 +136,6 @@ dependencies {
     api Deps.Github.titlebar
     api Deps.Github.MagicIndicator
     api Deps.Github.xpopup
+
+
 }
