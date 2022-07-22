@@ -57,7 +57,7 @@ abstract class BaseDialogHelper : DialogFragment() {
             val wlp = it.attributes
             wlp.gravity = mGravity
             wlp.x = mX
-            wlp.y = mY
+            wlp.y = ConvertUtils.dp2px(mY.toFloat())
 
             it.attributes = wlp
 
