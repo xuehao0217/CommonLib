@@ -10,7 +10,7 @@ import com.xueh.comm_core.utils.compose.showIme
 import com.xueh.comm_core.utils.compose.transparentStatusBar
 
 //ComponentActivity
-//AppCompatActivity
+//AppCompatActivity  可以解决弹窗问题
 abstract class BaseComposeActivity : AppCompatActivity(), IBaseLogic {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
