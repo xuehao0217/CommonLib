@@ -1,15 +1,11 @@
 package com.xueh.comm_core.weight.compose
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
@@ -20,18 +16,21 @@ import com.xueh.comm_core.R
 import com.xueh.comm_core.base.compose.theme.CommonLibTheme
 import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -95,3 +94,35 @@ fun SpanText(list: List<SpanTextEntity>, modifier: Modifier = Modifier) {
 
 
 data class SpanTextEntity(var text:String, var spanStyle: SpanStyle, var click:(()->Unit)?=null)
+
+
+
+
+
+
+@Composable
+fun AnimLoading(visible: MutableState<Boolean>, @DrawableRes id: Int, size: Int) {
+    AnimatedVisibility(visible = visible.value) {
+        val infiniteTransition = rememberInfiniteTransition()
+        val rotation by infiniteTransition.animateFloat(
+            initialValue = 0f,
+            targetValue = 360f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(
+                    durationMillis = 3000,
+                    easing = LinearEasing,
+                ),
+            )
+        )
+        val imageBitmap =
+            ImageBitmap.imageResource(id = id)
+        Canvas(
+            modifier = Modifier
+                .size(size.dp)
+        ) {
+            rotate(rotation) {
+                drawImage(imageBitmap)
+            }
+        }
+    }
+}
