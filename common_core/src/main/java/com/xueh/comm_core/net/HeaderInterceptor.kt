@@ -13,11 +13,23 @@ class HeaderInterceptor : Interceptor {
     private var headers = hashMapOf<String, String>()
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val requestBuilder = chain.request().newBuilder()
+        val originalRequest = chain.request()
+        val requestBuilder = originalRequest.newBuilder()
+            .header("Content-Type", "application/json")
+            .header("Accept", "application/json")
+            .method(originalRequest.method, originalRequest.body)
         headers.forEach { (t, u) ->
             requestBuilder.addHeader(t, u)
         }
-        return chain.proceed(requestBuilder.build())
+        val request = requestBuilder.build()
+        return chain.proceed(request)
+
+
+//        val requestBuilder = chain.request().newBuilder()
+//        headers.forEach { (t, u) ->
+//            requestBuilder.addHeader(t, u)
+//        }
+//        return chain.proceed(requestBuilder.build())
     }
 
     fun put(key: String, value: String) {
