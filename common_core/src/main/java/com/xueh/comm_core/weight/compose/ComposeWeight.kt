@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.blankj.utilcode.util.ToastUtils
 import kotlin.math.roundToInt
 
 
@@ -68,9 +69,23 @@ fun ComposeTitleView(
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////////////////////////
 
-
+//SpanText(
+//list = listOf(
+//SpanTextEntity("登录即同意", SpanStyle(color = Color.Black)),
+//SpanTextEntity("《用户协议》", SpanStyle(color = Color.Blue)) {
+//    ToastUtils.showShort("点击了 用户协议")
+//},
+//SpanTextEntity("和", SpanStyle(color = Color.Black)),
+//SpanTextEntity("《隐私政策》", SpanStyle(color = Color.Blue)) {
+//    ToastUtils.showShort("点击了 隐私政策")
+//},
+//), modifier = Modifier.constrainAs(tv_login_desc) {
+//    start.linkTo(iv_avatar.start)
+//    end.linkTo(iv_avatar.end)
+//    top.linkTo(tv_login_state.bottom)
+//}
+//)
 
 @Composable
 fun SpanText(list: List<SpanTextEntity>, modifier: Modifier = Modifier) {
@@ -92,10 +107,9 @@ fun SpanText(list: List<SpanTextEntity>, modifier: Modifier = Modifier) {
     })
 }
 
-
 data class SpanTextEntity(var text:String, var spanStyle: SpanStyle, var click:(()->Unit)?=null)
 
-
+//////////////////////////////////////////////////////////////////////////////////////
 
 
 
