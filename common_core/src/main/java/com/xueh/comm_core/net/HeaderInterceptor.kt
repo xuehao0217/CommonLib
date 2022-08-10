@@ -21,8 +21,7 @@ class HeaderInterceptor : Interceptor {
         headers.forEach { (t, u) ->
             requestBuilder.addHeader(t, u)
         }
-        val request = requestBuilder.build()
-        return chain.proceed(request)
+        return chain.proceed(requestBuilder.build())
 
 
 //        val requestBuilder = chain.request().newBuilder()
