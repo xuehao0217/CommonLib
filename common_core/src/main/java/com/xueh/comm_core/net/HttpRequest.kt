@@ -154,9 +154,9 @@ object HttpRequest {
                 )
                 val sslSocketFactory = sslContext.socketFactory
                 builder.sslSocketFactory(sslSocketFactory, XTrustManager())
-                builder.hostnameVerifier(HostnameVerifier { hostname, session ->
+                builder.hostnameVerifier { hostname, session ->
                     true
-                })
+                }
                 builder.addNetworkInterceptor(LoggingInterceptor())
             } catch (e: Exception) {
                 throw RuntimeException(e)
