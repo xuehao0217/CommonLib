@@ -148,7 +148,7 @@ public final class LoggingInterceptor implements Interceptor {
                 OkLog.log("________________________________________________________");
                 OkLog.log("*******************ResponseBody*************************");
                 String str=buffer.clone().readString(charset);
-                OkLog.log(str);
+                OkLog.log(""+str);
             }
             OkLog.log("ResponseBody-->" + buffer.size() + "byte");
             OkLog.end("Response ↑↑↑");
