@@ -100,6 +100,7 @@ dependencies {
     api Deps.Compose.lifecycle_runtime_ktx
     debugImplementation Deps.Compose.customview
     debugImplementation Deps.Compose.customview_poolingcontainer
+    api Deps.Compose.lifecycle_viewmodel
 
 
     api Deps.Kotlin.kotlin_stdlib
