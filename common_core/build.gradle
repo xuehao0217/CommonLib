@@ -99,9 +99,9 @@ dependencies {
     api Deps.Compose.compose_refreshlayout
     api Deps.Compose.navigation_compose
     api Deps.Compose.lifecycle_runtime_ktx
+    api Deps.Compose.lifecycle_viewmodel
     debugImplementation Deps.Compose.customview
     debugImplementation Deps.Compose.customview_poolingcontainer
-    api Deps.Compose.lifecycle_viewmodel
 
 
     api Deps.Kotlin.kotlin_stdlib

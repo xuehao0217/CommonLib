@@ -180,12 +180,13 @@ object Deps {
         const val customview="androidx.customview:customview:1.2.0-alpha01"
         const val customview_poolingcontainer = "androidx.customview:customview-poolingcontainer:1.0.0-alpha01"
 
-
-        const val lifecycle_runtime_ktx =  "androidx.lifecycle:lifecycle-runtime-ktx:2.5.0-rc01"
+        //collectAsStateWithLifecycle
+        const val lifecycle_runtime_ktx =  "androidx.lifecycle:lifecycle-runtime-compose:2.6.0-alpha01"
         //获取viewmodel
         // import androidx.lifecycle.viewmodel.compose.viewModel
         //val viewModel1: ComposeViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
         const val lifecycle_viewmodel =  "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
+
 
     }
 
