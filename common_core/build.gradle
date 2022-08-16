@@ -47,7 +47,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion Deps.Version.compose.toString()
+        kotlinCompilerExtensionVersion Deps.Version.compose_compiler.toString()
     }
     packagingOptions {
         resources {

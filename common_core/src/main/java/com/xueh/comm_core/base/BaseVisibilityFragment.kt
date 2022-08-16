@@ -140,7 +140,7 @@ open class BaseVisibilityFragment : Fragment(), View.OnAttachStateChangeListener
         checkVisibility(isVisibleToUser)
     }
 
-    override fun onViewAttachedToWindow(v: View?) {
+    override fun onViewAttachedToWindow(v: View) {
         info("onViewAttachedToWindow")
         checkVisibility(true)
     }

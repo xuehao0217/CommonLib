@@ -3,9 +3,10 @@ package buildsrc
 
 object Deps {
     object Version {
-        const val compose = "1.2.0-rc02"
-        const val kotlin = "1.6.21"
-        const val coroutines = "1.6.3"
+        const val compose = "1.3.0-alpha03"
+        const val kotlin = "1.7.10"
+        const val coroutines = "1.6.4"
+        const val compose_compiler = "1.3.0"
 
         const val pagingVersion = "3.1.0-rc01"
         const val pagingComposeVersion = "1.0.0-alpha14"
@@ -186,8 +187,6 @@ object Deps {
         // import androidx.lifecycle.viewmodel.compose.viewModel
         //val viewModel1: ComposeViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
         const val lifecycle_viewmodel =  "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
-
-
     }
 
 

@@ -29,7 +29,7 @@ abstract class MVVMActivity<VB : ViewBinding, VM : AbsViewModel> : DActivity<VB>
 
         viewModel.apiException.observe(this) {
             it?.let {
-                Log.e("BaseViewModel--> ", it?.toString())
+                Log.e("MVVMActivity", "BaseViewModel--> $it")
             }
         }
     }

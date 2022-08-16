@@ -319,6 +319,9 @@ inline fun FragmentActivity.lifecycleEvent(crossinline lifecycleDsl: lifecycleEv
                     lifecycle.removeObserver(this)
                     lifecycleEventDsl().apply(lifecycleDsl)?.onDestroy?.invoke()
                 }
+                else -> {
+
+                }
             }
         }
     })

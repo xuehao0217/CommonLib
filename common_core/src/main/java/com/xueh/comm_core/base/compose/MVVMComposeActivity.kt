@@ -18,11 +18,14 @@ import com.xueh.comm_core.base.mvvm.ibase.AbsViewModel
 import com.xueh.comm_core.helper.ViewModelHelper
 import com.xueh.comm_core.utils.compose.setAndroidNativeLightStatusBar
 import com.xueh.comm_core.utils.compose.transparentStatusBar
+import com.xueh.comm_core.weight.ViewLoading
 import com.xueh.comm_core.weight.compose.ComposeTitleView
 
 
-abstract class MVVMComposeActivity<VM : AbsViewModel> : BaseComposeActivity() {
+abstract class MVVMComposeActivity<VM : AbsViewModel> : BaseComposeActivity {
     lateinit var viewModel: VM
+
+    constructor() : super()
 
     override fun initListener() {
     }
@@ -32,24 +35,23 @@ abstract class MVVMComposeActivity<VM : AbsViewModel> : BaseComposeActivity() {
         transparentStatusBar()
         setAndroidNativeLightStatusBar()
     }
+
     override fun initView(savedInstanceState: Bundle?) {
         viewModel = ViewModelHelper.getViewModel(this.javaClass, this)
         viewModel.apiLoading.observe(this) {
             it?.let {
-//                if (it) showProgressDialog() else hideProgressDialog()
+                if (it) ViewLoading.show(this) else ViewLoading.dismiss(this)
             }
         }
 
         viewModel.apiException.observe(this) {
-            it?.let {
-                Log.e("BaseViewModel--> ", it?.toString())
-            }
+            Log.e("MVVMComposeActivity", "BaseViewModel--> $it")
         }
     }
 
     @Composable
     protected open fun contentRoot(
-        component: @Composable (BoxScope.() -> Unit)
+        component: @Composable (BoxScope.() -> Unit),
     ) {
         CommonLibTheme(themeTypeState.value) {
             rememberSystemUiController().run {

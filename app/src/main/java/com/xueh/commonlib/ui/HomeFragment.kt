@@ -41,6 +41,7 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
                         is LiveDataResult.Response -> {
                             ToastUtils.showShort(it.response.data.toString())
                         }
+                        else -> {}
                     }
                 })
             }

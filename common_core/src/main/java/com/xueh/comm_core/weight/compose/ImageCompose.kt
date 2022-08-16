@@ -30,5 +30,5 @@ fun ImageLoadCompose(
 )
 
 @Composable
-fun ImageCompose(@DrawableRes id: Int) =
-    Image(painter = painterResource(id = id), contentDescription = "ImageComposeContentDescription")
+fun ImageCompose(@DrawableRes id: Int,modifier: Modifier=Modifier) =
+    Image(painter = painterResource(id = id), contentDescription = "ImageComposeContentDescription", modifier = modifier)

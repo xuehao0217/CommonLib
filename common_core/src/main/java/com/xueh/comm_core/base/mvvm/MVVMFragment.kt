@@ -30,9 +30,7 @@ abstract class MVVMFragment<VB : ViewBinding, VM : AbsViewModel> : DFragment<VB>
         }
 
         viewModel.apiException.observe(this) {
-            it?.let {
-                Log.e("BaseViewModel--> ", it?.toString())
-            }
+            Log.e("MVVMFragment","BaseViewModel-->$it" )
         }
     }
 }
