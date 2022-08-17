@@ -51,9 +51,31 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+
+
+    // 自定义打包apk的文件名
+    android.applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            if (outputFileName != null && outputFileName.endsWith('.apk')) {
+                outputFileName = "${ProjectBuildConfig.appName}" +
+                        "_${ProjectBuildConfig.versionCode}" +
+                        "_v${ProjectBuildConfig.versionName}" +
+                        "_${variant.buildType.name}" +
+                        "_" + getDate() +
+                        ".apk"
+            }
+        }
+    }
+
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(path: ':common_core')
+}
+
+
+def static getDate() {
+    def date = new Date()
+    return date.format('yyyy-MM-dd-HH:mm')
 }
