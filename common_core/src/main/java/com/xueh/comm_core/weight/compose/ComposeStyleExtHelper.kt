@@ -1,13 +1,10 @@
-package com.xueh.comm_core.utils.compose
+package com.xueh.comm_core.weight.compose
 
 import androidx.compose.foundation.Indication
 import androidx.compose.foundation.IndicationInstance
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
@@ -22,7 +19,7 @@ import androidx.compose.ui.graphics.drawscope.ContentDrawScope
 val MyLocalIndication = staticCompositionLocalOf<Indication> {
     DefaultDebugIndication
 }
-
+//替换系统水波纹
 object DefaultDebugIndication : Indication {
 
     private class DefaultDebugIndicationInstance(
@@ -50,7 +47,7 @@ object DefaultDebugIndication : Indication {
         }
     }
 }
-
+//带水波纹的点击
 @Composable
 fun Modifier.clickState(click: () -> Unit) = clickable(
     indication = MyLocalIndication.current,
@@ -59,7 +56,7 @@ fun Modifier.clickState(click: () -> Unit) = clickable(
     }) {
     click.invoke()
 }
-
+//不带水波纹的点击
 @Composable
 fun Modifier.click(click: () -> Unit)=clickable(
     indication = null,
@@ -67,4 +64,18 @@ fun Modifier.click(click: () -> Unit)=clickable(
         MutableInteractionSource()
     }){
     click.invoke()
+}
+//防抖
+@Composable
+fun Modifier.clickPreventFast(millis: Long = 800, onClick: () -> Unit): Modifier {
+    var timeStamp by remember {
+        mutableStateOf(0L)
+    }
+
+    return click {
+        if (System.currentTimeMillis() - timeStamp > millis) {
+            onClick()
+            timeStamp = System.currentTimeMillis()
+        }
+    }
 }

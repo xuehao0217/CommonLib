@@ -13,6 +13,7 @@ import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import coil.request.ImageRequest
 
+//加载图片
 @Composable
 fun ImageLoadCompose(
     url: String, modifier: Modifier = Modifier, placeholder: Painter? = null,
