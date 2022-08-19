@@ -80,7 +80,7 @@ fun BarPage() {
                 title = "toolbar offset is ${toolbarOffsetHeightPx.value}",
                 scrollableAppBarHeight = 200.dp,
                 toolbarOffsetHeightPx = toolbarOffsetHeightPx,
-                backgroundImageId = R.drawable.ic_launcher_background
+                backgroundImageId = R.drawable.ic_launcher
             )
         }
     }

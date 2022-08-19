@@ -1,22 +1,17 @@
 package com.xueh.comm_core.weight.compose
 
 import androidx.annotation.DrawableRes
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.spring
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -26,6 +21,7 @@ import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.statusBarsHeight
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.xueh.comm_core.R
+import com.xueh.comm_core.base.compose.theme.appThemeState
 
 /**
  * 创 建 人: xueh
@@ -39,41 +35,37 @@ fun CommonTitlePage(
     title: String,
     @DrawableRes backIcon: Int = R.mipmap.bar_icon_back_black,
     blockClick: () -> Unit,
-    content: @Composable ConstraintLayoutScope.() -> Unit,
+    content: @Composable () -> Unit,
 ) {
     Column() {
         CommonTitleView(title, backIcon) {
             blockClick.invoke()
         }
         Divider()
-        ConstraintLayout(modifier = Modifier
-            .fillMaxSize()
-        ) {
-            content.invoke(this)
+        Surface(color = androidx.compose.material3.MaterialTheme.colorScheme.background,
+            modifier = Modifier
+                .fillMaxSize()) {
+            content.invoke()
         }
     }
 }
 
 
-//公用标题View
 @Composable
 fun CommonTitleView(
     name: String,
     @DrawableRes backIcon: Int = R.mipmap.bar_icon_back_black,
-    modifier: ((Modifier) -> Unit)? = null,
+    titleRightView: (@Composable () -> Unit)? = null,
     blockClick: () -> Unit,
 ) {
     ProvideWindowInsets {
-        rememberSystemUiController().setStatusBarColor(
-            Color.Transparent, darkIcons = MaterialTheme.colors.isLight
-        )
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentWidth()
-                .background(Color.White).also {
-                    modifier?.invoke(it)
+                .background(androidx.compose.material3.MaterialTheme.colorScheme.background).also {
+
                 }
         ) {
             Spacer(
@@ -86,7 +78,7 @@ fun CommonTitleView(
                     .fillMaxWidth()
                     .height(44.dp)
             ) {
-                val (iv_close, row_title) = createRefs()
+                val (iv_close, row_title, v_right) = createRefs()
                 Row(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically,
@@ -101,20 +93,30 @@ fun CommonTitleView(
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,
-                        color = Color.Black,
+                        color = if (appThemeState.value.darkTheme) Color.White else Color.Black,
                     )
                 }
 
-                ImageCompose(id = backIcon, modifier = Modifier
-                    .size(28.dp)
-                    .constrainAs(iv_close) {
-                        top.linkTo(row_title.top)
-                        bottom.linkTo(row_title.bottom)
-                        start.linkTo(parent.start, 16.dp)
-                    }
-                    .click {
-                        blockClick.invoke()
-                    })
+                ImageCompose(id = if (appThemeState.value.darkTheme) R.mipmap.bar_icon_back_white else R.mipmap.bar_icon_back_black,
+                    modifier = Modifier
+                        .size(28.dp)
+                        .constrainAs(iv_close) {
+                            top.linkTo(row_title.top)
+                            bottom.linkTo(row_title.bottom)
+                            start.linkTo(parent.start, 16.dp)
+                        }
+                        .click {
+                            blockClick.invoke()
+                        })
+
+                Surface(modifier = Modifier.constrainAs(v_right) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    end.linkTo(parent.end, 15.dp)
+                }) {
+                    titleRightView?.invoke()
+                }
+
             }
 
         }

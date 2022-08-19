@@ -27,7 +27,8 @@ import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
  * 备注：
  */
 @Composable
-fun refreshLoadUse(viewModel: ComposeViewModel) {
+fun refreshLoadUse() {
+    val viewModel: ComposeViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
     val homeDatas = viewModel.getListDatas().collectAsLazyPagingItems()
     RefreshList(lazyPagingItems = homeDatas) {
         itemsIndexed(homeDatas) { _, item ->
@@ -35,7 +36,7 @@ fun refreshLoadUse(viewModel: ComposeViewModel) {
                 modifier = Modifier
                     .padding(10.dp)
                     .clip(CircleShape)
-                    .background(Color.Blue)
+                    .background(androidx.compose.material3.MaterialTheme.colorScheme.primary)
                     .fillMaxWidth()
                     .height(50.dp)
                     .border(1.5.dp, MaterialTheme.colors.secondary, shape = CircleShape),

@@ -17,7 +17,7 @@ object RouteConfig {
 
     const val PARAMETER="parameter"
     const val SCROLLABLEAPPBAR="ScrollableAppBar"
-
+    const val ComposeStylePage="ComposeStylePage"
 
     const val name="name"
     const val age="age"

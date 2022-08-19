@@ -20,6 +20,7 @@
             android:exported="false"
             android:theme="@style/AppStyle" />
         <activity android:name=".ui.MainActivity" />
+
         <activity
             android:name=".ui.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

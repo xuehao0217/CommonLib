@@ -1,134 +1,41 @@
 package com.xueh.comm_core.base.compose.theme
 
 import androidx.compose.material.Colors
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
+
+val green200 = Color(0xffa5d6a7)
+val green500 = Color(0xff4caf50)
+val green700 = Color(0xff388e3c)
+
+val blue500 = Color(0xFF3F51B5)
+val blue200 = Color(0xFF9FA8DA)
+val blue700 = Color(0xFF303F9F)
+
+val purple200 = Color(0xFFB39DDB)
+val purple = Color(0xFF833AB4)
+val purple700 = Color(0xFF512DA8)
+
+val orange200 = Color(0xFFff7961)
+val orange500 = Color(0xFFf44336)
+val orange700 = Color(0xFFba000d)
 
 
+val teal200 = Color(0xff80deea)
+val twitterColor = Color(0xFF1DA1F2)
+val tiktokBlue = Color(0xFF69C9D0)
+val tiktokRed = Color(0xFFEE1D52)
+val tiktokBlack = Color(0xFF010101)
+val blue = Color(0xFF5851DB)
 
-val white = Color.White
-
-// 天蓝色
-val select_theme = Color(0xFF65A2FF)
-
-// 灰色
-val gray_theme = Color(0xFF888888)
-
-// 深蓝色
-val deep_blue_theme = Color(0xFF0000FF)
-
-// 绿色
-val green_theme = Color(0xFF00FF00)
-
-// 紫色
-val purple_theme = Color(0xFF9932CD)
-
-// 橘黄色
-val orange_theme = Color(0xFFFFA500)
-
-// 棕色
-val brown_theme = Color(0xFF804000)
-
-// 红色
-val red_theme = Color(0xFFFF0000)
-
-// 青色
-val cyan_theme = Color(0xFF00FFFF)
-
-// 品红色
-val magenta_theme = Color(0xFFFF00FF)
-
-// Light 主题颜色
-val pageLight = Color(0xFFf6f6f6)
-
-val primaryLight = Color(0xFF85B4FC)
-val primaryVariantLight = Color(0xFF3700B3)
-val secondaryLight = Color(0xFF3f2c2c)
-val backgroundLight = pageLight
-val surfaceLight = pageLight
-val onPrimaryLight = Color(0xFF232323)
-val onSecondaryLight = Color(0xFFD8D7D7)
-val onBackgroundLight = Color(0xFF232325)
-val onSurfaceLight = Color(0xFF232323)
+val orange = Color(0xFFF56040)
+val yellow = Color(0xFFFCAF45)
+val graySurface = Color(0xFF2A2A2A)
+val gradientGreenColors = listOf(green200, green500, green700)
+val gradientRedColors = listOf(orange, tiktokRed)
+val gradientBluePurple = listOf(blue, purple)
+val instagramGradient = listOf(blue, purple, orange, yellow)
 
 
-// Dark 主题颜色
-val primaryDark = Color(0xFF000000)
-val primaryVariantDark = Color(0xFF3700B3)
-val secondaryDark = Color(0xFFE0E0F0)
-val backgroundDark = Color(0xFF1B1B1B)
-val surfaceDark = Color(0xFF232323)
-val onPrimaryDark = white
-val onSecondaryDark = Color(0xFF3A3A3A)
-val onBackgroundDark = white
-val onSurfaceDark = white
-
-
-/**
- * 浅色主题方法
- */
-fun LightColors(
-    primary: Color = primaryLight,
-    primaryVariant: Color = primaryVariantLight,
-    secondary: Color = secondaryLight,
-    secondaryVariant: Color = Color(0xFF018786),
-    background: Color = backgroundLight,
-    surface: Color = surfaceLight,
-    error: Color = Color(0xFFB00020),
-    onPrimary: Color = onPrimaryLight,
-    onSecondary: Color = onSecondaryLight,
-    onBackground: Color = onBackgroundLight,
-    onSurface: Color = onSurfaceLight,
-    onError: Color = Color.White
-): Colors = Colors(
-    primary,
-    primaryVariant,
-    secondary,
-    secondaryVariant,
-    background,
-    surface,
-    error,
-    onPrimary,
-    onSecondary,
-    onBackground,
-    onSurface,
-    onError,
-    true
-)
-
-
-/**
- * 深色主题方法
- */
-fun DarkColors(
-    primary: Color = primaryDark,
-    primaryVariant: Color = primaryVariantDark,
-    secondary: Color = secondaryDark,
-    secondaryVariant: Color = secondary,
-    background: Color = backgroundDark,
-    surface: Color = surfaceDark,
-    error: Color = Color(0xFFCF6679),
-    onPrimary: Color = onPrimaryDark,
-    onSecondary: Color = onSecondaryDark,
-    onBackground: Color = onBackgroundDark,
-    onSurface: Color = onSurfaceDark,
-    onError: Color = Color.Black
-): Colors = Colors(
-    primary,
-    primaryVariant,
-    secondary,
-    secondaryVariant,
-    background,
-    surface,
-    error,
-    onPrimary,
-    onSecondary,
-    onBackground,
-    onSurface,
-    onError,
-    false
-)

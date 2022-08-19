@@ -35,7 +35,9 @@ import kotlinx.coroutines.launch
  * 备注：
  */
 @Composable
-fun LazyColumnPage(viewModel: ComposeViewModel) {
+fun LazyColumnPage() {
+    val viewModel: ComposeViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+
     val bannerDatas by viewModel.bannerLiveData.observeAsState()
     Box(
         contentAlignment = Alignment.BottomEnd,
@@ -92,37 +94,29 @@ var imageUrl =
     "https://c-ssl.dtstatic.com/uploads/item/202105/29/20210529001057_aSeLB.thumb.1000_0.jpeg"
 
 @Composable
-fun itemView( item: String,showimg: Boolean = true, clickEvent: () -> Unit) {
-    Surface(
-//            shape = RoundedCornerShape(10.dp),
-//            shadowElevation = 5.dp,
-        modifier = Modifier
-            .padding(all = 8.dp)
-            .shadow(4.dp, shape = RoundedCornerShape(5))
-    ) {
-        Column() {
-            if (showimg) {
-                ImageLoadCompose(imageUrl)
-            }
-            Box(
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .background(Color.Blue)
-                    .clickable(onClick = clickEvent)
-                    .fillMaxWidth()
-                    .height(50.dp)
-                    .border(1.5.dp, MaterialTheme.colors.secondary, shape = CircleShape),
-
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = item,
-                    color = Color.White,
-                    textAlign = TextAlign.Center,
-                )
-            }
+fun itemView(item: String, showimg: Boolean = true, clickEvent: () -> Unit) {
+    Column(modifier = Modifier.padding(horizontal = 15.dp)) {
+        if (showimg) {
+            ImageLoadCompose(imageUrl)
         }
+        Spacer(modifier = Modifier.height(10.dp))
+        Box(
+            modifier = Modifier
+                .clip(CircleShape)
+                .background(androidx.compose.material3.MaterialTheme.colorScheme.primary)
+                .clickable(onClick = clickEvent)
+                .fillMaxWidth()
+                .height(50.dp)
+                .border(1.5.dp, MaterialTheme.colors.secondary, shape = CircleShape),
 
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = item,
+                color = Color.White,
+                textAlign = TextAlign.Center,
+            )
+        }
     }
 
 }

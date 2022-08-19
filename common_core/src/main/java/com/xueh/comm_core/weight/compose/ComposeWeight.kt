@@ -13,7 +13,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xueh.comm_core.R
-import com.xueh.comm_core.base.compose.theme.CommonLibTheme
 import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
 import androidx.compose.animation.AnimatedVisibility
@@ -23,6 +22,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
@@ -31,41 +31,21 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.*
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.ConstraintLayoutScope
 import com.blankj.utilcode.util.ToastUtils
+import com.google.accompanist.insets.ProvideWindowInsets
+import com.google.accompanist.insets.statusBarsHeight
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.xueh.comm_core.base.compose.theme.appThemeState
 import kotlin.math.roundToInt
 
 
-@Composable
-fun ComposeTitleView(
-    title: String,
-    backClick: () -> Unit,
-    rightView: (@Composable () -> Unit)? = null
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(44.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.bar_arrows_left_black),
-            contentDescription = "返回图标",
-            modifier = Modifier
-                .clickable {
-                    backClick.invoke()
-                },
-        )
-        Text(text = title, fontSize = 18.sp)
-        Box {
-            rightView?.invoke()
-        }
-    }
-}
 
 //////////////////////////////////////////////////////////////////////////////////////
 
@@ -93,7 +73,7 @@ fun SpanText(list: List<SpanTextEntity>, modifier: Modifier = Modifier) {
         repeat(list.size) {
             val item = list[it]
             withStyle(item.spanStyle) {
-                pushStringAnnotation(item.text,item.text)
+                pushStringAnnotation(item.text, item.text)
                 append(item.text)
             }
         }
@@ -107,11 +87,13 @@ fun SpanText(list: List<SpanTextEntity>, modifier: Modifier = Modifier) {
     })
 }
 
-data class SpanTextEntity(var text:String, var spanStyle: SpanStyle, var click:(()->Unit)?=null)
+data class SpanTextEntity(
+    var text: String,
+    var spanStyle: SpanStyle,
+    var click: (() -> Unit)? = null,
+)
 
 //////////////////////////////////////////////////////////////////////////////////////
-
-
 
 
 @Composable

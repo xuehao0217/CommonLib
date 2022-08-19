@@ -3,13 +3,13 @@ package com.xueh.commonlib.ui
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.base.compose.BaseComposeActivity
-import com.xueh.comm_core.base.compose.MVVMComposeActivity
 import com.xueh.comm_core.base.mvvm.MVVMFragment
 import com.xueh.comm_core.helper.*
 import com.xueh.comm_core.net.coroutinedsl.LiveDataResult
@@ -62,13 +62,16 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
         val onBindAdapter = binding.rv
-            .grid(4).addGridItemDecoration(15f, 10f)
+            .linear().addLinearItemDecoration(R.color.transparent,15)
+//            .grid(4).addGridItemDecoration(15f, 10f)
             .onBindAdapter<ItemLayoutBinding, String> { item ->
                 tvItem.text = item
             }.apply {
-                setNewInstance(mutableListOf("1", "1", "1", "1", "1", "1", "1", "1", "1", "1"))
+                setNewInstance(mutableListOf("Compose"))
                 setOnItemClickListener { adapter, view, position ->
-                    startActivity(ComposeActivity::class.java)
+                    if (position==0){
+                        startActivity(ComposeActivity::class.java)
+                    }
                 }
             }
     }
