@@ -47,16 +47,16 @@ fun scrollableTabRow() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),
-            backgroundColor = Color.White,
-            contentColor = Color.Black,
+            backgroundColor = androidx.compose.material3.MaterialTheme.colorScheme.primaryContainer,
+            contentColor = androidx.compose.material3.MaterialTheme.colorScheme.primaryContainer,
             edgePadding = 10.dp,
             divider = {
-                TabRowDefaults.Divider(color = Color.Red)
+                TabRowDefaults.Divider(color = androidx.compose.material3.MaterialTheme.colorScheme.primary)
             },
             indicator = {
                 TabRowDefaults.Indicator(
                     Modifier.tabIndicatorOffset(it[tabIndex.value]),
-                    color = Color.Blue,
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.primary,
                     height = 2.dp
                 )
             },
@@ -98,24 +98,24 @@ fun leadingIconTabView(index: Int, text: String, tabIndex: MutableState<Int>) {
         text = {
             Text(
                 text = text,
-                color = if (isPress || index == tabIndex.value) Color.Red else Color.Black
+                color = if (isPress || index == tabIndex.value) androidx.compose.material3.MaterialTheme.colorScheme.primary  else androidx.compose.material3.MaterialTheme.colorScheme.primary
             )
         },
         icon = {
             Icon(
                 imageVector,
                 contentDescription = "icon图标",
-                tint = if (isPress || index == tabIndex.value) Color.Red else Color.Black
+                tint = if (isPress || index == tabIndex.value) androidx.compose.material3.MaterialTheme.colorScheme.primaryContainer  else androidx.compose.material3.MaterialTheme.colorScheme.primaryContainer
             )
         },
         modifier = Modifier
             .wrapContentWidth()
             .fillMaxHeight()
-            .background(Color.White),
+            .background(androidx.compose.material3.MaterialTheme.colorScheme.primaryContainer),
         enabled = true,
         interactionSource = interactionSource,
-        selectedContentColor = Color.Red,
-        unselectedContentColor = Color.Black
+        selectedContentColor = androidx.compose.material3.MaterialTheme.colorScheme.primaryContainer,
+        unselectedContentColor = androidx.compose.material3.MaterialTheme.colorScheme.primaryContainer
     )
 }
 
@@ -136,15 +136,15 @@ fun tabRow() {
         modifier = Modifier
             .fillMaxWidth()
             .height(50.dp),
-        backgroundColor = Color.Green,
-        contentColor = Color.Black,
+        backgroundColor = androidx.compose.material3.MaterialTheme.colorScheme.primary,
+        contentColor = Color.White,
         divider = {
             TabRowDefaults.Divider()
         },
         indicator = {
             TabRowDefaults.Indicator(
                 Modifier.tabIndicatorOffset(it[tabIndex.value]),
-                color = Color.Blue,
+                color = androidx.compose.material3.MaterialTheme.colorScheme.primaryContainer,
                 height = 2.dp
             )
         }
@@ -171,12 +171,12 @@ fun tabView(index: Int, text: String, tabIndex: MutableState<Int>) {
             .fillMaxHeight(),
         enabled = true,
         interactionSource = interactionSource,
-        selectedContentColor = Color.Red,
+        selectedContentColor = Color.White,
         unselectedContentColor = Color.Black
     ) {
         Text(
             text = text,
-            color = if (isPress || index == tabIndex.value) Color.Red else Color.Black
+            color = if (isPress || index == tabIndex.value) androidx.compose.material3.MaterialTheme.colorScheme.background else androidx.compose.material3.MaterialTheme.colorScheme.background
         )
     }
 }
