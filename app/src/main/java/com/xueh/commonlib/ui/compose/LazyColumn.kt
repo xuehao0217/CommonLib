@@ -107,7 +107,9 @@ fun itemView(item: String, showimg: Boolean = true, clickEvent: () -> Unit) {
                 .clickable(onClick = clickEvent)
                 .fillMaxWidth()
                 .height(50.dp)
-                .border(1.5.dp, MaterialTheme.colors.secondary, shape = CircleShape),
+                .border(1.5.dp,
+                    androidx.compose.material3.MaterialTheme.colorScheme.primaryContainer,
+                    shape = CircleShape),
 
             contentAlignment = Alignment.Center
         ) {
