@@ -10,7 +10,7 @@ import com.blankj.utilcode.util.Utils
 
 data class AppThemeState(
     var darkTheme: Boolean = false,//是否是黑暗主题
-    var appThemeColorType: AppThemeColorType = AppThemeColorType.GREEN,
+    var appThemeColorType: AppThemeColorType = AppThemeColorType.DEF,
 )
 
 val appThemeState by lazy { mutableStateOf(AppThemeState()) }
