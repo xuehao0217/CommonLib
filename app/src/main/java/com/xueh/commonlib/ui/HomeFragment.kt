@@ -36,14 +36,22 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
             }
 
             tvDownload.setOnClickListener {
-                viewModel.loadLiveData().observe(this@HomeFragment, Observer {
+                viewModel.loadLiveData().observe(this@HomeFragment) {
                     when (it) {
                         is LiveDataResult.Response -> {
                             ToastUtils.showShort(it.response.data.toString())
                         }
-                        else -> {}
+                        is LiveDataResult.Error -> {
+
+                        }
+                        is LiveDataResult.Start -> {
+
+                        }
+                        is LiveDataResult.Finally -> {
+
+                        }
                     }
-                })
+                }
             }
 
             tvGetClean.setOnClickListener {
