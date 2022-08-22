@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.xueh.comm_core.base.mvvm.ibase.AbsViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -77,9 +78,11 @@ open class RequestViewModel : AbsViewModel() {
 
     protected fun <Response> apiFlow(
         request: suspend () -> Response,
-        block: suspend (Response) -> Unit
+        block: suspend (Response) -> Unit,
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch (CoroutineExceptionHandler { _, throwable ->
+            onApiError(Exception(throwable.message))
+        }){
             flow {
                 emit(request())
             }.flowOn(Dispatchers.IO).onStart {
@@ -97,22 +100,21 @@ open class RequestViewModel : AbsViewModel() {
     protected fun <Response> apiLiveData(
         context: CoroutineContext = EmptyCoroutineContext,
         timeoutInMs: Long = 3000L,
-        request: suspend () -> Response
+        request: suspend () -> Response,
     ) = androidx.lifecycle.liveData(context, timeoutInMs) {
         onApiStart()
         emit(LiveDataResult.Start())
-        try {
+        kotlin.runCatching {
             emit(withContext(Dispatchers.IO) {
                 LiveDataResult.Response(request())
             })
-        } catch (e: Exception) {
-            e.printStackTrace()
-            onApiError(e)
-            emit(LiveDataResult.Error<Response>(e))
-        } finally {
-            onApiFinally()
-            emit(LiveDataResult.Finally())
+        }.onFailure {
+            it.printStackTrace()
+            onApiError(Exception(it))
+            emit(LiveDataResult.Error<Response>(Exception(it)))
         }
+        onApiFinally()
+        emit(LiveDataResult.Finally())
     }
 }
 
