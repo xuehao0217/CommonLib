@@ -8,6 +8,7 @@ import com.xueh.comm_core.R
 import com.xueh.comm_core.base.mvvm.ibase.AbsViewModel
 import com.xueh.comm_core.net.BaseResult
 import com.xueh.comm_core.utils.CommonUtils.getString
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -72,7 +73,9 @@ class ViewModelDsl<Response> {
 
 
     internal fun launchFlow(viewModelScope: AbsViewModel) {
-        viewModelScope.viewModelScope.launch {
+        viewModelScope.viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
+            onError?.invoke(Exception(throwable.message))
+        }){
             flow {
                 emit(request())
             }.flowOn(Dispatchers.IO).onStart {
