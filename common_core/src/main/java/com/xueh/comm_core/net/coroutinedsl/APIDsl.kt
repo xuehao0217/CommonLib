@@ -67,6 +67,19 @@ class ViewModelDsl<Response> {
                 onError?.invoke(Exception(it))
             }
             onFinally?.invoke()
+
+//            try {
+//                val response = withContext(Dispatchers.IO) {
+//                    request()
+//                }
+//                onResponse?.invoke(response)
+//                onResponseSuspend?.invoke(response)
+//            } catch (e: Exception) {
+//                e.printStackTrace()
+//                onError?.invoke(e)
+//            } finally {
+//                onFinally?.invoke()
+//            }
         }
     }
 
