@@ -1,5 +1,6 @@
 package com.xueh.comm_core.net.coroutinedsl
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.blankj.utilcode.util.NetworkUtils
 import com.blankj.utilcode.util.ToastUtils
@@ -55,18 +56,30 @@ class ViewModelDsl<Response> {
     internal fun launch(viewModelScope: AbsViewModel) {
         viewModelScope.viewModelScope.launch {
             onStart?.invoke()
-            try {
-                val response = withContext(Dispatchers.IO) {
+            runCatching {
+                withContext(Dispatchers.IO) {
                     request()
                 }
-                onResponse?.invoke(response)
-                onResponseSuspend?.invoke(response)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                onError?.invoke(e)
-            } finally {
-                onFinally?.invoke()
+            }.onSuccess {
+                onResponse?.invoke(it)
+                onResponseSuspend?.invoke(it)
+            }.onFailure {
+                onError?.invoke(Exception(it))
             }
+            onFinally?.invoke()
+
+//            try {
+//                val response = withContext(Dispatchers.IO) {
+//                    request()
+//                }
+//                onResponse?.invoke(response)
+//                onResponseSuspend?.invoke(response)
+//            } catch (e: Exception) {
+//                e.printStackTrace()
+//                onError?.invoke(e)
+//            } finally {
+//                onFinally?.invoke()
+//            }
         }
     }
 
