@@ -1,5 +1,6 @@
 package com.xueh.commonlib.ui.compose
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -65,6 +66,7 @@ fun ConstraintPage() {
             .background(color = Color.White, shape = RoundedCornerShape(5.dp))
             .fillMaxWidth()
             .padding(12.dp, 12.dp, 12.dp, 12.dp)
+            .animateContentSize()
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_launcher),
@@ -79,7 +81,8 @@ fun ConstraintPage() {
                         orientation.value = 0
                     }
                 }
-                .clip(shape = RoundedCornerShape(5)),
+                .clip(shape = RoundedCornerShape(5))
+                .animateContentSize(),
             contentScale = ContentScale.FillWidth
         )
         Text(
