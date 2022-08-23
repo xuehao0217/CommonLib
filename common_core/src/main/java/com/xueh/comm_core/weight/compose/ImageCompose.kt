@@ -14,6 +14,8 @@ import coil.compose.AsyncImagePainter
 import coil.request.ImageRequest
 
 //加载图片
+// https://coil-kt.github.io/coil/compose/
+// https://github.com/coil-kt/coil/blob/main/README-zh.md
 @Composable
 fun ImageLoadCompose(
     url: String, modifier: Modifier = Modifier, placeholder: Painter? = null,
@@ -21,6 +23,7 @@ fun ImageLoadCompose(
 ) = AsyncImage(
     model = ImageRequest.Builder(LocalContext.current)
         .data(url)
+        .crossfade(true)
         .build(),
     modifier = modifier,
     contentScale = ContentScale.Crop,
