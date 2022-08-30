@@ -3,6 +3,7 @@ package com.xueh.comm_core.weight.compose
 import android.R
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
@@ -28,10 +29,14 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.zj.refreshlayout.SwipeRefreshLayout
 import kotlinx.coroutines.delay
 
+
 @Composable
 fun <T : Any> RefreshList(
+    swipeEnabled: Boolean = true,
     lazyPagingItems: LazyPagingItems<T>,
     listState: LazyListState = rememberLazyListState(),
+    backgroundColor: Color=Color.White,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
     itemContent: LazyListScope.() -> Unit,
 ) {
     var isRefreshing by remember { mutableStateOf(false) }
@@ -46,14 +51,14 @@ fun <T : Any> RefreshList(
     SwipeRefreshLayout(isRefreshing = isRefreshing, onRefresh = {
         isRefreshing = true
         lazyPagingItems.refresh()
-    }) {
+    }, swipeEnabled = swipeEnabled) {
         //刷新状态
         isRefreshing = (lazyPagingItems.loadState.refresh is LoadState.Loading)
 
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().background(backgroundColor),
             horizontalAlignment = Alignment.CenterHorizontally,
-            state = listState
+            state = listState, contentPadding  = contentPadding,
         ) {
             //条目布局
             itemContent()

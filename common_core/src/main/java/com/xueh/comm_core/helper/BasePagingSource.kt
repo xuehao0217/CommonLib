@@ -19,6 +19,8 @@ package com.xueh.comm_core.helper
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.*
+import com.blankj.utilcode.util.LogUtils
+import com.blankj.utilcode.util.ToastUtils
 
 
 abstract class BasePagingSource<T : Any> : PagingSource<Int, T>() {
@@ -34,6 +36,8 @@ abstract class BasePagingSource<T : Any> : PagingSource<Int, T>() {
                 nextKey = if (!datas.isNullOrEmpty()) nextPage + 1 else null
             )
         } catch (e: Exception) {
+            LogUtils.e("BasePagingSource","${e}")
+            ToastUtils.showLong("${e}")
             LoadResult.Error(e)
         }
     }
