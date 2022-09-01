@@ -84,7 +84,7 @@ abstract class BaseViewModel<E> : RequestViewModel() {
     //开启协程 如果有上一个任务 则取消
     //key 协程的 key
     fun launchCancelLast(key:String, block: suspend CoroutineScope.() -> Unit){
-        jobs.get(key)?.let {
+        jobs[key]?.let {
             it.cancel()
         }
         jobs.put(key, launch{
