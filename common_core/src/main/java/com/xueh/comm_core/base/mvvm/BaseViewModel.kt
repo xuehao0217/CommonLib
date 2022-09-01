@@ -76,40 +76,4 @@ abstract class BaseViewModel<E> : RequestViewModel() {
             this.onResponse = onResponse
         }
     }
-
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    protected var jobs = hashMapOf<String, Job>()
-    //开启协程 如果有上一个任务 则取消
-    //key 协程的 key
-    fun launchCancelLast(key:String, block: suspend CoroutineScope.() -> Unit){
-        jobs[key]?.let {
-            it.cancel()
-        }
-        jobs.put(key, launch{
-            block.invoke(this)
-        })
-    }
-
-    //安全开启协程
-    fun launch(
-        showLoading:Boolean=true,
-        onError: (suspend ((Throwable) -> Unit))? = null,
-        block: suspend CoroutineScope.() -> Unit,
-    ) = viewModelScope.launch(CoroutineExceptionHandler { coroutineContext, throwable ->
-        apiException.value = throwable
-        LogUtils.eTag("BaseViewModel", "BaseViewModel CoroutineException --》${throwable}")
-    }) {
-        apiLoading.value = showLoading
-        kotlin.runCatching {
-            block.invoke(this)
-        }.onFailure {
-            //为了解决 suspend
-            apiException.value = it
-            onError?.invoke(it)
-            LogUtils.eTag("BaseViewModel", "BaseViewModel try catch --》${it}")
-        }
-        apiLoading.value = false
-    }
 }
