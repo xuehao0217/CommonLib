@@ -33,15 +33,26 @@ import com.xueh.comm_core.base.compose.theme.appThemeState
 @Composable
 fun CommonTitlePage(
     title: String,
+    showBackIcon: Boolean = true,
     @DrawableRes backIcon: Int = R.mipmap.bar_icon_back_black,
-    blockClick: () -> Unit,
+    backClick: (() -> Unit)? = null,
+    showTitleBottomLine:Boolean=true,
+    titleBackground: Color = Color.White,
+    backgroundPageColor: Color = Color.White,
+    rightContent: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
     Column() {
-        CommonTitleView(title, backIcon) {
-            blockClick.invoke()
+        CommonTitleView(title,
+            showBackIcon = showBackIcon,
+            titleBackground=titleBackground,
+            backIcon = backIcon,
+            rightContent = rightContent,
+            backClick = backClick)
+        if (showTitleBottomLine){
+            Divider()
         }
-        Divider()
+        //backgroundPageColor
         Surface(color = androidx.compose.material3.MaterialTheme.colorScheme.background,
             modifier = Modifier
                 .fillMaxSize()) {
@@ -55,18 +66,21 @@ fun CommonTitlePage(
 fun CommonTitleView(
     name: String,
     @DrawableRes backIcon: Int = R.mipmap.bar_icon_back_black,
-    titleRightView: (@Composable () -> Unit)? = null,
-    blockClick: () -> Unit,
+    titleBackground: Color = Color.White,
+    showBackIcon: Boolean = true,
+    rightContent: (@Composable () -> Unit)? = null,
+    backClick: (() -> Unit)? = null,
 ) {
     ProvideWindowInsets {
+        rememberSystemUiController().setStatusBarColor(
+            Color.Transparent, darkIcons = MaterialTheme.colors.isLight
+        )
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentWidth()
-                .background(androidx.compose.material3.MaterialTheme.colorScheme.background).also {
-
-                }
+                .background(titleBackground)
         ) {
             Spacer(
                 modifier = Modifier
@@ -76,9 +90,10 @@ fun CommonTitleView(
             ConstraintLayout(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .background(titleBackground)
                     .height(44.dp)
             ) {
-                val (iv_close, row_title, v_right) = createRefs()
+                val (iv_close, row_title, surface_right_view) = createRefs()
                 Row(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically,
@@ -93,12 +108,11 @@ fun CommonTitleView(
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,
-                        color = if (appThemeState.value.darkTheme) Color.White else Color.Black,
+                        color = Color.Black,
                     )
                 }
-
-                ImageCompose(id = if (appThemeState.value.darkTheme) R.mipmap.bar_icon_back_white else R.mipmap.bar_icon_back_black,
-                    modifier = Modifier
+                if (showBackIcon) {
+                    ImageCompose(id = backIcon, modifier = Modifier
                         .size(28.dp)
                         .constrainAs(iv_close) {
                             top.linkTo(row_title.top)
@@ -106,17 +120,18 @@ fun CommonTitleView(
                             start.linkTo(parent.start, 16.dp)
                         }
                         .click {
-                            blockClick.invoke()
+                            backClick?.invoke()
                         })
 
-                Surface(modifier = Modifier.constrainAs(v_right) {
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                    end.linkTo(parent.end, 15.dp)
-                }) {
-                    titleRightView?.invoke()
                 }
 
+                androidx.compose.material.Surface(modifier = Modifier.constrainAs(surface_right_view) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    end.linkTo(parent.end, 16.dp)
+                }) {
+                    rightContent?.invoke()
+                }
             }
 
         }
