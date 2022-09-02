@@ -48,7 +48,7 @@ abstract class BaseComposeActivity : AppCompatActivity() {
                         .background(MaterialTheme.colorScheme.background)
                 ) {
                     if (!getTitleText().isEmpty()) {
-                        CommonTitleView(getTitleText(), titleRightView = titleRightView) {
+                        CommonTitleView(getTitleText(), rightContent = titleRightView) {
                             this@BaseComposeActivity.finish()
                         }
                         Divider(color = Color.Gray, thickness = 0.5.dp)
