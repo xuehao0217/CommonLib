@@ -42,7 +42,7 @@ fun CommonTitlePage(
     rightContent: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
-    Column() {
+    Column {
         CommonTitleView(title,
             showBackIcon = showBackIcon,
             titleBackground=titleBackground,
@@ -52,8 +52,7 @@ fun CommonTitlePage(
         if (showTitleBottomLine){
             Divider()
         }
-        //backgroundPageColor
-        Surface(color = androidx.compose.material3.MaterialTheme.colorScheme.background,
+        Surface(color = backgroundPageColor,
             modifier = Modifier
                 .fillMaxSize()) {
             content.invoke()
