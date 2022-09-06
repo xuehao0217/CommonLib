@@ -14,6 +14,7 @@ import com.fengchen.uistatus.listener.OnCompatRetryListener
 import com.gyf.immersionbar.ImmersionBar
 import com.xueh.comm_core.R
 import com.xueh.comm_core.helper.EventBusHelper
+import com.xueh.comm_core.helper.EventBusRegister
 import com.xueh.comm_core.helper.GlobalCoroutineExceptionHandler
 import com.xueh.comm_core.helper.hasNetWorkConection
 import com.xueh.comm_core.weight.ViewLoading
@@ -31,7 +32,7 @@ abstract class DActivity<VB : ViewBinding> : BaseActivity<VB>(), CoroutineScope 
         if (isImmersionBarEnabled) {
             initImmersionBar()
         }
-        if (isRegisterEventBus()) {
+        if (isRegisterEventBus()||javaClass.isAnnotationPresent(EventBusRegister::class.java)) {
             EventBusHelper.register(this)
         }
     }
@@ -41,7 +42,7 @@ abstract class DActivity<VB : ViewBinding> : BaseActivity<VB>(), CoroutineScope 
         cancel()
         super.onDestroy()
         //在BaseActivity里销毁
-        if (isRegisterEventBus()) {
+        if (isRegisterEventBus()||javaClass.isAnnotationPresent(EventBusRegister::class.java)){
             EventBusHelper.unregister(this)
         }
         mImmersionBar?.let {

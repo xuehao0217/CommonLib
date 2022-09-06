@@ -1,6 +1,7 @@
 package com.xueh.comm_core.helper
 
 import com.blankj.utilcode.util.LogUtils
+import com.blankj.utilcode.util.ToastUtils
 import kotlinx.coroutines.CoroutineExceptionHandler
 import java.io.PrintWriter
 import java.io.StringWriter
@@ -16,6 +17,7 @@ class GlobalCoroutineExceptionHandler : CoroutineExceptionHandler {
     override fun handleException(context: CoroutineContext, exception: Throwable) {
         println("Coroutine exception: $exception")
         exception.printStackTrace()
+        ToastUtils.showShort("$exception")
         LogUtils.eTag(
             "GlobalCoroutineExceptionHandler",
             "Coroutine exception: ${getStackTrace(exception)}"

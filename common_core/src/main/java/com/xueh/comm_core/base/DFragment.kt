@@ -16,6 +16,7 @@ import com.fengchen.uistatus.listener.OnCompatRetryListener
 import com.gyf.immersionbar.ImmersionBar
 import com.xueh.comm_core.R
 import com.xueh.comm_core.helper.EventBusHelper
+import com.xueh.comm_core.helper.EventBusRegister
 import com.xueh.comm_core.helper.GlobalCoroutineExceptionHandler
 import com.xueh.comm_core.helper.hasNetWorkConection
 import com.xueh.comm_core.weight.ViewLoading
@@ -33,7 +34,7 @@ abstract class DFragment<VB : ViewBinding> : BaseFragment<VB>(), CoroutineScope 
         super.onAttach(context)
         //该方法与onDetach对应,只有当对象完全销毁时解除事件绑定！
         //在oncreate时还是会多次调用的
-        if (isRegisterEventBus()) {
+        if (isRegisterEventBus()||javaClass.isAnnotationPresent(EventBusRegister::class.java)) {
             EventBusHelper.register(this)
         }
     }
@@ -42,7 +43,7 @@ abstract class DFragment<VB : ViewBinding> : BaseFragment<VB>(), CoroutineScope 
         cancel()
         super.onDetach()
         //在onDestroyView时与activity还没有解绑！
-        if (isRegisterEventBus()) {
+        if (isRegisterEventBus()||javaClass.isAnnotationPresent(EventBusRegister::class.java)){
             EventBusHelper.unregister(this)
         }
         mImmersionBar?.let {
