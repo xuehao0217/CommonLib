@@ -1,5 +1,6 @@
 package com.xueh.comm_core.weight.compose
 
+import android.app.Activity
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -7,10 +8,11 @@ import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -21,7 +23,11 @@ import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.statusBarsHeight
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.xueh.comm_core.R
+import com.xueh.comm_core.base.compose.theme.BaseComposeView
+import com.xueh.comm_core.base.compose.theme.GrayAppAdapter
 import com.xueh.comm_core.base.compose.theme.appThemeState
+import com.xueh.comm_core.utils.compose.setSystemBarsColor
+import com.xueh.comm_core.utils.compose.transparentStatusBar
 
 /**
  * 创 建 人: xueh
@@ -32,31 +38,46 @@ import com.xueh.comm_core.base.compose.theme.appThemeState
 //公用带标题页面
 @Composable
 fun CommonTitlePage(
+    activity: Activity,
     title: String,
     showBackIcon: Boolean = true,
-    @DrawableRes backIcon: Int = R.mipmap.bar_icon_back_black,
+    @DrawableRes backIcon: Int = if (appThemeState.value.darkTheme) R.mipmap.bar_icon_back_white else R.mipmap.bar_icon_back_black,
     backClick: (() -> Unit)? = null,
-    showTitleBottomLine:Boolean=true,
-    titleBackground: Color = Color.White,
-    backgroundPageColor: Color = Color.White,
-    rightContent: (@Composable () -> Unit)? = null,
+    showTitleBottomLine: Boolean = true,
+    titleBackground: Color? = null,
+    contentBackground: Color? = null,
+    titleRightContent: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
-    Column {
-        CommonTitleView(title,
-            showBackIcon = showBackIcon,
-            titleBackground=titleBackground,
-            backIcon = backIcon,
-            rightContent = rightContent,
-            backClick = backClick)
-        if (showTitleBottomLine){
-            Divider()
+    activity.transparentStatusBar()
+    activity.setSystemBarsColor(color = androidx.compose.material3.MaterialTheme.colorScheme.onPrimaryContainer,
+        darkIcons = appThemeState.value.darkTheme)
+    BaseComposeView {
+        GrayAppAdapter {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(contentBackground ?: androidx.compose.material3.MaterialTheme.colorScheme.background)
+            ) {
+                if (title.isNotEmpty()) {
+                    CommonTitleView(title,
+                        showBackIcon = showBackIcon,
+                        backIcon = backIcon,
+                        rightContent = titleRightContent,
+                        titleBackground = titleBackground ?: androidx.compose.material3.MaterialTheme.colorScheme.background) {
+                        activity.finish()
+                    }
+                    if (showTitleBottomLine) {
+                        androidx.compose.material3.Divider(color = Color.Gray, thickness = 0.5.dp)
+                    }
+                }
+                Surface(color = contentBackground ?: androidx.compose.material3.MaterialTheme.colorScheme.background, modifier = Modifier
+                    .fillMaxSize()) {
+                    content.invoke()
+                }
+            }
         }
-        Surface(color = backgroundPageColor,
-            modifier = Modifier
-                .fillMaxSize()) {
-            content.invoke()
-        }
+
     }
 }
 
@@ -64,16 +85,13 @@ fun CommonTitlePage(
 @Composable
 fun CommonTitleView(
     name: String,
-    @DrawableRes backIcon: Int = R.mipmap.bar_icon_back_black,
-    titleBackground: Color = Color.White,
+    @DrawableRes backIcon: Int = if (appThemeState.value.darkTheme) R.mipmap.bar_icon_back_white else R.mipmap.bar_icon_back_black,
+    titleBackground: Color = androidx.compose.material3.MaterialTheme.colorScheme.background,
     showBackIcon: Boolean = true,
     rightContent: (@Composable () -> Unit)? = null,
     backClick: (() -> Unit)? = null,
 ) {
     ProvideWindowInsets {
-        rememberSystemUiController().setStatusBarColor(
-            Color.Transparent, darkIcons = MaterialTheme.colors.isLight
-        )
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -107,7 +125,7 @@ fun CommonTitleView(
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,
-                        color = Color.Black,
+                        color = if (appThemeState.value.darkTheme) Color.White else Color.Black,
                     )
                 }
                 if (showBackIcon) {
@@ -123,12 +141,13 @@ fun CommonTitleView(
                         })
 
                 }
-
-                androidx.compose.material.Surface(modifier = Modifier.constrainAs(surface_right_view) {
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                    end.linkTo(parent.end, 16.dp)
-                }) {
+                androidx.compose.material.Surface(modifier = Modifier
+                    .background(titleBackground)
+                    .constrainAs(surface_right_view) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        end.linkTo(parent.end, 16.dp)
+                    }) {
                     rightContent?.invoke()
                 }
             }

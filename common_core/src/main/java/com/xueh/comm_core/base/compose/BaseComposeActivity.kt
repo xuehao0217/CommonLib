@@ -29,41 +29,6 @@ abstract class BaseComposeActivity : AppCompatActivity() {
     }
 
     abstract fun initView(savedInstanceState: Bundle?)
-
-    protected open fun getTitleText() = ""
-
-    @Composable
-    protected open fun baseContentRoot(
-        titleRightView: (@Composable () -> Unit)? = null,
-        content: @Composable () -> Unit,
-    ) {
-        BaseComposeView {
-            transparentStatusBar()
-            setSystemBarsColor(color = MaterialTheme.colorScheme.onPrimaryContainer,
-                darkIcons = appThemeState.value.darkTheme)
-            GrayAppAdapter {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.background)
-                ) {
-                    if (!getTitleText().isEmpty()) {
-                        CommonTitleView(getTitleText(), rightContent = titleRightView) {
-                            this@BaseComposeActivity.finish()
-                        }
-                        Divider(color = Color.Gray, thickness = 0.5.dp)
-                    }
-                    Surface(color = MaterialTheme.colorScheme.background, modifier = Modifier
-                        .fillMaxSize()) {
-                        content.invoke()
-                    }
-                }
-            }
-
-        }
-    }
-
-
 }
 
 

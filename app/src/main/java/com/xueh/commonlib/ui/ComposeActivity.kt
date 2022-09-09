@@ -31,26 +31,26 @@ import androidx.navigation.navArgument
 import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.base.compose.BaseComposeActivity
 import com.xueh.comm_core.base.compose.theme.*
+import com.xueh.comm_core.weight.compose.CommonTitlePage
 import com.xueh.commonlib.R
 import com.xueh.commonlib.ui.compose.*
 
 class ComposeActivity : BaseComposeActivity() {
-    override fun getTitleText() = "Compose"
-
     override fun initView(savedInstanceState: Bundle?) {
         setContent {
             var showMenu by remember {
                 mutableStateOf(false)
             }
-            baseContentRoot(titleRightView = {
-                Row {
+            CommonTitlePage(this, title = "Compose", titleRightContent = {
+                Row(Modifier.background(MaterialTheme.colorScheme.background)) {
                     androidx.compose.material3.IconButton(onClick = {
                         appThemeState.value = appThemeState
                             .value.copy(darkTheme = !appThemeState.value.darkTheme)
                     }) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_sleep),
-                            contentDescription = ""
+                            contentDescription = "",
+                            tint = if (appThemeState.value.darkTheme) Color.White else Color.Black
                         )
                     }
 
@@ -59,7 +59,8 @@ class ComposeActivity : BaseComposeActivity() {
                     }) {
                         Icon(
                             Icons.Filled.Menu,
-                            contentDescription = ""
+                            contentDescription = "",
+                            tint = if (appThemeState.value.darkTheme) Color.White else Color.Black
                         )
                     }
                 }
@@ -85,6 +86,8 @@ class ComposeActivity : BaseComposeActivity() {
         val navController = rememberNavController()
         NavHost(navController = navController, startDestination = RouteConfig.ACTION_LIST) {
             composable(RouteConfig.ACTION_LIST) {
+                ToastUtils.showShort("${navController.currentBackStackEntry?.destination}")
+
                 var str = listOf(
                     ItemData("下拉加载使用", RouteConfig.REFRESHLOADUSE),
                     ItemData("ConstraintSet使用", RouteConfig.CONSTRAINTSET),
@@ -93,9 +96,10 @@ class ComposeActivity : BaseComposeActivity() {
                     ItemData("LazyColumnPage", RouteConfig.LAZYCOLUMNPAGE),
                     ItemData("路由传参", RouteConfig.PARAMETER),
                     ItemData("ScrollableAppBar", RouteConfig.SCROLLABLEAPPBAR),
-                    ItemData("样式变化", RouteConfig.ComposeStylePage),
+                    ItemData("BottomNavigation", RouteConfig.BottomNavigation),
                 )
                 LazyColumn() {
+
                     itemsIndexed(str) { _, item ->
                         itemView(item.str, false) {
                             if (item.router == RouteConfig.PARAMETER) {
@@ -141,8 +145,8 @@ class ComposeActivity : BaseComposeActivity() {
                 BarPage()
             }
 
-            composable(RouteConfig.ComposeStylePage) {
-//                ComposeStylePage()
+            composable(RouteConfig.BottomNavigation) {
+
             }
         }
     }
