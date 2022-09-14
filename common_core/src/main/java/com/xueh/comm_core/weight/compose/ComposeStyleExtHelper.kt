@@ -4,11 +4,15 @@ import androidx.compose.foundation.Indication
 import androidx.compose.foundation.IndicationInstance
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.ContentDrawScope
+import androidx.compose.ui.unit.TextUnit
 
 /**
  * 创 建 人: xueh
@@ -77,5 +81,14 @@ fun Modifier.clickPreventFast(millis: Long = 800, onClick: () -> Unit): Modifier
             onClick()
             timeStamp = System.currentTimeMillis()
         }
+    }
+}
+
+
+
+@Composable
+fun BoxText(text: String, textColor: Color = Color.Unspecified, fontSize: TextUnit = TextUnit.Unspecified, modifier: Modifier = Modifier) {
+    Box(modifier = modifier, contentAlignment = Alignment.Center) {
+        Text(text = text, color = textColor, fontSize = fontSize)
     }
 }
