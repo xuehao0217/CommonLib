@@ -17,7 +17,8 @@ object RouteConfig {
 
     const val PARAMETER="parameter"
     const val SCROLLABLEAPPBAR="ScrollableAppBar"
-    const val BottomNavigation="BottomNavigation"
+    const val navigate_param_transfer2="navigate_param_transfer2"
+    const val navigate_param_transfer1="navigate_param_transfer1"
 
     const val name="name"
     const val age="age"

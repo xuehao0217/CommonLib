@@ -1,11 +1,13 @@
 package com.xueh.comm_core.helper.compose
 
+import android.os.Bundle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.NavHostController
 
 /**
  * 创 建 人: xueh
@@ -42,4 +44,37 @@ fun rememberLifecycle(): ComposeLifecycleObserver {
     }
     val ctx = LocalLifecycleOwner.current
     return remember(ctx) { observer }
+}
+
+
+
+/**
+ * 返回指定的route并回调参数
+ */
+fun NavHostController.goBackRouteWithParams(
+    route: String,
+    autoPop: Boolean = true,
+    callback: (Bundle.() -> Unit)? = null,
+) {
+    getBackStackEntry(route).arguments?.let {
+        callback?.invoke(it)
+    }
+    if (autoPop) {
+        popBackStack()
+    }
+}
+
+/**
+ * 回到上级页面，并回调参数
+ */
+fun NavHostController.goBackWithParams(
+    autoPop: Boolean = true,
+    callback: (Bundle.() -> Unit)? = null,
+) {
+    previousBackStackEntry?.arguments?.let {
+        callback?.invoke(it)
+    }
+    if (autoPop) {
+        popBackStack()
+    }
 }

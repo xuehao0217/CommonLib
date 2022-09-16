@@ -96,7 +96,7 @@ class ComposeActivity : BaseComposeActivity() {
                     ItemData("LazyColumnPage", RouteConfig.LAZYCOLUMNPAGE),
                     ItemData("路由传参", RouteConfig.PARAMETER),
                     ItemData("ScrollableAppBar", RouteConfig.SCROLLABLEAPPBAR),
-                    ItemData("BottomNavigation", RouteConfig.BottomNavigation),
+                    ItemData("跳转互传参数", RouteConfig.navigate_param_transfer1),
                 )
                 LazyColumn() {
 
@@ -145,8 +145,12 @@ class ComposeActivity : BaseComposeActivity() {
                 BarPage()
             }
 
-            composable(RouteConfig.BottomNavigation) {
+            composable(RouteConfig.navigate_param_transfer1) {
+                NavigateParams1View(navController)
+            }
 
+            composable(RouteConfig.navigate_param_transfer2) {
+                NavigateParams2View(navController)
             }
         }
     }
