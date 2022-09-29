@@ -96,7 +96,7 @@ dependencies {
     api Deps.Compose.accompanist_insets
     api Deps.Compose.accompanist_systemuicontroller
     api Deps.Compose.accompanist_swiperefresh
-    api Deps.Compose.compose_refreshlayout
+    api Deps.Compose.compose_smartrefresh
     api Deps.Compose.navigation_compose
     api Deps.Compose.lifecycle_runtime_ktx
     api Deps.Compose.lifecycle_viewmodel

@@ -26,39 +26,42 @@ import androidx.paging.compose.LazyPagingItems
 import com.blankj.utilcode.util.ToastUtils
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.zj.refreshlayout.SwipeRefreshLayout
-import kotlinx.coroutines.delay
+import com.loren.component.view.composesmartrefresh.MyRefreshHeader
+import com.loren.component.view.composesmartrefresh.SmartSwipeRefreshState
+import com.loren.component.view.composesmartrefresh.rememberSmartSwipeRefreshState
 
 
 @Composable
 fun <T : Any> RefreshList(
-    swipeEnabled: Boolean = true,
     lazyPagingItems: LazyPagingItems<T>,
     listState: LazyListState = rememberLazyListState(),
-    backgroundColor: Color=Color.White,
+    refreshState: SmartSwipeRefreshState = rememberSmartSwipeRefreshState(),//下拉刷新状态
+    backgroundColor: Color = Color.White,
     contentPadding: PaddingValues = PaddingValues(0.dp),
+    headerIndicator: @Composable () -> Unit = { MyRefreshHeader(refreshState.refreshFlag) },
     itemContent: LazyListScope.() -> Unit,
 ) {
     var isRefreshing by remember { mutableStateOf(false) }
-
     //错误页
     val err = lazyPagingItems.loadState.refresh is LoadState.Error
     if (err) {
         ErrorContent { lazyPagingItems.retry() }
         return
     }
-
-    SwipeRefreshLayout(isRefreshing = isRefreshing, onRefresh = {
+    LaunchedEffect(lazyPagingItems.itemSnapshotList) {
+        isRefreshing = false
+    }
+    SwipeRefresh(isRefreshing = isRefreshing, scrollState = listState, refreshState = refreshState, headerIndicator = headerIndicator, onRefresh = {
         isRefreshing = true
         lazyPagingItems.refresh()
-    }, swipeEnabled = swipeEnabled) {
+    }) {
         //刷新状态
-        isRefreshing = (lazyPagingItems.loadState.refresh is LoadState.Loading)
-
         LazyColumn(
-            modifier = Modifier.fillMaxSize().background(backgroundColor),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(backgroundColor),
             horizontalAlignment = Alignment.CenterHorizontally,
-            state = listState, contentPadding  = contentPadding,
+            state = listState, contentPadding = contentPadding,
         ) {
             //条目布局
             itemContent()
