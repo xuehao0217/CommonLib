@@ -35,9 +35,8 @@ import kotlinx.coroutines.launch
  * 备注：
  */
 @Composable
-fun LazyColumnPage() {
-    val viewModel: ComposeViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
-
+fun LazyColumnPage(viewModel: ComposeViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
+    viewModel.loadDsl()
     val bannerDatas by viewModel.bannerLiveData.observeAsState()
     Box(
         contentAlignment = Alignment.BottomEnd,
