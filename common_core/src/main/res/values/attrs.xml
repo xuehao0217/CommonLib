@@ -1,46 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <declare-styleable name="NavigationBar">
-        <attr name="navigationHeight" format="dimension" />
-        <attr name="navigationBackground" format="color" />
-        <attr name="navigation_tabTextSize" format="dimension" />
-        <attr name="navigation_tabTextTop" format="dimension" />
-        <attr name="navigation_tabIconSize" format="dimension" />
-        <attr name="navigation_tabNormalColor" format="color" />
-        <attr name="navigation_tabSelectColor" format="color" />
-        <attr name="navigation_hintPointSize" format="dimension" />
-        <attr name="navigation_msgPointSize" format="dimension" />
-        <attr name="navigation_hintPointLeft" format="dimension" />
-        <attr name="navigation_msgPointLeft" format="dimension" />
-        <attr name="navigation_hintPointTop" format="dimension" />
-        <attr name="navigation_msgPointTop" format="dimension" />
-        <attr name="navigation_msgPointTextSize" format="dimension" />
-        <attr name="navigation_lineHeight" format="dimension" />
-        <attr name="navigation_lineColor" format="color" />
-        <attr name="navigation_hasPadding" format="boolean"/>
-        <attr name="navigation_addIconSize" format="dimension" />
-        <attr name="navigation_addLayoutHeight" format="dimension" />
-        <attr name="navigation_addLayoutBottom" format="dimension"/>
-        <attr name="navigation_scaleType">
-            <flag name="CENTER_INSIDE" value="0" />
-            <flag name="CENTER_CROP" value="1" />
-            <flag name="CENTER" value="2" />
-            <flag name="FIT_CENTER" value="3" />
-            <flag name="FIT_END" value="4" />
-            <flag name="FIT_START" value="5" />
-            <flag name="FIT_XY" value="6" />
-            <flag name="MATRIX" value="7" />
-        </attr>
-        <attr name="navigation_addLayoutRule">
-            <flag name="RULE_CENTER" value="0" />
-            <flag name="RULE_BOTTOM" value="1" />
-        </attr>
-        <attr name="navigation_addAsFragment" format="boolean"/>
-        <attr name="navigation_addSelectTextColor" format="color"/>
-        <attr name="navigation_addNormalTextColor" format="color"/>
-        <attr name="navigation_addTextSize" format="dimension"/>
-        <attr name="navigation_addTextTopMargin" format="dimension"/>
-        <attr name="navigation_addAlignBottom" format="dimension"/>
-    </declare-styleable>
+
 
 </resources>
