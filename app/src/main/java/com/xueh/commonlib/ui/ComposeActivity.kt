@@ -44,13 +44,12 @@ class ComposeActivity : BaseComposeActivity() {
             CommonTitlePage(this, title = "Compose", titleRightContent = {
                 Row(Modifier.background(MaterialTheme.colorScheme.background)) {
                     androidx.compose.material3.IconButton(onClick = {
-                        appThemeState.value = appThemeState
-                            .value.copy(darkTheme = !appThemeState.value.darkTheme)
+                        appThemeState = appThemeState.copy(darkTheme = !appThemeState.darkTheme)
                     }) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_sleep),
                             contentDescription = "",
-                            tint = if (appThemeState.value.darkTheme) Color.White else Color.Black
+                            tint = if (appThemeState.darkTheme) Color.White else Color.Black
                         )
                     }
 
@@ -60,7 +59,7 @@ class ComposeActivity : BaseComposeActivity() {
                         Icon(
                             Icons.Filled.Menu,
                             contentDescription = "",
-                            tint = if (appThemeState.value.darkTheme) Color.White else Color.Black
+                            tint = if (appThemeState.darkTheme) Color.White else Color.Black
                         )
                     }
                 }
@@ -70,8 +69,7 @@ class ComposeActivity : BaseComposeActivity() {
                     Box(modifier = Modifier.fillMaxWidth()) {
                         PalletMenu(
                             modifier = Modifier.align(Alignment.TopEnd)) {
-                            appThemeState.value =
-                                appThemeState.value.copy(darkTheme = appThemeState.value.darkTheme,
+                            appThemeState = appThemeState.copy(darkTheme = appThemeState.darkTheme,
                                     appThemeColorType = it)
                         }
                     }

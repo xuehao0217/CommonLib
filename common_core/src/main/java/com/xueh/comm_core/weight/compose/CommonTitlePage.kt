@@ -41,7 +41,7 @@ fun CommonTitlePage(
     activity: Activity,
     title: String,
     showBackIcon: Boolean = true,
-    @DrawableRes backIcon: Int = if (appThemeState.value.darkTheme) R.mipmap.bar_icon_back_white else R.mipmap.bar_icon_back_black,
+    @DrawableRes backIcon: Int = if (appThemeState.darkTheme) R.mipmap.bar_icon_back_white else R.mipmap.bar_icon_back_black,
     backClick: (() -> Unit)? = null,
     showTitleBottomLine: Boolean = true,
     titleBackground: Color? = null,
@@ -51,7 +51,7 @@ fun CommonTitlePage(
 ) {
     activity.transparentStatusBar()
     activity.setSystemBarsColor(color = androidx.compose.material3.MaterialTheme.colorScheme.onPrimaryContainer,
-        darkIcons = appThemeState.value.darkTheme)
+        darkIcons = appThemeState.darkTheme)
     BaseComposeView {
         GrayAppAdapter {
             Column(
@@ -85,7 +85,7 @@ fun CommonTitlePage(
 @Composable
 fun CommonTitleView(
     name: String,
-    @DrawableRes backIcon: Int = if (appThemeState.value.darkTheme) R.mipmap.bar_icon_back_white else R.mipmap.bar_icon_back_black,
+    @DrawableRes backIcon: Int = if (appThemeState.darkTheme) R.mipmap.bar_icon_back_white else R.mipmap.bar_icon_back_black,
     titleBackground: Color = androidx.compose.material3.MaterialTheme.colorScheme.background,
     showBackIcon: Boolean = true,
     rightContent: (@Composable () -> Unit)? = null,
@@ -125,7 +125,7 @@ fun CommonTitleView(
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,
-                        color = if (appThemeState.value.darkTheme) Color.White else Color.Black,
+                        color = if (appThemeState.darkTheme) Color.White else Color.Black,
                     )
                 }
                 if (showBackIcon) {

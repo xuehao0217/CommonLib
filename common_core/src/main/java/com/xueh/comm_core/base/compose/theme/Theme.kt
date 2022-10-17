@@ -52,7 +52,7 @@ fun ComposeMaterial3Theme(
 
 @Composable
 fun BaseComposeView(
-    appThemeState: AppThemeState = com.xueh.comm_core.base.compose.theme.appThemeState.value,
+    appThemeState: AppThemeState = com.xueh.comm_core.base.compose.theme.appThemeState,
     content: @Composable () -> Unit,
 ) {
     ComposeMaterial3Theme(
@@ -61,9 +61,9 @@ fun BaseComposeView(
     ) {
         rememberSystemUiController().run {
             setStatusBarColor(androidx.compose.material3.MaterialTheme.colorScheme.onPrimaryContainer,
-                com.xueh.comm_core.base.compose.theme.appThemeState.value.darkTheme)
+                com.xueh.comm_core.base.compose.theme.appThemeState.darkTheme)
             setSystemBarsColor(androidx.compose.material3.MaterialTheme.colorScheme.onPrimaryContainer,
-                com.xueh.comm_core.base.compose.theme.appThemeState.value.darkTheme)
+                com.xueh.comm_core.base.compose.theme.appThemeState.darkTheme)
         }
         content()
     }
