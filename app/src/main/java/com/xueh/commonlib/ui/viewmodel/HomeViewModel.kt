@@ -79,12 +79,18 @@ class HomeViewModel : BaseViewModel<RestApi>() {
     }
 
     fun loadStateFlow() {
-        apiFlowBaseResult({
+        launchNet(true, request = {
             api.bannerList3()
-        }, {
+        }){
             stateFlowDada.emit(it)
-//            banner.postValue(it)
-        })
+        }
+
+//        apiFlowBaseResult({
+//            api.bannerList3()
+//        }, {
+//            stateFlowDada.emit(it)
+////            banner.postValue(it)
+//        })
     }
 
     //上传头像

@@ -4,10 +4,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.blankj.utilcode.util.LogUtils
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import com.blankj.utilcode.util.NetworkUtils
+import com.blankj.utilcode.util.ToastUtils
+import com.xueh.comm_core.net.BaseResult
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 /**
  * 创 建 人: xueh
@@ -54,5 +55,42 @@ abstract class AbsViewModel : ViewModel() {
             LogUtils.eTag("BaseViewModel", "BaseViewModel try catch --》${it}")
         }
         apiLoading.value = false
+    }
+
+
+
+
+    fun <T> launchNet(
+        showLoading: Boolean = false,
+        request: suspend () -> BaseResult<T>,
+        start: (() -> Unit)? = null,
+        error: ((Throwable) -> Unit)? = null,
+        finally: (() -> Unit)? = null,
+        result: suspend (T) -> Unit,
+    ) {
+        if (!NetworkUtils.isConnected()) {
+            ToastUtils.showShort("网络异常，请检查网络设置")
+            error?.invoke(Exception("网络异常，请检查网络设置"))
+            return
+        }
+        launch(showLoading=showLoading,onError = {
+            error?.invoke(Exception(it.message))
+            ToastUtils.showShort(it.message.toString())
+        }) {
+            flow {
+                emit(request())
+            }.flowOn(Dispatchers.IO).onStart {
+                start?.invoke()
+            }.onCompletion {
+                finally?.invoke()
+            }.collect {
+                if (it.isSuccess()) {
+                    result.invoke(it.data)
+                } else {
+                    error?.invoke(Exception(it.errorMsg))
+                    ToastUtils.showShort(it.errorMsg)
+                }
+            }
+        }
     }
 }
