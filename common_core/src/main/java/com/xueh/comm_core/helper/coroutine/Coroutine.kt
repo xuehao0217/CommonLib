@@ -10,13 +10,14 @@ import kotlin.coroutines.EmptyCoroutineContext
  * 备注：
  */
 // https://juejin.cn/post/7052269576851030030#heading-2
+
 // 自己的launch扩展
 //lifecycleScope.launchSafety {
 //    // 这里能执行完的代码，一定是成功的
 //}.onCatch {
 //    // 想来几个就来几个，不想处理就一个都不写
 //}.onComplete {
-//
+//不管成功失败onCatch这个onComplete都会走
 //}
 
 @OptIn(ExperimentalCoroutinesApi::class)
