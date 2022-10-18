@@ -117,7 +117,7 @@ class SafetyCoroutine<T>(
     fun onCancell(cancell: (Throwable) -> Unit) = apply {
         cancellBlock.add(cancell)
     }
-
+    //不管成功失败onCatch这个都会走
     fun onComplete(complete: (T?) -> Unit) = apply {
         completeBlock.add(complete)
     }
