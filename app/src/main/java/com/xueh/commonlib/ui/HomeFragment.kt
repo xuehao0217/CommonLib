@@ -2,19 +2,10 @@ package com.xueh.commonlib.ui
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import androidx.activity.compose.setContent
-import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.base.compose.BaseComposeActivity
 import com.xueh.comm_core.base.mvvm.MVVMFragment
 import com.xueh.comm_core.helper.*
-import com.xueh.comm_core.net.coroutinedsl.LiveDataResult
-import com.xueh.comm_core.weight.GridItemDecoration
-import com.xueh.comm_core.weight.SpacesItemDecoration
 import com.xueh.commonlib.R
 import com.xueh.commonlib.databinding.FragmentHomeBinding
 import com.xueh.commonlib.databinding.ItemLayoutBinding
@@ -36,26 +27,11 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
             }
 
             tvDownload.setOnClickListener {
-                viewModel.loadLiveData().observe(this@HomeFragment) {
-                    when (it) {
-                        is LiveDataResult.Response -> {
-                            ToastUtils.showShort(it.response.data.toString())
-                        }
-                        is LiveDataResult.Error -> {
-
-                        }
-                        is LiveDataResult.Start -> {
-
-                        }
-                        is LiveDataResult.Finally -> {
-
-                        }
-                    }
-                }
+                viewModel.downloadFile()
             }
 
             tvGetClean.setOnClickListener {
-                viewModel.downloadFile()
+                viewModel.loadFlow()
             }
         }
     }

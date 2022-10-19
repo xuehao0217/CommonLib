@@ -166,6 +166,22 @@ open class RequestViewModel : AbsViewModel() {
         data class Error<T>(val exception: Exception) : LiveDataResult<T>()
     }
 
+    //    viewModel.loadLiveData().observe(this@HomeFragment) {
+    //        when (it) {
+    //            is RequestViewModel.LiveDataResult.Response -> {
+    //                ToastUtils.showShort(it.response.data.toString())
+    //            }
+    //            is RequestViewModel.LiveDataResult.Error -> {
+    //
+    //            }
+    //            is RequestViewModel.LiveDataResult.Start -> {
+    //
+    //            }
+    //            is RequestViewModel.LiveDataResult.Finally -> {
+    //
+    //            }
+    //        }
+    //    }
     protected fun <Response> apiLiveData(
         context: CoroutineContext = EmptyCoroutineContext,
         timeoutInMs: Long = 3000L,
