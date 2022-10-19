@@ -3,7 +3,7 @@ Kotlin 协程 DSL网络请求封装
 Compose 使用
 
 #### Compose
-<img width="400" height="680" src="https://github.com/xuehao0217/flutter_widget_demo/blob/master/screenshot/screenshot.gif"/>
+<img width="400" height="680" src="https://github.com/xuehao0217/CommonLib/blob/master/screenshot/Screenrecorder-2022-10-19-14-42-07-579.gif"/>
 #### BaseViewModel使用
 ```kotlin
     class HomeViewModel : BaseViewModel<RestApi>() {
