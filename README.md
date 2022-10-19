@@ -3,7 +3,7 @@ Kotlin 协程 DSL网络请求封装
 Compose 使用
 
 #### Compose
-<img width="1440" height="3200" src="https://github.com/xuehao0217/CommonLib/blob/master/screenshot/Screenrecorder-2022-10-19-14-42-07-579.gif"/>
+<img width="720" height="1600" src="https://github.com/xuehao0217/CommonLib/blob/master/screenshot/Screenrecorder-2022-10-19-14-42-07-579.gif"/>
 
 
 #### BaseViewModel使用
