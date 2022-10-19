@@ -3,13 +3,16 @@ package com.xueh.comm_core.base.mvvm
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.blankj.utilcode.util.LogUtils
+import com.blankj.utilcode.util.NetworkUtils
+import com.blankj.utilcode.util.ToastUtils
+import com.xueh.comm_core.helper.launchSafety
 import com.xueh.comm_core.net.BaseResult
 import com.xueh.comm_core.net.coroutinedsl.RequestViewModel
 import com.xueh.comm_core.net.coroutinedsl.ViewModelDsl
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onStart
 
 
 /**
@@ -33,9 +36,54 @@ abstract class BaseViewModel<E> : RequestViewModel() {
     }
 
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//    launchNet( request = {
+//        api.bannerList3()
+//    },start = {
+//        apiLoading.value=true
+//    }, finally = {
+//        apiLoading.value=false
+//    }){
+//        stateFlowDada.emit(it)
+//    }
+    fun <T> launchNet(
+        request: suspend () -> BaseResult<T>,
+        start: (() -> Unit)? = null,
+        error: ((Throwable) -> Unit)? = null,
+        finally: (() -> Unit)? = null,
+        result: suspend (T) -> Unit,
+    ) {
+        if (!NetworkUtils.isConnected()) {
+            ToastUtils.showShort("网络异常，请检查网络设置")
+            error?.invoke(Exception("网络异常，请检查网络设置"))
+            return
+        }
+        viewModelScope.launchSafety {
+            flow {
+                emit(request())
+            }.flowOn(Dispatchers.IO).onStart {
+                start?.invoke()
+            }.collect {
+                if (it.isSuccess()) {
+                    result.invoke(it.data)
+                } else {
+                    error?.invoke(Exception(it.errorMsg))
+                    ToastUtils.showShort(it.errorMsg)
+                }
+            }
+        }.onCatch {
+            error?.invoke(Exception(it.message))
+            ToastUtils.showShort(it.message.toString())
+        }.onComplete {
+            finally?.invoke()
+        }
+    }
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
     protected fun <Response> apiFlowBaseResult(
         request: suspend () -> BaseResult<Response>,
-        block: suspend (Response) -> Unit
+        block: suspend (Response) -> Unit,
     ) {
         apiFlow({ request.invoke() }) {
             if (it.isSuccess()) {
@@ -48,7 +96,7 @@ abstract class BaseViewModel<E> : RequestViewModel() {
 
     //DSL
     protected fun <Response> apiDslBaseResult(
-        apiDSL: ApiDslBaseResult<Response>.() -> Unit
+        apiDSL: ApiDslBaseResult<Response>.() -> Unit,
     ) {
         apiDSL<BaseResult<Response>> {
             onRequest {
