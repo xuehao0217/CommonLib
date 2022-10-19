@@ -24,78 +24,84 @@ class ViewModelDsl<Response> {
 
     internal lateinit var request: suspend () -> Response
 
-    internal var onStart: (() -> Boolean?)? = null
+    internal var start: (() -> Boolean?)? = null
 
-    internal var onResponse: ((Response) -> Unit)? = null
+    internal var response: ((Response) -> Unit)? = null
 
-    internal var onError: ((Exception) -> Boolean?)? = null
+    internal var error: ((Exception) -> Boolean?)? = null
 
-    internal var onFinally: (() -> Boolean?)? = null
+    internal var finally: (() -> Boolean?)? = null
 
 
-    infix fun onStart(onStart: (() -> (Boolean?))?) {
-        this.onStart = onStart
+    infix fun onStart(start: (() -> (Boolean?))?) {
+        this.start = start
     }
 
     infix fun onRequest(request: suspend () -> Response) {
         this.request = request
     }
 
-    infix fun onResponse(onResponse: ((Response) -> Unit)?) {
-        this.onResponse = onResponse
+    infix fun onResponse(response: ((Response) -> Unit)?) {
+        this.response = response
     }
 
-    infix fun onError(onError: ((Exception) -> Boolean?)?) {
-        this.onError = onError
+    infix fun onError(error: ((Exception) -> Boolean?)?) {
+        this.error = error
     }
 
-    infix fun onFinally(onFinally: (() -> Boolean?)?) {
-        this.onFinally = onFinally
+    infix fun onFinally(finally: (() -> Boolean?)?) {
+        this.finally = finally
     }
 
 
     internal fun launch(viewModelScope: AbsViewModel) {
         viewModelScope.viewModelScope.launch {
-            onStart?.invoke()
+            start?.invoke()
             runCatching {
                 withContext(Dispatchers.IO) {
                     request()
                 }
             }.onSuccess {
-                onResponse?.invoke(it)
-                onResponseSuspend?.invoke(it)
+                response?.invoke(it)
+                responseSuspend?.invoke(it)
             }.onFailure {
-                onError?.invoke(Exception(it))
+                error?.invoke(Exception(it))
             }
-            onFinally?.invoke()
+            finally?.invoke()
         }
     }
 
 
     internal fun launchFlow(viewModelScope: AbsViewModel) {
         viewModelScope.viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
-            onError?.invoke(Exception(throwable.message))
-        }){
+            error?.invoke(Exception(throwable.message))
+        }) {
             flow {
                 emit(request())
             }.flowOn(Dispatchers.IO).onStart {
-                onStart?.invoke()
+                start?.invoke()
             }.onCompletion {
-                onFinally?.invoke()
+                finally?.invoke()
             }.catch {
-                onError?.invoke(Exception(it.message))
+                error?.invoke(Exception(it.message))
             }.collect {
-                onResponse?.invoke(it)
-                onResponseSuspend?.invoke(it)
+                response?.invoke(it)
+                responseSuspend?.invoke(it)
             }
         }
     }
 
     /////////////////////////////////////////////////////////////////////////////////////
     //使用flow 需要Suspend 在协程 中操作  MutableStateFlow<List<BannerVO>>(emptyList())
-    internal var onResponseSuspend: (suspend (Response) -> Unit)? = null
-    infix fun onResponseSuspend(onResponse: (suspend (Response) -> Unit)?) {
-        this.onResponseSuspend = onResponse
+    internal var responseSuspend: (suspend (Response) -> Unit)? = null
+    infix fun onResponseSuspend(responseSuspend: (suspend (Response) -> Unit)?) {
+        this.responseSuspend = responseSuspend
+    }
+
+    //解析了BaseResult
+    internal lateinit var requestParseData: suspend () -> BaseResult<Response>
+    infix fun onRequestParseData(request: suspend () -> BaseResult<Response>) {
+        this.requestParseData = request
     }
     /////////////////////////////////////////////////////////////////////////////////////
 

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.viewbinding.ViewBinding
+import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.base.DFragment
 import com.xueh.comm_core.base.mvvm.ibase.AbsViewModel
 import com.xueh.comm_core.helper.ViewModelHelper
@@ -30,6 +31,7 @@ abstract class MVVMFragment<VB : ViewBinding, VM : AbsViewModel> : DFragment<VB>
         }
 
         viewModel.apiException.observe(this) {
+            ToastUtils.showShort("${it}")
             Log.e("MVVMFragment","BaseViewModel-->$it" )
         }
     }

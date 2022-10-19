@@ -32,7 +32,7 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
     override fun initListener() {
         with(binding) {
             tvGetDsl.setOnClickListener {
-                viewModel.loadStateFlow()
+                viewModel.loadDsl()
             }
 
             tvDownload.setOnClickListener {

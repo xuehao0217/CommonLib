@@ -44,14 +44,25 @@ class HomeViewModel : BaseViewModel<RestApi>() {
     var stateFlowDada = MutableStateFlow<List<BannerVO>>(emptyList())
 
     fun loadDsl() {
-        apiDslBaseResult<List<BannerVO>> {
-            onRequest {
+        apiDslResult {
+            onRequestParseData {
                 api.bannerList3()
             }
             onResponse {
                 banner.postValue(it)
             }
         }
+
+//        apiFlowDSL<List<BannerVO>> {
+//            onRequest {
+//                api.bannerList3().data
+//            }
+//            onResponse {
+//                banner.postValue(it)
+//            }
+//        }
+
+//
 //        apiDSL<List<BannerVO>> {
 //            onRequest {
 //                api.bannerList3().data
@@ -62,35 +73,21 @@ class HomeViewModel : BaseViewModel<RestApi>() {
 //        }
     }
 
-    fun loadFlowDsl() {
-        apiFlowDSL<List<BannerVO>> {
-            onRequest {
-                api.bannerList3().data
-            }
-            onResponse {
-                banner.postValue(it)
-            }
-        }
-    }
-
 
     fun loadLiveData() = apiLiveData {
         api.bannerList3()
     }
 
-    fun loadStateFlow() {
-        launchNet(true, request = {
+    fun loadFlow() {
+        apiFlow(request = {
             api.bannerList3()
-        }){
+        }, start = {
+            apiLoading.value = true
+        }, finally = {
+            apiLoading.value = false
+        }) {
             stateFlowDada.emit(it)
         }
-
-//        apiFlowBaseResult({
-//            api.bannerList3()
-//        }, {
-//            stateFlowDada.emit(it)
-////            banner.postValue(it)
-//        })
     }
 
     //上传头像
