@@ -1,7 +1,9 @@
 # 公用库适配Androidx
 Kotlin 协程 DSL网络请求封装
-Compose UI
+Compose 使用
 
+#### Compose
+<img width="400" height="680" src="https://github.com/xuehao0217/flutter_widget_demo/blob/master/screenshot/screenshot.gif"/>
 #### BaseViewModel使用
 ```kotlin
     class HomeViewModel : BaseViewModel<RestApi>() {
@@ -31,4 +33,20 @@ Compose UI
          })
      }
 
+```
+#### RecyclerView 精简写法
+```kotlin
+    val onBindAdapter = binding.rv
+        .linear().addLinearItemDecoration(R.color.transparent,15)
+    //            .grid(4).addGridItemDecoration(15f, 10f)
+        .onBindAdapter<ItemLayoutBinding, String> { item ->
+            tvItem.text = item
+        }.apply {
+            setNewInstance(mutableListOf("Compose"))
+            setOnItemClickListener { adapter, view, position ->
+                if (position==0){
+                    startActivity(ComposeActivity::class.java)
+                }
+            }
+        }
 ```
