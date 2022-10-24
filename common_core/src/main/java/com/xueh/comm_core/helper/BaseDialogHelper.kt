@@ -25,6 +25,7 @@ abstract class BaseDialogHelper : DialogFragment() {
     private var isDimEnabled = true
     private var mX = 0
     private var mY = 0
+    private var dimAmount=1f
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //设置 无标题 无边框
@@ -55,6 +56,7 @@ abstract class BaseDialogHelper : DialogFragment() {
                 it.attributes.width = (dm.widthPixels * mWidth).toInt() //宽度按屏幕大小的百分比设置
             }
             val wlp = it.attributes
+            wlp.dimAmount =dimAmount
             wlp.gravity = mGravity
             wlp.x = mX
             wlp.y = ConvertUtils.dp2px(mY.toFloat())
@@ -163,5 +165,9 @@ abstract class BaseDialogHelper : DialogFragment() {
 
     protected fun setY(y: Int) {
         mY = y
+    }
+    //昏暗透明度
+    protected fun setDimAmount(dimAmount:Float){
+        this.dimAmount=dimAmount
     }
 }
