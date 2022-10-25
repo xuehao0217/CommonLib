@@ -2,14 +2,18 @@ package com.xueh.commonlib.ui
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import androidx.lifecycle.lifecycleScope
 import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.base.compose.BaseComposeActivity
 import com.xueh.comm_core.base.mvvm.MVVMFragment
 import com.xueh.comm_core.helper.*
+import com.xueh.comm_core.helper.coroutine.GlobalCoroutineExceptionHandler
 import com.xueh.commonlib.R
 import com.xueh.commonlib.databinding.FragmentHomeBinding
 import com.xueh.commonlib.databinding.ItemLayoutBinding
 import com.xueh.commonlib.ui.viewmodel.HomeViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -36,8 +40,7 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
         }
     }
 
-    val URL =
-        "https://lh3.googleusercontent.com/-vFBVjRp14wam3b974OJcM2jQzu7Z-WJ_cDv4hijwcUhtmvJGjHVowXtasz2214O3MSD82dWUA=w128-h128-e365-rj-sc0x00ffffff"
+    val URL = "https://lh3.googleusercontent.com/-vFBVjRp14wam3b974OJcM2jQzu7Z-WJ_cDv4hijwcUhtmvJGjHVowXtasz2214O3MSD82dWUA=w128-h128-e365-rj-sc0x00ffffff"
 
     override fun initData() {
 
@@ -45,15 +48,14 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
-        val onBindAdapter = binding.rv
-            .linear().addLinearItemDecoration(R.color.transparent,15)
+        val onBindAdapter = binding.rv.linear().addLinearItemDecoration(R.color.transparent, 15)
 //            .grid(4).addGridItemDecoration(15f, 10f)
             .onBindAdapter<ItemLayoutBinding, String> { item ->
                 tvItem.text = item
             }.apply {
                 setNewInstance(mutableListOf("Compose"))
                 setOnItemClickListener { adapter, view, position ->
-                    if (position==0){
+                    if (position == 0) {
                         startActivity(ComposeActivity::class.java)
                     }
                 }
@@ -67,11 +69,16 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
         viewModel.banner.observe(this) {
             ToastUtils.showShort(it.toString())
         }
-        launch {
-            viewModel.stateFlowDada.collect {
-                ToastUtils.showShort(it.toString())
-            }
+        viewModel.stateFlowDada.collect(lifecycleScope){
+            ToastUtils.showShort(it.toString())
         }
+//        launch {
+//            viewModel.stateFlowDada.collect {
+//                ToastUtils.showShort(it.toString())
+//            }
+//        }
     }
 }
+
+
 

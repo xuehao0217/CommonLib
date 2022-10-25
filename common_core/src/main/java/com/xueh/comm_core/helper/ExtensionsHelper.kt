@@ -1,28 +1,24 @@
 package com.xueh.comm_core.helper
 
-import android.Manifest
-import android.app.Activity
-import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.Outline
-import android.graphics.Rect
-import android.net.Uri
 import android.util.Log
 import android.view.View
 import android.view.ViewOutlineProvider
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.ComponentActivity
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.core.content.FileProvider
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.blankj.utilcode.util.*
 import com.noober.background.drawable.DrawableCreator
+import com.xueh.comm_core.helper.coroutine.GlobalCoroutineExceptionHandler
 import com.xueh.comm_core.utils.CommonUtils
 import com.xueh.comm_core.utils.GlideUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import me.jessyan.progressmanager.ProgressListener
 import me.jessyan.progressmanager.ProgressManager
 import me.jessyan.progressmanager.body.ProgressInfo
@@ -30,6 +26,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
+import java.util.concurrent.Flow
 import kotlin.properties.Delegates
 
 
@@ -173,7 +170,7 @@ fun View.setInvisible() {
  * 设置圆角 View
  */
 fun View.setRoundBg(
-    CornersRadius: Int, @ColorRes bgColor: Int, @ColorRes tvColor: Int = 0
+    CornersRadius: Int, @ColorRes bgColor: Int, @ColorRes tvColor: Int = 0,
 ) {
     val drawable = DrawableCreator.Builder()
         .setCornersRadius(ConvertUtils.dp2px(CornersRadius.toFloat()).toFloat())
@@ -192,7 +189,7 @@ fun View.setRoundBg(
  */
 fun View.setRoundLineBg(
     radius: Int, @ColorRes SolidColor: Int, @ColorRes lineColor: Int,
-    width: Int = 1, @ColorRes tvColor: Int = 0
+    width: Int = 1, @ColorRes tvColor: Int = 0,
 ) {
     val drawable = DrawableCreator.Builder()
         .setCornersRadius(ConvertUtils.dp2px(radius.toFloat()).toFloat())
@@ -293,7 +290,7 @@ inline fun yesOrNo(a: Boolean, crossinline yesOrNo: yesOrNoDsl.() -> Unit) {
     }
 }
 
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class lifecycleEventDsl {
     var onResume: (() -> Unit)? = null
 
@@ -325,4 +322,13 @@ inline fun FragmentActivity.lifecycleEvent(crossinline lifecycleDsl: lifecycleEv
             }
         }
     })
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+inline fun <T> kotlinx.coroutines.flow.Flow<T>.collect(scope: CoroutineScope, crossinline action: suspend (T) -> Unit) {
+    scope.launch(GlobalCoroutineExceptionHandler()) {
+        collect {
+            action(it)
+        }
+    }
 }
