@@ -146,7 +146,8 @@ object Deps {
         const val compose_tooling = "androidx.compose.ui:ui-tooling:${Version.compose}"
         const val compose_manifest =
             "androidx.compose.ui:ui-test-manifest:${Version.compose}"
-        const val activity_compose = "androidx.activity:activity-compose:1.4.0"
+        const val compose_activity = "androidx.activity:activity-compose:1.7.0-alpha01"
+        const val compose_activity_ktx = "androidx.activity:activity-ktx:1.7.0-alpha01"
         const val compose_material = "androidx.compose.material:material:${Version.compose}"
         const val compose_livedata =
             "androidx.compose.runtime:runtime-livedata:${Version.compose}"

@@ -85,7 +85,8 @@ dependencies {
     api Deps.Compose.compose_preview
     api Deps.Compose.compose_tooling
     api Deps.Compose.compose_manifest
-    api Deps.Compose.activity_compose
+    api Deps.Compose.compose_activity
+    api Deps.Compose.compose_activity_ktx
     api Deps.Compose.compose_material
     api Deps.Compose.compose_livedata
     api Deps.Compose.coil_compose
