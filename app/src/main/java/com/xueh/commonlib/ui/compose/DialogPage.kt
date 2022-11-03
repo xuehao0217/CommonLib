@@ -24,8 +24,10 @@ import androidx.compose.ui.window.SecureFlagPolicy
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.base.compose.theme.appThemeState
+import com.xueh.comm_core.weight.compose.BottomSheetDialog
 import com.xueh.comm_core.weight.compose.BoxText
 import com.xueh.comm_core.weight.compose.click
+import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
  * 创 建 人: xueh
@@ -36,22 +38,42 @@ import com.xueh.comm_core.weight.compose.click
 @Composable
 fun DialogPage() {
     val alertDialog = remember { mutableStateOf(false) }
-    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val (bt_text) = createRefs()
-        BoxText(text = "Dialog",textColor=Color.White,
+    val fullScreenDialog = remember { mutableStateOf(false) }
+    var bottomSheetDialog by remember { mutableStateOf(false) }
+
+    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxSize()) {
+        Spacer(modifier = Modifier.height(15.dp))
+        BoxText(text = "Dialog",
+            textColor = Color.White,
             modifier = Modifier
                 .size(180.dp, 44.dp)
                 .clip(RoundedCornerShape(22.dp))
                 .background(androidx.compose.material3.MaterialTheme.colorScheme.primary)
-                .constrainAs(bt_text) {
-                    top.linkTo(parent.top,15.dp)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
                 .click {
                     alertDialog.value = true
                 })
+        Spacer(modifier = Modifier.height(15.dp))
+        BoxText(text = "FullScreenDialog",
+            textColor = Color.White,
+            modifier = Modifier
+                .size(180.dp, 44.dp)
+                .clip(RoundedCornerShape(22.dp))
+                .background(androidx.compose.material3.MaterialTheme.colorScheme.primary)
+                .click {
+                    fullScreenDialog.value = true
+                })
+        Spacer(modifier = Modifier.height(15.dp))
+        BoxText(text = "BottomSheetDialog",
+            textColor = Color.White,
+            modifier = Modifier
+                .size(180.dp, 44.dp)
+                .clip(RoundedCornerShape(22.dp))
+                .background(androidx.compose.material3.MaterialTheme.colorScheme.primary)
+                .click {
+                    bottomSheetDialog = true
+                })
     }
+
 
     MyDialog(alertDialog) {
         ConstraintLayout(modifier = Modifier
@@ -62,11 +84,69 @@ fun DialogPage() {
 
         }
     }
+
+    FullScreenDialog(fullScreenDialog) {
+        ConstraintLayout(modifier = Modifier
+            .clip(RoundedCornerShape(18.dp))
+            .background(androidx.compose.material3.MaterialTheme.colorScheme.primary)) {
+
+        }
+    }
+
+    BottomSheetDialog(modifier = Modifier, visible = bottomSheetDialog, cancelable = true, canceledOnTouchOutside = true, onDismissRequest = {
+        bottomSheetDialog = false
+    }) {
+        DialogContent {
+            bottomSheetDialog = false
+        }
+    }
+
 }
+
+@Composable
+private fun DialogContent(onDismissRequest: () -> Unit) {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .fillMaxHeight(fraction = 0.7f)
+        .clip(shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
+        .background(color = Color(0xFF009688)), verticalArrangement = Arrangement.Center) {
+        Button(modifier = Modifier.align(alignment = Alignment.CenterHorizontally), onClick = {
+            onDismissRequest()
+        }) {
+            Text(modifier = Modifier.padding(all = 4.dp), text = "dismissDialog", fontSize = 16.sp)
+        }
+    }
+}
+
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun MyDialog(alertDialog: MutableState<Boolean>, content: @Composable () -> Unit) {
+private fun MyDialog(
+    alertDialog: MutableState<Boolean>,
+    properties: DialogProperties = DialogProperties(usePlatformDefaultWidth = false),
+    content: @Composable () -> Unit,
+) {
+    if (alertDialog.value) {
+        Dialog(
+            onDismissRequest = {
+                alertDialog.value = false
+            },
+            properties = properties,
+        ) {
+            content()
+        }
+    }
+}
+
+
+/**
+ *
+ * 全屏的 dialog 显示
+ *
+ */
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun FullScreenDialog(alertDialog: MutableState<Boolean>, content: @Composable () -> Unit) {
     if (alertDialog.value) {
         Dialog(
             onDismissRequest = {
@@ -74,7 +154,9 @@ private fun MyDialog(alertDialog: MutableState<Boolean>, content: @Composable ()
             },
             properties = DialogProperties(usePlatformDefaultWidth = false),
         ) {
-            content()
+            Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
+                content.invoke()
+            }
         }
     }
 }
