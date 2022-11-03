@@ -20,6 +20,8 @@ object RouteConfig {
     const val navigate_param_transfer2="navigate_param_transfer2"
     const val navigate_param_transfer1="navigate_param_transfer1"
 
+    const val DialogPage="DialogPage"
+
     const val name="name"
     const val age="age"
 }

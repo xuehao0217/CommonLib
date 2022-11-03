@@ -70,7 +70,7 @@ class ComposeActivity : BaseComposeActivity() {
                         PalletMenu(
                             modifier = Modifier.align(Alignment.TopEnd)) {
                             appThemeState = appThemeState.copy(darkTheme = appThemeState.darkTheme,
-                                    appThemeColorType = it)
+                                appThemeColorType = it)
                         }
                     }
                 }
@@ -95,7 +95,9 @@ class ComposeActivity : BaseComposeActivity() {
                     ItemData("路由传参", RouteConfig.PARAMETER),
                     ItemData("ScrollableAppBar", RouteConfig.SCROLLABLEAPPBAR),
                     ItemData("跳转互传参数", RouteConfig.navigate_param_transfer1),
-                )
+                    ItemData("Dialog", RouteConfig.DialogPage),
+
+                    )
                 LazyColumn() {
 
                     itemsIndexed(str) { _, item ->
@@ -149,6 +151,9 @@ class ComposeActivity : BaseComposeActivity() {
 
             composable(RouteConfig.navigate_param_transfer2) {
                 NavigateParams2View(navController)
+            }
+            composable(RouteConfig.DialogPage) {
+                DialogPage()
             }
         }
     }

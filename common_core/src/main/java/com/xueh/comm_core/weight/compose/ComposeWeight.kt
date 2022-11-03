@@ -10,8 +10,6 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.xueh.comm_core.R
 import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
@@ -32,10 +30,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.*
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.*
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintLayoutScope
 import com.blankj.utilcode.util.ToastUtils
@@ -120,5 +115,14 @@ fun AnimLoading(visible: MutableState<Boolean>, @DrawableRes id: Int, size: Int)
                 drawImage(imageBitmap)
             }
         }
+    }
+}
+
+
+
+@Composable
+fun BoxText(text: String, textColor: Color = Color.Unspecified, fontSize: TextUnit = TextUnit.Unspecified, modifier: Modifier = Modifier, fontWeight: FontWeight? = null,) {
+    Box(modifier = modifier, contentAlignment = Alignment.Center) {
+        androidx.compose.material3.Text(text = text, color = textColor, fontSize = fontSize, fontWeight = fontWeight)
     }
 }
