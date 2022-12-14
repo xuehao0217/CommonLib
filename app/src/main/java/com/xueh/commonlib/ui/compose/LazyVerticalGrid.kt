@@ -32,7 +32,8 @@ fun lazyVerticalGrid() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomEnd) {
         val listState = rememberLazyGridState()
 
-        LazyVerticalGrid(state = listState, columns = GridCells.Fixed(3), content = {
+        LazyVerticalGrid(state = listState, verticalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),columns = GridCells.Fixed(3), content = {
             items(images.size) { index ->
                 ImageLoadCompose(images[index])
             }

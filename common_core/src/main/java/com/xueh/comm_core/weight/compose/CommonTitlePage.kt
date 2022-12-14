@@ -58,6 +58,7 @@ fun CommonTitlePage(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(contentBackground ?: androidx.compose.material3.MaterialTheme.colorScheme.background)
+                    .systemBarsPadding()
             ) {
                 if (title.isNotEmpty()) {
                     CommonTitleView(title,
