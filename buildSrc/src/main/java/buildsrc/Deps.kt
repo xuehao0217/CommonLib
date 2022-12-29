@@ -3,7 +3,7 @@ package buildsrc
 
 object Deps {
     object Version {
-        const val compose = "1.4.0-alpha01"
+        const val compose = "1.4.0-alpha03"
         const val kotlin = "1.7.10"
         const val coroutines = "1.6.4"
         const val compose_compiler = "1.3.0"
@@ -139,20 +139,18 @@ object Deps {
 
 
     object Compose {
-        const val compose_ui = "androidx.compose.ui:ui:${Version.compose}"
-        const val compose_material3 = "androidx.compose.material3:material3:1.0.0-alpha13"
-        const val compose_preview =
-            "androidx.compose.ui:ui-tooling-preview:${Version.compose}"
-        const val compose_tooling = "androidx.compose.ui:ui-tooling:${Version.compose}"
-        const val compose_manifest =
-            "androidx.compose.ui:ui-test-manifest:${Version.compose}"
+        const val compose_bom= "androidx.compose:compose-bom:2022.10.00"
+        const val compose_ui = "androidx.compose.ui:ui"
+        const val compose_material3 = "androidx.compose.material3:material3"
+        const val compose_preview = "androidx.compose.ui:ui-tooling-preview"
+        const val compose_tooling = "androidx.compose.ui:ui-tooling"
+        const val compose_manifest = "androidx.compose.ui:ui-test-manifest"
+        const val compose_material = "androidx.compose.material:material:${Version.compose}"
+
         const val compose_activity = "androidx.activity:activity-compose:1.7.0-alpha01"
         const val compose_activity_ktx = "androidx.activity:activity-ktx:1.7.0-alpha01"
-        const val compose_material = "androidx.compose.material:material:${Version.compose}"
-        const val compose_livedata =
-            "androidx.compose.runtime:runtime-livedata:${Version.compose}"
-        const val compose_constraintlayout =
-            "androidx.constraintlayout:constraintlayout-compose:1.0.1"
+        const val compose_livedata = "androidx.compose.runtime:runtime-livedata:${Version.compose}"
+        const val compose_constraintlayout = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
         const val coil_compose = "io.coil-kt:coil-compose:${Version.coil_compose}"
 
         const val compose_paging_compose =

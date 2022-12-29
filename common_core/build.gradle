@@ -80,6 +80,9 @@ dependencies {
     api Deps.Github.ActivityResultLauncher
     api Deps.Github.EasyNavigation
 
+
+    api platform(Deps.Compose.compose_bom)
+    androidTestImplementation platform(Deps.Compose.compose_bom)
     api Deps.Compose.compose_ui
     api Deps.Compose.compose_material3
     api Deps.Compose.compose_preview
