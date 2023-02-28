@@ -5,9 +5,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import com.xueh.comm_core.base.BaseVisibilityFragment
+import com.xueh.comm_core.weight.ViewLoading
 
 
-abstract class BaseComposeFragmen : BaseVisibilityFragment() {
+abstract class BaseComposeFragment : BaseVisibilityFragment() {
     abstract fun setComposeView(composeView: ComposeView)
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -16,5 +17,14 @@ abstract class BaseComposeFragmen : BaseVisibilityFragment() {
     ) = ComposeView(requireActivity()).apply {
         setComposeView(this)
     }
+
+    protected fun showProgressDialog() {
+        ViewLoading.show(activity)
+    }
+
+    protected fun hideProgressDialog() {
+        ViewLoading.dismiss(activity)
+    }
+
 }
 
