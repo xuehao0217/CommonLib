@@ -13,8 +13,6 @@ import com.xueh.comm_core.helper.ViewModelHelper
  */
 abstract class MVVMComposeActivity<VM : AbsViewModel> : BaseComposeActivity() {
     lateinit var viewModel: VM
-
-
     override fun initView(savedInstanceState: Bundle?) {
         viewModel = ViewModelHelper.getViewModel(this.javaClass, this)
         viewModel.apiLoading.observe(this) {
