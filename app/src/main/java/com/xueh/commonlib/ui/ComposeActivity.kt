@@ -3,7 +3,6 @@ package com.xueh.commonlib.ui
 import android.os.Build
 import androidx.compose.runtime.*
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.activity.compose.setContent
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -96,7 +95,7 @@ class ComposeActivity : BaseComposeActivity() {
                     ItemData("ScrollableAppBar", RouteConfig.SCROLLABLEAPPBAR),
                     ItemData("跳转互传参数", RouteConfig.navigate_param_transfer1),
                     ItemData("Dialog", RouteConfig.DialogPage),
-
+                    ItemData("CustomiTabPager", RouteConfig.CustomiTabPager),
                     )
                 LazyColumn() {
 
@@ -154,6 +153,9 @@ class ComposeActivity : BaseComposeActivity() {
             }
             composable(RouteConfig.DialogPage) {
                 DialogPage()
+            }
+            composable(RouteConfig.CustomiTabPager) {
+                CustomiTabPagerScreen()
             }
         }
     }

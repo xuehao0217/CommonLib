@@ -21,6 +21,7 @@ object RouteConfig {
     const val navigate_param_transfer1="navigate_param_transfer1"
 
     const val DialogPage="DialogPage"
+    const val CustomiTabPager="CustomiTabPager"
 
     const val name="name"
     const val age="age"

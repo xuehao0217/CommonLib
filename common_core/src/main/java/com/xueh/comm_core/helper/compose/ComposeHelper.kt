@@ -1,9 +1,7 @@
 package com.xueh.comm_core.helper.compose
 
 import android.os.Bundle
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -14,6 +12,15 @@ import androidx.navigation.NavHostController
  * 创建日期: 2022/8/29
  * 备注：
  */
+
+
+/**
+ * 快捷使用remember { mutableStateOf(T) }
+ * Quick use remember { mutableStateOf(T) }
+ */
+@Composable
+fun <T> rememberMutableStateOf(value: T): MutableState<T> = remember { mutableStateOf(value) }
+
 
 //var life = rememberLifecycle()
 //life.onLifeResume {
