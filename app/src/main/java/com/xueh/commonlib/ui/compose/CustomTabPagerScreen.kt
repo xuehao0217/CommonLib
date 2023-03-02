@@ -1,7 +1,6 @@
 package com.xueh.commonlib.ui.compose
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -9,12 +8,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.*
+import com.google.accompanist.pager.*
 
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
 import com.xueh.comm_core.weight.compose.PagerTab
 import com.xueh.comm_core.weight.compose.PagerTabIndicator
+import com.xueh.comm_core.weight.compose.click
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.lang.Math.*
@@ -26,7 +24,8 @@ import java.lang.Math.*
  */
 
 
-val pages = arrayOf("Home", "Shows", "Books")
+val pages = arrayOf("Home", "Shows上上 上 ", "Books")
+
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun CustomiTabPagerScreen() {
@@ -50,12 +49,13 @@ fun CustomiTabPagerScreen() {
                         pageCount = pages.size,
                         text = title,
                         modifier = Modifier
-                            .height(50.dp)
-                            .clickable {
+                            .click {
                                 scope.launch {
                                     pagerState.animateScrollToPage(index)
                                 }
-                            })
+                            }
+                            .height(50.dp)
+                    )
                 }
             }
             HorizontalPager(

@@ -1,6 +1,5 @@
 package com.xueh.comm_core.weight.compose
 
-import androidx.annotation.FloatRange
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,7 +27,6 @@ import com.google.accompanist.pager.PagerState
  */
 /**
  * PagerTap 指示器
- * @param  percent  指示器占用整个tab宽度的比例
  * @param  height   指示器的高度
  * @param  color    指示器的颜色
  */
@@ -38,7 +36,7 @@ fun PagerTabIndicator(
     tabPositions: List<TabPosition>,
     pagerState: PagerState,
     color: Color = MaterialTheme.colors.primarySurface,
-    @FloatRange(from = 0.0, to = 1.0) percent: Float = 0.4f,
+    with: Dp = 40.dp,
     height: Dp = 4.dp,
 ) {
     Canvas(modifier = Modifier.fillMaxSize()) {
@@ -48,7 +46,7 @@ fun PagerTabIndicator(
         val nextTab = tabPositions.getOrNull(currentPage + 1)
         val fraction = pagerState.currentPageOffset
 
-        val indicatorWidth = currentTab.width.toPx() * percent
+        val indicatorWidth = currentTab.width.toPx() * 1f
 
         val indicatorOffset = if (fraction > 0 && nextTab != null) {
             lerp(currentTab.left, nextTab.left, fraction).toPx()
@@ -61,10 +59,10 @@ fun PagerTabIndicator(
         drawRoundRect(
             color = color,
             topLeft = Offset(
-                indicatorOffset + (currentTab.width.toPx() * (1 - percent) / 2),
+                indicatorOffset + ((currentTab.width-with).toPx()/ 2),
                 canvasHeight - height.toPx()
             ),
-            size = Size(indicatorWidth + indicatorWidth * Math.abs(fraction), height.toPx()),
+            size = Size(with.toPx(), height.toPx()),
             cornerRadius = CornerRadius(50f)
         )
     }
