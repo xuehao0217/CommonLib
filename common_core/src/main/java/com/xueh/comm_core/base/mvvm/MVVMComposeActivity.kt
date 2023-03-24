@@ -1,6 +1,5 @@
 package com.xueh.comm_core.base.mvvm
 
-import android.os.Bundle
 import android.util.Log
 import com.xueh.comm_core.base.compose.BaseComposeActivity
 import com.xueh.comm_core.base.mvvm.ibase.AbsViewModel
@@ -13,7 +12,7 @@ import com.xueh.comm_core.helper.ViewModelHelper
  */
 abstract class MVVMComposeActivity<VM : AbsViewModel> : BaseComposeActivity() {
     lateinit var viewModel: VM
-    override fun initView(savedInstanceState: Bundle?) {
+    override fun initView() {
         viewModel = ViewModelHelper.getViewModel(this.javaClass, this)
         viewModel.apiLoading.observe(this) {
             it?.let {

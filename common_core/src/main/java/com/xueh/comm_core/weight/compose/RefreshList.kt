@@ -1,16 +1,12 @@
 package com.xueh.comm_core.weight.compose
 
 import android.R
-import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults.buttonColors
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -23,9 +19,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import com.blankj.utilcode.util.ToastUtils
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.loren.component.view.composesmartrefresh.MyRefreshHeader
 import com.loren.component.view.composesmartrefresh.SmartSwipeRefreshState
 import com.loren.component.view.composesmartrefresh.rememberSmartSwipeRefreshState
@@ -36,8 +29,9 @@ fun <T : Any> RefreshList(
     lazyPagingItems: LazyPagingItems<T>,
     listState: LazyListState = rememberLazyListState(),
     refreshState: SmartSwipeRefreshState = rememberSmartSwipeRefreshState(),//下拉刷新状态
-    backgroundColor: Color = Color.White,
-    contentPadding: PaddingValues = PaddingValues(0.dp),
+    modifier: Modifier = Modifier,
+    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
+    contentPadding: PaddingValues = PaddingValues(horizontal = 15.dp),
     headerIndicator: @Composable () -> Unit = { MyRefreshHeader(refreshState.refreshFlag) },
     itemContent: LazyListScope.() -> Unit,
 ) {
@@ -51,19 +45,19 @@ fun <T : Any> RefreshList(
     LaunchedEffect(lazyPagingItems.itemSnapshotList) {
         isRefreshing = false
     }
+
+//    if (lazyPagingItems.loadState.refresh is LoadState.Loading) {
+//
+//    }
+
     SwipeRefresh(isRefreshing = isRefreshing, scrollState = listState, refreshState = refreshState, headerIndicator = headerIndicator, onRefresh = {
         isRefreshing = true
         lazyPagingItems.refresh()
     }) {
         //刷新状态
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(backgroundColor),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            state = listState, contentPadding = contentPadding,
+        CommonLazyColumn(
+            modifier = modifier, state = listState, contentPadding = contentPadding, verticalArrangement = verticalArrangement
         ) {
-            //条目布局
             itemContent()
             //加载更多状态：加载中和加载错误,没有更多
             if (!isRefreshing) {
@@ -96,8 +90,7 @@ fun ErrorContent(retry: () -> Unit) {
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
             Text(
-                text = "请求出错啦",
-                modifier = Modifier
+                text = "请求出错啦", modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 10.dp)
             )
@@ -128,11 +121,9 @@ fun ErrorItem(retry: () -> Unit) {
 @Composable
 fun NoMoreItem() {
     Text(
-        text = "没有更多了",
-        modifier = Modifier
+        text = "没有更多了", modifier = Modifier
             .padding(10.dp)
-            .fillMaxWidth(),
-        textAlign = TextAlign.Center
+            .fillMaxWidth(), textAlign = TextAlign.Center
     )
 }
 

@@ -2,7 +2,6 @@ package com.xueh.commonlib.ui
 
 import android.os.Build
 import androidx.compose.runtime.*
-import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -35,12 +34,12 @@ import com.xueh.commonlib.R
 import com.xueh.commonlib.ui.compose.*
 
 class ComposeActivity : BaseComposeActivity() {
-    override fun initView(savedInstanceState: Bundle?) {
+    override fun initView() {
         setContent {
             var showMenu by remember {
                 mutableStateOf(false)
             }
-            CommonTitlePage(this, title = "Compose", titleRightContent = {
+            CommonTitlePage(title = "Compose", titleRightContent = {
                 Row(Modifier.background(MaterialTheme.colorScheme.background)) {
                     androidx.compose.material3.IconButton(onClick = {
                         appThemeState = appThemeState.copy(darkTheme = !appThemeState.darkTheme)
@@ -56,9 +55,7 @@ class ComposeActivity : BaseComposeActivity() {
                         showMenu = !showMenu
                     }) {
                         Icon(
-                            Icons.Filled.Menu,
-                            contentDescription = "",
-                            tint = if (appThemeState.darkTheme) Color.White else Color.Black
+                            Icons.Filled.Menu, contentDescription = "", tint = if (appThemeState.darkTheme) Color.White else Color.Black
                         )
                     }
                 }
@@ -67,9 +64,11 @@ class ComposeActivity : BaseComposeActivity() {
                 if (showMenu) {
                     Box(modifier = Modifier.fillMaxWidth()) {
                         PalletMenu(
-                            modifier = Modifier.align(Alignment.TopEnd)) {
-                            appThemeState = appThemeState.copy(darkTheme = appThemeState.darkTheme,
-                                appThemeColorType = it)
+                            modifier = Modifier.align(Alignment.TopEnd)
+                        ) {
+                            appThemeState = appThemeState.copy(
+                                darkTheme = appThemeState.darkTheme, appThemeColorType = it
+                            )
                         }
                     }
                 }
@@ -86,19 +85,21 @@ class ComposeActivity : BaseComposeActivity() {
                 ToastUtils.showShort("${navController.currentBackStackEntry?.destination}")
 
                 var str = listOf(
-                    ItemData("下拉加载使用", RouteConfig.REFRESHLOADUSE),
+                    ItemData("Dialog", RouteConfig.DialogPage),
+                    ItemData("公用CommonTabPager", RouteConfig.CommonTabPager),
+                    ItemData("公用CommonLazyColumnDatasPage", RouteConfig.CommonLazyColumnDatas),
+                    ItemData("公用CommonRefreshColumnData", RouteConfig.CommonRefreshColumnData),
+                    ItemData("公用CommonPagingPage", RouteConfig.CommonPaging),
                     ItemData("ConstraintSet使用", RouteConfig.CONSTRAINTSET),
                     ItemData("scrollableTab使用", RouteConfig.SCROLLABLETABROW),
-                    ItemData("lazyVerticalGrid使用", RouteConfig.LAZYVERTICALGRID),
-                    ItemData("LazyColumnPage", RouteConfig.LAZYCOLUMNPAGE),
                     ItemData("路由传参", RouteConfig.PARAMETER),
-                    ItemData("ScrollableAppBar", RouteConfig.SCROLLABLEAPPBAR),
                     ItemData("跳转互传参数", RouteConfig.navigate_param_transfer1),
-                    ItemData("Dialog", RouteConfig.DialogPage),
-                    ItemData("CustomiTabPager", RouteConfig.CustomiTabPager),
-                    )
+                    ItemData("下拉加载使用", RouteConfig.REFRESHLOADUSE),
+                    //                    ItemData("lazyVerticalGrid使用", RouteConfig.LAZYVERTICALGRID),
+//                    ItemData("LazyColumnPage", RouteConfig.LAZYCOLUMNPAGE),
+//                    ItemData("ScrollableAppBar", RouteConfig.SCROLLABLEAPPBAR),
+                )
                 LazyColumn() {
-
                     itemsIndexed(str) { _, item ->
                         itemView(item.str, false) {
                             if (item.router == RouteConfig.PARAMETER) {
@@ -125,17 +126,12 @@ class ComposeActivity : BaseComposeActivity() {
             composable(RouteConfig.LAZYCOLUMNPAGE) {
                 LazyColumnPage()
             }
-            composable(
-                "${RouteConfig.PARAMETER}/{${RouteConfig.name}}" + "" +
-                        "?${RouteConfig.age}={${RouteConfig.age}} ",
-                arguments = listOf(
-                    navArgument("age") {
-                        type = NavType.IntType  //类型
-                        defaultValue = 18  //默认值
+            composable("${RouteConfig.PARAMETER}/{${RouteConfig.name}}" + "" + "?${RouteConfig.age}={${RouteConfig.age}} ",
+                arguments = listOf(navArgument("age") {
+                    type = NavType.IntType  //类型
+                    defaultValue = 18  //默认值
 //                        nullable = true //是否可空
-                    }
-                )
-            ) {
+                })) {
                 val name = it.arguments?.getString(RouteConfig.name)
                 val age = it.arguments?.getInt(RouteConfig.age)
                 PageTwo(navController, name ?: "NULL", age ?: 0)
@@ -154,8 +150,18 @@ class ComposeActivity : BaseComposeActivity() {
             composable(RouteConfig.DialogPage) {
                 DialogPage()
             }
-            composable(RouteConfig.CustomiTabPager) {
-                CustomiTabPagerScreen()
+            composable(RouteConfig.CommonTabPager) {
+                CommonTabPage()
+            }
+            composable(RouteConfig.CommonLazyColumnDatas) {
+                CommonLazyColumnDatasPage()
+            }
+            composable(RouteConfig.CommonRefreshColumnData) {
+                CommonRefreshColumnData()
+            }
+
+            composable(RouteConfig.CommonPaging) {
+                CommonPaging()
             }
         }
     }
@@ -199,13 +205,10 @@ fun MenuItem(color: Color, name: String, onPalletChange: () -> Unit) {
     Row(
         modifier = Modifier
             .padding(8.dp)
-            .clickable(onClick = onPalletChange),
-        verticalAlignment = Alignment.CenterVertically
+            .clickable(onClick = onPalletChange), verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            imageVector = Icons.Filled.Menu,
-            tint = color,
-            contentDescription = null
+            imageVector = Icons.Filled.Menu, tint = color, contentDescription = null
         )
         Text(text = name, modifier = Modifier.padding(8.dp))
     }

@@ -1,33 +1,27 @@
 package com.xueh.comm_core.weight.compose
 
-import android.app.Activity
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.ConstraintLayoutScope
-import androidx.constraintlayout.compose.Dimension
+import com.blankj.utilcode.util.BarUtils
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.statusBarsHeight
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.xueh.comm_core.R
 import com.xueh.comm_core.base.compose.theme.BaseComposeView
 import com.xueh.comm_core.base.compose.theme.GrayAppAdapter
 import com.xueh.comm_core.base.compose.theme.appThemeState
-import com.xueh.comm_core.utils.compose.setSystemBarsColor
-import com.xueh.comm_core.utils.compose.transparentStatusBar
+import com.xueh.comm_core.helper.dp
 
 /**
  * 创 建 人: xueh
@@ -38,43 +32,62 @@ import com.xueh.comm_core.utils.compose.transparentStatusBar
 //公用带标题页面
 @Composable
 fun CommonTitlePage(
-    activity: Activity,
     title: String,
     showBackIcon: Boolean = true,
     @DrawableRes backIcon: Int = if (appThemeState.darkTheme) R.mipmap.bar_icon_back_white else R.mipmap.bar_icon_back_black,
     backClick: (() -> Unit)? = null,
     showTitleBottomLine: Boolean = true,
-    titleBackground: Color? = null,
-    contentBackground: Color? = null,
+    titleBackground: Color = Color.White,
+    contentBackground: Color = Color.White,
     titleRightContent: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
-    activity.transparentStatusBar()
-    activity.setSystemBarsColor(color = androidx.compose.material3.MaterialTheme.colorScheme.onPrimaryContainer,
-        darkIcons = appThemeState.darkTheme)
     BaseComposeView {
         GrayAppAdapter {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(contentBackground ?: androidx.compose.material3.MaterialTheme.colorScheme.background)
-                    .systemBarsPadding()
-            ) {
-                if (title.isNotEmpty()) {
-                    CommonTitleView(title,
+            Scaffold(topBar = {
+                Spacer(
+                    modifier = Modifier
+                        .height(
+                            BarUtils
+                                .getStatusBarHeight().toFloat().dp().dp
+                        )
+                        .background(titleBackground)
+                        .fillMaxWidth()
+                )
+            }, bottomBar = {
+                Spacer(
+                    modifier = Modifier
+                        .height(
+                                BarUtils
+                                    .getNavBarHeight()
+                                    .toFloat().dp().dp
+                        )
+                        .background(contentBackground)
+                        .fillMaxWidth()
+                )
+            }) {
+                Column(
+                    modifier = Modifier
+                        .background(contentBackground)
+                        .padding(it)
+                ) {
+                    CommonTitleView(
+                        title,
                         showBackIcon = showBackIcon,
+                        titleBackground = titleBackground,
                         backIcon = backIcon,
                         rightContent = titleRightContent,
-                        titleBackground = titleBackground ?: androidx.compose.material3.MaterialTheme.colorScheme.background) {
-                        activity.finish()
-                    }
+                        backClick = backClick
+                    )
                     if (showTitleBottomLine) {
-                        androidx.compose.material3.Divider(color = Color.Gray, thickness = 0.5.dp)
+                        Divider()
                     }
-                }
-                Surface(color = contentBackground ?: androidx.compose.material3.MaterialTheme.colorScheme.background, modifier = Modifier
-                    .fillMaxSize()) {
-                    content.invoke()
+                    androidx.compose.material.Surface(
+                        modifier = Modifier
+                            .fillMaxSize(), color = contentBackground
+                    ) {
+                        content.invoke()
+                    }
                 }
             }
         }
