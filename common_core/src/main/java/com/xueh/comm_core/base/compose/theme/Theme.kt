@@ -1,24 +1,15 @@
 package com.xueh.comm_core.base.compose.theme
 
 import android.os.Build
-import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.Colors
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import com.blankj.utilcode.util.ToastUtils
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.xueh.comm_core.utils.DataStoreUtils
 
 
 @Composable
@@ -29,7 +20,7 @@ fun ComposeMaterial3Theme(
 ) {
     val context = LocalContext.current
     val colors = when (appThemeColorState) {
-        AppThemeColorType.GREEN ,AppThemeColorType.DEF-> if (darkTheme) DarkGreenColorPalette else LightGreenColorPalette
+        AppThemeColorType.GREEN, AppThemeColorType.DEF -> if (darkTheme) DarkGreenColorPalette else LightGreenColorPalette
         AppThemeColorType.PURPLE -> if (darkTheme) DarkPurpleColorPalette else LightPurpleColorPalette
         AppThemeColorType.ORANGE -> if (darkTheme) DarkOrangeColorPalette else LightOrangeColorPalette
         AppThemeColorType.BLUE -> if (darkTheme) DarkBlueColorPalette else LightBlueColorPalette
@@ -52,6 +43,8 @@ fun ComposeMaterial3Theme(
 
 @Composable
 fun BaseComposeView(
+    systemBarsColor: Color = androidx.compose.material3.MaterialTheme.colorScheme.onPrimaryContainer,
+    darkTheme: Boolean = com.xueh.comm_core.base.compose.theme.appThemeState.darkTheme,
     appThemeState: AppThemeState = com.xueh.comm_core.base.compose.theme.appThemeState,
     content: @Composable () -> Unit,
 ) {
@@ -60,10 +53,10 @@ fun BaseComposeView(
         appThemeColorState = appThemeState.appThemeColorType
     ) {
         rememberSystemUiController().run {
-            setStatusBarColor(androidx.compose.material3.MaterialTheme.colorScheme.onPrimaryContainer,
-                com.xueh.comm_core.base.compose.theme.appThemeState.darkTheme)
-            setSystemBarsColor(androidx.compose.material3.MaterialTheme.colorScheme.onPrimaryContainer,
-                com.xueh.comm_core.base.compose.theme.appThemeState.darkTheme)
+            setSystemBarsColor(
+                systemBarsColor,
+                darkTheme
+            )
         }
         content()
     }
@@ -157,7 +150,7 @@ private val LightGreenColorPalette = lightColorScheme(
     surfaceVariant = Color.White,
     onPrimary = Color.White,
     onSecondary = Color.Black,
-    onBackground = Color.Black,
+    onBackground = Color.Yellow,
     onSurface = Color.Black,
     onSurfaceVariant = Color.Black
 )
