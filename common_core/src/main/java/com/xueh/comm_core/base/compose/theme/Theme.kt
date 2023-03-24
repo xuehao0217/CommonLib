@@ -43,7 +43,7 @@ fun ComposeMaterial3Theme(
 
 @Composable
 fun BaseComposeView(
-    systemBarsColor: Color = androidx.compose.material3.MaterialTheme.colorScheme.onPrimaryContainer,
+    systemBarsColor: Color? = null,
     darkTheme: Boolean = com.xueh.comm_core.base.compose.theme.appThemeState.darkTheme,
     appThemeState: AppThemeState = com.xueh.comm_core.base.compose.theme.appThemeState,
     content: @Composable () -> Unit,
@@ -54,7 +54,7 @@ fun BaseComposeView(
     ) {
         rememberSystemUiController().run {
             setSystemBarsColor(
-                systemBarsColor,
+                systemBarsColor ?: androidx.compose.material3.MaterialTheme.colorScheme.background,
                 darkTheme
             )
         }

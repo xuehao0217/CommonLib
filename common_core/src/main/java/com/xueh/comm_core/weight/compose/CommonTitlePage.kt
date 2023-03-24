@@ -19,6 +19,7 @@ import com.xueh.comm_core.R
 import com.xueh.comm_core.base.compose.theme.BaseComposeView
 import com.xueh.comm_core.base.compose.theme.GrayAppAdapter
 import com.xueh.comm_core.base.compose.theme.appThemeState
+import androidx.compose.material3.MaterialTheme
 
 /**
  * 创 建 人: xueh
@@ -34,18 +35,22 @@ fun CommonTitlePage(
     @DrawableRes backIcon: Int = if (appThemeState.darkTheme) R.mipmap.bar_icon_back_white else R.mipmap.bar_icon_back_black,
     backClick: (() -> Unit)? = null,
     showTitleBottomLine: Boolean = true,
-    titleBackgroundColor: Color = if (appThemeState.darkTheme) Color.Black else androidx.compose.material3.MaterialTheme.colorScheme.background,
-    contentBackgroundColor: Color = if (appThemeState.darkTheme) Color.Black else androidx.compose.material3.MaterialTheme.colorScheme.background,
+    titleBackgroundColor: Color? = null,
+    contentBackgroundColor: Color? = null,
     titleRightContent: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
     ProvideWindowInsets {
         // 状态栏改为透明
-        BaseComposeView(systemBarsColor = if (appThemeState.darkTheme) Color.Black else Color.Transparent, darkTheme = !appThemeState.darkTheme) {
+        BaseComposeView(
+            systemBarsColor = Color.Transparent, darkTheme = !appThemeState.darkTheme
+        ) {
             GrayAppAdapter {
                 Scaffold(topBar = {
                     Spacer(
                         modifier = Modifier
+                            //具体状态栏的颜色在这
+                            .background(titleBackgroundColor ?: MaterialTheme.colorScheme.background)
                             .statusBarsHeight()
                             .fillMaxWidth()
                     )
@@ -58,28 +63,33 @@ fun CommonTitlePage(
                 }) {
                     Column(
                         modifier = Modifier
-                            .background(contentBackgroundColor)
+                            .background(contentBackgroundColor ?: MaterialTheme.colorScheme.background)
                             .padding(it)
                     ) {
                         CommonTitleView(
                             title,
                             showBackIcon = showBackIcon,
-                            titleBackgroundColor = titleBackgroundColor,
+                            titleBackgroundColor = titleBackgroundColor ?: MaterialTheme.colorScheme.background,
                             backIcon = backIcon,
                             rightContent = titleRightContent,
                             backClick = backClick
                         )
                         if (showTitleBottomLine) {
-                            Divider(color = if (appThemeState.darkTheme) Color.White else MaterialTheme.colors.onSurface.copy(alpha = 0.12f))
+                            Divider(
+                                color = if (appThemeState.darkTheme) Color.White else androidx.compose.material.MaterialTheme.colors.onSurface.copy(
+                                    alpha = 0.12f
+                                )
+                            )
                         }
-                        androidx.compose.material.Surface(
-                            modifier = Modifier.fillMaxSize(), color = contentBackgroundColor
+                        Surface(
+                            modifier = Modifier.fillMaxSize(), color = contentBackgroundColor ?: MaterialTheme.colorScheme.background
                         ) {
                             content.invoke()
                         }
                     }
                 }
             }
+
         }
     }
 
@@ -140,7 +150,7 @@ fun CommonTitlePage(
 fun CommonTitleView(
     name: String,
     @DrawableRes backIcon: Int = if (appThemeState.darkTheme) R.mipmap.bar_icon_back_white else R.mipmap.bar_icon_back_black,
-    titleBackgroundColor: Color = androidx.compose.material3.MaterialTheme.colorScheme.background,
+    titleBackgroundColor: Color? = null,
     showBackIcon: Boolean = true,
     rightContent: (@Composable () -> Unit)? = null,
     backClick: (() -> Unit)? = null,
@@ -148,7 +158,7 @@ fun CommonTitleView(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
-            .background(titleBackgroundColor)
+            .background(titleBackgroundColor ?: MaterialTheme.colorScheme.background)
             .height(44.dp)
     ) {
         val (iv_close, row_title, surface_right_view) = createRefs()
@@ -179,8 +189,8 @@ fun CommonTitleView(
                 })
 
         }
-        androidx.compose.material.Surface(modifier = Modifier
-            .background(titleBackgroundColor)
+        Surface(modifier = Modifier
+            .background(titleBackgroundColor ?: MaterialTheme.colorScheme.background)
             .constrainAs(surface_right_view) {
                 top.linkTo(parent.top)
                 bottom.linkTo(parent.bottom)

@@ -131,7 +131,8 @@ class ComposeActivity : BaseComposeActivity() {
                     type = NavType.IntType  //类型
                     defaultValue = 18  //默认值
 //                        nullable = true //是否可空
-                })) {
+                })
+            ) {
                 val name = it.arguments?.getString(RouteConfig.name)
                 val age = it.arguments?.getInt(RouteConfig.age)
                 PageTwo(navController, name ?: "NULL", age ?: 0)
