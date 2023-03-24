@@ -150,7 +150,7 @@ private val LightGreenColorPalette = lightColorScheme(
     surfaceVariant = Color.White,
     onPrimary = Color.White,
     onSecondary = Color.Black,
-    onBackground = Color.Yellow,
+    onBackground = Color.White,
     onSurface = Color.Black,
     onSurfaceVariant = Color.Black
 )
