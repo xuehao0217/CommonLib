@@ -4,16 +4,16 @@ package buildsrc
 object Deps {
     object Version {
         const val compose = "1.4.0-alpha03"
-        const val kotlin = "1.7.10"
+        const val kotlin = "1.8.10"
         const val coroutines = "1.6.4"
-        const val compose_compiler = "1.3.0"
-
+        const val compose_compiler = "1.4.4"
+        const val lifecycle_compose = "2.6.0"
         const val pagingVersion = "3.1.0-rc01"
-        const val pagingComposeVersion = "1.0.0-alpha14"
-        const val accompanistVersion = "0.18.0"
+        const val pagingCompose = "1.0.0-alpha18"
+        const val accompanist = "0.30.0"
+        const val compose_activity="1.8.0-alpha02"
 
         const val core_ktx = "1.8.0"
-        const val support = "28.0.0"
         const val constraint_layout = "2.1.4"
         const val appcompat = "1.4.2"
         const val androidx = "1.0.0"
@@ -139,41 +139,40 @@ object Deps {
 
 
     object Compose {
-        const val compose_bom= "androidx.compose:compose-bom:2022.10.00"
+        const val compose_bom= "androidx.compose:compose-bom:2023.03.00"
         const val compose_ui = "androidx.compose.ui:ui"
         const val compose_material3 = "androidx.compose.material3:material3"
         const val compose_preview = "androidx.compose.ui:ui-tooling-preview"
         const val compose_tooling = "androidx.compose.ui:ui-tooling"
         const val compose_manifest = "androidx.compose.ui:ui-test-manifest"
         const val compose_material = "androidx.compose.material:material:${Version.compose}"
-
-        const val compose_activity = "androidx.activity:activity-compose:1.7.0-alpha01"
-        const val compose_activity_ktx = "androidx.activity:activity-ktx:1.7.0-alpha01"
+        const val compose_activity = "androidx.activity:activity-compose:${Version.compose_activity}"
+        const val compose_activity_ktx = "androidx.activity:activity-ktx:${Version.compose_activity}"
         const val compose_livedata = "androidx.compose.runtime:runtime-livedata:${Version.compose}"
         const val compose_constraintlayout = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
         const val coil_compose = "io.coil-kt:coil-compose:${Version.coil_compose}"
 
         const val compose_paging_compose =
-            "androidx.paging:paging-compose:${Version.pagingComposeVersion}"
+            "androidx.paging:paging-compose:${Version.pagingCompose}"
 
-        const val navigation_compose="androidx.navigation:navigation-compose:2.5.0"
+        const val navigation_compose="androidx.navigation:navigation-compose:2.6.0-alpha08"
         //viewPager
-        const val accompanist_pager = "com.google.accompanist:accompanist-pager:0.20.2"
+        const val accompanist_pager = "com.google.accompanist:accompanist-pager:${Version.accompanist}"
         const val accompanist_pager_indicators =
-            "com.google.accompanist:accompanist-pager-indicators:${Version.accompanistVersion}"
+            "com.google.accompanist:accompanist-pager-indicators:${Version.accompanist}"
 
         /** accompanist辅助插件 */
         const val accompanist_insets =
-            "com.google.accompanist:accompanist-insets:${Version.accompanistVersion}"
+            "com.google.accompanist:accompanist-insets:${Version.accompanist}"
 
         //        const val accompanist_coil="com.google.accompanist:accompanist-coil:0.15.0"
         //系统ui控制器
         const val accompanist_systemuicontroller =
-            "com.google.accompanist:accompanist-systemuicontroller:${Version.accompanistVersion}"
+            "com.google.accompanist:accompanist-systemuicontroller:${Version.accompanist}"
 
         //下拉刷新
         const val accompanist_swiperefresh =
-            "com.google.accompanist:accompanist-swiperefresh:${Version.accompanistVersion}"
+            "com.google.accompanist:accompanist-swiperefresh:${Version.accompanist}"
 
         const val compose_smartrefresh = "io.github.loren-moon:composesmartrefresh:1.0.0"
 
@@ -181,11 +180,11 @@ object Deps {
         const val customview_poolingcontainer = "androidx.customview:customview-poolingcontainer:1.0.0-alpha01"
 
         //collectAsStateWithLifecycle
-        const val lifecycle_runtime_ktx =  "androidx.lifecycle:lifecycle-runtime-compose:2.6.0-alpha01"
+        const val lifecycle_runtime_ktx =  "androidx.lifecycle:lifecycle-runtime-compose:${Version.lifecycle_compose}"
         //获取viewmodel
         // import androidx.lifecycle.viewmodel.compose.viewModel
         //val viewModel1: ComposeViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
-        const val lifecycle_viewmodel =  "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
+        const val lifecycle_viewmodel =  "androidx.lifecycle:lifecycle-viewmodel-compose:${Version.lifecycle_compose}"
     }
 
 

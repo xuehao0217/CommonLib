@@ -4,9 +4,6 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.ViewTreeLifecycleOwner
-import androidx.lifecycle.ViewTreeViewModelStoreOwner
-import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.xueh.comm_core.weight.ViewLoading
 
 //ComponentActivity
@@ -22,14 +19,6 @@ abstract class BaseComposeActivity : AppCompatActivity() {
     }
 
     abstract fun initView()
-    override fun onDestroy() {
-        super.onDestroy()
-        val decorView = window.decorView
-        ViewTreeLifecycleOwner.set(decorView, null)
-        ViewTreeViewModelStoreOwner.set(decorView, null)
-        decorView.setViewTreeSavedStateRegistryOwner(null)
-    }
-
 
     protected fun showProgressDialog() {
         ViewLoading.show(this)
