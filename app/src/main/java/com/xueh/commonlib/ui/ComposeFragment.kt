@@ -1,8 +1,6 @@
 package com.xueh.commonlib.ui
 
 import android.os.Build
-import androidx.compose.runtime.*
-import androidx.activity.compose.setContent
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,10 +9,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,54 +18,58 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.blankj.utilcode.util.ToastUtils
-import com.xueh.comm_core.base.compose.BaseComposeActivity
+import com.xueh.comm_core.base.compose.BaseComposeFragment
 import com.xueh.comm_core.base.compose.theme.*
 import com.xueh.comm_core.weight.compose.CommonTitlePage
 import com.xueh.commonlib.R
 import com.xueh.commonlib.ui.compose.*
 
-class ComposeActivity : BaseComposeActivity() {
-    override fun initView() {
-        setContent {
-            var showMenu by remember {
-                mutableStateOf(false)
-            }
-            CommonTitlePage(title = "Compose", titleRightContent = {
-                Row(Modifier.background(MaterialTheme.colorScheme.background)) {
-                    androidx.compose.material3.IconButton(onClick = {
-                        appThemeState = appThemeState.copy(darkTheme = !appThemeState.darkTheme)
-                    }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_sleep),
-                            contentDescription = "",
-                            tint = if (appThemeState.darkTheme) Color.White else Color.Black
-                        )
-                    }
+/**
+ * 创 建 人: xueh
+ * 创建日期: 2023/3/30
+ * 备注：
+ */
 
-                    androidx.compose.material3.IconButton(onClick = {
-                        showMenu = !showMenu
-                    }) {
-                        Icon(
-                            Icons.Filled.Menu, contentDescription = "", tint = if (appThemeState.darkTheme) Color.White else Color.Black
-                        )
-                    }
+class ComposeFragment:BaseComposeFragment() {
+    @Composable
+    override fun setComposeContent() {
+        var showMenu by remember {
+            mutableStateOf(false)
+        }
+        CommonTitlePage(title = "Compose", titleRightContent = {
+            Row(Modifier.background(MaterialTheme.colorScheme.background)) {
+                IconButton(onClick = {
+                    appThemeState = appThemeState.copy(darkTheme = !appThemeState.darkTheme)
+                }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_sleep),
+                        contentDescription = "",
+                        tint = if (appThemeState.darkTheme) Color.White else Color.Black
+                    )
                 }
-            }) {
-                NavHost()
-                if (showMenu) {
-                    Box(modifier = Modifier.fillMaxWidth()) {
-                        PalletMenu(
-                            modifier = Modifier.align(Alignment.TopEnd)
-                        ) {
-                            appThemeState = appThemeState.copy(
-                                darkTheme = appThemeState.darkTheme, appThemeColorType = it
-                            )
-                        }
+
+                IconButton(onClick = {
+                    showMenu = !showMenu
+                }) {
+                    Icon(
+                        Icons.Filled.Menu, contentDescription = "", tint = if (appThemeState.darkTheme) Color.White else Color.Black
+                    )
+                }
+            }
+        }) {
+            NavHost()
+            if (showMenu) {
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    PalletMenu(
+                        modifier = Modifier.align(Alignment.TopEnd)
+                    ) {
+                        appThemeState = appThemeState.copy(
+                            darkTheme = appThemeState.darkTheme, appThemeColorType = it
+                        )
                     }
                 }
             }
@@ -77,10 +77,11 @@ class ComposeActivity : BaseComposeActivity() {
     }
 
 
+
     @Composable
     fun NavHost() {
         val navController = rememberNavController()
-        NavHost(navController = navController, startDestination = RouteConfig.ACTION_LIST) {
+        androidx.navigation.compose.NavHost(navController = navController, startDestination = RouteConfig.ACTION_LIST) {
             composable(RouteConfig.ACTION_LIST) {
                 ToastUtils.showShort("${navController.currentBackStackEntry?.destination}")
 
@@ -126,7 +127,8 @@ class ComposeActivity : BaseComposeActivity() {
             composable(RouteConfig.LAZYCOLUMNPAGE) {
                 LazyColumnPage()
             }
-            composable("${RouteConfig.PARAMETER}/{${RouteConfig.name}}" + "" + "?${RouteConfig.age}={${RouteConfig.age}} ",
+            composable(
+                "${RouteConfig.PARAMETER}/{${RouteConfig.name}}" + "" + "?${RouteConfig.age}={${RouteConfig.age}} ",
                 arguments = listOf(navArgument("age") {
                     type = NavType.IntType  //类型
                     defaultValue = 18  //默认值
@@ -200,6 +202,7 @@ fun PalletMenu(
         }
     }
 }
+
 
 @Composable
 fun MenuItem(color: Color, name: String, onPalletChange: () -> Unit) {

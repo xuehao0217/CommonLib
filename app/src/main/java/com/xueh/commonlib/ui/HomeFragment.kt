@@ -1,21 +1,14 @@
 package com.xueh.commonlib.ui
 
-import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.blankj.utilcode.util.ToastUtils
-import com.xueh.comm_core.base.compose.BaseComposeActivity
 import com.xueh.comm_core.base.mvvm.MVVMFragment
 import com.xueh.comm_core.helper.*
-import com.xueh.comm_core.helper.coroutine.GlobalCoroutineExceptionHandler
 import com.xueh.commonlib.R
 import com.xueh.commonlib.databinding.FragmentHomeBinding
 import com.xueh.commonlib.databinding.ItemLayoutBinding
 import com.xueh.commonlib.ui.viewmodel.HomeViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 
 /**
@@ -55,9 +48,7 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
             }.apply {
                 setNewInstance(mutableListOf("Compose"))
                 setOnItemClickListener { adapter, view, position ->
-                    if (position == 0) {
-                        startActivity(ComposeActivity::class.java)
-                    }
+
                 }
             }
     }

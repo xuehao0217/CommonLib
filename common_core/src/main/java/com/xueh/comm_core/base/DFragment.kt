@@ -114,23 +114,15 @@ abstract class DFragment<VB : ViewBinding> : BaseFragment<VB>(), CoroutineScope 
         }
     }
 
-    /**
-     * 是否可以使用沉浸式
-     * Is immersion bar enabled boolean.
-     *
-     * @return the boolean
-     */
-    protected val isImmersionBarEnabled = true
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (isImmersionBarEnabled) {
+        if (isImmersionBarEnabled()) {
             initImmersionBar()
         }
     }
 
     protected open fun isRegisterEventBus() = false
-
+    protected open fun isImmersionBarEnabled() = false
 
     protected open fun launchLifecycle(block: suspend (CoroutineScope) -> Unit) {
         lifecycleScope.launch(GlobalCoroutineExceptionHandler()) {

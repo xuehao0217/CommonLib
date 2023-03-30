@@ -25,7 +25,7 @@ import kotlinx.coroutines.*
 abstract class DActivity<VB : ViewBinding> : BaseActivity<VB>(), CoroutineScope by MainScope() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (isImmersionBarEnabled) {
+        if (isImmersionBarEnabled()) {
             initImmersionBar()
         }
         if (isRegisterEventBus()||javaClass.isAnnotationPresent(EventBusRegister::class.java)) {
@@ -100,7 +100,6 @@ abstract class DActivity<VB : ViewBinding> : BaseActivity<VB>(), CoroutineScope 
      *
      * @return the boolean
      */
-    protected val isImmersionBarEnabled = true
     var mImmersionBar: ImmersionBar? = null
     protected fun initImmersionBar() {
         //在BaseActivity里初始化
@@ -117,6 +116,7 @@ abstract class DActivity<VB : ViewBinding> : BaseActivity<VB>(), CoroutineScope 
 
     protected open fun isRegisterEventBus() = false
 
+    protected open fun isImmersionBarEnabled() = false
     protected open fun launchLifecycle(block: suspend (CoroutineScope) -> Unit) {
         lifecycleScope.launch(GlobalCoroutineExceptionHandler()) {
             block.invoke(this)

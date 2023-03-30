@@ -2,7 +2,9 @@ package com.xueh.comm_core.base.compose
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.Composable
 import androidx.core.view.WindowCompat
 import com.xueh.comm_core.weight.ViewLoading
 
@@ -15,11 +17,12 @@ abstract class BaseComposeActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val controller = WindowCompat.getInsetsController(window, window.decorView)
         controller?.isAppearanceLightStatusBars = !(resources.configuration.uiMode == 0x21)
-        initView()
+        setContent {
+            setComposeContent()
+        }
     }
-
-    abstract fun initView()
-
+    @Composable
+    abstract fun setComposeContent()
     protected fun showProgressDialog() {
         ViewLoading.show(this)
     }
