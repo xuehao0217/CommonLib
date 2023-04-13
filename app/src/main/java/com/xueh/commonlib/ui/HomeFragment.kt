@@ -3,6 +3,7 @@ package com.xueh.commonlib.ui
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.blankj.utilcode.util.ToastUtils
+import com.chuckerteam.chucker.api.Chucker
 import com.xueh.comm_core.base.mvvm.MVVMFragment
 import com.xueh.comm_core.helper.*
 import com.xueh.commonlib.R
@@ -46,9 +47,9 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
             .onBindAdapter<ItemLayoutBinding, String> { item ->
                 tvItem.text = item
             }.apply {
-                setNewInstance(mutableListOf("Compose"))
+                setNewInstance(mutableListOf("查看网络日志"))
                 setOnItemClickListener { adapter, view, position ->
-
+                    startActivity(Chucker.getLaunchIntent(requireContext()))
                 }
             }
     }

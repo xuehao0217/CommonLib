@@ -149,8 +149,6 @@ public static java.lang.String TABLENAME;
 #bar
 -keep class com.hjq.bar.** {*;}
 
-#统计sdk
--keep class com.example.statisti_lib.entity.** {*;}
 #permission
 -dontwarn com.yanzhenjie.permission.**
 
