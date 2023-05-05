@@ -1,4 +1,4 @@
-# 公用库适配Androidx
+# 公用库
 Kotlin 协程 DSL网络请求封装
 Compose 使用
 
