@@ -1,33 +1,19 @@
 package com.xueh.commonlib.ui.viewmodel
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.liveData
-import androidx.lifecycle.viewModelScope
 import com.blankj.utilcode.util.*
 import com.xueh.comm_core.base.mvvm.BaseViewModel
 import com.xueh.comm_core.helper.getDownloadProgress
 import com.xueh.comm_core.helper.getPart
-import com.xueh.comm_core.helper.loge
 import com.xueh.comm_core.net.BaseResult
 import com.xueh.comm_core.net.HttpRequest
 import com.xueh.commonlib.api.RestApi
 import com.xueh.commonlib.entity.BannerVO
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.launch
-import me.jessyan.progressmanager.ProgressListener
-import me.jessyan.progressmanager.ProgressManager
 import me.jessyan.progressmanager.body.ProgressInfo
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
 import java.io.File
-import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.ResponseBody
 import retrofit2.Response
-import java.lang.Exception
 
 /**
  * 创 建 人: xueh
