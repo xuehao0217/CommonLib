@@ -11,7 +11,6 @@ import androidx.annotation.DrawableRes
 import androidx.core.content.FileProvider
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.blankj.utilcode.util.*
 import com.noober.background.drawable.DrawableCreator
 import com.xueh.comm_core.helper.coroutine.GlobalCoroutineExceptionHandler
@@ -26,7 +25,6 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
-import java.util.concurrent.Flow
 import kotlin.properties.Delegates
 
 
@@ -251,44 +249,80 @@ fun String.getDownloadProgress(block: (ProgressInfo) -> Unit) = ProgressManager.
         }
 
     })
+//***********************************************kotlin 扩展函数之Boolean扩展**********************************************************
+//https://juejin.cn/post/6952690897234591780
+/**
+ * 数据
+ */
+sealed class BooleanExt<out T>
+
+object Otherwise : BooleanExt<Nothing>()
+class WithData<T>(val data: T) : BooleanExt<T>()
+
+/**
+ * 判断条件为true 时执行block
+ */
+inline fun <T : Any> Boolean.yes(block: () -> T) =
+    when {
+        this -> {
+            WithData(block())
+        }
+        else -> {
+            Otherwise
+        }
+    }
+
+/**
+ * 判断条件为false 时执行block
+ *
+ */
+inline fun <T> Boolean.no(block: () -> T) = when {
+    this -> Otherwise
+    else -> {
+        WithData(block())
+    }
+}
+
+//// 有返回值（条件为false）
+//val otherwise1 = false.no {
+//    2
+//}.otherwise {
+//    3
+//}
+
+/**
+ * 与判断条件互斥时执行block
+ */
+inline fun <T> BooleanExt<T>.otherwise(block: () -> T): T =
+    when (this) {
+        is Otherwise -> block()
+        is WithData -> this.data
+    }
 //*********************************************************************************************************
 
-
-fun Boolean.yes(block: () -> Unit) {
-    if (this) {
-        block.invoke()
-    }
-}
-
-fun Boolean.no(block: () -> Unit) {
-    if (!this) {
-        block.invoke()
-    }
-}
-
-class yesOrNoDsl {
-    var isTrue: (() -> Unit?)? = null
-
-    var isFalse: (() -> Unit?)? = null
-
-    infix fun yes(isTrue: (() -> Unit?)) {
-        this.isTrue = isTrue
-    }
-
-    infix fun no(isFalse: (() -> Unit?)) {
-        this.isFalse = isFalse
-    }
-}
-
-
-inline fun yesOrNo(a: Boolean, crossinline yesOrNo: yesOrNoDsl.() -> Unit) {
-    a.yes {
-        yesOrNoDsl().apply(yesOrNo)?.isTrue?.invoke()
-    }
-    a.no {
-        yesOrNoDsl().apply(yesOrNo)?.isFalse?.invoke()
-    }
-}
+//class yesOrNoDsl {
+//    var isTrue: (() -> Unit?)? = null
+//
+//    var isFalse: (() -> Unit?)? = null
+//
+//    infix fun yes(isTrue: (() -> Unit?)) {
+//        this.isTrue = isTrue
+//    }
+//
+//    infix fun no(isFalse: (() -> Unit?)) {
+//        this.isFalse = isFalse
+//    }
+//}
+//
+//
+//inline fun yesOrNo(a: Boolean, crossinline yesOrNo: yesOrNoDsl.() -> Unit) {
+//    a.yes {
+//        yesOrNoDsl().apply(yesOrNo)?.isTrue?.invoke()
+//    }
+//    a.no {
+//        yesOrNoDsl().apply(yesOrNo)?.isFalse?.invoke()
+//    }
+//}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class lifecycleEventDsl {
