@@ -104,6 +104,7 @@ dependencies {
     api Deps.Compose.navigation_compose
     api Deps.Compose.lifecycle_runtime_ktx
     api Deps.Compose.lifecycle_viewmodel
+    api Deps.Compose.accompanist_permissions
     debugImplementation Deps.Compose.customview
     debugImplementation Deps.Compose.customview_poolingcontainer
 

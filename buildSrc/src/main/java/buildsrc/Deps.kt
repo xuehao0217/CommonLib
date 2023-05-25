@@ -11,7 +11,7 @@ object Deps {
         const val pagingVersion = "3.1.0-rc01"
         const val pagingCompose = "1.0.0-alpha18"
         const val accompanist = "0.30.0"
-        const val compose_activity="1.8.0-alpha02"
+        const val compose_activity = "1.8.0-alpha02"
 
         const val core_ktx = "1.8.0"
         const val constraint_layout = "2.1.4"
@@ -139,7 +139,7 @@ object Deps {
 
 
     object Compose {
-        const val compose_bom= "androidx.compose:compose-bom:2023.03.00"
+        const val compose_bom = "androidx.compose:compose-bom:2023.03.00"
         const val compose_ui = "androidx.compose.ui:ui"
         const val compose_material3 = "androidx.compose.material3:material3"
         const val compose_preview = "androidx.compose.ui:ui-tooling-preview"
@@ -155,7 +155,8 @@ object Deps {
         const val compose_paging_compose =
             "androidx.paging:paging-compose:${Version.pagingCompose}"
 
-        const val navigation_compose="androidx.navigation:navigation-compose:2.6.0-alpha08"
+        const val navigation_compose = "androidx.navigation:navigation-compose:2.6.0-alpha08"
+
         //viewPager
         const val accompanist_pager = "com.google.accompanist:accompanist-pager:${Version.accompanist}"
         const val accompanist_pager_indicators =
@@ -176,15 +177,18 @@ object Deps {
 
         const val compose_smartrefresh = "io.github.loren-moon:composesmartrefresh:1.0.0"
 
-        const val customview="androidx.customview:customview:1.2.0-alpha01"
+        const val customview = "androidx.customview:customview:1.2.0-alpha01"
         const val customview_poolingcontainer = "androidx.customview:customview-poolingcontainer:1.0.0-alpha01"
 
         //collectAsStateWithLifecycle
-        const val lifecycle_runtime_ktx =  "androidx.lifecycle:lifecycle-runtime-compose:${Version.lifecycle_compose}"
+        const val lifecycle_runtime_ktx = "androidx.lifecycle:lifecycle-runtime-compose:${Version.lifecycle_compose}"
+
         //获取viewmodel
         // import androidx.lifecycle.viewmodel.compose.viewModel
         //val viewModel1: ComposeViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
-        const val lifecycle_viewmodel =  "androidx.lifecycle:lifecycle-viewmodel-compose:${Version.lifecycle_compose}"
+        const val lifecycle_viewmodel = "androidx.lifecycle:lifecycle-viewmodel-compose:${Version.lifecycle_compose}"
+        //https://blog.csdn.net/qq_34453595/article/details/124675524
+        const val accompanist_permissions = "com.google.accompanist:accompanist-permissions:0.31.2-alpha"
     }
 
 
