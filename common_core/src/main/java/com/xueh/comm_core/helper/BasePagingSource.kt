@@ -20,7 +20,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.*
 import com.blankj.utilcode.util.LogUtils
+import com.blankj.utilcode.util.NetworkUtils
 import com.blankj.utilcode.util.ToastUtils
+import kotlinx.coroutines.flow.filter
 
 
 abstract class BasePagingSource<T : Any> : PagingSource<Int, T>() {
@@ -65,4 +67,10 @@ fun <T : Any> ViewModel.pager(
     object : BasePagingSource<T>() {
         override suspend fun getDataList(page: Int) = getDatas.invoke(page)
     }
-}.flow.cachedIn(viewModelScope)
+}.flow.filter {
+    NetworkUtils.isConnected().also {
+        if (!it){
+            ToastUtils.showShort("网络异常，请检查网络设置")
+        }
+    }
+}.cachedIn(viewModelScope)
