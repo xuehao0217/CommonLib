@@ -1,8 +1,13 @@
 package com.xueh.comm_core.helper.compose
 
+import android.content.pm.PackageManager
 import android.os.Bundle
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavHostController
@@ -83,5 +88,30 @@ fun NavHostController.goBackWithParams(
     }
     if (autoPop) {
         popBackStack()
+    }
+}
+
+
+
+
+@Composable
+fun CheckPermission( permission:String,onPermissionGranted: () -> Unit) {
+    val context = LocalContext.current
+    val requestPermissionLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (isGranted) {
+                onPermissionGranted.invoke()
+            }
+        }
+    // 检查权限是否已授权
+    val hasPermission =
+        ContextCompat.checkSelfPermission(context, permission) ==
+                PackageManager.PERMISSION_GRANTED
+
+    if (hasPermission) {
+        onPermissionGranted.invoke()
+    } else {
+        // 请求权限
+        requestPermissionLauncher.launch(permission)
     }
 }
