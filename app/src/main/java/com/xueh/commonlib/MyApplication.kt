@@ -20,8 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory
  * 备注：
  */
 class MyApplication : BaseApplication() {
-    override fun onCreate() {
-        super.onCreate()
+    override fun init() {
         initState()
         initLog()
         initNet()
