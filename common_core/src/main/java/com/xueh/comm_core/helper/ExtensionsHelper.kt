@@ -17,6 +17,8 @@ import com.xueh.comm_core.helper.coroutine.GlobalCoroutineExceptionHandler
 import com.xueh.comm_core.utils.CommonUtils
 import com.xueh.comm_core.utils.GlideUtils
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import me.jessyan.progressmanager.ProgressListener
 import me.jessyan.progressmanager.ProgressManager
@@ -364,5 +366,16 @@ inline fun <T> kotlinx.coroutines.flow.Flow<T>.collect(scope: CoroutineScope, cr
         collect {
             action(it)
         }
+    }
+}
+
+
+fun launchMainAndCancel(error: () -> Unit={},block: suspend CoroutineScope.() -> Unit) = CoroutineScope(Dispatchers.Main).launch {
+    try {
+        block()
+    } catch (e: Exception) {
+        error()
+    } finally {
+        cancel()
     }
 }
