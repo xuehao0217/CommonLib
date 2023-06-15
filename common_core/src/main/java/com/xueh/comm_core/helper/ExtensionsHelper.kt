@@ -129,7 +129,10 @@ inline fun <R> notNull(vararg args: Any?, block: () -> R) {
 }
 
 
-fun Any.isNotEmpty() = ObjectUtils.isNotEmpty(this)
+
+fun Any?.isEmpty()=ObjectUtils.isEmpty(this)
+
+fun Any?.isNotEmpty()=ObjectUtils.isNotEmpty(this)
 
 //**********************************************************************************************************
 
