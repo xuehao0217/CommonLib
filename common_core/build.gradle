@@ -105,6 +105,7 @@ dependencies {
     api Deps.Compose.lifecycle_runtime_ktx
     api Deps.Compose.lifecycle_viewmodel
     api Deps.Compose.accompanist_permissions
+    api Deps.Compose.placeholder
     debugImplementation Deps.Compose.customview
     debugImplementation Deps.Compose.customview_poolingcontainer
 

@@ -27,6 +27,8 @@ object RouteConfig {
     const val CommonRefreshColumnData="CommonRefreshColumnData"
     const val ComposePermission="CommonPermission"
     const val CommonPaging="CommonPagingPage"
+    const val Placeholder="Placeholder"
+
 
 
 

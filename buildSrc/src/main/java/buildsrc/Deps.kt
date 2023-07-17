@@ -189,6 +189,8 @@ object Deps {
         const val lifecycle_viewmodel = "androidx.lifecycle:lifecycle-viewmodel-compose:${Version.lifecycle_compose}"
         //https://blog.csdn.net/qq_34453595/article/details/124675524
         const val accompanist_permissions = "com.google.accompanist:accompanist-permissions:0.31.2-alpha"
+
+        const val placeholder="com.google.accompanist:accompanist-placeholder-material:0.31.0-alpha"
     }
 
 

@@ -97,6 +97,7 @@ class ComposeFragment:BaseComposeFragment() {
                     ItemData("跳转互传参数", RouteConfig.navigate_param_transfer1),
                     ItemData("下拉加载使用", RouteConfig.REFRESHLOADUSE),
                     ItemData("Compose下权限申请", RouteConfig.ComposePermission),
+                    ItemData("Compose Placeholder", RouteConfig.Placeholder),
                     //                    ItemData("lazyVerticalGrid使用", RouteConfig.LAZYVERTICALGRID),
 //                    ItemData("LazyColumnPage", RouteConfig.LAZYCOLUMNPAGE),
 //                    ItemData("ScrollableAppBar", RouteConfig.SCROLLABLEAPPBAR),
@@ -170,6 +171,10 @@ class ComposeFragment:BaseComposeFragment() {
 
             composable(RouteConfig.ComposePermission) {
                 PermissionPageContent()
+            }
+
+            composable(RouteConfig.Placeholder) {
+                PlaceholderPage()
             }
         }
     }
