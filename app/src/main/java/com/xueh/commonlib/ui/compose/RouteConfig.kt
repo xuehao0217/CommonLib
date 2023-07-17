@@ -7,16 +7,16 @@ package com.xueh.commonlib.ui.compose
  */
 object RouteConfig {
 
-    const val CONSTRAINTSET="ConstraintSet"
-    const val REFRESHLOADUSE="refreshLoadUse"
-    const val SCROLLABLETABROW="scrollableTabRow"
+    const val ConstraintSet="ConstraintSet"
+    const val refreshLoadUse="refreshLoadUse"
+    const val scrollableTabRow="scrollableTabRow"
 
-    const val LAZYVERTICALGRID="lazyVerticalGrid"
-    const val LAZYCOLUMNPAGE="LazyColumnPage"
-    const val ACTION_LIST="actionLIst"
+    const val lazyVerticalGrid="lazyVerticalGrid"
+    const val LazyColumnPage="LazyColumnPage"
+    const val ActionList="ActionList"
 
-    const val PARAMETER="parameter"
-    const val SCROLLABLEAPPBAR="ScrollableAppBar"
+    const val Parameter="Parameter"
+    const val ScrollableAppBar="ScrollableAppBar"
     const val navigate_param_transfer2="navigate_param_transfer2"
     const val navigate_param_transfer1="navigate_param_transfer1"
 

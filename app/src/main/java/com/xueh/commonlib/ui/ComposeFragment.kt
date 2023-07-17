@@ -34,7 +34,7 @@ import com.xueh.commonlib.ui.compose.*
  * 备注：
  */
 
-class ComposeFragment:BaseComposeFragment() {
+class ComposeFragment : BaseComposeFragment() {
     @Composable
     override fun setComposeContent() {
         var showMenu by remember {
@@ -77,12 +77,11 @@ class ComposeFragment:BaseComposeFragment() {
     }
 
 
-
     @Composable
     fun NavHost() {
         val navController = rememberNavController()
-        androidx.navigation.compose.NavHost(navController = navController, startDestination = RouteConfig.ACTION_LIST) {
-            composable(RouteConfig.ACTION_LIST) {
+        androidx.navigation.compose.NavHost(navController = navController, startDestination = RouteConfig.ActionList) {
+            composable(RouteConfig.ActionList) {
                 ToastUtils.showShort("${navController.currentBackStackEntry?.destination}")
 
                 var str = listOf(
@@ -91,22 +90,22 @@ class ComposeFragment:BaseComposeFragment() {
                     ItemData("公用CommonLazyColumnDatasPage", RouteConfig.CommonLazyColumnDatas),
                     ItemData("公用CommonRefreshColumnData", RouteConfig.CommonRefreshColumnData),
                     ItemData("公用CommonPagingPage", RouteConfig.CommonPaging),
-                    ItemData("ConstraintSet使用", RouteConfig.CONSTRAINTSET),
-                    ItemData("scrollableTab使用", RouteConfig.SCROLLABLETABROW),
-                    ItemData("路由传参", RouteConfig.PARAMETER),
+                    ItemData("ConstraintSet使用", RouteConfig.ConstraintSet),
+                    ItemData("scrollableTab使用", RouteConfig.scrollableTabRow),
+                    ItemData("路由传参", RouteConfig.Parameter),
                     ItemData("跳转互传参数", RouteConfig.navigate_param_transfer1),
-                    ItemData("下拉加载使用", RouteConfig.REFRESHLOADUSE),
+                    ItemData("下拉加载使用", RouteConfig.refreshLoadUse),
                     ItemData("Compose下权限申请", RouteConfig.ComposePermission),
                     ItemData("Compose Placeholder", RouteConfig.Placeholder),
-                    //                    ItemData("lazyVerticalGrid使用", RouteConfig.LAZYVERTICALGRID),
-//                    ItemData("LazyColumnPage", RouteConfig.LAZYCOLUMNPAGE),
-//                    ItemData("ScrollableAppBar", RouteConfig.SCROLLABLEAPPBAR),
+//                    ItemData("lazyVerticalGrid使用", RouteConfig.lazyVerticalGrid),
+//                    ItemData("LazyColumnPage", RouteConfig.LazyColumnPage),
+//                    ItemData("ScrollableAppBar", RouteConfig.ScrollableAppBar),
                 )
                 LazyColumn() {
                     itemsIndexed(str) { _, item ->
                         itemView(item.str, false) {
-                            if (item.router == RouteConfig.PARAMETER) {
-                                navController.navigate("${RouteConfig.PARAMETER}/Kevin")
+                            if (item.router == RouteConfig.Parameter) {
+                                navController.navigate("${RouteConfig.Parameter}/Kevin")
                             } else {
                                 navController.navigate("${item.router}")
                             }
@@ -114,23 +113,23 @@ class ComposeFragment:BaseComposeFragment() {
                     }
                 }
             }
-            composable(RouteConfig.REFRESHLOADUSE) {
+            composable(RouteConfig.refreshLoadUse) {
                 refreshLoadUse()
             }
-            composable(RouteConfig.CONSTRAINTSET) {
+            composable(RouteConfig.ConstraintSet) {
                 ConstraintPage()
             }
-            composable(RouteConfig.SCROLLABLETABROW) {
+            composable(RouteConfig.scrollableTabRow) {
                 scrollableTabRow()
             }
-            composable(RouteConfig.LAZYVERTICALGRID) {
+            composable(RouteConfig.lazyVerticalGrid) {
                 lazyVerticalGrid()
             }
-            composable(RouteConfig.LAZYCOLUMNPAGE) {
+            composable(RouteConfig.LazyColumnPage) {
                 LazyColumnPage()
             }
             composable(
-                "${RouteConfig.PARAMETER}/{${RouteConfig.name}}" + "" + "?${RouteConfig.age}={${RouteConfig.age}} ",
+                "${RouteConfig.Parameter}/{${RouteConfig.name}}" + "" + "?${RouteConfig.age}={${RouteConfig.age}} ",
                 arguments = listOf(navArgument("age") {
                     type = NavType.IntType  //类型
                     defaultValue = 18  //默认值
@@ -141,7 +140,7 @@ class ComposeFragment:BaseComposeFragment() {
                 val age = it.arguments?.getInt(RouteConfig.age)
                 PageTwo(navController, name ?: "NULL", age ?: 0)
             }
-            composable(RouteConfig.SCROLLABLEAPPBAR) {
+            composable(RouteConfig.ScrollableAppBar) {
                 BarPage()
             }
 
