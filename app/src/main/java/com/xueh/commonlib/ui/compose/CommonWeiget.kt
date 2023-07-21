@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalPagerApi::class)
 
 package com.xueh.commonlib.ui.compose
 
@@ -13,7 +12,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.google.accompanist.pager.ExperimentalPagerApi
 import com.xueh.comm_core.weight.compose.*
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
 import kotlinx.coroutines.delay
@@ -28,7 +26,7 @@ import kotlinx.coroutines.launch
 @Preview
 @Composable
 fun CommonTabPage() {
-    CommonTabPage(tabsName = mutableListOf("AAAAAAA", "BBBBBBB")) { index, bool ->
+    CommonTabPage(tabsName = mutableListOf("AAAAAAA", "BBBBBBB")) { index ->
         if (index == 0) {
             Box(
                 modifier = Modifier

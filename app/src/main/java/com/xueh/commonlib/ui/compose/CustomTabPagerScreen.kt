@@ -1,5 +1,6 @@
 package com.xueh.commonlib.ui.compose
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -8,8 +9,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.*
-import com.google.accompanist.pager.*
-
 import com.xueh.comm_core.weight.compose.PagerTab
 import com.xueh.comm_core.weight.compose.PagerTabIndicator
 import com.xueh.comm_core.weight.compose.click
@@ -26,13 +25,13 @@ import java.lang.Math.*
 
 val pages = arrayOf("Home", "Shows上上 上 ", "Books")
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CustomiTabPagerScreen() {
+fun CustomTabPagerScreen() {
     Scaffold(topBar = {
     }) {
         Column(Modifier.padding(it)) {
-            val pagerState = rememberPagerState()
+            val pagerState = androidx.compose.foundation.pager.rememberPagerState()
             TabRow(
                 modifier = Modifier.fillMaxWidth(),
                 selectedTabIndex = pagerState.currentPage,
@@ -58,8 +57,8 @@ fun CustomiTabPagerScreen() {
                     )
                 }
             }
-            HorizontalPager(
-                count = pages.size,
+            androidx.compose.foundation.pager.HorizontalPager(
+                pageCount = pages.size,
                 state = pagerState,
             ) { page ->
                 Text(

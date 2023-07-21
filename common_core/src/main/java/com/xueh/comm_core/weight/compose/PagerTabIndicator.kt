@@ -1,6 +1,7 @@
 package com.xueh.comm_core.weight.compose
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
@@ -17,8 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.PagerState
 
 /**
  * 创 建 人: xueh
@@ -30,11 +29,11 @@ import com.google.accompanist.pager.PagerState
  * @param  height   指示器的高度
  * @param  color    指示器的颜色
  */
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PagerTabIndicator(
     tabPositions: List<TabPosition>,
-    pagerState: PagerState,
+    pagerState: androidx.compose.foundation.pager.PagerState,
     color: Color = MaterialTheme.colors.primarySurface,
     with: Dp = 40.dp,
     height: Dp = 4.dp,
@@ -44,7 +43,7 @@ fun PagerTabIndicator(
         val currentTab = tabPositions[currentPage]
         val previousTab = tabPositions.getOrNull(currentPage - 1)
         val nextTab = tabPositions.getOrNull(currentPage + 1)
-        val fraction = pagerState.currentPageOffset
+        val fraction = pagerState.currentPageOffsetFraction
 
         val indicatorWidth = currentTab.width.toPx() * 1f
 
@@ -79,11 +78,11 @@ fun PagerTabIndicator(
  * @param selectedFontWeight        tab选中时的文字比重
  * @param unselectedFontWeight      tab没选中时的文字比重
  */
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PagerTab(
     modifier: Modifier = Modifier,
-    pagerState: PagerState,
+    pagerState: androidx.compose.foundation.pager.PagerState,
     index: Int,
     pageCount: Int,
     text: String,
@@ -96,7 +95,7 @@ fun PagerTab(
 ) {
     val previousIndex = Math.max(index - 1, 0)
     val nextIndex = Math.min(index + 1, pageCount - 1)
-    val currentIndexPlusOffset = pagerState.currentPage + pagerState.currentPageOffset
+    val currentIndexPlusOffset = pagerState.currentPage + pagerState.currentPageOffsetFraction
 
     val progress =
         if (currentIndexPlusOffset >= previousIndex && currentIndexPlusOffset <= nextIndex) {

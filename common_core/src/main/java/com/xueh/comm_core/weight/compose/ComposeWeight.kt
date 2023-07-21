@@ -32,10 +32,6 @@ import androidx.paging.compose.items
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import coil.request.ImageRequest
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerScope
-import com.google.accompanist.pager.rememberPagerState
 import com.loren.component.view.composesmartrefresh.rememberSmartSwipeRefreshState
 import com.xueh.comm_core.weight.compose.refreshheader.RefreshHeader
 import kotlinx.coroutines.CoroutineScope
@@ -335,11 +331,11 @@ fun <T : Any> CommonPagingPage(
 
 
 //公用带滑动Tab页面
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CommonTabPage(tabsName: List<String>, content: @Composable PagerScope.(page: Int, bool: Boolean) -> Unit) {
+fun CommonTabPage(tabsName: List<String>, pageContent: @Composable (page: Int) -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
-        val pagerState = rememberPagerState()
+        val pagerState = androidx.compose.foundation.pager.rememberPagerState()
         TabRow(modifier = Modifier
             .wrapContentHeight()
             .fillMaxWidth()
@@ -363,13 +359,14 @@ fun CommonTabPage(tabsName: List<String>, content: @Composable PagerScope.(page:
             }
         }
 
-        HorizontalPager(
-            count = tabsName.size,
+        androidx.compose.foundation.pager.HorizontalPager(
+            pageCount = tabsName.size,
             state = pagerState,
         ) { page ->
-//            if (page==pagerState.currentPage){
-            content(page, page == pagerState.currentPage)
-//            }
+            if (page == pagerState.currentPage) {
+//                pageContent(page, page == pagerState.currentPage)
+                pageContent(page)
+            }
         }
     }
 }
