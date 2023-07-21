@@ -95,7 +95,7 @@ dependencies {
     api Deps.Compose.coil_compose
     api Deps.Compose.compose_constraintlayout
     api Deps.Compose.compose_paging_compose
-    api Deps.Compose.accompanist_pager
+//    api Deps.Compose.accompanist_pager
     api Deps.Compose.accompanist_pager_indicators
     api Deps.Compose.accompanist_insets
     api Deps.Compose.accompanist_systemuicontroller
