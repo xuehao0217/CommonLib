@@ -26,6 +26,8 @@ import androidx.navigation.NavHostController
 @Composable
 fun <T> rememberMutableStateOf(value: T): MutableState<T> = remember { mutableStateOf(value) }
 
+@Composable
+fun <T> rememberDerivedStateOfOf(value: T) = remember {  derivedStateOf { value }}
 
 //var life = rememberLifecycle()
 //life.onLifeResume {
