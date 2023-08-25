@@ -7,11 +7,10 @@ import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.widget.LinearLayout
+import com.hjq.bar.OnTitleBarListener
 import com.just.agentweb.AgentWeb
-import com.xueh.comm_core.R
 import com.xueh.comm_core.base.DActivity
 import com.xueh.comm_core.databinding.ActivityWebViewBinding
-import com.xueh.comm_core.weight.OnTitleLeftListener
 
 /**
  * 创 建 人: xueh
@@ -68,9 +67,15 @@ open class WebViewActivity : DActivity<ActivityWebViewBinding>() {
     }
 
     override fun initListener() {
-        binding.tbTitleBar.setOnTitleBarListener(object : OnTitleLeftListener() {
+        binding.tbTitleBar.setOnTitleBarListener(object : OnTitleBarListener{
             override fun onLeftClick(v: View) {
                 finish()
+            }
+
+            override fun onTitleClick(v: View) {
+            }
+
+            override fun onRightClick(v: View) {
             }
         })
     }
