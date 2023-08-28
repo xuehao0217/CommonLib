@@ -126,7 +126,7 @@ private fun DialogContent(onDismissRequest: () -> Unit) {
         .fillMaxWidth()
         .fillMaxHeight(fraction = 0.7f)
         .clip(shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
-        .background(color = Color(0xFF009688)), verticalArrangement = Arrangement.Center) {
+        .background(color = androidx.compose.material3.MaterialTheme.colorScheme.primary), verticalArrangement = Arrangement.Center) {
         Button(modifier = Modifier.align(alignment = Alignment.CenterHorizontally), onClick = {
             onDismissRequest()
         }) {
