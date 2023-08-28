@@ -1,7 +1,5 @@
 package com.xueh.commonlib.ui.compose
 
-import android.util.Log
-import android.view.Surface
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,21 +11,16 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalProvider
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.compose.ui.window.SecureFlagPolicy
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.blankj.utilcode.util.ToastUtils
-import com.xueh.comm_core.base.compose.theme.appThemeState
 import com.xueh.comm_core.weight.compose.BottomSheetDialog
 import com.xueh.comm_core.weight.compose.BoxText
+import com.xueh.comm_core.weight.compose.CustomDialog
 import com.xueh.comm_core.weight.compose.click
-import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
  * 创 建 人: xueh
@@ -40,6 +33,7 @@ fun DialogPage() {
     val alertDialog = remember { mutableStateOf(false) }
     val fullScreenDialog = remember { mutableStateOf(false) }
     var bottomSheetDialog by remember { mutableStateOf(false) }
+    var customDialog by remember { mutableStateOf(false) }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxSize()) {
         Spacer(modifier = Modifier.height(15.dp))
@@ -72,6 +66,16 @@ fun DialogPage() {
                 .click {
                     bottomSheetDialog = true
                 })
+        Spacer(modifier = Modifier.height(15.dp))
+        BoxText(text = "CustomDialog",
+            textColor = Color.White,
+            modifier = Modifier
+                .size(180.dp, 44.dp)
+                .clip(RoundedCornerShape(22.dp))
+                .background(androidx.compose.material3.MaterialTheme.colorScheme.primary)
+                .click {
+                    customDialog = true
+                })
     }
 
 
@@ -98,6 +102,19 @@ fun DialogPage() {
     }) {
         DialogContent {
             bottomSheetDialog = false
+        }
+    }
+
+    CustomDialog(contentAlignment = Alignment.Center, dialogBackgroundColor = Color.Transparent, modifier = Modifier, visible = customDialog, cancelable = true, canceledOnTouchOutside = true, onDismissRequest = {
+        customDialog = false
+    }) {
+        ConstraintLayout(modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth()
+            .height(300.dp)
+            .clip(RoundedCornerShape(18.dp))
+            .background(androidx.compose.material3.MaterialTheme.colorScheme.primary)) {
+
         }
     }
 

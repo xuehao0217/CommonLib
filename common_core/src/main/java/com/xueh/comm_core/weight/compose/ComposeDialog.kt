@@ -148,3 +148,80 @@ private fun Modifier.clickableNoRipple(onClick: () -> Unit): Modifier =
             onClick()
         }
     }
+
+
+
+
+@Composable
+fun CustomDialog(
+    contentAlignment: Alignment = Alignment.TopStart,
+    dialogBackgroundColor:Color=Color(0x99000000),
+    modifier: Modifier = Modifier,
+    visible: Boolean,
+    cancelable: Boolean = true,
+    canceledOnTouchOutside: Boolean = true,
+    onDismissRequest: () -> Unit,
+    content: @Composable () -> Unit
+) {
+    BackHandler(enabled = visible, onBack = {
+        if (cancelable) {
+            onDismissRequest()
+        }
+    })
+    Box(modifier = modifier) {
+        AnimatedVisibility(
+            visible = visible,
+            enter = fadeIn(animationSpec = tween(durationMillis = 400, easing = LinearEasing)),
+            exit = fadeOut(animationSpec = tween(durationMillis = 400, easing = LinearEasing))
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = dialogBackgroundColor)
+            )
+        }
+        var offsetY by remember {
+            mutableStateOf(0f)
+        }
+        val offsetYAnimate by animateFloatAsState(targetValue = offsetY)
+        var bottomSheetHeight by remember { mutableStateOf(0f) }
+        AnimatedVisibility(
+            modifier = Modifier
+                .clickableNoRipple {
+
+                }
+                .align(alignment = Alignment.BottomCenter)
+                .onGloballyPositioned {
+                    bottomSheetHeight = it.size.height.toFloat()
+                }
+                .offset(offset = {
+                    IntOffset(0, offsetYAnimate.roundToInt())
+                })
+            ,
+            visible = visible,
+            enter = slideInVertically(
+                animationSpec = tween(durationMillis = 400, easing = LinearOutSlowInEasing),
+                initialOffsetY = { 2 * it }
+            ),
+            exit = slideOutVertically(
+                animationSpec = tween(durationMillis = 400, easing = LinearOutSlowInEasing),
+                targetOffsetY = { it }
+            ),
+        ) {
+            DisposableEffect(key1 = null) {
+                onDispose {
+                    offsetY = 0f
+                }
+            }
+            Box(contentAlignment = contentAlignment, modifier = Modifier.fillMaxSize().clickableNoRipple {
+                if (canceledOnTouchOutside) {
+                    onDismissRequest()
+                }
+            }){
+                content()
+            }
+
+        }
+    }
+}
+
