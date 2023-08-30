@@ -2,6 +2,7 @@ package com.xueh.commonlib.ui
 
 import android.Manifest
 import android.os.Bundle
+import com.blankj.utilcode.util.ActivityUtils
 import com.dylanc.activityresult.launcher.*
 import com.fengchen.uistatus.annotation.UiStatus
 import com.xueh.comm_core.base.DFragment
@@ -76,6 +77,9 @@ class MyFragment : DFragment<FragmentMyBinding>() {
             }
             tvContent.setOnClickListener {
                 showState(UiStatus.CONTENT)
+            }
+            tvCompose.setOnClickListener {
+                ActivityUtils.startActivity(ComposeActivity::class.java)
             }
         }
 

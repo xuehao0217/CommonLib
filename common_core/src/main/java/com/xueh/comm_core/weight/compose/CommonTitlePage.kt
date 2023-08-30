@@ -12,8 +12,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.google.accompanist.insets.navigationBarsHeight
-import com.google.accompanist.insets.statusBarsHeight
 import com.xueh.comm_core.R
 import com.xueh.comm_core.base.compose.theme.BaseComposeView
 import com.xueh.comm_core.base.compose.theme.GrayAppAdapter
@@ -43,21 +41,23 @@ fun CommonTitlePage(
         systemBarsColor = Color.Transparent, darkTheme = !appThemeState.darkTheme
     ) {
         GrayAppAdapter(isGray = false){
-            Scaffold(topBar = {
-                Spacer(
-                    modifier = Modifier
-                        //具体状态栏的颜色在这
-                        .background(titleBackgroundColor ?: MaterialTheme.colorScheme.background)
-                        .statusBarsHeight()
-                        .fillMaxWidth()
-                )
-            }, bottomBar = {
-                Spacer(
-                    modifier = Modifier
-                        .navigationBarsHeight()
-                        .fillMaxWidth()
-                )
-            }) {
+            Scaffold(modifier = Modifier.systemBarsPadding(),
+//                topBar = {
+//                Spacer(
+//                    modifier = Modifier
+//                        //具体状态栏的颜色在这
+//                        .background(titleBackgroundColor ?: MaterialTheme.colorScheme.background)
+//                        .statusBarsHeight()
+//                        .fillMaxWidth()
+//                )
+//            }, bottomBar = {
+//                Spacer(
+//                    modifier = Modifier
+//                        .navigationBarsHeight()
+//                        .fillMaxWidth()
+//                )
+//            }
+            ) {
                 Column(
                     modifier = Modifier
                         .background(contentBackgroundColor ?: MaterialTheme.colorScheme.background)
