@@ -3,6 +3,8 @@ package com.xueh.commonlib.ui.compose
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -31,7 +33,7 @@ fun CustomTabPagerScreen() {
     Scaffold(topBar = {
     }) {
         Column(Modifier.padding(it)) {
-            val pagerState = androidx.compose.foundation.pager.rememberPagerState()
+            val pagerState = rememberPagerState(pageCount = {pages.size})
             TabRow(
                 modifier = Modifier.fillMaxWidth(),
                 selectedTabIndex = pagerState.currentPage,
@@ -57,8 +59,7 @@ fun CustomTabPagerScreen() {
                     )
                 }
             }
-            androidx.compose.foundation.pager.HorizontalPager(
-                pageCount = pages.size,
+            HorizontalPager(
                 state = pagerState,
             ) { page ->
                 Text(

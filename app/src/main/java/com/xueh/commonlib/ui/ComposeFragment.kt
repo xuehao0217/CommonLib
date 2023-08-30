@@ -40,7 +40,7 @@ class ComposeFragment : BaseComposeFragment() {
         var showMenu by remember {
             mutableStateOf(false)
         }
-        CommonTitlePage(title = "Compose", titleRightContent = {
+        CommonTitlePage(title = "Compose",showBackIcon = false, titleRightContent = {
             Row(Modifier.background(MaterialTheme.colorScheme.background)) {
                 IconButton(onClick = {
                     appThemeState = appThemeState.copy(darkTheme = !appThemeState.darkTheme)
