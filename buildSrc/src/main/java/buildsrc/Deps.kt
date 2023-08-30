@@ -4,13 +4,13 @@ package buildsrc
 object Deps {
     object Version {
         const val compose = "1.4.0-alpha03"
-        const val kotlin = "1.8.10"
-        const val coroutines = "1.6.4"
-        const val compose_compiler = "1.4.4"
+        const val kotlin = "1.9.0"
+        const val coroutines = "1.7.3"
+        const val compose_compiler = "1.5.2"
         const val lifecycle_compose = "2.6.0"
         const val pagingVersion = "3.1.0-rc01"
         const val pagingCompose = "1.0.0-alpha18"
-        const val accompanist = "0.30.0"
+        const val accompanist = "0.33.1-alpha"
         const val compose_activity = "1.8.0-alpha02"
 
         const val core_ktx = "1.8.0"
@@ -155,7 +155,7 @@ object Deps {
         const val compose_paging_compose =
             "androidx.paging:paging-compose:${Version.pagingCompose}"
 
-        const val navigation_compose = "androidx.navigation:navigation-compose:2.6.0-alpha08"
+        const val navigation_compose = "androidx.navigation:navigation-compose:2.7.1"
 
         //viewPager
         const val accompanist_pager = "com.google.accompanist:accompanist-pager:${Version.accompanist}"
@@ -163,8 +163,7 @@ object Deps {
             "com.google.accompanist:accompanist-pager-indicators:${Version.accompanist}"
 
         /** accompanist辅助插件 */
-        const val accompanist_insets =
-            "com.google.accompanist:accompanist-insets:${Version.accompanist}"
+        const val accompanist_insets = "com.google.accompanist:accompanist-insets:0.31.5-beta"
 
         //        const val accompanist_coil="com.google.accompanist:accompanist-coil:0.15.0"
         //系统ui控制器
@@ -177,8 +176,8 @@ object Deps {
 
         const val compose_smartrefresh = "io.github.loren-moon:composesmartrefresh:1.0.0"
 
-        const val customview = "androidx.customview:customview:1.2.0-alpha01"
-        const val customview_poolingcontainer = "androidx.customview:customview-poolingcontainer:1.0.0-alpha01"
+        const val customview = "androidx.customview:customview:1.2.0-alpha02"
+        const val customview_poolingcontainer = "androidx.customview:customview-poolingcontainer:1.0.0"
 
         //collectAsStateWithLifecycle
         const val lifecycle_runtime_ktx = "androidx.lifecycle:lifecycle-runtime-compose:${Version.lifecycle_compose}"
@@ -188,7 +187,7 @@ object Deps {
         //val viewModel1: ComposeViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
         const val lifecycle_viewmodel = "androidx.lifecycle:lifecycle-viewmodel-compose:${Version.lifecycle_compose}"
         //https://blog.csdn.net/qq_34453595/article/details/124675524
-        const val accompanist_permissions = "com.google.accompanist:accompanist-permissions:0.31.2-alpha"
+        const val accompanist_permissions = "com.google.accompanist:accompanist-permissions:0.33.1-alpha"
 
         const val placeholder="com.google.accompanist:accompanist-placeholder-material:0.31.0-alpha"
     }
