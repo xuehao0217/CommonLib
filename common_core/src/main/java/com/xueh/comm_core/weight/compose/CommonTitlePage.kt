@@ -12,7 +12,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.statusBarsHeight
 import com.xueh.comm_core.R
@@ -40,56 +39,52 @@ fun CommonTitlePage(
     titleRightContent: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
-    ProvideWindowInsets {
-        // 状态栏改为透明
-        BaseComposeView(
-            systemBarsColor = Color.Transparent, darkTheme = !appThemeState.darkTheme
-        ) {
-            GrayAppAdapter {
-                Scaffold(topBar = {
-                    Spacer(
-                        modifier = Modifier
-                            //具体状态栏的颜色在这
-                            .background(titleBackgroundColor ?: MaterialTheme.colorScheme.background)
-                            .statusBarsHeight()
-                            .fillMaxWidth()
+    BaseComposeView(
+        systemBarsColor = Color.Transparent, darkTheme = !appThemeState.darkTheme
+    ) {
+        GrayAppAdapter(isGray = false){
+            Scaffold(topBar = {
+                Spacer(
+                    modifier = Modifier
+                        //具体状态栏的颜色在这
+                        .background(titleBackgroundColor ?: MaterialTheme.colorScheme.background)
+                        .statusBarsHeight()
+                        .fillMaxWidth()
+                )
+            }, bottomBar = {
+                Spacer(
+                    modifier = Modifier
+                        .navigationBarsHeight()
+                        .fillMaxWidth()
+                )
+            }) {
+                Column(
+                    modifier = Modifier
+                        .background(contentBackgroundColor ?: MaterialTheme.colorScheme.background)
+                        .padding(it)
+                ) {
+                    CommonTitleView(
+                        title,
+                        showBackIcon = showBackIcon,
+                        titleBackgroundColor = titleBackgroundColor ?: MaterialTheme.colorScheme.background,
+                        backIcon = backIcon,
+                        rightContent = titleRightContent,
+                        backClick = backClick
                     )
-                }, bottomBar = {
-                    Spacer(
-                        modifier = Modifier
-                            .navigationBarsHeight()
-                            .fillMaxWidth()
-                    )
-                }) {
-                    Column(
-                        modifier = Modifier
-                            .background(contentBackgroundColor ?: MaterialTheme.colorScheme.background)
-                            .padding(it)
-                    ) {
-                        CommonTitleView(
-                            title,
-                            showBackIcon = showBackIcon,
-                            titleBackgroundColor = titleBackgroundColor ?: MaterialTheme.colorScheme.background,
-                            backIcon = backIcon,
-                            rightContent = titleRightContent,
-                            backClick = backClick
-                        )
-                        if (showTitleBottomLine) {
-                            Divider(
-                                color = if (appThemeState.darkTheme) Color.White else androidx.compose.material.MaterialTheme.colors.onSurface.copy(
-                                    alpha = 0.12f
-                                )
+                    if (showTitleBottomLine) {
+                        Divider(
+                            color = if (appThemeState.darkTheme) Color.White else androidx.compose.material.MaterialTheme.colors.onSurface.copy(
+                                alpha = 0.12f
                             )
-                        }
-                        Surface(
-                            modifier = Modifier.fillMaxSize(), color = contentBackgroundColor ?: MaterialTheme.colorScheme.background
-                        ) {
-                            content.invoke()
-                        }
+                        )
+                    }
+                    Surface(
+                        modifier = Modifier.fillMaxSize(), color = contentBackgroundColor ?: MaterialTheme.colorScheme.background
+                    ) {
+                        content.invoke()
                     }
                 }
             }
-
         }
     }
 

@@ -134,14 +134,14 @@ fun SpacerH(int: Int) {
 @Composable
 fun AnimLoading(@DrawableRes id: Int, size: Int) {
     Box(contentAlignment = Alignment.Center) {
-        val infiniteTransition = rememberInfiniteTransition()
+        val infiniteTransition = rememberInfiniteTransition(label = "")
         val rotation by infiniteTransition.animateFloat(
             initialValue = 0f, targetValue = 360f, animationSpec = infiniteRepeatable(
                 animation = tween(
                     durationMillis = 3000,
                     easing = LinearEasing,
                 ),
-            )
+            ), label = ""
         )
         val imageBitmap = ImageBitmap.imageResource(id = id)
         Canvas(
