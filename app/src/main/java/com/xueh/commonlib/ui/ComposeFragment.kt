@@ -2,6 +2,7 @@ package com.xueh.commonlib.ui
 
 import android.os.Build
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -77,6 +78,7 @@ class ComposeFragment : BaseComposeFragment() {
     }
 
 
+    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun NavHost() {
         val navController = rememberNavController()
@@ -97,6 +99,7 @@ class ComposeFragment : BaseComposeFragment() {
                     ItemData("下拉加载使用", RouteConfig.refreshLoadUse),
                     ItemData("Compose下权限申请", RouteConfig.ComposePermission),
                     ItemData("Compose Placeholder", RouteConfig.Placeholder),
+                    ItemData("NavPageWeiget 使用", RouteConfig.NavPageWeiget),
 //                    ItemData("lazyVerticalGrid使用", RouteConfig.lazyVerticalGrid),
 //                    ItemData("LazyColumnPage", RouteConfig.LazyColumnPage),
 //                    ItemData("ScrollableAppBar", RouteConfig.ScrollableAppBar),
@@ -174,6 +177,9 @@ class ComposeFragment : BaseComposeFragment() {
 
             composable(RouteConfig.Placeholder) {
                 PlaceholderPage()
+            }
+            composable(RouteConfig.NavPageWeiget) {
+                NavPageWeigetPage()
             }
         }
     }

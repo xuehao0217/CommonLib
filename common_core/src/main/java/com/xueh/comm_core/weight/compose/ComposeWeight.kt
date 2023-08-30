@@ -363,7 +363,7 @@ fun CommonTabPage(tabsName: List<String>, pageContent: @Composable (page: Int) -
             }
         }
 
-        HorizontalPager(state = pagerState,) { page ->
+        HorizontalPager(state = pagerState,Modifier.weight(1f)) { page ->
             if (page == pagerState.currentPage) {
 //                pageContent(page, page == pagerState.currentPage)
                 pageContent(page)

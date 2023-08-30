@@ -28,7 +28,7 @@ object RouteConfig {
     const val ComposePermission="CommonPermission"
     const val CommonPaging="CommonPagingPage"
     const val Placeholder="Placeholder"
-
+    const val NavPageWeiget="NavPageWeiget"
 
 
 
