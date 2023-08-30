@@ -139,7 +139,7 @@ object Deps {
 
 
     object Compose {
-        const val compose_bom = "androidx.compose:compose-bom:2023.03.00"
+        const val compose_bom = "androidx.compose:compose-bom:2023.08.00"
         const val compose_ui = "androidx.compose.ui:ui"
         const val compose_material3 = "androidx.compose.material3:material3"
         const val compose_preview = "androidx.compose.ui:ui-tooling-preview"
