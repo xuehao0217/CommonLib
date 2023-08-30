@@ -149,7 +149,7 @@ object Deps {
         const val compose_activity = "androidx.activity:activity-compose:${Version.compose_activity}"
         const val compose_activity_ktx = "androidx.activity:activity-ktx:${Version.compose_activity}"
         const val compose_livedata = "androidx.compose.runtime:runtime-livedata:${Version.compose}"
-        const val compose_constraintlayout = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
+        const val compose_constraintlayout =    "androidx.constraintlayout:constraintlayout-compose-android:1.1.0-alpha12"
         const val coil_compose = "io.coil-kt:coil-compose:${Version.coil_compose}"
 
         const val compose_paging_compose =
