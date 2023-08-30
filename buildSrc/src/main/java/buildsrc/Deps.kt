@@ -3,7 +3,7 @@ package buildsrc
 
 object Deps {
     object Version {
-        const val compose = "1.4.0-alpha03"
+        const val compose = "1.6.0-alpha04"
         const val kotlin = "1.9.0"
         const val coroutines = "1.7.3"
         const val compose_compiler = "1.5.2"
