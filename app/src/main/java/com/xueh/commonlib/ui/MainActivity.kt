@@ -33,7 +33,7 @@ class MainActivity : DActivity<ActivityMainBinding>() {
             .tabTextTop(2)     //Tab文字距Tab图标的距离
 //            .lineHeight(10)         //分割线高度  默认1px
             .lineColor(Color.parseColor("#ff0000"))
-            .canScroll(true)
+            .canScroll(false)
             .build()
     }
 
