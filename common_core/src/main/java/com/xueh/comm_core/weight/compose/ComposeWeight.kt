@@ -12,6 +12,8 @@ import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -335,7 +337,9 @@ fun <T : Any> CommonPagingPage(
 @Composable
 fun CommonTabPage(tabsName: List<String>, pageContent: @Composable (page: Int) -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
-        val pagerState = androidx.compose.foundation.pager.rememberPagerState()
+        val pagerState = rememberPagerState(pageCount = {
+            tabsName.size
+        })
         TabRow(modifier = Modifier
             .wrapContentHeight()
             .fillMaxWidth()
@@ -359,10 +363,7 @@ fun CommonTabPage(tabsName: List<String>, pageContent: @Composable (page: Int) -
             }
         }
 
-        androidx.compose.foundation.pager.HorizontalPager(
-            pageCount = tabsName.size,
-            state = pagerState,
-        ) { page ->
+        HorizontalPager(state = pagerState,) { page ->
             if (page == pagerState.currentPage) {
 //                pageContent(page, page == pagerState.currentPage)
                 pageContent(page)
