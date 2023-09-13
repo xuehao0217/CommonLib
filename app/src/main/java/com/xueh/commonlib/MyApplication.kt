@@ -5,6 +5,7 @@ import com.blankj.utilcode.util.PathUtils
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.chuckerteam.chucker.api.RetentionManager
+import com.dylanc.activityresult.launcher.FileProviderUtils
 import com.fengchen.uistatus.UiStatusManager
 import com.fengchen.uistatus.annotation.UiStatus
 import com.hjq.gson.factory.GsonFactory
@@ -24,6 +25,7 @@ class MyApplication : BaseApplication() {
         initState()
         initLog()
         initNet()
+        FileProviderUtils.authority = packageName + ".utilcode.provider"
     }
 
     private fun initNet() {
