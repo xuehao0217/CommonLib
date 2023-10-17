@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.*
 import androidx.compose.ui.Alignment
@@ -33,11 +34,14 @@ fun lazyVerticalGrid() {
         val listState = rememberLazyGridState()
 
         LazyVerticalGrid(state = listState, verticalArrangement = Arrangement.spacedBy(10.dp),
-            horizontalArrangement = Arrangement.spacedBy(10.dp),columns = GridCells.Fixed(3), content = {
+            horizontalArrangement = Arrangement.spacedBy(10.dp),columns = GridCells.Fixed(3)){
+            items(images){
+
+            }
             items(images.size) { index ->
                 ImageLoadCompose(images[index])
             }
-        })
+        }
 
         val showButton by remember {
             derivedStateOf { listState.firstVisibleItemIndex > 0 }
