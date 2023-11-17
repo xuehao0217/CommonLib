@@ -10,6 +10,7 @@ import com.xueh.comm_core.net.HttpRequest
 import com.xueh.commonlib.api.RestApi
 import com.xueh.commonlib.entity.BannerVO
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.onStart
 
 class ComposeViewModel : BaseViewModel<RestApi>() {
     override fun initApi() = HttpRequest.getService(RestApi::class.java)
@@ -37,6 +38,8 @@ class ComposeViewModel : BaseViewModel<RestApi>() {
     fun getTestDatas() = pager {
         delay(2000)
         getTest(it)
+    }.onStart {
+
     }
 
     fun getTest(index: Int): List<Int> {
