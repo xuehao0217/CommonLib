@@ -35,23 +35,16 @@ fun <T : Any> RefreshList(
     headerIndicator: @Composable () -> Unit = { MyRefreshHeader(refreshState.refreshFlag) },
     itemContent: LazyListScope.() -> Unit,
 ) {
-    var isRefreshing by remember { mutableStateOf(false) }
+    val isRefreshing = lazyPagingItems.loadState.refresh is LoadState.Loading
     //错误页
     val err = lazyPagingItems.loadState.refresh is LoadState.Error
+
     if (err) {
         ErrorContent { lazyPagingItems.retry() }
         return
     }
-    LaunchedEffect(lazyPagingItems.itemSnapshotList) {
-        isRefreshing = false
-    }
-
-//    if (lazyPagingItems.loadState.refresh is LoadState.Loading) {
-//
-//    }
 
     SwipeRefresh(isRefreshing = isRefreshing, scrollState = listState, refreshState = refreshState, headerIndicator = headerIndicator, onRefresh = {
-        isRefreshing = true
         lazyPagingItems.refresh()
     }) {
         //刷新状态
