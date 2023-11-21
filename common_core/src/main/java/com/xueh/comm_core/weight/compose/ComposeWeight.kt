@@ -196,10 +196,15 @@ fun CommonLazyColumn(
     foodContent: @Composable () -> Unit? = {},
     content: LazyListScope.() -> Unit,
 ) {
-    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        var (bottom_v) = createRefs()
+
+    ConstraintLayout(modifier = modifier) {
+        var (column, bottom_v) = createRefs()
         LazyColumn(
-            modifier = modifier,
+            modifier = Modifier
+                .fillMaxSize()
+                .constrainAs(column) {
+                    top.linkTo(parent.top)
+                },
             state = state,
             verticalArrangement = verticalArrangement,
             contentPadding = contentPadding,
@@ -363,7 +368,7 @@ fun CommonTabPage(tabsName: List<String>, pageContent: @Composable (page: Int) -
             }
         }
 
-        HorizontalPager(state = pagerState,Modifier.weight(1f)) { page ->
+        HorizontalPager(state = pagerState, Modifier.weight(1f)) { page ->
             if (page == pagerState.currentPage) {
 //                pageContent(page, page == pagerState.currentPage)
                 pageContent(page)
