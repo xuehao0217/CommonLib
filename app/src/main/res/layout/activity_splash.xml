@@ -12,6 +12,7 @@
         android:src="@drawable/shape_splash"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
     <TextView
@@ -21,10 +22,6 @@
         android:layout_marginTop="15dp"
         android:layout_marginRight="15dp"
         android:gravity="center"
-        android:textColor="#fff"
-        app:bl_corners_radius="25dp"
-        app:bl_solid_color="@color/colorAccent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingPrefix" />
+        android:textColor="#fff" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,9 +5,6 @@ import com.blankj.utilcode.util.PathUtils
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.chuckerteam.chucker.api.RetentionManager
-import com.dylanc.activityresult.launcher.FileProviderUtils
-import com.fengchen.uistatus.UiStatusManager
-import com.fengchen.uistatus.annotation.UiStatus
 import com.hjq.gson.factory.GsonFactory
 import com.xueh.comm_core.base.BaseApplication
 import com.xueh.comm_core.net.HttpRequest
@@ -22,10 +19,8 @@ import retrofit2.converter.gson.GsonConverterFactory
  */
 class MyApplication : BaseApplication() {
     override fun init() {
-        initState()
         initLog()
         initNet()
-        FileProviderUtils.authority = packageName + ".utilcode.provider"
     }
 
     private fun initNet() {
@@ -73,16 +68,16 @@ class MyApplication : BaseApplication() {
             .dir = PathUtils.getExternalAppCachePath()
     }
 
-    private fun initState() {
-        UiStatusManager.getInstance()
-            .addUiStatusConfig(UiStatus.LOADING, R.layout.state_loading)
-            .addUiStatusConfig(UiStatus.EMPTY, R.layout.state_empty)
-            //添加R.id.tv_net_error 点击事件
-            .addUiStatusConfig(
-                UiStatus.NETWORK_ERROR,
-                R.layout.state_net_error,
-                R.id.tv_net_error,
-                null
-            )
-    }
+//    private fun initState() {
+//        UiStatusManager.getInstance()
+//            .addUiStatusConfig(UiStatus.LOADING, R.layout.state_loading)
+//            .addUiStatusConfig(UiStatus.EMPTY, R.layout.state_empty)
+//            //添加R.id.tv_net_error 点击事件
+//            .addUiStatusConfig(
+//                UiStatus.NETWORK_ERROR,
+//                R.layout.state_net_error,
+//                R.id.tv_net_error,
+//                null
+//            )
+//    }
 }

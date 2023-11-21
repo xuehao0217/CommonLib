@@ -77,7 +77,6 @@ dependencies {
     api Deps.Androidx.datastore
     api Deps.Androidx.paging_runtime
     api Deps.Androidx.paging_common
-    api Deps.Github.ActivityResultLauncher
     api Deps.Github.EasyNavigation
 
 
@@ -131,7 +130,6 @@ dependencies {
     api Deps.Github.coil_gif
     api Deps.Github.AdapterHelper
     api Deps.Github.glide
-    api Deps.Github.background
     api Deps.Github.progressmanager
     api Deps.Github.gson
     api Deps.Github.GsonFactory
@@ -141,8 +139,6 @@ dependencies {
 
     api Deps.Github.immersionbar
     api Deps.Github.utilcode
-    api Deps.Github.UiStatus
-    api Deps.Github.titlebar
     api Deps.Github.MagicIndicator
     api Deps.Github.xpopup
 

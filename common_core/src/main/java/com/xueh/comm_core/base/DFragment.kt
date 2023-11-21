@@ -5,17 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import com.blankj.utilcode.util.IntentUtils
 import com.blankj.utilcode.util.ToastUtils
-import com.fengchen.uistatus.UiStatusController
-import com.fengchen.uistatus.annotation.UiStatus
 import com.gyf.immersionbar.ImmersionBar
 import com.xueh.comm_core.R
 import com.xueh.comm_core.helper.EventBusHelper
 import com.xueh.comm_core.helper.EventBusRegister
-import com.xueh.comm_core.helper.coroutine.GlobalCoroutineExceptionHandler
 import com.xueh.comm_core.helper.hasNetWorkConection
 import com.xueh.comm_core.weight.ViewLoading
 import kotlinx.coroutines.*
@@ -77,29 +73,6 @@ abstract class DFragment<VB : ViewBinding> : BaseFragment<VB>(), CoroutineScope 
     }
 
 
-    val uiStatusController by lazy {
-        UiStatusController.get()
-    }
-
-    fun bindStateView(view: View) = uiStatusController.bind(view)
-
-    fun showState(@UiStatus state: Int) = uiStatusController.changeUiStatus(state)
-
-    fun setRetryListener(block: () -> Unit) {
-        /**
-         * 重试.
-         *
-         * @param uiStatus   UiStatus.
-         * @param target     bind Object.
-         * @param controller 当前视图状态控制器.
-         * @param trigger    重试触发控件.
-         */
-        uiStatusController.setOnCompatRetryListener { i, any, iUiStatusController, view ->
-            block.invoke()
-        }
-    }
-
-
     var mImmersionBar: ImmersionBar? = null
     protected fun initImmersionBar() {
         //在BaseActivity里初始化
@@ -123,10 +96,4 @@ abstract class DFragment<VB : ViewBinding> : BaseFragment<VB>(), CoroutineScope 
 
     protected open fun isRegisterEventBus() = false
     protected open fun isImmersionBarEnabled() = false
-
-    protected open fun launchLifecycle(block: suspend (CoroutineScope) -> Unit) {
-        lifecycleScope.launch(GlobalCoroutineExceptionHandler()) {
-            block.invoke(this)
-        }
-    }
 }

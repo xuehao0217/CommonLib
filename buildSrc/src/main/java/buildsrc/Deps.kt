@@ -48,7 +48,6 @@ object Deps {
         const val utilcode = "1.31.0"
         const val BaseRecyclerViewAdapterHelper = "3.0.7"
         const val walle = "1.1.6"
-        const val titlebar = "8.0"
         const val UiStatus = "1.0.5"
         const val MagicIndicator = "1.7.0"
         const val xpopup = "2.1.16"
@@ -87,7 +86,8 @@ object Deps {
 
     object Github {
         const val spiderman = "com.github.simplepeng.SpiderMan:spiderman:${Version.spiderman}"
-        const val ActivityResultLauncher = "com.github.DylanCaiCoding:ActivityResultLauncher:1.1.2"
+//      const val ActivityResultLauncher = "com.github.DylanCaiCoding:ActivityResultLauncher:1.1.2"
+//      const val background = "com.github.JavaNoober.BackgroundLibrary:library:${Version.background}"
 
         const val retrofit = "com.squareup.retrofit2:retrofit:${Version.retrofit}"
         const val converter_gson = "com.squareup.retrofit2:converter-gson:${Version.retrofit}"
@@ -103,8 +103,8 @@ object Deps {
 
         const val glide = "com.github.bumptech.glide:glide:${Version.glide}"
         const val progressmanager = "me.jessyan:progressmanager:${Version.progressmanager}"
-        const val background =
-            "com.github.JavaNoober.BackgroundLibrary:library:${Version.background}"
+
+
         const val GsonFactory = "com.github.getActivity:GsonFactory:${Version.GsonFactory}"
         const val gson = "com.google.code.gson:gson:2.8.7"
 
@@ -128,8 +128,6 @@ object Deps {
             "com.github.CymChad:BaseRecyclerViewAdapterHelper:${Version.BaseRecyclerViewAdapterHelper}"
         const val walle = "com.meituan.android.walle:library:${Version.walle}"
         const val banner = "cn.bingoogolapple:bga-banner:${Version.banner}@aar"
-        const val UiStatus = "com.github.FengChenSunshine:UiStatus:${Version.UiStatus}"
-        const val titlebar = "com.hjq:titlebar:${Version.titlebar}"
         const val MagicIndicator =
             "com.github.hackware1993:MagicIndicator:${Version.MagicIndicator}"
         const val xpopup = "com.lxj:xpopup:${Version.xpopup}"
@@ -149,7 +147,7 @@ object Deps {
         const val compose_activity = "androidx.activity:activity-compose:${Version.compose_activity}"
         const val compose_activity_ktx = "androidx.activity:activity-ktx:${Version.compose_activity}"
         const val compose_livedata = "androidx.compose.runtime:runtime-livedata:${Version.compose}"
-        const val compose_constraintlayout =    "androidx.constraintlayout:constraintlayout-compose-android:1.1.0-alpha12"
+        const val compose_constraintlayout = "androidx.constraintlayout:constraintlayout-compose-android:1.1.0-alpha12"
         const val coil_compose = "io.coil-kt:coil-compose:${Version.coil_compose}"
 
         const val compose_paging_compose =
@@ -187,10 +185,11 @@ object Deps {
         // import androidx.lifecycle.viewmodel.compose.viewModel
         //val viewModel1: ComposeViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
         const val lifecycle_viewmodel = "androidx.lifecycle:lifecycle-viewmodel-compose:${Version.lifecycle_compose}"
+
         //https://blog.csdn.net/qq_34453595/article/details/124675524
         const val accompanist_permissions = "com.google.accompanist:accompanist-permissions:0.33.1-alpha"
 
-        const val placeholder="com.google.accompanist:accompanist-placeholder-material:0.31.0-alpha"
+        const val placeholder = "com.google.accompanist:accompanist-placeholder-material:0.31.0-alpha"
     }
 
 

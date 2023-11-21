@@ -57,28 +57,20 @@
 
 
         <Button
-            android:id="@+id/tv_loading"
+            android:id="@+id/tv_web"
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:gravity="center"
-            android:text="加载"
+            android:text="web"
             android:textColor="@color/black" />
 
-        <Button
-            android:id="@+id/tv_content"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:gravity="center"
-            android:text="内容"
-            android:textColor="@color/black" />
-
-        <Button
-            android:id="@+id/tv_compose"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:gravity="center"
-            android:text="Compose"
-            android:textColor="@color/black" />
+<!--        <Button-->
+<!--            android:id="@+id/tv_content"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="44dp"-->
+<!--            android:gravity="center"-->
+<!--            android:text="内容"-->
+<!--            android:textColor="@color/black" />-->
 
         <ImageView
             android:id="@+id/iv_my"

@@ -12,7 +12,6 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
 import com.blankj.utilcode.util.*
-import com.noober.background.drawable.DrawableCreator
 import com.xueh.comm_core.helper.coroutine.GlobalCoroutineExceptionHandler
 import com.xueh.comm_core.utils.CommonUtils
 import com.xueh.comm_core.utils.GlideUtils
@@ -170,6 +169,7 @@ fun View.setInvisible() {
 }
 
 /**
+/**
  * 设置圆角 View
  */
 fun View.setRoundBg(
@@ -224,6 +224,7 @@ fun View.clipRoundBg(radius: Float) {
     }
 }
 
+**/
 //*********************************************************************************************************
 
 

@@ -1,12 +1,12 @@
 package com.xueh.commonlib.ui
 
 import android.Manifest
+import android.content.Intent
 import android.os.Bundle
 import com.blankj.utilcode.util.ActivityUtils
-import com.dylanc.activityresult.launcher.*
-import com.fengchen.uistatus.annotation.UiStatus
 import com.xueh.comm_core.base.DFragment
 import com.xueh.comm_core.utils.time.Interval
+import com.xueh.comm_core.web.WebViewActivity
 import com.xueh.commonlib.databinding.FragmentMyBinding
 import java.util.concurrent.TimeUnit
 
@@ -17,51 +17,12 @@ import java.util.concurrent.TimeUnit
  * 备注：
  */
 class MyFragment : DFragment<FragmentMyBinding>() {
-    private val requestMultiplePermissionsLauncher = RequestMultiplePermissionsLauncher(this)
-
-    private val cropPictureLauncher = CropPictureLauncher(this)
-    private val takePictureLauncher = TakePictureLauncher(this)
-    private val requestPermissionLauncher = RequestPermissionLauncher(this)
-    private val pickContentLauncher = PickContentLauncher(this)
     override fun initListener() {
         with(binding) {
             tvAlbum.setOnClickListener {
-                showState(UiStatus.CONTENT)
-                pickContentLauncher.launchForImage(
-                    onActivityResult = { uri ->
-                        binding.ivMy.setImageURI(uri)
-                    },
-                    onPermissionDenied = { settingsLauncher ->
-
-                    },
-                    onExplainRequestPermission = {
-
-                    }
-                )
-            }
-            tvCarema.setOnClickListener {
-                requestMultiplePermissionsLauncher.launch(
-                    Manifest.permission.CAMERA,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    onAllGranted = {
-                        showState(UiStatus.CONTENT)
-                        takePictureLauncher.launch { uri ->
-                            if (uri != null) {
-                                cropPictureLauncher.launch(uri) { croppedUri ->
-                                    activity?.contentResolver?.delete(uri, null, null)
-                                    binding.ivMy.setImageURI(croppedUri)
-                                }
-                            }
-                        }
-                    },
-                    onDenied = { list, settingsLauncher ->
-                    },
-                    onExplainRequest = { list ->
-                    }
-                )
 
             }
+
             btStartTime.setOnClickListener {
                 interval.start()
             }
@@ -71,15 +32,11 @@ class MyFragment : DFragment<FragmentMyBinding>() {
             btStartResume.setOnClickListener {
                 interval.resume()
             }
-
-            tvLoading.setOnClickListener {
-                showState(UiStatus.LOADING)
-            }
-            tvContent.setOnClickListener {
-                showState(UiStatus.CONTENT)
-            }
-            tvCompose.setOnClickListener {
-                ActivityUtils.startActivity(ComposeActivity::class.java)
+            tvWeb.setOnClickListener {
+                ActivityUtils.startActivity(Intent(activity,WebViewActivity::class.java).apply {
+                    putExtra(WebViewActivity.TITLE,"TITLE")
+                    putExtra(WebViewActivity.URL,"https://www.baidu.com/")
+                })
             }
         }
 
@@ -91,8 +48,6 @@ class MyFragment : DFragment<FragmentMyBinding>() {
 
     private lateinit var interval: Interval
     override fun initView(savedInstanceState: Bundle?) {
-        //调用这个方法就会默认展示loading 需要show content
-        bindStateView(binding.ivMy)
         interval = Interval(
             0,
             1,
