@@ -17,8 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemsIndexed
-import com.xueh.comm_core.weight.compose.RefreshList
+import com.xueh.comm_core.weight.compose.CommonPagingPage
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
 
 /**
@@ -27,28 +26,28 @@ import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
  * 备注：
  */
 @Composable
-fun refreshLoadUse() {
+fun RefreshLoadUse() {
     val viewModel: ComposeViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
     val homeDatas = viewModel.getListDatas().collectAsLazyPagingItems()
-    RefreshList(lazyPagingItems = homeDatas) {
-        itemsIndexed(homeDatas) { _, item ->
-            Box(
-                modifier = Modifier
-                    .padding(10.dp)
-                    .clip(CircleShape)
-                    .background(androidx.compose.material3.MaterialTheme.colorScheme.primary)
-                    .fillMaxWidth()
-                    .height(50.dp)
-                    .border(1.5.dp, MaterialTheme.colors.secondary, shape = CircleShape),
+    CommonPagingPage(homeDatas, emptyDataContent = {
+        Box(modifier = Modifier.background(Color.Blue))
+    }) {
+        Box(
+            modifier = Modifier
+                .padding(10.dp)
+                .clip(CircleShape)
+                .background(androidx.compose.material3.MaterialTheme.colorScheme.primary)
+                .fillMaxWidth()
+                .height(50.dp)
+                .border(1.5.dp, MaterialTheme.colors.secondary, shape = CircleShape),
 
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = item!!.title,
-                    color = Color.White,
-                    textAlign = TextAlign.Center,
-                )
-            }
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = it.title,
+                color = Color.White,
+                textAlign = TextAlign.Center,
+            )
         }
     }
 }
