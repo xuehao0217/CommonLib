@@ -311,26 +311,18 @@ fun <T : Any> CommonPagingPage(
     emptyDataContent: @Composable BoxScope.() -> Unit,
     itemContent: @Composable LazyItemScope.(value: T) -> Unit,
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = modifier) {
         if (lazyPagingItems.itemCount == 0) {
             emptyDataContent()
         } else {
-            ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-                var (bottom_v) = createRefs()
-                RefreshList(
-                    lazyPagingItems = lazyPagingItems, modifier = modifier, verticalArrangement = verticalArrangement, contentPadding = contentPadding
-                ) {
-                    items(lazyPagingItems) {
-                        it?.let {
-                            itemContent(it)
-                        }
+            RefreshList(
+                lazyPagingItems = lazyPagingItems, verticalArrangement = verticalArrangement, contentPadding = contentPadding
+            ) {
+                items(lazyPagingItems) {
+                    it?.let {
+                        itemContent(it)
                     }
                 }
-                ShadowVerticalView(modifier = Modifier
-                    .fillMaxWidth()
-                    .constrainAs(bottom_v) {
-                        bottom.linkTo(parent.bottom)
-                    })
             }
         }
     }
