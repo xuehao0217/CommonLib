@@ -35,6 +35,11 @@ class MyFragment : DFragment<FragmentMyBinding>() {
 
     }
 
+    private val takeCameraUriLauncherUri = registerForActivityResult(TakeCameraUri()) {
+        it?.let {
+            mActLauncherCrop.launch(CropImageResult(it, 1, 1))
+        }
+    }
 
     //选取图片
     private val mLauncherAlbum = registerForActivityResult<String, Uri>(
@@ -56,7 +61,8 @@ class MyFragment : DFragment<FragmentMyBinding>() {
     val mResultLauncherPermission = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { result: Map<String, Boolean> ->
-        mLauncherCameraBitmap.launch(null)
+//        mLauncherCameraBitmap.launch(null)
+        takeCameraUriLauncherUri.launch(null)
     }
 
     override fun initListener() {

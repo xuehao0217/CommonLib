@@ -44,7 +44,7 @@ class TakeCameraUri : ActivityResultContract<Any?, Uri?>() {
         return Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, uri)
     }
 
-    override fun parseResult(resultCode: Int, @Nullable intent: Intent?): Uri {
-        return uri!!
+    override fun parseResult(resultCode: Int, @Nullable intent: Intent?): Uri? {
+        return uri
     }
 }
