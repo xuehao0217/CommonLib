@@ -174,7 +174,8 @@ object Deps {
         const val accompanist_swiperefresh =
             "com.google.accompanist:accompanist-swiperefresh:${Version.accompanist}"
 
-        const val compose_smartrefresh = "io.github.loren-moon:composesmartrefresh:1.0.0"
+        //https://github.com/Loren-Moon/ComposeSmartRefresh
+        const val compose_smartrefresh = "io.github.loren-moon:composesmartrefresh:1.2.1"
 
         const val customview = "androidx.customview:customview:1.2.0-alpha02"
         const val customview_poolingcontainer = "androidx.customview:customview-poolingcontainer:1.0.0"
