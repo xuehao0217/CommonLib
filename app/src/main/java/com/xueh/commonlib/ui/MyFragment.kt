@@ -2,7 +2,12 @@ package com.xueh.commonlib.ui
 
 import android.Manifest
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import com.blankj.utilcode.util.ActivityUtils
 import com.xueh.comm_core.base.DFragment
 import com.xueh.comm_core.utils.time.Interval
@@ -17,12 +22,37 @@ import java.util.concurrent.TimeUnit
  * 备注：
  */
 class MyFragment : DFragment<FragmentMyBinding>() {
+
+    //拍照
+    private val mLauncherCamera = registerForActivityResult<Void, Bitmap>(
+        ActivityResultContracts.TakePicturePreview()
+    ) {
+        binding.ivMy.setImageBitmap(it)
+    }
+
+
+    //选取图片
+    private val mLauncherAlbum = registerForActivityResult<String, Uri>(
+        ActivityResultContracts.GetContent()
+    ) {
+        binding.ivMy.setImageURI(it)
+    }
+
+
+    val mResultLauncherPermission = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { result: Map<String, Boolean> ->
+        mLauncherCamera.launch(null)
+    }
+
     override fun initListener() {
         with(binding) {
             tvAlbum.setOnClickListener {
-
+                mLauncherAlbum.launch("image/*")
             }
-
+            tvCarema.setOnClickListener {
+                mResultLauncherPermission.launch(arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE))
+            }
             btStartTime.setOnClickListener {
                 interval.start()
             }
@@ -33,9 +63,9 @@ class MyFragment : DFragment<FragmentMyBinding>() {
                 interval.resume()
             }
             tvWeb.setOnClickListener {
-                ActivityUtils.startActivity(Intent(activity,WebViewActivity::class.java).apply {
-                    putExtra(WebViewActivity.TITLE,"TITLE")
-                    putExtra(WebViewActivity.URL,"https://www.baidu.com/")
+                ActivityUtils.startActivity(Intent(activity, WebViewActivity::class.java).apply {
+                    putExtra(WebViewActivity.TITLE, "TITLE")
+                    putExtra(WebViewActivity.URL, "https://www.baidu.com/")
                 })
             }
         }
