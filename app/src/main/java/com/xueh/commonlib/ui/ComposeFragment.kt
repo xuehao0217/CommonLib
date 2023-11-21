@@ -117,7 +117,7 @@ class ComposeFragment : BaseComposeFragment() {
                 }
             }
             composable(RouteConfig.refreshLoadUse) {
-                refreshLoadUse()
+                RefreshLoadUse()
             }
             composable(RouteConfig.ConstraintSet) {
                 ConstraintPage()
