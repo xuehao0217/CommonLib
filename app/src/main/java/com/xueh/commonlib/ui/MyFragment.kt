@@ -5,11 +5,14 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import com.blankj.utilcode.util.ActivityUtils
+import com.blankj.utilcode.util.ConvertUtils
 import com.xueh.comm_core.base.DFragment
+import com.xueh.comm_core.helper.activityresult.CropImageActivityResul
+import com.xueh.comm_core.helper.activityresult.CropImageResult
+import com.xueh.comm_core.helper.activityresult.TakeCameraUri
 import com.xueh.comm_core.utils.time.Interval
 import com.xueh.comm_core.web.WebViewActivity
 import com.xueh.commonlib.databinding.FragmentMyBinding
@@ -23,11 +26,13 @@ import java.util.concurrent.TimeUnit
  */
 class MyFragment : DFragment<FragmentMyBinding>() {
 
-    //拍照
-    private val mLauncherCamera = registerForActivityResult<Void, Bitmap>(
+    private val mLauncherCameraBitmap = registerForActivityResult<Void, Bitmap>(
         ActivityResultContracts.TakePicturePreview()
     ) {
-        binding.ivMy.setImageBitmap(it)
+        it?.let {
+            binding.ivMy.setImageBitmap(it)
+        }
+
     }
 
 
@@ -35,14 +40,23 @@ class MyFragment : DFragment<FragmentMyBinding>() {
     private val mLauncherAlbum = registerForActivityResult<String, Uri>(
         ActivityResultContracts.GetContent()
     ) {
-        binding.ivMy.setImageURI(it)
+        it?.let {
+            mActLauncherCrop.launch(CropImageResult(it, 1, 1))
+        }
+    }
+
+    //裁剪图片
+    private var mActLauncherCrop =registerForActivityResult(CropImageActivityResul()){
+        it?.let {
+            binding.ivMy.setImageURI(it)
+        }
     }
 
 
     val mResultLauncherPermission = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { result: Map<String, Boolean> ->
-        mLauncherCamera.launch(null)
+        mLauncherCameraBitmap.launch(null)
     }
 
     override fun initListener() {
