@@ -49,8 +49,8 @@ android {
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
-//    debugImplementation(libs.chucker)
-//    releaseImplementation(libs.chucker.no.op)
+    debugApi(libs.chucker)
+    releaseApi(libs.chucker.no.op)
 
     api(Deps.Androidx.junit)
     api(Deps.Androidx.espresso)

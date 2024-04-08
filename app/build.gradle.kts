@@ -55,7 +55,5 @@ android {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
     implementation(project(":common_core"))
-    debugImplementation(libs.chucker)
-    releaseImplementation(libs.chucker.no.op)
 }
 
