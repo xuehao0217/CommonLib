@@ -10,7 +10,6 @@ android {
     compileSdk = ProjectBuildConfig.compileSdkVersion
     defaultConfig {
         minSdk = ProjectBuildConfig.minSdkVersion
-        targetSdk =  ProjectBuildConfig.targetSdkVersion
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -50,10 +49,8 @@ android {
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
-    debugImplementation(libs.chucker)
-    releaseImplementation(libs.chucker.no.op)
-
-
+//    debugImplementation(libs.chucker)
+//    releaseImplementation(libs.chucker.no.op)
 
     api(Deps.Androidx.junit)
     api(Deps.Androidx.espresso)
