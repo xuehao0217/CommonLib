@@ -11,7 +11,7 @@ object Deps {
         const val pagingVersion = "3.1.0-rc01"
         const val pagingCompose = "1.0.0-alpha18"
         const val accompanist = "0.33.1-alpha"
-        const val compose_activity = "1.8.0-alpha02"
+        const val compose_activity = "1.8.0"
 
         const val core_ktx = "1.8.0"
         const val constraint_layout = "2.1.4"

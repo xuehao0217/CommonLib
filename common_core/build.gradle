@@ -10,8 +10,6 @@ android {
     defaultConfig {
         minSdkVersion ProjectBuildConfig.minSdkVersion
         targetSdkVersion ProjectBuildConfig.targetSdkVersion
-        versionCode ProjectBuildConfig.versionCode
-        versionName ProjectBuildConfig.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         //buildConfigField "String", "api_env", "\"" + String.valueOf(java.lang.System.properties['api_env']) + "\""
     }
@@ -54,6 +52,7 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+    namespace 'com.xueh.comm_core'
 }
 
 dependencies {
