@@ -6,7 +6,7 @@ object Deps {
         const val compose = "1.6.0-alpha04"
         const val kotlin = "1.9.0"
         const val coroutines = "1.7.3"
-        const val compose_compiler = "1.5.2"
+        const val compose_compiler = "1.5.1"
         const val lifecycle_compose = "2.6.0"
         const val pagingVersion = "3.1.0-rc01"
         const val pagingCompose = "1.0.0-alpha18"
