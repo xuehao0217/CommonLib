@@ -36,9 +36,7 @@ abstract class DActivity<VB : ViewBinding> : BaseActivity<VB>(), CoroutineScope 
         if (isRegisterEventBus()||javaClass.isAnnotationPresent(EventBusRegister::class.java)){
             EventBusHelper.unregister(this)
         }
-        mImmersionBar?.let {
-            it == null
-        }
+        mImmersionBar=null
     }
 
     protected fun showProgressDialog() {
