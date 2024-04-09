@@ -2,6 +2,7 @@ package com.xueh.comm_core.weight.compose
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -37,9 +38,7 @@ fun CommonTitlePage(
     titleRightContent: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
-    BaseComposeTheme(
-        systemBarsColor = if (appThemeState.darkTheme) Color.Black else Color.Transparent, darkTheme = !appThemeState.darkTheme
-    ) {
+    BaseComposeTheme(darkTheme = appThemeState.darkTheme) {
         GrayAppAdapter(isGray = false){
             Scaffold(modifier = Modifier.systemBarsPadding(),
 //                topBar = {
