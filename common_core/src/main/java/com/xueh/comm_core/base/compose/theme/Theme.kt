@@ -56,7 +56,7 @@ fun BaseComposeTheme(
         rememberSystemUiController().run {
             setSystemBarsColor(
                 systemBarsColor ?: androidx.compose.material3.MaterialTheme.colorScheme.background,
-                darkIcons = darkTheme
+                darkIcons = !darkTheme
             )
         }
         content()

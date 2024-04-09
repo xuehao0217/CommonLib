@@ -38,7 +38,7 @@ fun CommonTitlePage(
     titleRightContent: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
-    BaseComposeTheme(darkTheme = appThemeState.darkTheme) {
+    BaseComposeTheme(systemBarsColor =if (appThemeState.darkTheme) Color.Black else  Color.Transparent, darkTheme = appThemeState.darkTheme) {
         GrayAppAdapter(isGray = false){
             Scaffold(modifier = Modifier.systemBarsPadding(),
 //                topBar = {
