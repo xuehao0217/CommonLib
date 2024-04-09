@@ -1,5 +1,6 @@
 package com.xueh.comm_core.weight.compose
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -38,12 +39,11 @@ fun CommonTitlePage(
     titleRightContent: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
-    if (isSystemInDarkTheme()){
-        appThemeState.darkTheme =isSystemInDarkTheme()
-    }else{
-        //由于appThemeState 会刷新所有的组件，导致系统的暗黑模式和app中的冲突 所以加了个这个判断，只能在非系统暗黑模式下手动关闭
-        appThemeState = appThemeState.copy(darkTheme = appThemeState.darkTheme)
+    var  isSystemInDark=isSystemInDarkTheme()
+    LaunchedEffect(isSystemInDark) {
+        appThemeState = appThemeState.copy(darkTheme = isSystemInDark)
     }
+
     BaseComposeTheme(systemBarsColor =if (appThemeState.darkTheme) Color.Black else  Color.Transparent, darkTheme = appThemeState.darkTheme) {
         GrayAppAdapter(isGray = false){
             Scaffold(modifier = Modifier.systemBarsPadding(),
