@@ -32,7 +32,8 @@ fun ComposeMaterial3Theme(
         else
             if (darkTheme)
                 DarkGreenColorPalette
-            else LightGreenColorPalette
+            else
+                LightGreenColorPalette
     }
     androidx.compose.material3.MaterialTheme(
         colorScheme = colors,
