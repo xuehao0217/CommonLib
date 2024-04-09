@@ -20,9 +20,6 @@ abstract class BaseComposeFragment : BaseVisibilityFragment() {
         savedInstanceState: Bundle?,
     ) = ComposeView(requireActivity()).apply {
         setContent {
-            appThemeState = appThemeState.copy(
-                darkTheme = isSystemInDarkTheme()
-            )
             setComposeContent()
         }
     }

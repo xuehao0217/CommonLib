@@ -20,9 +20,6 @@ abstract class BaseComposeActivity : AppCompatActivity() {
         val controller = WindowCompat.getInsetsController(window, window.decorView)
         controller.isAppearanceLightStatusBars = resources.configuration.uiMode != 0x21
         setContent {
-            appThemeState = appThemeState.copy(
-                darkTheme = isSystemInDarkTheme()
-            )
             setComposeContent()
         }
     }

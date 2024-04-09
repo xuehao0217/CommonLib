@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Color
 import com.blankj.utilcode.util.Utils
 
 data class AppThemeState(
-    var darkTheme: Boolean = false,//是否是黑暗主题
+    var darkTheme: Boolean = false,//是否是黑暗主题  isSystemInDarkTheme()
     var appThemeColorType: AppThemeColorType = AppThemeColorType.DEF,
 )
 
