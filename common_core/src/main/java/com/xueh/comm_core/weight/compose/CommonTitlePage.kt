@@ -13,10 +13,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.xueh.comm_core.R
-import com.xueh.comm_core.base.compose.theme.BaseComposeView
 import com.xueh.comm_core.base.compose.theme.GrayAppAdapter
 import com.xueh.comm_core.base.compose.theme.appThemeState
 import androidx.compose.material3.MaterialTheme
+import com.xueh.comm_core.base.compose.theme.BaseComposeTheme
 
 /**
  * 创 建 人: xueh
@@ -37,8 +37,8 @@ fun CommonTitlePage(
     titleRightContent: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
-    BaseComposeView(
-        systemBarsColor = Color.Transparent, darkTheme = !appThemeState.darkTheme
+    BaseComposeTheme(
+        systemBarsColor = if (appThemeState.darkTheme) Color.Black else Color.Transparent, darkTheme = !appThemeState.darkTheme
     ) {
         GrayAppAdapter(isGray = false){
             Scaffold(modifier = Modifier.systemBarsPadding(),

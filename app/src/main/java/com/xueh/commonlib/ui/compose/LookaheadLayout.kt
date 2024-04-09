@@ -42,14 +42,14 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.round
-import com.xueh.comm_core.base.compose.theme.BaseComposeView
+import com.xueh.comm_core.base.compose.theme.BaseComposeTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 @OptIn(ExperimentalComposeUiApi::class)
 @Preview(showBackground = true)
 @Composable
 fun OtherNewPreview() {
-    BaseComposeView  {
+    BaseComposeTheme  {
         Column() {
 //            TextBrushAlpha()
 //            SpanStyleBrushSample()
@@ -75,7 +75,7 @@ fun OtherNewPreview() {
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun PlacementScopePreview() {
-    BaseComposeView  {
+    BaseComposeTheme  {
         FirstItemHalf {
             Box(modifier = Modifier.background(Color.Red))
             Box(modifier = Modifier.background(Color.Yellow))

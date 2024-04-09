@@ -42,7 +42,7 @@ fun ComposeMaterial3Theme(
 
 
 @Composable
-fun BaseComposeView(
+fun BaseComposeTheme(
     systemBarsColor: Color? = null,
     darkTheme: Boolean = com.xueh.comm_core.base.compose.theme.appThemeState.darkTheme,
     appThemeState: AppThemeState = com.xueh.comm_core.base.compose.theme.appThemeState,
