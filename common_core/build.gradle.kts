@@ -20,8 +20,8 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
             )
         }
     }
@@ -35,7 +35,7 @@ android {
     buildFeatures {
         compose = true
         viewBinding = true
-        buildConfig=true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = Deps.Version.compose_compiler
@@ -49,91 +49,86 @@ android {
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
+    //----------------基本库相关--------------------------
+    api(libs.androidx.multidex)
+    api(libs.junit)
+    api(libs.androidx.core.ktx)
+    api(libs.androidx.appcompat)
+    api(libs.androidx.fragment.ktx)
+    api(libs.androidx.datastore)
+    api(libs.androidx.customview)
+    api(libs.androidx.customview.poolingcontainer)
+
+    api(libs.androidx.lifecycle.livedata.ktx)
+    api(libs.androidx.lifecycle.viewmodel.ktx)//by viewModels()
+
+    //----------------Compose相关--------------------------
+    api(platform(libs.androidx.compose.bom))
+    api(libs.constraintlayout.compose)
+    api(libs.androidx.ui)
+    api(libs.androidx.material3)
+    api(libs.androidx.ui.tooling.preview)
+    api(libs.androidx.ui.graphics)
+    api(libs.androidx.ui.tooling)
+    api(libs.androidx.activity.compose)
+    api(libs.androidx.activity.ktx)
+    api(libs.androidx.paging.compose)
+    api(libs.accompanist.pager.indicators)
+    api(libs.ccompanist)
+    api(libs.accompanist.systemuicontroller)
+    api(libs.accompanist.swiperefresh)
+    api(libs.accompanist.permissions)
+    api(libs.accompanist.placeholder)
+    api(libs.navigation.compose)
+    api(libs.lifecycle.runtime.compose)
+    api(libs.lifecycle.viewmodel.compose)
+
+    api(libs.coil)
+    api(libs.coil.gif)
+    api(libs.coil.compose)
+    api("androidx.compose.runtime:runtime-livedata:${Deps.Version.compose}")
+    api(libs.composesmartrefresh)
+
+    //----------------Kotlin相关--------------------------
+    api(libs.kotlin.stdlib)
+    api(libs.kotlinx.coroutines.core)
+    api(libs.kotlinx.coroutines.android)
+
+    //----------------网络请求相关--------------------------
+    api(libs.retrofit)
+    api(libs.converter.gson)
+    api(libs.okhttp3.okhttp)
+    api(libs.okhttp3.logging.interceptor)
+    api(libs.cookieJar)
+
+    //----------------网络请求查看日志相关--------------------------
     debugApi(libs.chucker)
     releaseApi(libs.chucker.no.op)
 
-    api(Deps.Androidx.junit)
-    api(Deps.Androidx.espresso)
-    api(Deps.Androidx.core_ktx)
-    api(Deps.Androidx.multidex)
-    api(Deps.Androidx.support_v4)
-    api(Deps.Androidx.appcompat)
-    api(Deps.Androidx.material)
-    api(Deps.Androidx.recyclerview)
-    api(Deps.Androidx.constraint_layout)
-    api(Deps.Androidx.cardview)
-    api(Deps.Androidx.viewpager2)
-    api(Deps.Androidx.fragment_ktx)
-    api(Deps.Androidx.lifecycle_common)
-    api(Deps.Androidx.lifecycle_extensions)
-    api(Deps.Androidx.lifecycle_livedata_ktx)
-    api(Deps.Androidx.lifecycle_viewmodel_ktx)
-    api(Deps.Androidx.datastore)
-    api(Deps.Androidx.paging_runtime)
-    api(Deps.Androidx.paging_common)
-    api(Deps.Github.EasyNavigation)
-
-    api(platform(Deps.Compose.compose_bom))
-    androidTestImplementation(platform(Deps.Compose.compose_bom))
-
-    api(Deps.Compose.compose_ui)
-    api(Deps.Compose.compose_material3)
-    api(Deps.Compose.compose_preview)
-    api(Deps.Compose.compose_tooling)
-    api(Deps.Compose.compose_manifest)
-    api(Deps.Compose.compose_activity)
-    api(Deps.Compose.compose_activity_ktx)
-    api(Deps.Compose.compose_material)
-    api(Deps.Compose.compose_livedata)
-    api(Deps.Compose.coil_compose)
-    api(Deps.Compose.compose_constraintlayout)
-    api(Deps.Compose.compose_paging_compose)
-    //api(Deps.Compose.accompanist_pager)
-    api(Deps.Compose.accompanist_pager_indicators)
-    api(Deps.Compose.accompanist_insets)
-    api(Deps.Compose.accompanist_systemuicontroller)
-    api(Deps.Compose.accompanist_swiperefresh)
-    api(Deps.Compose.compose_smartrefresh)
-    api(Deps.Compose.navigation_compose)
-    api(Deps.Compose.lifecycle_runtime_ktx)
-    api(Deps.Compose.lifecycle_viewmodel)
-    api(Deps.Compose.accompanist_permissions)
-    api(Deps.Compose.placeholder)
-
-    debugImplementation(Deps.Compose.customview)
-    debugImplementation(Deps.Compose.customview_poolingcontainer)
-
-    api(Deps.Kotlin.kotlin_stdlib)
-    api(Deps.Kotlin.kotlin_coroutines)
-    api(Deps.Kotlin.kotlin_coroutines_android)
-
-    api(Deps.Github.agentweb)
-    api(Deps.Github.eventbus)
-    api(Deps.Github.greendao)
-
-    api(Deps.Github.okhttp_logging)
-    api(Deps.Github.okhttp)
-    api(Deps.Github.retrofit)
-    api(Deps.Github.converter_gson)
-    api(Deps.Github.PersistentCookieJar)
-
-    debugImplementation(Deps.Github.spiderman) {
+    //---------------工具类的库--------------------------
+    api(libs.agentweb)
+    api(libs.gsonFactory)
+    api(libs.gson)
+    api(libs.utilcodex)
+    api(libs.progressmanager)
+    api(libs.eventbus)
+    //捕获崩溃信息
+    debugImplementation(libs.spiderman) {
         exclude(group = "androidx.appcompat")
     }
-    api(Deps.Github.coil)
-    api(Deps.Github.coil_gif)
-    api(Deps.Github.AdapterHelper)
-    api(Deps.Github.glide)
-    api(Deps.Github.progressmanager)
-    api(Deps.Github.gson)
-    api(Deps.Github.GsonFactory)
 
-    api(Deps.Github.refresh_layout_kernel)
-    api(Deps.Github.refresh_header_classics)
-
-    api(Deps.Github.immersionbar)
-    api(Deps.Github.utilcode)
-    api(Deps.Github.MagicIndicator)
-    api(Deps.Github.xpopup)
+    //--------------XML相关一些库--------------------------
+    api(libs.material)
+    api(libs.recyclerview)
+    api(libs.github.glide)
+    api(libs.immersionbar)
+    api(libs.refresh.layout)
+    api(libs.refresh.header)
+    api(libs.androidx.constraintlayout)
+    api(libs.androidx.viewpager2)
+    api(libs.magicIndicator)
+    api(libs.xpopup)
+    api(libs.github.brvah)
+    api(libs.easyNavigation)
 }
 

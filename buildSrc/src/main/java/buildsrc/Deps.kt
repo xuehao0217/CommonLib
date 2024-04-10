@@ -58,10 +58,8 @@ object Deps {
     object Androidx {
         const val junit = "junit:junit:4.13.2"
         const val material = "com.google.android.material:material:${Version.material}"
-        const val espresso = "androidx.test.espresso:espresso-core:3.4.0"
         const val core_ktx = "androidx.core:core-ktx:${Version.core_ktx}"
         const val multidex = "androidx.multidex:multidex:2.0.1"
-        const val support_v4 = "androidx.legacy:legacy-support-v4:${Version.androidx}"
         const val appcompat = "androidx.appcompat:appcompat:${Version.appcompat}"
         const val recyclerview = "androidx.recyclerview:recyclerview:${Version.recyclerview}"
         const val cardview = "androidx.cardview:cardview:${Version.androidx}"
