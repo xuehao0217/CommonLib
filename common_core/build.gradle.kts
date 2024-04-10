@@ -52,16 +52,17 @@ dependencies {
     //----------------基本库相关--------------------------
     api(libs.androidx.multidex)
     api(libs.junit)
-    api(libs.androidx.core.ktx)
     api(libs.androidx.appcompat)
-    api(libs.androidx.fragment.ktx)
     api(libs.androidx.datastore)
     api(libs.androidx.customview)
     api(libs.androidx.customview.poolingcontainer)
-
+    //----------------KTX相关--------------------------
+    api(libs.androidx.core.ktx)
+    api(libs.androidx.activity.ktx)
+    api(libs.androidx.fragment.ktx)
+    api(libs.androidx.lifecycle.runtime.ktx)
     api(libs.androidx.lifecycle.livedata.ktx)
     api(libs.androidx.lifecycle.viewmodel.ktx)//by viewModels()
-
     //----------------Compose相关--------------------------
     api(platform(libs.androidx.compose.bom))
     api(libs.constraintlayout.compose)
@@ -71,7 +72,6 @@ dependencies {
     api(libs.androidx.ui.graphics)
     api(libs.androidx.ui.tooling)
     api(libs.androidx.activity.compose)
-    api(libs.androidx.activity.ktx)
     api(libs.androidx.paging.compose)
     api(libs.accompanist.pager.indicators)
     api(libs.ccompanist)
@@ -86,7 +86,7 @@ dependencies {
     api(libs.coil)
     api(libs.coil.gif)
     api(libs.coil.compose)
-    api("androidx.compose.runtime:runtime-livedata:${Deps.Version.compose}")
+    api("androidx.compose.runtime:runtime-livedata:1.6.0-alpha04")
     api(libs.composesmartrefresh)
 
     //----------------Kotlin相关--------------------------

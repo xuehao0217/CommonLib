@@ -9,15 +9,11 @@ composeBom = "2023.08.00"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
-activityKtx = "1.8.0"
 material = "1.10.0"
 multidex = "2.0.1"
 appcompat = "1.6.1"
-fragmentKtx = "1.5.6"
-lifecycleKtx = "2.2.0"
 gson = "2.10.1"
 gsonfactoryVersion = "5.2"
-coreKtx = "1.10.1"
 customviewPoolingContainer = "1.0.0"
 customviewVersion = "1.2.0-alpha02"
 glideVersion = "4.15.1"
@@ -25,9 +21,14 @@ justAgentweb = "4.1.4"
 eventbus = "3.3.1"
 utilcodex = "1.31.0"
 datastore = "1.0.0"
+#--------------KTX相关-----------------
+coreKtx = "1.10.1"
+activityKtx = "1.8.0"
+fragmentKtx = "1.5.6"
+lifecycleRuntimeKtx = "2.6.1"
+lifecycleKtx = "2.2.0"
 #--------------Compose相关-----------------
 lifecycleRuntimeComposeVersion = "2.6.1"
-lifecycleRuntimeKtx = "2.6.1"
 activityCompose = "1.8.0"
 coilCompose = "2.1.0"
 coilVersion = "2.1.0"
@@ -71,13 +72,17 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 androidx-multidex = { module = "androidx.multidex:multidex", version.ref = "multidex" }
 androidx-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-paging-common = { module = "androidx.paging:paging-common", version.ref = "pagingCommon" }
 androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "pagingRuntime" }
+#-----------------------------------------------KTX相关-------------------------------------------------------------
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleKtx" }
+androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleKtx" }
 #-----------------------------------------------图片加载相关-------------------------------------------------------------
 coil = { module = "io.coil-kt:coil", version.ref = "coilVersion" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
@@ -104,11 +109,8 @@ accompanist-permissions = { module = "com.google.accompanist:accompanist-permiss
 accompanist-swiperefresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "accompanist" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 ccompanist = { module = "com.google.accompanist:accompanist-insets", version.ref = "googleAccompanistInsets" }
-androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
 androidx-customview-poolingcontainer = { module = "androidx.customview:customview-poolingcontainer", version.ref = "customviewPoolingContainer" }
 androidx-customview = { module = "androidx.customview:customview", version.ref = "customviewVersion" }
-androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleKtx" }
-androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleKtx" }
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingComposeVersion" }
 #-----------------------------------------------网络相关-------------------------------------------------------------
 okhttp3-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptorVersion" }
