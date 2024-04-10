@@ -34,13 +34,14 @@ coilVersion = "2.1.0"
 constraintlayoutCompose = "1.1.0-alpha12"
 accompanist = "0.33.1-alpha"
 accompanistPlaceholder = "0.31.0-alpha"
-composeSmartrefreshVersion = "1.2.1"
 googleAccompanistInsets = "0.31.5-beta"
 navigationComposeVersion = "2.7.1"
 pagingCommon = "3.1.1"
 pagingComposeVersion = "1.0.0-alpha18"
 pagingRuntime = "3.1.1"
 lifecycleViewmodelCompose = "2.6.1"
+composeSmartrefreshVersion = "1.2.1"
+any_pop_dialog_compose = "1.0.1"
 #--------------网络相关-----------------
 retrofit = "2.9.0"
 okhttpVersion = "5.0.0-alpha.10"
@@ -63,7 +64,6 @@ xpopup = "2.1.16"
 brvah = "3.0.7"
 
 [libraries]
-
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlinStdlib" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinCoroutinesAndroidVersion" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutinesCoreVersion" }
@@ -111,6 +111,7 @@ ccompanist = { module = "com.google.accompanist:accompanist-insets", version.ref
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingComposeVersion" }
 androidx-customview-poolingcontainer = { module = "androidx.customview:customview-poolingcontainer", version.ref = "customviewPoolingContainer" }
 androidx-customview = { module = "androidx.customview:customview", version.ref = "customviewVersion" }
+any_pop_dialog_compose = { module = "io.github.TheMelody:any_pop_dialog_compose", version.ref = "any_pop_dialog_compose" }
 #-----------------------------------------------网络相关-------------------------------------------------------------
 okhttp3-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptorVersion" }
 okhttp3-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttpVersion" }
