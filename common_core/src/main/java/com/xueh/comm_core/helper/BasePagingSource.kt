@@ -39,7 +39,7 @@ abstract class BasePagingSource<T : Any> : PagingSource<Int, T>() {
             )
         } catch (e: Exception) {
             LogUtils.e("BasePagingSource","${e}")
-            ToastUtils.showLong("${e}")
+//            ToastUtils.showLong("${e}")
             LoadResult.Error(e)
         }
     }
