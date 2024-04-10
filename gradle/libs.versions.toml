@@ -109,9 +109,9 @@ accompanist-permissions = { module = "com.google.accompanist:accompanist-permiss
 accompanist-swiperefresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "accompanist" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 ccompanist = { module = "com.google.accompanist:accompanist-insets", version.ref = "googleAccompanistInsets" }
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingComposeVersion" }
 androidx-customview-poolingcontainer = { module = "androidx.customview:customview-poolingcontainer", version.ref = "customviewPoolingContainer" }
 androidx-customview = { module = "androidx.customview:customview", version.ref = "customviewVersion" }
-androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingComposeVersion" }
 #-----------------------------------------------网络相关-------------------------------------------------------------
 okhttp3-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptorVersion" }
 okhttp3-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttpVersion" }
