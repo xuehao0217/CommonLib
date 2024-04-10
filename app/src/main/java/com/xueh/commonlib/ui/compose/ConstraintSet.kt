@@ -65,8 +65,8 @@ fun ConstraintPage() {
             .padding(16.dp, 0.dp, 16.dp, 0.dp)
             .background(color = Color.White, shape = RoundedCornerShape(5.dp))
             .fillMaxWidth()
-            .padding(12.dp, 12.dp, 12.dp, 12.dp)
-            .animateContentSize()
+            .padding(12.dp, 12.dp, 12.dp, 12.dp), animateChanges = true
+
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_launcher),
@@ -81,8 +81,7 @@ fun ConstraintPage() {
                         orientation.value = 0
                     }
                 }
-                .clip(shape = RoundedCornerShape(5))
-                .animateContentSize(),
+                .clip(shape = RoundedCornerShape(5)),
             contentScale = ContentScale.FillWidth
         )
         Text(
