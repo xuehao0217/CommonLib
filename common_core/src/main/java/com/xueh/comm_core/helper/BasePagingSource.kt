@@ -35,7 +35,7 @@ abstract class BasePagingSource<T : Any> : PagingSource<Int, T>() {
             LoadResult.Page(
                 data = datas,
                 prevKey = if (nextPage == 1) null else nextPage - 1,
-                nextKey = if (!datas.isNullOrEmpty()) nextPage + 1 else null
+                nextKey = if (datas.isNotEmpty()) nextPage + 1 else null
             )
         } catch (e: Exception) {
             LogUtils.e("BasePagingSource","${e}")
