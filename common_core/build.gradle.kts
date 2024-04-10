@@ -56,6 +56,9 @@ dependencies {
     api(libs.androidx.datastore)
     api(libs.androidx.customview)
     api(libs.androidx.customview.poolingcontainer)
+
+    api(libs.androidx.paging.common)
+    api(libs.androidx.paging.runtime)
     //----------------KTX相关--------------------------
     api(libs.androidx.core.ktx)
     api(libs.androidx.activity.ktx)
@@ -107,13 +110,12 @@ dependencies {
 
     //---------------工具类的库--------------------------
     api(libs.agentweb)
-    api(libs.gsonFactory)
     api(libs.gson)
     api(libs.utilcodex)
     api(libs.progressmanager)
     api(libs.eventbus)
     //捕获崩溃信息
-    debugImplementation(libs.spiderman) {
+    debugApi(libs.spiderman) {
         exclude(group = "androidx.appcompat")
     }
 

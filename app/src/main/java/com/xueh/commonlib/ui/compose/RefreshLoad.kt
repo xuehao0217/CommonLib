@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.xueh.comm_core.weight.compose.CommonPagingPage
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
@@ -27,7 +28,7 @@ import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
  */
 @Composable
 fun RefreshLoadUse() {
-    val viewModel: ComposeViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    val viewModel: ComposeViewModel = viewModel()
     val homeDatas = viewModel.getListDatas().collectAsLazyPagingItems()
     CommonPagingPage(homeDatas, emptyDataContent = {
         Box(modifier = Modifier.background(Color.Blue))

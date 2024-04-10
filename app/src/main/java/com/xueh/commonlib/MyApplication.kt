@@ -5,11 +5,9 @@ import com.blankj.utilcode.util.PathUtils
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.chuckerteam.chucker.api.RetentionManager
-import com.hjq.gson.factory.GsonFactory
 import com.xueh.comm_core.base.BaseApplication
 import com.xueh.comm_core.net.HttpRequest
 import me.jessyan.progressmanager.ProgressManager
-import retrofit2.converter.gson.GsonConverterFactory
 
 
 /**
@@ -50,7 +48,7 @@ class MyApplication : BaseApplication() {
                 }
                 retrofit {
                     it.apply {
-                        addConverterFactory(GsonConverterFactory.create(GsonFactory.getSingletonGson()))
+//                        addConverterFactory(GsonConverterFactory.create(GsonFactory.getSingletonGson()))
                     }
                 }
             }

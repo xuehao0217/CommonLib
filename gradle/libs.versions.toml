@@ -13,7 +13,6 @@ material = "1.10.0"
 multidex = "2.0.1"
 appcompat = "1.6.1"
 gson = "2.10.1"
-gsonfactoryVersion = "5.2"
 customviewPoolingContainer = "1.0.0"
 customviewVersion = "1.2.0-alpha02"
 glideVersion = "4.15.1"
@@ -119,7 +118,6 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 cookieJar = { module = "com.github.franmontiel:PersistentCookieJar", version.ref = "cookiejarVersion" }
-gsonFactory = { module = "com.github.getActivity:GsonFactory", version.ref = "gsonfactoryVersion" }
 chucker-no-op = { module = "com.github.chuckerteam.chucker:library-no-op", version.ref = "chucker" }
 chucker = { module = "com.github.chuckerteam.chucker:library", version.ref = "chucker" }
 progressmanager = { module = "me.jessyan:progressmanager", version.ref = "progressmanagerVersion" }
