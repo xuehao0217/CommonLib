@@ -4,12 +4,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
+import androidx.paging.PagingData
 import com.xueh.comm_core.base.mvvm.BaseViewModel
 import com.xueh.comm_core.helper.pager
 import com.xueh.comm_core.net.HttpRequest
 import com.xueh.commonlib.api.RestApi
 import com.xueh.commonlib.entity.BannerVO
+import com.xueh.commonlib.entity.HomeEntity
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.onStart
 
 class ComposeViewModel : BaseViewModel<RestApi>() {
@@ -31,9 +35,12 @@ class ComposeViewModel : BaseViewModel<RestApi>() {
         }
     }
 
-    //    var msgDatas by mutableStateOf<Flow<PagingData<HomeEntity>>?>(null)
+    var homeDatas by mutableStateOf<Flow<PagingData<HomeEntity.Data>>>(emptyFlow())
     fun getListDatas() = pager { api.getHome(it).data.datas }
 
+    fun getHomeDatas() {
+        homeDatas= pager { api.getHome(it).data.datas }
+    }
 
     fun getTestDatas() = pager {
         delay(2000)
