@@ -4,12 +4,12 @@ kotlin = "1.9.0"
 kotlinStdlib = "1.9.20"
 kotlinCoroutinesAndroidVersion = "1.7.3"
 kotlinCoroutinesCoreVersion = "1.7.3"
-composeBom = "2023.08.00"
+composeBom = "2024.04.00"
 #--------------基础库相关-----------------
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
-material = "1.10.0"
+material = "1.11.0"
 multidex = "2.0.1"
 appcompat = "1.6.1"
 gson = "2.10.1"
@@ -18,20 +18,21 @@ customviewVersion = "1.2.0-alpha02"
 glideVersion = "4.15.1"
 justAgentweb = "4.1.4"
 eventbus = "3.3.1"
+runtimeLivedata = "1.6.5"
 utilcodex = "1.31.0"
 datastore = "1.0.0"
 #--------------KTX相关-----------------
-coreKtx = "1.10.1"
-activityKtx = "1.8.0"
-fragmentKtx = "1.5.6"
-lifecycleRuntimeKtx = "2.6.1"
-lifecycleKtx = "2.2.0"
+coreKtx = "1.12.0"
+activityKtx = "1.8.2"
+fragmentKtx = "1.6.2"
+lifecycleRuntimeKtx = "2.7.0"
+lifecycleKtx = "2.7.0"
 #--------------Compose相关-----------------
 lifecycleRuntimeComposeVersion = "2.6.1"
 activityCompose = "1.8.0"
 coilCompose = "2.1.0"
 coilVersion = "2.1.0"
-constraintlayoutCompose = "1.1.0-alpha12"
+constraintLayoutCompose = "1.1.0-alpha12"
 accompanist = "0.33.1-alpha"
 accompanistPlaceholder = "0.31.0-alpha"
 googleAccompanistInsets = "0.31.5-beta"
@@ -82,6 +83,7 @@ androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleKtx" }
 androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleKtx" }
+androidx-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "runtimeLivedata" }
 #-----------------------------------------------图片加载相关-------------------------------------------------------------
 coil = { module = "io.coil-kt:coil", version.ref = "coilVersion" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
@@ -97,7 +99,7 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose-android", version.ref = "constraintlayoutCompose" }
+constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose-android", version.ref = "constraintLayoutCompose" }
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationComposeVersion" }
 lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeComposeVersion" }
 composesmartrefresh = { module = "io.github.loren-moon:composesmartrefresh", version.ref = "composeSmartrefreshVersion" }

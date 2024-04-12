@@ -89,7 +89,7 @@ dependencies {
     api(libs.coil)
     api(libs.coil.gif)
     api(libs.coil.compose)
-    api("androidx.compose.runtime:runtime-livedata:1.6.0-alpha04")
+    api(libs.androidx.runtime.livedata)
     api(libs.composesmartrefresh)
     api(libs.any.pop.dialog.compose)    //https://github.com/TheMelody/AnyPopDialog-Compose
 
