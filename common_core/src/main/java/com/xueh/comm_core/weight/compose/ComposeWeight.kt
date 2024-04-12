@@ -30,7 +30,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.items
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import coil.request.ImageRequest
@@ -104,7 +103,8 @@ fun SpanText(list: List<SpanTextEntity>, modifier: Modifier = Modifier) {
     }
     ClickableText(text = spanText, modifier = modifier, onClick = {
         repeat(list.size) { index ->
-            spanText.getStringAnnotations(tag = list[index].text, start = it, end = it).firstOrNull()?.let { list[index].click?.invoke() }
+            spanText.getStringAnnotations(tag = list[index].text, start = it, end = it)
+                .firstOrNull()?.let { list[index].click?.invoke() }
         }
     })
 }
@@ -164,7 +164,12 @@ fun BoxText(
     fontWeight: FontWeight? = null,
 ) {
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
-        androidx.compose.material3.Text(text = text, color = textColor, fontSize = fontSize, fontWeight = fontWeight)
+        androidx.compose.material3.Text(
+            text = text,
+            color = textColor,
+            fontSize = fontSize,
+            fontWeight = fontWeight
+        )
     }
 }
 
@@ -296,7 +301,12 @@ fun <T> CommonRefreshColumnDataPage(
         if (datas.isEmpty()) {
             emptContent?.invoke()
         } else {
-            CommonLazyColumnDatas(datas = datas, headContent = headContent, foodContent = foodContent, itemContent = itemContent)
+            CommonLazyColumnDatas(
+                datas = datas,
+                headContent = headContent,
+                foodContent = foodContent,
+                itemContent = itemContent
+            )
         }
     }
 }
@@ -316,10 +326,13 @@ fun <T : Any> CommonPagingPage(
             emptyDataContent()
         } else {
             RefreshList(
-                lazyPagingItems = lazyPagingItems, verticalArrangement = verticalArrangement, contentPadding = contentPadding
+                lazyPagingItems = lazyPagingItems,
+                verticalArrangement = verticalArrangement,
+                contentPadding = contentPadding
             ) {
-                items(lazyPagingItems) {
-                    it?.let {
+                // 如果是老版本的Paging3这里的实现方式不同，自己根据版本来实现。
+                items(lazyPagingItems.itemCount) { index ->
+                    lazyPagingItems[index]?.let {
                         itemContent(it)
                     }
                 }
@@ -349,14 +362,18 @@ fun CommonTabPage(tabsName: List<String>, pageContent: @Composable (page: Int) -
             divider = {}) {
             val scope: CoroutineScope = rememberCoroutineScope()
             tabsName.forEachIndexed { index, title ->
-                PagerTab(pagerState = pagerState, index = index, pageCount = tabsName.size, text = title, modifier = Modifier
-                    .padding(bottom = 5.dp)
-                    .click {
-                        scope.launch {
-                            pagerState.animateScrollToPage(index)
+                PagerTab(pagerState = pagerState,
+                    index = index,
+                    pageCount = tabsName.size,
+                    text = title,
+                    modifier = Modifier
+                        .padding(bottom = 5.dp)
+                        .click {
+                            scope.launch {
+                                pagerState.animateScrollToPage(index)
+                            }
                         }
-                    }
-                    .height(22.dp))
+                        .height(22.dp))
             }
         }
 
