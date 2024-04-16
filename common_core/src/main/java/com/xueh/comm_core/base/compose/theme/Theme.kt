@@ -14,8 +14,8 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun ComposeMaterial3Theme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    appThemeColorState: AppThemeColorType = AppThemeColorType.DEF,
+    darkTheme: Boolean =  appThemeState.darkTheme,
+    appThemeColorState: AppThemeColorType =  appThemeState.appThemeColorType,
     content: @Composable () -> Unit,
 ) {
     val context = LocalContext.current
@@ -40,29 +40,6 @@ fun ComposeMaterial3Theme(
         content = content
     )
 }
-
-
-@Composable
-fun BaseComposeTheme(
-    systemBarsColor: Color? = null,
-    darkTheme: Boolean = com.xueh.comm_core.base.compose.theme.appThemeState.darkTheme,
-    appThemeState: AppThemeState = com.xueh.comm_core.base.compose.theme.appThemeState,
-    content: @Composable () -> Unit,
-) {
-    ComposeMaterial3Theme(
-        darkTheme = appThemeState.darkTheme,
-        appThemeColorState = appThemeState.appThemeColorType
-    ) {
-        rememberSystemUiController().run {
-            setSystemBarsColor(
-                systemBarsColor ?: androidx.compose.material3.MaterialTheme.colorScheme.background,
-                darkIcons = !darkTheme
-            )
-        }
-        content()
-    }
-}
-
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //黑暗 绿色

@@ -1,4 +1,5 @@
 package com.xueh.commonlib.ui.compose
+
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
@@ -42,29 +43,27 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.round
-import com.xueh.comm_core.base.compose.theme.BaseComposeTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
 @OptIn(ExperimentalComposeUiApi::class)
 @Preview(showBackground = true)
 @Composable
 fun OtherNewPreview() {
-    BaseComposeTheme  {
-        Column() {
+    Column {
 //            TextBrushAlpha()
 //            SpanStyleBrushSample()
 //            TextAccessibilityDemo()
 //            DetectTapPressureGesturesDemo()
 //            PullRefreshTest()
 //            SnapFlingBehaviorTest()
-            Column(modifier = Modifier.fillMaxHeight(0.5f)) {
-                Text(text = "LazyVerticalStaggeredGridTest")
-                LazyVerticalStaggeredGridTest()
-            }
-            Column(modifier = Modifier.fillMaxHeight(0.5f)) {
-                Text(text = "LazyHorizontalStaggeredGridTest")
-                LazyHorizontalStaggeredGridTest()
-            }
+        Column(modifier = Modifier.fillMaxHeight(0.5f)) {
+            Text(text = "LazyVerticalStaggeredGridTest")
+            LazyVerticalStaggeredGridTest()
+        }
+        Column(modifier = Modifier.fillMaxHeight(0.5f)) {
+            Text(text = "LazyHorizontalStaggeredGridTest")
+            LazyHorizontalStaggeredGridTest()
         }
     }
 
@@ -75,13 +74,11 @@ fun OtherNewPreview() {
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun PlacementScopePreview() {
-    BaseComposeTheme  {
-        FirstItemHalf {
-            Box(modifier = Modifier.background(Color.Red))
-            Box(modifier = Modifier.background(Color.Yellow))
-            Box(modifier = Modifier.background(Color.Black))
-            Box(modifier = Modifier.background(Color.Blue))
-        }
+    FirstItemHalf {
+        Box(modifier = Modifier.background(Color.Red))
+        Box(modifier = Modifier.background(Color.Yellow))
+        Box(modifier = Modifier.background(Color.Black))
+        Box(modifier = Modifier.background(Color.Blue))
     }
 }
 

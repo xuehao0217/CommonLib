@@ -12,7 +12,7 @@ import com.xueh.comm_core.weight.compose.CommonTitlePage
 /**
  * 创 建 人: xueh
  * 创建日期: 2023/8/30
- * 备注：
+ * 备注： https://github.com/KatieBarnett/Experiments/tree/main/jc-edge-to-edge?source=post_page-----bea553dd97ff--------------------------------
  */
 class ComposeActivity:BaseComposeActivity() {
     @Composable

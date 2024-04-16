@@ -5,7 +5,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.Divider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,7 +18,11 @@ import com.xueh.comm_core.R
 import com.xueh.comm_core.base.compose.theme.GrayAppAdapter
 import com.xueh.comm_core.base.compose.theme.appThemeState
 import androidx.compose.material3.MaterialTheme
-import com.xueh.comm_core.base.compose.theme.BaseComposeTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.xueh.comm_core.base.compose.theme.ComposeMaterial3Theme
 
 /**
  * 创 建 人: xueh
@@ -39,14 +43,18 @@ fun CommonTitlePage(
     titleRightContent: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
-    var  isSystemInDark=isSystemInDarkTheme()
+    var isSystemInDark = isSystemInDarkTheme()
     LaunchedEffect(isSystemInDark) {
         appThemeState = appThemeState.copy(darkTheme = isSystemInDark)
     }
-
-    BaseComposeTheme(systemBarsColor =if (appThemeState.darkTheme) Color.Black else  Color.Transparent, darkTheme = appThemeState.darkTheme) {
-        GrayAppAdapter(isGray = false){
-            Scaffold(modifier = Modifier.systemBarsPadding(),
+    rememberSystemUiController().setSystemBarsColor(
+        if (appThemeState.darkTheme) Color.Black else Color.Transparent,
+        darkIcons = !appThemeState.darkTheme
+    )
+    ComposeMaterial3Theme {
+        GrayAppAdapter(isGray = false) {
+            Scaffold(
+                modifier = Modifier.systemBarsPadding(),
 //                topBar = {
 //                Spacer(
 //                    modifier = Modifier
@@ -71,7 +79,8 @@ fun CommonTitlePage(
                     CommonTitleView(
                         title,
                         showBackIcon = showBackIcon,
-                        titleBackgroundColor = titleBackgroundColor ?: MaterialTheme.colorScheme.background,
+                        titleBackgroundColor = titleBackgroundColor
+                            ?: MaterialTheme.colorScheme.background,
                         backIcon = backIcon,
                         rightContent = titleRightContent,
                         backClick = backClick
@@ -84,7 +93,8 @@ fun CommonTitlePage(
                         )
                     }
                     Surface(
-                        modifier = Modifier.fillMaxSize(), color = contentBackgroundColor ?: MaterialTheme.colorScheme.background
+                        modifier = Modifier.fillMaxSize(),
+                        color = contentBackgroundColor ?: MaterialTheme.colorScheme.background
                     ) {
                         content.invoke()
                     }
@@ -162,12 +172,15 @@ fun CommonTitleView(
             .height(44.dp)
     ) {
         val (iv_close, row_title, surface_right_view) = createRefs()
-        Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.constrainAs(row_title) {
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-            top.linkTo(parent.top)
-            bottom.linkTo(parent.bottom)
-        }) {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.constrainAs(row_title) {
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                top.linkTo(parent.top)
+                bottom.linkTo(parent.bottom)
+            }) {
             Text(
                 text = "${name}",
                 fontSize = 20.sp,
