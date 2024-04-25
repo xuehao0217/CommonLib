@@ -1,7 +1,7 @@
 [versions]
 agp = "8.3.2"
 kotlin = "1.9.0"
-kotlinStdlib = "1.9.20"
+kotlinStdlib = "1.9.22"
 kotlinCoroutinesAndroidVersion = "1.7.3"
 kotlinCoroutinesCoreVersion = "1.7.3"
 composeBom = "2024.04.01"
