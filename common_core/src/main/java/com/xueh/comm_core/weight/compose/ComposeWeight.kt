@@ -1,5 +1,6 @@
 package com.xueh.comm_core.weight.compose
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.runtime.Composable
@@ -29,11 +30,13 @@ import androidx.compose.ui.res.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import coil.request.ImageRequest
 import com.loren.component.view.composesmartrefresh.rememberSmartSwipeRefreshState
+import com.xueh.comm_core.helper.isEmpty
 import com.xueh.comm_core.weight.compose.refreshheader.RefreshHeader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -318,23 +321,46 @@ fun <T : Any> CommonPagingPage(
     modifier: Modifier = Modifier,
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
     contentPadding: PaddingValues = PaddingValues(horizontal = 15.dp),
-    emptyDataContent: @Composable BoxScope.() -> Unit,
+    emptyDataContent: (@Composable BoxScope.() -> Unit)? = null,
+    loadingContent: (@Composable BoxScope.() -> Unit)? = null,
     itemContent: @Composable LazyItemScope.(value: T) -> Unit,
 ) {
     Box(modifier = modifier) {
-        if (lazyPagingItems.itemCount == 0) {
-            emptyDataContent()
-        } else {
-            RefreshList(
-                lazyPagingItems = lazyPagingItems,
-                verticalArrangement = verticalArrangement,
-                contentPadding = contentPadding
-            ) {
-                // 如果是老版本的Paging3这里的实现方式不同，自己根据版本来实现。
-                items(lazyPagingItems.itemCount) { index ->
-                    lazyPagingItems[index]?.let {
-                        itemContent(it)
+        when (lazyPagingItems.loadState.refresh) {
+            is LoadState.Loading -> {
+                if (loadingContent.isEmpty()) {
+                    Box(modifier = Modifier.fillMaxSize(), Alignment.Center) {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .height(50.dp)
+                        )
                     }
+                } else {
+                    loadingContent?.invoke(this)
+                }
+            }
+
+            is LoadState.Error -> {
+
+            }
+
+            is LoadState.NotLoading -> {
+                if (lazyPagingItems.itemCount == 0) {
+                    emptyDataContent?.let { it() }
+                }
+            }
+        }
+
+        RefreshList(
+            lazyPagingItems = lazyPagingItems,
+            verticalArrangement = verticalArrangement,
+            contentPadding = contentPadding
+        ) {
+            // 如果是老版本的Paging3这里的实现方式不同，自己根据版本来实现。
+            items(lazyPagingItems.itemCount) { index ->
+                lazyPagingItems[index]?.let {
+                    itemContent(it)
                 }
             }
         }
