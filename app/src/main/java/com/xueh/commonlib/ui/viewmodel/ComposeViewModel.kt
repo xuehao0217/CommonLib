@@ -38,7 +38,7 @@ class ComposeViewModel : BaseViewModel<RestApi>() {
         }
     }
 
-    var homeDatas by mutableStateOf<Flow<PagingData<HomeEntity.Data>>>(emptyFlow())
+
 
     var isFirst=true
     fun getListDatas() = pager { api.getHome(it).data.datas }.onStart {
@@ -52,6 +52,8 @@ class ComposeViewModel : BaseViewModel<RestApi>() {
         }
     }
 
+
+    var homeDatas by mutableStateOf<Flow<PagingData<HomeEntity.Data>>>(emptyFlow())
     fun getHomeDatas() {
         homeDatas= pager { api.getHome(it).data.datas }
     }
