@@ -27,7 +27,7 @@ import com.loren.component.view.composesmartrefresh.rememberSmartSwipeRefreshSta
 @Composable
 fun <T : Any> RefreshList(
     lazyPagingItems: LazyPagingItems<T>,
-    listState: LazyListState = rememberLazyListState(),
+    lazyListState: LazyListState = rememberLazyListState(),
     refreshState: SmartSwipeRefreshState = rememberSmartSwipeRefreshState(),//下拉刷新状态
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
     contentPadding: PaddingValues = PaddingValues(horizontal = 15.dp),
@@ -43,11 +43,11 @@ fun <T : Any> RefreshList(
         return
     }
 
-    SwipeRefresh(isRefreshing = isRefreshing, scrollState = listState, refreshState = refreshState, headerIndicator = headerIndicator, onRefresh = {
+    SwipeRefresh(isRefreshing = isRefreshing, scrollState = lazyListState, refreshState = refreshState, headerIndicator = headerIndicator, onRefresh = {
         lazyPagingItems.refresh()
     }) {
         //刷新状态
-        CommonLazyColumn(state = listState, contentPadding = contentPadding, verticalArrangement = verticalArrangement
+        CommonLazyColumn(state = lazyListState, contentPadding = contentPadding, verticalArrangement = verticalArrangement
         ) {
             itemContent()
             //加载更多状态：加载中和加载错误,没有更多

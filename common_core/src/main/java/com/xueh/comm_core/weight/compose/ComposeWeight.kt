@@ -16,8 +16,10 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.*
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -35,6 +37,7 @@ import androidx.paging.compose.LazyPagingItems
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import coil.request.ImageRequest
+import com.blankj.utilcode.util.ToastUtils
 import com.loren.component.view.composesmartrefresh.rememberSmartSwipeRefreshState
 import com.xueh.comm_core.helper.isEmpty
 import com.xueh.comm_core.weight.compose.refreshheader.RefreshHeader
@@ -319,12 +322,25 @@ fun <T> CommonRefreshColumnDataPage(
 fun <T : Any> CommonPagingPage(
     lazyPagingItems: LazyPagingItems<T>,
     modifier: Modifier = Modifier,
+    lazyListState: LazyListState = rememberLazyListState(),
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
+    onScrollEnd:((List<Int>)->Unit)?=null,
     contentPadding: PaddingValues = PaddingValues(horizontal = 15.dp),
     emptyDataContent: (@Composable BoxScope.() -> Unit)? = null,
     loadingContent: (@Composable BoxScope.() -> Unit)? = null,
     itemContent: @Composable LazyItemScope.(value: T) -> Unit,
 ) {
+    LaunchedEffect(lazyListState) {
+        snapshotFlow { lazyListState.isScrollInProgress }
+            .collect { isScrolling ->
+                if (!isScrolling) {
+                    // 滑动停止
+                    val visibleItemsIndex = lazyListState.layoutInfo.visibleItemsInfo.map { it.index }.toList()
+                    onScrollEnd?.invoke(visibleItemsIndex)
+                }
+            }
+    }
+
     Box(modifier = modifier) {
         when (lazyPagingItems.loadState.refresh) {
             is LoadState.Loading -> {
@@ -353,6 +369,7 @@ fun <T : Any> CommonPagingPage(
         }
 
         RefreshList(
+            lazyListState=lazyListState,
             lazyPagingItems = lazyPagingItems,
             verticalArrangement = verticalArrangement,
             contentPadding = contentPadding
