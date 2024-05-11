@@ -15,6 +15,7 @@ import com.xueh.comm_core.helper.activityresult.CropImageResult
 import com.xueh.comm_core.helper.activityresult.TakeCameraUri
 import com.xueh.comm_core.utils.time.Interval
 import com.xueh.comm_core.web.WebViewActivity
+import com.xueh.comm_core.web.WebViewComposeActivity
 import com.xueh.commonlib.databinding.FragmentMyBinding
 import java.util.concurrent.TimeUnit
 
@@ -83,10 +84,8 @@ class MyFragment : DFragment<FragmentMyBinding>() {
                 interval.resume()
             }
             tvWeb.setOnClickListener {
-                ActivityUtils.startActivity(Intent(activity, WebViewActivity::class.java).apply {
-                    putExtra(WebViewActivity.TITLE, "TITLE")
-                    putExtra(WebViewActivity.URL, "https://www.baidu.com/")
-                })
+                WebViewComposeActivity.start("https://www.baidu.com/")
+//                WebViewActivity.start("https://www.baidu.com/")
             }
         }
 

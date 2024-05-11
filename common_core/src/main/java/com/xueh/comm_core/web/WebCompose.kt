@@ -32,12 +32,12 @@ import kotlinx.coroutines.launch
 
 @Preview
 @Composable
-fun WebViewPage(onBack: () -> Unit = {}) {
+fun WebViewPage(url: String="",onBack: () -> Unit = {}) {
     var rememberWebViewProgress by remember { mutableStateOf(-1) }
     Box {
         CustomWebView(
             modifier = Modifier.fillMaxSize(),
-            url = "https://www.baidu.com/",
+            url = url,
             onProgressChange = { progress ->
                 rememberWebViewProgress = progress
             },
