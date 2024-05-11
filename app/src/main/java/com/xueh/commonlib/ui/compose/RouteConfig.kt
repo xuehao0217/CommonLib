@@ -30,7 +30,7 @@ object RouteConfig {
     const val Placeholder="Placeholder"
     const val NavPageWeiget="NavPageWeiget"
 
-
+    const val WebView="WebView"
 
 
     const val name="name"

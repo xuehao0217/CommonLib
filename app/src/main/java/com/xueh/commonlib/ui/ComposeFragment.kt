@@ -25,6 +25,7 @@ import androidx.navigation.navArgument
 import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.base.compose.BaseComposeFragment
 import com.xueh.comm_core.base.compose.theme.*
+import com.xueh.comm_core.web.WebViewPage
 import com.xueh.comm_core.weight.compose.CommonTitlePage
 import com.xueh.commonlib.R
 import com.xueh.commonlib.ui.compose.*
@@ -100,6 +101,7 @@ class ComposeFragment : BaseComposeFragment() {
                     ItemData("Compose下权限申请", RouteConfig.ComposePermission),
                     ItemData("Compose Placeholder", RouteConfig.Placeholder),
                     ItemData("NavPageWeiget 使用", RouteConfig.NavPageWeiget),
+                    ItemData("WebView 使用", RouteConfig.WebView),
 //                    ItemData("lazyVerticalGrid使用", RouteConfig.lazyVerticalGrid),
 //                    ItemData("LazyColumnPage", RouteConfig.LazyColumnPage),
 //                    ItemData("ScrollableAppBar", RouteConfig.ScrollableAppBar),
@@ -180,6 +182,11 @@ class ComposeFragment : BaseComposeFragment() {
             }
             composable(RouteConfig.NavPageWeiget) {
                 NavPageWeigetPage()
+            }
+            composable(RouteConfig.WebView) {
+                WebViewPage{
+                    navController.popBackStack()
+                }
             }
         }
     }
