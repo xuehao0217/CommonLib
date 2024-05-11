@@ -40,7 +40,8 @@ import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
 fun RefreshLoadUse() {
     val viewModel: ComposeViewModel = viewModel()
     val homeDatas = viewModel.getListDatas().collectAsLazyPagingItems()
-    CommonPagingPage(homeDatas,  onScrollEnd = {
+    CommonPagingPage(homeDatas, onScrollEnd = { visibleItem, isScrollingUp ->
+        ToastUtils.showShort("是否上划${isScrollingUp}  ${visibleItem.toList()}")
     }, emptyDataContent = {
         Box(modifier = Modifier.background(Color.Blue))
     }) {

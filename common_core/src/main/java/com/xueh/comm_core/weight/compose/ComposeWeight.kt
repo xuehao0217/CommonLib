@@ -19,6 +19,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -39,6 +40,7 @@ import coil.compose.AsyncImagePainter
 import coil.request.ImageRequest
 import com.blankj.utilcode.util.ToastUtils
 import com.loren.component.view.composesmartrefresh.rememberSmartSwipeRefreshState
+import com.xueh.comm_core.helper.compose.rememberMutableStateOf
 import com.xueh.comm_core.helper.isEmpty
 import com.xueh.comm_core.weight.compose.refreshheader.RefreshHeader
 import kotlinx.coroutines.CoroutineScope
@@ -324,19 +326,30 @@ fun <T : Any> CommonPagingPage(
     modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState(),
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
-    onScrollEnd:((List<Int>)->Unit)?=null,
+    onScrollEnd: ((visibleItem: List<Int>, isScrollingUp: Boolean) -> Unit)? = null,
     contentPadding: PaddingValues = PaddingValues(horizontal = 15.dp),
     emptyDataContent: (@Composable BoxScope.() -> Unit)? = null,
     loadingContent: (@Composable BoxScope.() -> Unit)? = null,
     itemContent: @Composable LazyItemScope.(value: T) -> Unit,
 ) {
+    var lastFirstIndex by rememberMutableStateOf(value = 0)
+    var isScrollingUp = false
     LaunchedEffect(lazyListState) {
         snapshotFlow { lazyListState.isScrollInProgress }
             .collect { isScrolling ->
                 if (!isScrolling) {
+                    if (lazyListState.firstVisibleItemIndex > lastFirstIndex) {
+                        // 上滑
+                        isScrollingUp = true
+                    } else {
+                        //下滑
+                        isScrollingUp = false
+                    }
+                    lastFirstIndex = lazyListState.firstVisibleItemIndex
                     // 滑动停止
-                    val visibleItemsIndex = lazyListState.layoutInfo.visibleItemsInfo.map { it.index }.toList()
-                    onScrollEnd?.invoke(visibleItemsIndex)
+                    val visibleItemsIndex =
+                        lazyListState.layoutInfo.visibleItemsInfo.map { it.index }.toList()
+                    onScrollEnd?.invoke(visibleItemsIndex, isScrollingUp)
                 }
             }
     }
@@ -369,7 +382,7 @@ fun <T : Any> CommonPagingPage(
         }
 
         RefreshList(
-            lazyListState=lazyListState,
+            lazyListState = lazyListState,
             lazyPagingItems = lazyPagingItems,
             verticalArrangement = verticalArrangement,
             contentPadding = contentPadding
