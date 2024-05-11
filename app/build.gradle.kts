@@ -1,4 +1,3 @@
-import buildsrc.*
 
 plugins {
     alias(libs.plugins.androidApplication)
@@ -6,15 +5,15 @@ plugins {
 }
 
 android {
-    namespace = ProjectBuildConfig.applicationId
-    compileSdk = ProjectBuildConfig.compileSdkVersion
+    namespace = "com.xueh.commonlib"
+    compileSdk = rootProject.extra["compileSdk"] as Int
     defaultConfig {
-        applicationId = ProjectBuildConfig.applicationId
-        minSdk = ProjectBuildConfig.minSdkVersion
-        targetSdk =  ProjectBuildConfig.targetSdkVersion
+        applicationId = rootProject.extra["applicationId"] as String
+        minSdk =rootProject.extra["minSdk"] as Int
+        targetSdk = rootProject.extra["targetSdk"] as Int
 
-        versionCode = ProjectBuildConfig.versionCode
-        versionName = ProjectBuildConfig.versionName
+        versionCode =rootProject.extra["versionCode"] as Int
+        versionName = rootProject.extra["versionName"] as String
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -43,7 +42,7 @@ android {
         buildConfig=true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = rootProject.extra["compose_compiler"] as String
+        kotlinCompilerExtensionVersion =  rootProject.extra["compose_compiler"] as String
     }
     packaging {
         resources {

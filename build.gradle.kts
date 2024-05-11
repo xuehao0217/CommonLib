@@ -10,7 +10,7 @@ plugins {
 
 ext {
     set("compileSdk", 34)
-    set("minSdk", 31)
+    set("minSdk", 23)
     set("applicationId", "com.xueh.commonlib")
     set("appName", "commonlib")
     set("targetSdk", 34)

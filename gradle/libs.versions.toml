@@ -4,27 +4,27 @@ kotlin = "1.9.0"
 kotlinStdlib = "1.9.22"
 kotlinCoroutinesAndroidVersion = "1.7.3"
 kotlinCoroutinesCoreVersion = "1.7.3"
-composeBom = "2024.04.01"
+composeBom = "2024.05.00"
 #--------------基础库相关-----------------
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
-material = "1.11.0"
+material = "1.12.0"
 multidex = "2.0.1"
 appcompat = "1.6.1"
 gson = "2.10.1"
 customviewPoolingContainer = "1.0.0"
 customviewVersion = "1.2.0-alpha02"
 glideVersion = "4.15.1"
-justAgentweb = "4.1.4"
+agentweb = "v5.1.1-androidx"
 eventbus = "3.3.1"
-runtimeLivedata = "1.6.6"
+runtimeLivedata = "1.6.7"
 utilcodex = "1.31.0"
-datastore = "1.1.0"
+datastore = "1.1.1"
 #--------------KTX相关-----------------
-coreKtx = "1.13.0"
+coreKtx = "1.13.1"
 activityKtx = "1.9.0"
-fragmentKtx = "1.6.2"
+fragmentKtx = "1.7.0"
 lifecycleRuntimeKtx = "2.7.0"
 lifecycleKtx = "2.7.0"
 #--------------Compose相关-----------------
@@ -55,7 +55,7 @@ spiderman = "v1.1.8"
 #--------------XML相关-----------------
 constraintlayout = "2.1.4"
 recyclerviewVersion = "1.3.2"
-viewpager2 = "1.1.0-beta02"
+viewpager2 = "1.1.0-rc01"
 immersionbar = "3.0.0"
 magicindicator = "1.7.0"
 refreshHeader = "2.0.1"
@@ -96,8 +96,6 @@ androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose-android", version.ref = "constraintLayoutCompose" }
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationComposeVersion" }
@@ -128,6 +126,7 @@ spiderman = { module = "com.github.simplepeng.SpiderMan:spiderman", version.ref 
 #------------------------------------------------工具相关--------------------------------------------------------------
 eventbus = { module = "org.greenrobot:eventbus", version.ref = "eventbus" }
 utilcodex = { module = "com.blankj:utilcodex", version.ref = "utilcodex" }
+agentweb = { module = "io.github.justson:agentweb-core", version.ref = "agentweb" }
 #------------------------------------------------XML相关--------------------------------------------------------------
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
@@ -140,7 +139,6 @@ magicIndicator = { module = "com.github.hackware1993:MagicIndicator", version.re
 easyNavigation = { module = "com.github.Vincent7Wong:EasyNavigation", version.ref = "easynavigationVersion" }
 refresh-header = { module = "com.scwang.smart:refresh-header-classics", version.ref = "refreshHeader" }
 refresh-layout = { module = "com.scwang.smart:refresh-layout-kernel", version.ref = "refreshLayout" }
-agentweb = { module = "com.just.agentweb:agentweb", version.ref = "justAgentweb" }
 xpopup = { module = "com.lxj:xpopup", version.ref = "xpopup" }
 
 [plugins]

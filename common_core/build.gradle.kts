@@ -1,5 +1,3 @@
-import buildsrc.*
-
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -7,9 +5,9 @@ plugins {
 
 android {
     namespace = "com.xueh.comm_core"
-    compileSdk = ProjectBuildConfig.compileSdkVersion
+    compileSdk = rootProject.extra["compileSdk"] as Int
     defaultConfig {
-        minSdk = ProjectBuildConfig.minSdkVersion
+        minSdk =rootProject.extra["minSdk"] as Int
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
