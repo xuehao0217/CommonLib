@@ -326,7 +326,7 @@ fun <T : Any> CommonPagingPage(
     modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState(),
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
-    onScrollEnd: ((visibleItem: List<Int>, isScrollingUp: Boolean) -> Unit)? = null,
+    onScrollStop: ((visibleItem: List<Int>, isScrollingUp: Boolean) -> Unit)? = null,
     contentPadding: PaddingValues = PaddingValues(horizontal = 15.dp),
     emptyDataContent: (@Composable BoxScope.() -> Unit)? = null,
     loadingContent: (@Composable BoxScope.() -> Unit)? = null,
@@ -349,7 +349,7 @@ fun <T : Any> CommonPagingPage(
                     // 滑动停止
                     val visibleItemsIndex =
                         lazyListState.layoutInfo.visibleItemsInfo.map { it.index }.toList()
-                    onScrollEnd?.invoke(visibleItemsIndex, isScrollingUp)
+                    onScrollStop?.invoke(visibleItemsIndex, isScrollingUp)
                 }
             }
     }
