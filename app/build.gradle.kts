@@ -23,6 +23,8 @@ android {
             abiFilters.addAll(arrayOf( "arm64-v8a"))
         }
     }
+    //签名配置  https://blog.csdn.net/kongqwesd12/article/details/133313123
+    // https://blog.csdn.net/jdsjlzx/article/details/136030728
 
     buildTypes {
         release {
