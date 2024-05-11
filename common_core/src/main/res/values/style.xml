@@ -18,18 +18,4 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowTitleStyle">@null</item>
     </style>
-
-    <style name="common_textview_style" parent="Widget.MaterialComponents.Button.UnelevatedButton" />
-
-    <!--ShapeableImageView 圆 -->
-    <style name="CircleStyle">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">50%</item>
-    </style>
-
-    <!--ShapeableImageView 圆角-->
-    <style name="RoundedStyle">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">10dp</item>
-    </style>
 </resources>

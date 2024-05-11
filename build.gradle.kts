@@ -5,3 +5,16 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid) apply false
     alias(libs.plugins.androidLibrary) apply false
 }
+
+
+
+ext {
+    set("compileSdk", 34)
+    set("minSdk", 31)
+    set("applicationId", "com.xueh.commonlib")
+    set("appName", "commonlib")
+    set("targetSdk", 34)
+    set("versionCode", 1)
+    set("versionName", "1.0.0")
+    set("compose_compiler", "1.5.1")
+}
