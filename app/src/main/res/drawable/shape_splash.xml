@@ -6,6 +6,17 @@
         </shape>
     </item>
 
+
+<!--    <item-->
+<!--        android:top="250dp"-->
+<!--        >-->
+<!--        <bitmap-->
+<!--            android:width="120dp"-->
+<!--            android:gravity="top"-->
+<!--            android:src="@mipmap/ic_launcher" />-->
+<!--    </item>-->
+
+
     <item
         android:width="180dp"
         android:height="180dp"
