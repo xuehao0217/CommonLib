@@ -18,6 +18,10 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        ndk {
+            abiFilters.addAll(arrayOf( "arm64-v8a"))
+        }
     }
 
     buildTypes {
