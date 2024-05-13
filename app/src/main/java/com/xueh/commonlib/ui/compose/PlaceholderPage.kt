@@ -69,7 +69,7 @@ fun PlaceholderPage() {
         SpacerH(int = 15)
 
         Image(
-            painter = painterResource(id = R.mipmap.ic_head), contentDescription = "",
+            painter = painterResource(id = R.drawable.ic_launcher), contentDescription = "",
             modifier = Modifier
                 .size(150.dp)
                 .padding(16.dp)

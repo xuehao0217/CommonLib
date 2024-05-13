@@ -1,3 +1,5 @@
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 plugins {
     alias(libs.plugins.androidApplication)
@@ -25,9 +27,18 @@ android {
     }
     //签名配置  https://blog.csdn.net/kongqwesd12/article/details/133313123
     // https://blog.csdn.net/jdsjlzx/article/details/136030728
+//    signingConfigs {
+//        create("release") {
+//            keyAlias = "keyAlias"
+//            keyPassword = "keyPassword"
+//            storeFile =  file("../common.jks")
+//            storePassword ="storePassword"
+//        }
+//    }
 
     buildTypes {
         release {
+//            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -35,6 +46,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -55,6 +67,19 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    android.applicationVariants.all {
+        outputs.all {
+            if (this is com.android.build.gradle.internal.api.ApkVariantOutputImpl) {
+                val config = project.android.defaultConfig
+                val versionName = config.versionName
+                val formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd.HH.mm")
+                val createTime = LocalDateTime.now().format(formatter)
+                this.outputFileName = "${rootProject.extra["appName"]}_${this.name}_${versionName}_$createTime.apk"
+            }
+        }
+    }
+
 }
 
 dependencies {
