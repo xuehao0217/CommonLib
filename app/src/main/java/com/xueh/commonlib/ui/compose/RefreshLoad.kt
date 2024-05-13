@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.weight.compose.CommonPagingPage
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
@@ -42,6 +43,8 @@ fun RefreshLoadUse() {
     val homeDatas = viewModel.getListDatas().collectAsLazyPagingItems()
     CommonPagingPage(homeDatas, onScrollStop = { visibleItem, isScrollingUp ->
         ToastUtils.showShort("是否上划${isScrollingUp}  ${visibleItem.toList()}")
+    }, itemKey = {
+        homeDatas.itemKey { it.id }
     }, emptyDataContent = {
         Box(modifier = Modifier.background(Color.Blue))
     }) {

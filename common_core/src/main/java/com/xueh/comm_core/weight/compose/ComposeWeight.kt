@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.*
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.itemKey
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import coil.request.ImageRequest
@@ -324,6 +325,7 @@ fun <T> CommonRefreshColumnDataPage(
 fun <T : Any> CommonPagingPage(
     lazyPagingItems: LazyPagingItems<T>,
     modifier: Modifier = Modifier,
+    itemKey: ((index: Int) -> Any)? = null,
     lazyListState: LazyListState = rememberLazyListState(),
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
     onScrollStop: ((visibleItem: List<Int>, isScrollingUp: Boolean) -> Unit)? = null,
@@ -388,7 +390,7 @@ fun <T : Any> CommonPagingPage(
             contentPadding = contentPadding
         ) {
             // 如果是老版本的Paging3这里的实现方式不同，自己根据版本来实现。
-            items(lazyPagingItems.itemCount) { index ->
+            items(lazyPagingItems.itemCount,key = itemKey) { index ->
                 lazyPagingItems[index]?.let {
                     itemContent(it)
                 }
