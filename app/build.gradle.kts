@@ -1,7 +1,4 @@
-import com.android.build.gradle.internal.api.ApkVariantOutputImpl
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.Date
 
 plugins {
