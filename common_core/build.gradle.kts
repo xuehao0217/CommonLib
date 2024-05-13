@@ -113,11 +113,11 @@ dependencies {
     api(libs.utilcodex)
     api(libs.progressmanager)
     api(libs.eventbus)
+    api(libs.xxPermissions)
     //捕获崩溃信息
     debugApi(libs.spiderman) {
         exclude(group = "androidx.appcompat")
     }
-
     //--------------XML相关一些库--------------------------
     api(libs.material)
     api(libs.recyclerview)
