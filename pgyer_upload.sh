@@ -50,6 +50,6 @@ fi
 echo "构建完成 ${APK_FILE}，开始上传到蒲公英..."
 
 # 上传至蒲公英并传递更新描述
-curl -F "file=@$APK_FILE" -F "uKey=$PGYER_USER_KEY" -F "_api_key=$PGYER_API_KEY" -F "updateDescription=$updateDescription" https://www.pgyer.com/apiv1/app/upload
+#curl -F "file=@$APK_FILE" -F "uKey=$PGYER_USER_KEY" -F "_api_key=$PGYER_API_KEY" -F "updateDescription=$updateDescription" https://www.pgyer.com/apiv1/app/upload
 echo
-echo "---------------------上传完成---------------------"
+echo "---------------------上传完成更新了$updateDescription---------------------"
