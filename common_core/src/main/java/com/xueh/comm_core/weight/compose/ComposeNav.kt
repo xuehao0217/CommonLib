@@ -38,6 +38,10 @@ data class NavData(
 @Preview
 @Composable
 fun NavPage(
+    selectTextColor: Color = androidx.compose.material3.MaterialTheme.colorScheme.primary,
+    unSelectTextColor: Color = Color.Gray,
+    textFontSize: Int = 10,
+    imageSize: Int = 24,
     interceptIndex: Int = -1,
     interceptClick: () -> Unit = {},
     navList: MutableList<NavData> = mutableListOf(),
@@ -49,13 +53,18 @@ fun NavPage(
     selectPos = pagerState.currentPage
     Column {
         HorizontalPager(
-            state = pagerState,
-            userScrollEnabled = false,
-            modifier = Modifier.weight(1f)
+            state = pagerState, userScrollEnabled = false, modifier = Modifier.weight(1f)
         ) { page ->
             pageContent(page)
         }
-        Nav(selectPos = selectPos, itemList = navList) {
+        Nav(
+            selectPos = selectPos,
+            itemList = navList,
+            selectTextColor = selectTextColor,
+            unSelectTextColor = unSelectTextColor,
+            textFontSize = textFontSize,
+            imageSize = imageSize
+        ) {
             scope.launch {
                 if (it != interceptIndex) {
                     pagerState.scrollToPage(page = it)
@@ -80,6 +89,10 @@ fun NavPage(
 @Composable
 fun Nav(
     selectPos: Int = 0,
+    selectTextColor: Color = androidx.compose.material3.MaterialTheme.colorScheme.primary,
+    unSelectTextColor: Color = Color.Gray,
+    textFontSize: Int = 10,
+    imageSize: Int = 24,
     itemList: MutableList<NavData> = mutableListOf(),
     itemClick: (Int) -> Unit = {},
 ) {
@@ -88,7 +101,8 @@ fun Nav(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.White)
-            .height(49.dp), horizontalArrangement = Arrangement.SpaceAround
+            .height(49.dp),
+        horizontalArrangement = Arrangement.SpaceAround
     ) {
         itemList.forEachIndexed { index, navData ->
             NavItem(
@@ -97,7 +111,13 @@ fun Nav(
                     .fillMaxHeight()
                     .click {
                         itemClick.invoke(index)
-                    }, navData, selectPos == index
+                    },
+                navData,
+                selectPos == index,
+                selectTextColor = selectTextColor,
+                unSelectTextColor = unSelectTextColor,
+                imageSize = imageSize,
+                textFontSize = textFontSize,
             )
         }
     }
@@ -107,15 +127,29 @@ fun Nav(
 @Composable
 fun NavItem(
     modifier: Modifier = Modifier,
-    navData: NavData = NavData(selectIcon = R.mipmap.bar_icon_back_white, unSelectIcon = R.mipmap.bar_icon_back_black, text = "星辰", showRed = false),
+    navData: NavData = NavData(
+        selectIcon = R.mipmap.bar_icon_back_white,
+        unSelectIcon = R.mipmap.bar_icon_back_black,
+        text = "星辰",
+        showRed = false
+    ),
     select: Boolean = true,
     selectTextColor: Color = androidx.compose.material3.MaterialTheme.colorScheme.primary,
     unSelectTextColor: Color = Color.Gray,
+    imageSize: Int = 24,
+    textFontSize: Int = 10,
 ) {
-    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
         Box(contentAlignment = Alignment.Center) {
-            ImageCompose(id = if (select) navData.selectIcon else navData.unSelectIcon, modifier = Modifier.size(24.dp))
-            Box(contentAlignment = Alignment.TopEnd, modifier = Modifier.size(26.dp)) {
+            ImageCompose(
+                id = if (select) navData.selectIcon else navData.unSelectIcon,
+                modifier = Modifier.size(24.dp)
+            )
+            Box(contentAlignment = Alignment.TopEnd, modifier = Modifier.size(imageSize.dp)) {
                 if (navData.showRed) {
                     Box(
                         modifier = Modifier
@@ -126,6 +160,10 @@ fun NavItem(
                 }
             }
         }
-        Text(text = navData.text, fontSize = 10.sp, color = if (select) selectTextColor else unSelectTextColor)
+        Text(
+            text = navData.text,
+            fontSize = textFontSize.sp,
+            color = if (select) selectTextColor else unSelectTextColor
+        )
     }
 }
