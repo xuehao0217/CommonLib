@@ -1,5 +1,8 @@
 package com.xueh.commonlib.entity
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+
 /**
  * 创 建 人: xueh
  * 创建日期: 2019/12/27 15:30
@@ -14,5 +17,6 @@ data class BannerVO(
     val title: String,
     val type: Int,
     val url: String,
-    var listData:List<BannerVO>
+    var listData:List<BannerVO>,
+    var is_select: MutableState<Boolean> = mutableStateOf(false),
 )
