@@ -136,6 +136,9 @@ open class RequestViewModel : AbsViewModel() {
         apiDSL: ViewModelDsl<Response>.() -> Unit,
     ) {
         apiDSL<BaseResult<Response>> {
+            onStart {
+                ViewModelDsl<Response>().apply(apiDSL)?.start?.invoke()
+            }
             onRequest {
                 ViewModelDsl<Response>().apply(apiDSL).requestParseData()
             }
@@ -147,6 +150,9 @@ open class RequestViewModel : AbsViewModel() {
                     ToastUtils.showShort("${it.errorMsg}")
                     Log.e("HTTP", "apiDslResult--> ${it.errorMsg}")
                 }
+            }
+            onFinally {
+                ViewModelDsl<Response>().apply(apiDSL)?.finally?.invoke()
             }
         }
     }
