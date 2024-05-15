@@ -1,5 +1,6 @@
 package com.xueh.comm_core.weight.compose
 
+import android.os.Build
 import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
@@ -36,10 +37,15 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
+import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import com.blankj.utilcode.util.ToastUtils
+import com.blankj.utilcode.util.Utils
 import com.loren.component.view.composesmartrefresh.rememberSmartSwipeRefreshState
 import com.xueh.comm_core.helper.compose.rememberMutableStateOf
 import com.xueh.comm_core.helper.isEmpty
@@ -71,14 +77,27 @@ fun ImageCompose(
     colorFilter: ColorFilter? = null,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Crop,
-) = Image(
-    painter = painterResource(id = id),
-    contentDescription = "ImageComposeContentDescription",
-    modifier = modifier,
-    contentScale = contentScale,
-    colorFilter = colorFilter,
-    alignment = alignment
-)
+) {
+    val imgLoader = ImageLoader.Builder(Utils.getApp())
+        .components {
+            if (Build.VERSION.SDK_INT >= 28) {
+                add(ImageDecoderDecoder.Factory())
+            } else {
+                add(GifDecoder.Factory())
+            }
+        }
+        .build()
+
+    Image(
+        painter = rememberAsyncImagePainter(id, imgLoader),
+        contentDescription = "ImageComposeContentDescription",
+        modifier = modifier,
+        contentScale = contentScale,
+        colorFilter = colorFilter,
+        alignment = alignment
+    )
+}
+
 
 //////////////////////////////////////////////////////////////////////////////////////
 
