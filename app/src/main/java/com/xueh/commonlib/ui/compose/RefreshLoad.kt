@@ -43,8 +43,6 @@ fun RefreshLoadUse() {
     val homeDatas = viewModel.getListDatas().collectAsLazyPagingItems()
     CommonPagingPage(homeDatas, onScrollStop = { visibleItem, isScrollingUp ->
         ToastUtils.showShort("是否上划${isScrollingUp}  ${visibleItem.toList()}")
-    }, itemKey = {
-        homeDatas.itemKey { it.id }
     }, emptyDataContent = {
         Box(modifier = Modifier.background(Color.Blue))
     }) {
