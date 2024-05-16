@@ -43,7 +43,7 @@ pagingCommon = "3.2.1"
 pagingComposeVersion = "3.2.1"
 pagingRuntime = "3.2.1"
 lifecycleViewmodelCompose = "2.7.0"
-composeSmartrefreshVersion = "1.2.1"
+composeSmartrefreshVersion = "2.1.0"
 animation = "1.6.7"
 any_pop_dialog_compose = "1.0.1"
 #--------------网络相关-----------------

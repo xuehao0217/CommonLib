@@ -1,9 +1,14 @@
 package com.xueh.comm_core.weight.compose
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.dp
 import com.loren.component.view.composesmartrefresh.*
 
 /**
@@ -11,38 +16,50 @@ import com.loren.component.view.composesmartrefresh.*
  * 创建日期: 2022/9/29
  * 备注：
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun SwipeRefresh(
-    isRefreshing: Boolean,//是否下拉刷新
-    scrollState: LazyListState = rememberLazyListState(),//滑动状态
-    refreshState: SmartSwipeRefreshState = rememberSmartSwipeRefreshState(),//下拉刷新状态
+fun  SmartRefresh(
+    isRefreshing:Boolean=false,
     isNeedLoadMore: Boolean = false,
     isNeedRefresh: Boolean = true,
+    isFirstRefresh:Boolean=true,
+    scrollState: LazyListState = rememberLazyListState(),//滑动状态
+    refreshState: SmartSwipeRefreshState = rememberSmartSwipeRefreshState().also {
+        it.enableLoadMore = isNeedLoadMore
+        it.enableRefresh=isNeedRefresh
+    },//下拉刷新状态
     headerIndicator: @Composable () -> Unit = { MyRefreshHeader(refreshState.refreshFlag) },
     footerIndicator: @Composable () -> Unit = { MyRefreshHeader(refreshState.refreshFlag) },
     onRefresh: (suspend () -> Unit)? = null,
     onLoadMore: (suspend () -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
-    LaunchedEffect(refreshState.smartSwipeRefreshAnimateFinishing) {
-        if (refreshState.smartSwipeRefreshAnimateFinishing.isFinishing && !refreshState.smartSwipeRefreshAnimateFinishing.isRefresh) {
-            scrollState.animateScrollToItem(scrollState.firstVisibleItemIndex + 1)
-        }
+
+    with(LocalDensity.current) {
+        refreshState.dragHeaderIndicatorStrategy = ThresholdScrollStrategy.UnLimited
+        refreshState.dragFooterIndicatorStrategy = ThresholdScrollStrategy.Fixed(160.dp.toPx())
+        refreshState.flingHeaderIndicatorStrategy = ThresholdScrollStrategy.None
+        refreshState.flingFooterIndicatorStrategy = ThresholdScrollStrategy.Fixed(80.dp.toPx())
+        refreshState.needFirstRefresh=isFirstRefresh
     }
+
     if (isRefreshing) {
         refreshState.refreshFlag = SmartSwipeStateFlag.REFRESHING
     } else {
-        refreshState.refreshFlag = SmartSwipeStateFlag.SUCCESS
+        refreshState.refreshFlag=SmartSwipeStateFlag.SUCCESS
     }
+
     SmartSwipeRefresh(
         onRefresh = onRefresh,
         onLoadMore = onLoadMore,
-        isNeedLoadMore = isNeedLoadMore,
         state = refreshState,
-        isNeedRefresh = isNeedRefresh,
         headerIndicator = headerIndicator,
         footerIndicator = footerIndicator,
-        content = content
-    )
+        contentScrollState = scrollState,
+    ){
+        CompositionLocalProvider(LocalOverscrollConfiguration.provides(null)) {
+            content()
+        }
+    }
 
 }

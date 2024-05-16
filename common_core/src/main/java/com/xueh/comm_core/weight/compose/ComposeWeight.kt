@@ -49,6 +49,7 @@ import com.blankj.utilcode.util.Utils
 import com.loren.component.view.composesmartrefresh.rememberSmartSwipeRefreshState
 import com.xueh.comm_core.helper.compose.rememberMutableStateOf
 import com.xueh.comm_core.helper.isEmpty
+import com.xueh.comm_core.weight.compose.refreshheader.MyRefreshHeader
 import com.xueh.comm_core.weight.compose.refreshheader.RefreshHeader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -294,7 +295,7 @@ fun CommonRefreshPage(
 //    var refreshing by remember { mutableStateOf(false) }
     var refreshState = rememberSmartSwipeRefreshState()
     var listState = rememberLazyListState()
-    SwipeRefresh(
+    SmartRefresh(
         isRefreshing = isRefreshing,
         scrollState = listState,
         refreshState = refreshState,
@@ -319,11 +320,11 @@ fun <T> CommonRefreshColumnDataPage(
 //    var refreshing by remember { mutableStateOf(false) }
     var refreshState = rememberSmartSwipeRefreshState()
     var listState = rememberLazyListState()
-    SwipeRefresh(
+    SmartRefresh(
         isRefreshing = isRefreshing,
         scrollState = listState,
         refreshState = refreshState,
-        headerIndicator = { RefreshHeader(refreshState) },
+        headerIndicator = { MyRefreshHeader(refreshState) },
         onRefresh = onRefresh
     ) {
         if (datas.isEmpty()) {
@@ -343,8 +344,9 @@ fun <T> CommonRefreshColumnDataPage(
 @Composable
 fun <T : Any> CommonPagingPage(
     lazyPagingItems: LazyPagingItems<T>,
-    modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState(),
+    modifier: Modifier = Modifier,
+    isFirstRefresh:Boolean=true,
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
     onScrollStop: ((visibleItem: List<Int>, isScrollingUp: Boolean) -> Unit)? = null,
     contentPadding: PaddingValues = PaddingValues(horizontal = 15.dp),
@@ -374,34 +376,35 @@ fun <T : Any> CommonPagingPage(
             }
     }
 
-    Box(modifier = modifier) {
-        when (lazyPagingItems.loadState.refresh) {
-            is LoadState.Loading -> {
-                if (loadingContent.isEmpty()) {
-                    Box(modifier = Modifier.fillMaxSize(), Alignment.Center) {
-                        CircularProgressIndicator(
-                            modifier = Modifier
-                                .padding(10.dp)
-                                .height(50.dp)
-                        )
-                    }
-                } else {
-                    loadingContent?.invoke(this)
-                }
-            }
-
-            is LoadState.Error -> {
-
-            }
-
-            is LoadState.NotLoading -> {
-                if (lazyPagingItems.itemCount == 0) {
-                    emptyDataContent?.let { it() }
-                }
-            }
-        }
+//    Box(modifier = modifier) {
+//        when (lazyPagingItems.loadState.refresh) {
+//            is LoadState.Loading -> {
+//                if (loadingContent.isEmpty()) {
+//                    Box(modifier = Modifier.fillMaxSize(), Alignment.Center) {
+//                        CircularProgressIndicator(
+//                            modifier = Modifier
+//                                .padding(10.dp)
+//                                .height(50.dp)
+//                        )
+//                    }
+//                } else {
+//                    loadingContent?.invoke(this)
+//                }
+//            }
+//
+//            is LoadState.Error -> {
+//
+//            }
+//
+//            is LoadState.NotLoading -> {
+//                if (lazyPagingItems.itemCount == 0) {
+//                    emptyDataContent?.let { it() }
+//                }
+//            }
+//        }
 
         RefreshList(
+            isFirstRefresh=isFirstRefresh,
             lazyListState = lazyListState,
             lazyPagingItems = lazyPagingItems,
             verticalArrangement = verticalArrangement,
@@ -414,7 +417,7 @@ fun <T : Any> CommonPagingPage(
                 }
             }
         }
-    }
+//    }
 }
 
 

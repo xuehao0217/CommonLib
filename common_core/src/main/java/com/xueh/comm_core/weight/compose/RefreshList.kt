@@ -21,19 +21,23 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.loren.component.view.composesmartrefresh.MyRefreshHeader
 import com.loren.component.view.composesmartrefresh.SmartSwipeRefreshState
+import com.loren.component.view.composesmartrefresh.SmartSwipeStateFlag
 import com.loren.component.view.composesmartrefresh.rememberSmartSwipeRefreshState
+import com.xueh.comm_core.weight.compose.refreshheader.RefreshHeader
 
 
 @Composable
 fun <T : Any> RefreshList(
+    isFirstRefresh:Boolean=true,
     lazyPagingItems: LazyPagingItems<T>,
     lazyListState: LazyListState = rememberLazyListState(),
     refreshState: SmartSwipeRefreshState = rememberSmartSwipeRefreshState(),//下拉刷新状态
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
     contentPadding: PaddingValues = PaddingValues(horizontal = 15.dp),
-    headerIndicator: @Composable () -> Unit = { MyRefreshHeader(refreshState.refreshFlag) },
+    headerIndicator: @Composable () -> Unit = { com.xueh.comm_core.weight.compose.refreshheader.MyRefreshHeader(refreshState) },
     itemContent: LazyListScope.() -> Unit,
 ) {
+    //是不是在loading
     val isRefreshing = lazyPagingItems.loadState.refresh is LoadState.Loading
     //错误页
     val err = lazyPagingItems.loadState.refresh is LoadState.Error
@@ -43,11 +47,20 @@ fun <T : Any> RefreshList(
         return
     }
 
-    SwipeRefresh(isRefreshing = isRefreshing, scrollState = lazyListState, refreshState = refreshState, headerIndicator = headerIndicator, onRefresh = {
-        lazyPagingItems.refresh()
-    }) {
+    SmartRefresh(
+        isFirstRefresh=isFirstRefresh,
+        isRefreshing=isRefreshing,
+        scrollState = lazyListState,
+        refreshState = refreshState,
+        headerIndicator = headerIndicator,
+        onRefresh = {
+            lazyPagingItems.refresh()
+        }) {
         //刷新状态
-        CommonLazyColumn(state = lazyListState, contentPadding = contentPadding, verticalArrangement = verticalArrangement
+        CommonLazyColumn(
+            state = lazyListState,
+            contentPadding = contentPadding,
+            verticalArrangement = verticalArrangement
         ) {
             itemContent()
             //加载更多状态：加载中和加载错误,没有更多
