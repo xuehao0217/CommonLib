@@ -140,7 +140,8 @@ fun MyRefreshHeader(state: SmartSwipeRefreshState, isNeedTimestamp: Boolean = tr
                     SmartSwipeStateFlag.TIPS_DOWN -> Icons.Default.KeyboardArrowDown
                     SmartSwipeStateFlag.TIPS_RELEASE -> Icons.Default.KeyboardArrowDown
                 },
-                contentDescription = null
+                contentDescription = null,
+                tint=Color.Black
             )
             Column(modifier = Modifier.padding(start = 8.dp)) {
                 androidx.compose.material3.Text(
@@ -150,7 +151,7 @@ fun MyRefreshHeader(state: SmartSwipeRefreshState, isNeedTimestamp: Boolean = tr
                         SmartSwipeStateFlag.ERROR -> "刷新失败"
                         SmartSwipeStateFlag.IDLE, SmartSwipeStateFlag.TIPS_DOWN -> "下拉可以刷新"
                         SmartSwipeStateFlag.TIPS_RELEASE -> "释放立即刷新"
-                    }, fontSize = 18.sp
+                    }, fontSize = 18.sp,color = Color.Black
                 )
                 if (isNeedTimestamp) {
                     Spacer(modifier = Modifier.height(4.dp))
@@ -160,7 +161,7 @@ fun MyRefreshHeader(state: SmartSwipeRefreshState, isNeedTimestamp: Boolean = tr
                                 "MM-dd HH:mm",
                                 Locale.getDefault()
                             ).format(lastRecordTime)
-                        }", fontSize = 14.sp
+                        }", fontSize = 14.sp, color = Color.Black
                     )
                 }
             }

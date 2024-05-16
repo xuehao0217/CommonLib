@@ -19,11 +19,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import com.loren.component.view.composesmartrefresh.MyRefreshHeader
 import com.loren.component.view.composesmartrefresh.SmartSwipeRefreshState
 import com.loren.component.view.composesmartrefresh.SmartSwipeStateFlag
 import com.loren.component.view.composesmartrefresh.rememberSmartSwipeRefreshState
-import com.xueh.comm_core.weight.compose.refreshheader.RefreshHeader
+import com.xueh.comm_core.weight.compose.refreshheader.MyRefreshHeader
 
 
 @Composable
@@ -34,7 +33,7 @@ fun <T : Any> RefreshList(
     refreshState: SmartSwipeRefreshState = rememberSmartSwipeRefreshState(),//下拉刷新状态
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
     contentPadding: PaddingValues = PaddingValues(horizontal = 15.dp),
-    headerIndicator: @Composable () -> Unit = { com.xueh.comm_core.weight.compose.refreshheader.MyRefreshHeader(refreshState) },
+    headerIndicator: @Composable () -> Unit = {MyRefreshHeader(refreshState) },
     itemContent: LazyListScope.() -> Unit,
 ) {
     //是不是在loading
