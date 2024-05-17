@@ -60,8 +60,7 @@ fun SmartRefresh(
         headerIndicator = headerIndicator,
         footerIndicator = footerIndicator,
         contentScrollState = scrollState,
-    ) {
-        content()
-    }
+        content = content
+    )
 
 }
