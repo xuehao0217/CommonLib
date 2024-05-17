@@ -46,6 +46,7 @@ import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import com.blankj.utilcode.util.ToastUtils
 import com.blankj.utilcode.util.Utils
+import com.loren.component.view.composesmartrefresh.SmartSwipeRefreshState
 import com.loren.component.view.composesmartrefresh.rememberSmartSwipeRefreshState
 import com.xueh.comm_core.helper.compose.rememberMutableStateOf
 import com.xueh.comm_core.helper.isEmpty
@@ -345,6 +346,8 @@ fun <T> CommonRefreshColumnDataPage(
 fun <T : Any> CommonPagingPage(
     lazyPagingItems: LazyPagingItems<T>,
     lazyListState: LazyListState = rememberLazyListState(),
+    refreshState: SmartSwipeRefreshState = rememberSmartSwipeRefreshState(),//下拉刷新状态
+    headerIndicator: @Composable () -> Unit = {MyRefreshHeader(refreshState) },
     modifier: Modifier = Modifier,
     isFirstRefresh:Boolean=true,
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
@@ -407,6 +410,8 @@ fun <T : Any> CommonPagingPage(
             isFirstRefresh=isFirstRefresh,
             lazyListState = lazyListState,
             lazyPagingItems = lazyPagingItems,
+            refreshState=refreshState,
+            headerIndicator=headerIndicator,
             verticalArrangement = verticalArrangement,
             contentPadding = contentPadding
         ) {
