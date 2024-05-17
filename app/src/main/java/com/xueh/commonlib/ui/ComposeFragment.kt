@@ -29,6 +29,10 @@ import com.xueh.comm_core.web.WebViewPage
 import com.xueh.comm_core.weight.compose.CommonTitlePage
 import com.xueh.commonlib.R
 import com.xueh.commonlib.ui.compose.*
+import com.xueh.commonlib.ui.compose.google.CustomPullRefreshSample
+import com.xueh.commonlib.ui.compose.google.GoogleSamplePage
+import com.xueh.commonlib.ui.compose.google.PullRefreshIndicatorTransformSample
+import com.xueh.commonlib.ui.compose.google.PullRefreshSample
 
 /**
  * 创 建 人: xueh
@@ -102,6 +106,7 @@ class ComposeFragment : BaseComposeFragment() {
                     ItemData("Compose Placeholder", RouteConfig.Placeholder),
                     ItemData("NavPageWeiget 使用", RouteConfig.NavPageWeiget),
                     ItemData("WebView 使用", RouteConfig.WebView),
+                    ItemData("GoogleSample", RouteConfig.GoogleSample),
 //                    ItemData("lazyVerticalGrid使用", RouteConfig.lazyVerticalGrid),
 //                    ItemData("LazyColumnPage", RouteConfig.LazyColumnPage),
 //                    ItemData("ScrollableAppBar", RouteConfig.ScrollableAppBar),
@@ -187,6 +192,20 @@ class ComposeFragment : BaseComposeFragment() {
                 WebViewPage{
                     navController.popBackStack()
                 }
+            }
+            composable(RouteConfig.GoogleSample) {
+                GoogleSamplePage(navController)
+            }
+
+            composable(RouteConfig.PullRefreshSample) {
+                PullRefreshSample()
+            }
+
+            composable(RouteConfig.CustomPullRefreshSample) {
+                CustomPullRefreshSample()
+            }
+            composable(RouteConfig.PullRefreshIndicatorTransformSample) {
+                PullRefreshIndicatorTransformSample()
             }
         }
     }

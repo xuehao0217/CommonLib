@@ -32,6 +32,11 @@ object RouteConfig {
 
     const val WebView="WebView"
 
+    const val GoogleSample="GoogleSample"
+    const val PullRefreshSample="PullRefreshSample"
+    const val CustomPullRefreshSample="CustomPullRefreshSample"
+    const val PullRefreshIndicatorTransformSample="PullRefreshIndicatorTransformSample"
+
 
     const val name="name"
     const val age="age"

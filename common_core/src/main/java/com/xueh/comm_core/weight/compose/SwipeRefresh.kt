@@ -21,7 +21,6 @@ import com.xueh.comm_core.weight.compose.refreshheader.MyRefreshHeader
  * 创建日期: 2022/9/29
  * 备注：
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SmartRefresh(
     isRefreshing: Boolean = false,
