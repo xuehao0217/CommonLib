@@ -25,7 +25,7 @@ abstract class BaseDialogHelper : DialogFragment() {
     private var isDimEnabled = true
     private var mX = 0
     private var mY = 0
-    private var dimAmount=1f
+    private var dimAmount=0.4f
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //设置 无标题 无边框
