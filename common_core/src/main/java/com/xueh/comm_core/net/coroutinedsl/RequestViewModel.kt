@@ -152,7 +152,7 @@ open class RequestViewModel : AbsViewModel() {
                 }
             }
             onFinally {
-                ViewModelDsl<Response>().apply(apiDSL)?.finally?.invoke()
+                ViewModelDsl<Response>().apply(apiDSL).finally?.invoke()
             }
         }
     }
