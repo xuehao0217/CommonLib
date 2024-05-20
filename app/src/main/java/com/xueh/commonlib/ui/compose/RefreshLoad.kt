@@ -7,11 +7,13 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -39,6 +41,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
@@ -48,8 +51,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import com.blankj.utilcode.util.BarUtils
+import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.ToastUtils
+import com.xueh.comm_core.helper.compose.rememberMutableStateOf
+import com.xueh.comm_core.weight.compose.BoxText
 import com.xueh.comm_core.weight.compose.CommonPagingPage
+import com.xueh.comm_core.weight.compose.CommonTitleView
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -65,11 +73,37 @@ import kotlinx.coroutines.launch
 fun RefreshLoadUse() {
     val viewModel: ComposeViewModel = viewModel()
     val homeDatas = viewModel.getListDatas().collectAsLazyPagingItems()
-    CommonPagingPage(homeDatas, onScrollStop = { visibleItem, isScrollingUp ->
-        ToastUtils.showShort("是否上划${isScrollingUp}  ${visibleItem.toList()}")
-    }, emptyDataContent = {
-        Box(modifier = Modifier.background(Color.Blue))
-    }) {
+
+    val lazyListState = rememberLazyListState()
+
+    val firstVisibleScrollOffset by remember { derivedStateOf { lazyListState.firstVisibleItemScrollOffset } }
+
+    val targetHeight = BarUtils.getStatusBarHeight() + ConvertUtils.dp2px(50f)
+
+    var alpha by rememberMutableStateOf(value = 0f)
+
+    LaunchedEffect(firstVisibleScrollOffset) {
+        when {
+            lazyListState.firstVisibleItemIndex > 1 -> {
+                alpha = (lazyListState.firstVisibleItemIndex.toFloat())
+            }
+
+            else -> {
+                alpha = (firstVisibleScrollOffset.toFloat() / targetHeight)
+            }
+        }
+    }
+
+
+    CommonPagingPage(
+        homeDatas,
+        lazyListState = lazyListState,
+        onScrollStop = { visibleItem, isScrollingUp ->
+            ToastUtils.showShort("是否上划${isScrollingUp}  ${visibleItem.toList()}")
+        },
+        emptyDataContent = {
+            Box(modifier = Modifier.background(Color.Blue))
+        }) {
         Box(
             modifier = Modifier
                 .padding(10.dp)
@@ -88,6 +122,7 @@ fun RefreshLoadUse() {
             )
         }
     }
+
 
 }
 

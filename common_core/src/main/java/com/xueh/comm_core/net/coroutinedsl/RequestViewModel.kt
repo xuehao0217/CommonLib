@@ -137,17 +137,17 @@ open class RequestViewModel : AbsViewModel() {
     ) {
         apiDSL<BaseResult<Response>> {
             onStart {
-                ViewModelDsl<Response>().apply(apiDSL)?.start?.invoke()
+                ViewModelDsl<Response>().apply(apiDSL).start?.invoke()
             }
             onRequest {
                 ViewModelDsl<Response>().apply(apiDSL).requestParseData()
             }
             onResponse {
                 if (it.isSuccess()) {
-                    ViewModelDsl<Response>().apply(apiDSL)?.response?.invoke(it.data)
+                    ViewModelDsl<Response>().apply(apiDSL).response?.invoke(it.data)
                 } else {
-                    ViewModelDsl<Response>().apply(apiDSL)?.error?.invoke(Exception(it.errorMsg))
-                    ToastUtils.showShort("${it.errorMsg}")
+                    ViewModelDsl<Response>().apply(apiDSL).error?.invoke(Exception(it.errorMsg))
+                    ToastUtils.showShort(it.errorMsg)
                     Log.e("HTTP", "apiDslResult--> ${it.errorMsg}")
                 }
             }
