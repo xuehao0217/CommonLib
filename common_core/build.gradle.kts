@@ -115,6 +115,7 @@ dependencies {
     api(libs.progressmanager)
     api(libs.eventbus)
     api(libs.xxPermissions)
+    api(libs.logger)
     //捕获崩溃信息
     debugApi(libs.spiderman) {
         exclude(group = "androidx.appcompat")

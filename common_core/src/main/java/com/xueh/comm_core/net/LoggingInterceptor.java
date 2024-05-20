@@ -3,6 +3,8 @@ package com.xueh.comm_core.net;
 
 import android.text.TextUtils;
 
+import com.blankj.utilcode.util.LogUtils;
+import com.orhanobut.logger.Logger;
 import com.xueh.comm_core.net.tools.OkLog;
 
 import java.io.IOException;
@@ -149,6 +151,7 @@ public final class LoggingInterceptor implements Interceptor {
                 OkLog.log("*******************ResponseBody*************************");
                 String str=buffer.clone().readString(charset);
                 OkLog.log(""+str);
+                Logger.t("HTTP").i(str);
             }
             OkLog.log("ResponseBody-->" + buffer.size() + "byte");
             OkLog.end("Response ↑↑↑");

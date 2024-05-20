@@ -23,6 +23,7 @@ agentweb = "v5.1.1-androidx"
 eventbus = "3.3.1"
 xxpermissions = "18.63"
 glideVersion = "4.15.1"
+logger = "2.2.0"
 #--------------KTX相关-----------------
 coreKtx = "1.13.1"
 activityKtx = "1.9.0"
@@ -132,6 +133,7 @@ eventbus = { module = "org.greenrobot:eventbus", version.ref = "eventbus" }
 utilcodex = { module = "com.blankj:utilcodex", version.ref = "utilcodex" }
 agentweb = { module = "io.github.justson:agentweb-core", version.ref = "agentweb" }
 xxPermissions = { module = "com.github.getActivity:XXPermissions", version.ref = "xxpermissions" }
+logger = { module = "com.orhanobut:logger", version.ref = "logger" }
 #------------------------------------------------XML相关--------------------------------------------------------------
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }

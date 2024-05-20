@@ -3,6 +3,8 @@ package com.xueh.comm_core.base
 import android.app.Application
 import androidx.multidex.MultiDex
 import com.blankj.utilcode.util.ProcessUtils
+import com.orhanobut.logger.AndroidLogAdapter
+import com.orhanobut.logger.Logger
 import com.xueh.comm_core.helper.hasNetWorkConection
 
 /**
@@ -16,6 +18,7 @@ open abstract class BaseApplication : Application() {
         super.onCreate()
         MultiDex.install(this)
         if (ProcessUtils.getCurrentProcessName().equals(getPackageName())) {
+            Logger.addLogAdapter(AndroidLogAdapter())
             init()
         }
     }
