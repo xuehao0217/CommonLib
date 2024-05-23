@@ -72,6 +72,34 @@ fun ImageLoadCompose(
     onSuccess = onSuccess //加载成功
 )
 
+//@Composable
+//fun ImageCompose(
+//    @DrawableRes id: Int,
+//    modifier: Modifier = Modifier,
+//    colorFilter: ColorFilter? = null,
+//    alignment: Alignment = Alignment.Center,
+//    contentScale: ContentScale = ContentScale.Crop,
+//) {
+//    val imgLoader = ImageLoader.Builder(Utils.getApp())
+//        .components {
+//            if (Build.VERSION.SDK_INT >= 28) {
+//                add(ImageDecoderDecoder.Factory())
+//            } else {
+//                add(GifDecoder.Factory())
+//            }
+//        }
+//        .build()
+//
+//    Image(
+//        painter = rememberAsyncImagePainter(id, imgLoader),
+//        contentDescription = "ImageComposeContentDescription",
+//        modifier = modifier,
+//        contentScale = contentScale,
+//        colorFilter = colorFilter,
+//        alignment = alignment
+//    )
+//}
+
 @Composable
 fun ImageCompose(
     @DrawableRes id: Int,
@@ -79,28 +107,14 @@ fun ImageCompose(
     colorFilter: ColorFilter? = null,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Crop,
-) {
-    val imgLoader = ImageLoader.Builder(Utils.getApp())
-        .components {
-            if (Build.VERSION.SDK_INT >= 28) {
-                add(ImageDecoderDecoder.Factory())
-            } else {
-                add(GifDecoder.Factory())
-            }
-        }
-        .build()
-
-    Image(
-        painter = rememberAsyncImagePainter(id, imgLoader),
-        contentDescription = "ImageComposeContentDescription",
-        modifier = modifier,
-        contentScale = contentScale,
-        colorFilter = colorFilter,
-        alignment = alignment
-    )
-}
-
-
+) = Image(
+    painter = painterResource(id = id),
+    contentDescription = "ImageComposeContentDescription",
+    modifier = modifier,
+    contentScale = contentScale,
+    colorFilter = colorFilter,
+    alignment = alignment
+)
 //////////////////////////////////////////////////////////////////////////////////////
 
 //SpanText(
