@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.LaunchedEffect
@@ -35,6 +36,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.*
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -406,21 +408,21 @@ fun <T : Any> CommonPagingPage(
     var isScrollingUp = false
     LaunchedEffect(lazyListState) {
         snapshotFlow { lazyListState.isScrollInProgress }.collect { isScrolling ->
-                if (!isScrolling) {
-                    if (lazyListState.firstVisibleItemIndex > lastFirstIndex) {
-                        // 上滑
-                        isScrollingUp = true
-                    } else {
-                        //下滑
-                        isScrollingUp = false
-                    }
-                    lastFirstIndex = lazyListState.firstVisibleItemIndex
-                    // 滑动停止
-                    val visibleItemsIndex =
-                        lazyListState.layoutInfo.visibleItemsInfo.map { it.index }.toList()
-                    onScrollStop?.invoke(visibleItemsIndex, isScrollingUp)
+            if (!isScrolling) {
+                if (lazyListState.firstVisibleItemIndex > lastFirstIndex) {
+                    // 上滑
+                    isScrollingUp = true
+                } else {
+                    //下滑
+                    isScrollingUp = false
                 }
+                lastFirstIndex = lazyListState.firstVisibleItemIndex
+                // 滑动停止
+                val visibleItemsIndex =
+                    lazyListState.layoutInfo.visibleItemsInfo.map { it.index }.toList()
+                onScrollStop?.invoke(visibleItemsIndex, isScrollingUp)
             }
+        }
     }
 
 //    Box(modifier = modifier) {
@@ -533,7 +535,8 @@ onValueChange = {
 },
 keyboardOptions = KeyboardOptions(
 keyboardType = KeyboardType.Text,
-capitalization = KeyboardCapitalization.Characters
+capitalization = KeyboardCapitalization.Characters,
+  imeAction = ImeAction.Search,//键盘右下角
 ),
 maxLength = 7,
 textFieldPadding = 0,
@@ -543,11 +546,17 @@ hintTextColor = cl_999999,
 hintTextSize = 12.sp,
 delIconId = R.mipmap.ic_search_close,
 delIconSize = 12.dp,
+keyboardActions = KeyboardActions(
+                        onSearch = {
+
+                        },
+                    ),
 delIconEndDP = 12, modifier = Modifier
 .height(32.dp)
 .weight(1f)
 )
 */
+
 @Composable
 fun MyTextField(
     hintText: String = "",
@@ -557,11 +566,14 @@ fun MyTextField(
     delIconEndDP: Int = 9,
     delIconSize: Dp = 8.dp,
     text: String = "",
+    textColor: Color = Color.Unspecified,
+    textSize: TextUnit = 12.sp,
     modifier: Modifier = Modifier,
     textFieldPadding: Int = 34,
     textFieldEnabled: Boolean = true,
     maxLength: Int = 12,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     delClick: () -> Unit,
     onValueChange: (String) -> Unit,
 ) {
@@ -573,6 +585,11 @@ fun MyTextField(
     ) {
         BasicTextField(
             value = text,
+            textStyle = TextStyle(
+                fontSize = textSize,
+                fontWeight = FontWeight(400),
+                color = textColor,
+                ),
             onValueChange = {
                 if (it.length <= maxLength) {
                     onValueChange.invoke(it)
@@ -583,6 +600,7 @@ fun MyTextField(
                 .fillMaxWidth()
                 .padding(horizontal = textFieldPadding.dp),
             keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
             maxLines = 1,
             decorationBox = { innerTextField ->
                 Box(
@@ -596,7 +614,7 @@ fun MyTextField(
                     innerTextField()
                 }
             },
-            enabled = textFieldEnabled
+            enabled = textFieldEnabled,
         )
         if (showDel) {
             Row(verticalAlignment = Alignment.CenterVertically) {
