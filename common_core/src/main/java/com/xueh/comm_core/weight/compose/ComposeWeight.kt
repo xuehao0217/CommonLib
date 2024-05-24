@@ -397,6 +397,8 @@ fun <T : Any> CommonPagingPage(
     headerIndicator: @Composable () -> Unit = { MyRefreshHeader(refreshState) },
     modifier: Modifier = Modifier,
     isFirstRefresh: Boolean = true,
+    enableLoadMore: Boolean = false,
+    enableRefresh: Boolean = true,
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
     onScrollStop: ((visibleItem: List<Int>, isScrollingUp: Boolean) -> Unit)? = null,
     contentPadding: PaddingValues = PaddingValues(horizontal = 15.dp),
@@ -425,50 +427,52 @@ fun <T : Any> CommonPagingPage(
         }
     }
 
-//    Box(modifier = modifier) {
-//        when (lazyPagingItems.loadState.refresh) {
-//            is LoadState.Loading -> {
-//                if (loadingContent.isEmpty()) {
-//                    Box(modifier = Modifier.fillMaxSize(), Alignment.Center) {
-//                        CircularProgressIndicator(
-//                            modifier = Modifier
-//                                .padding(10.dp)
-//                                .height(50.dp)
-//                        )
-//                    }
-//                } else {
-//                    loadingContent?.invoke(this)
-//                }
-//            }
-//
-//            is LoadState.Error -> {
-//
-//            }
-//
-//            is LoadState.NotLoading -> {
-//                if (lazyPagingItems.itemCount == 0) {
-//                    emptyDataContent?.let { it() }
-//                }
-//            }
-//        }
+    Box(modifier = modifier) {
+        when (lazyPagingItems.loadState.refresh) {
+            is LoadState.Loading -> {
+                if (loadingContent.isEmpty()) {
+                    Box(modifier = Modifier.fillMaxSize(), Alignment.Center) {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .height(50.dp)
+                        )
+                    }
+                } else {
+                    loadingContent?.invoke(this)
+                }
+            }
 
-    RefreshList(
-        isFirstRefresh = isFirstRefresh,
-        lazyListState = lazyListState,
-        lazyPagingItems = lazyPagingItems,
-        refreshState = refreshState,
-        headerIndicator = headerIndicator,
-        verticalArrangement = verticalArrangement,
-        contentPadding = contentPadding
-    ) {
-        // 如果是老版本的Paging3这里的实现方式不同，自己根据版本来实现。
-        items(lazyPagingItems.itemCount, key = { it }) { index ->
-            lazyPagingItems[index]?.let {
-                itemContent(it)
+            is LoadState.Error -> {
+
+            }
+
+            is LoadState.NotLoading -> {
+                if (lazyPagingItems.itemCount == 0) {
+                    emptyDataContent?.let { it() }
+                }
+            }
+        }
+
+        RefreshList(
+            enableRefresh = enableRefresh,
+            enableLoadMore = enableLoadMore,
+            isFirstRefresh = isFirstRefresh,
+            lazyListState = lazyListState,
+            lazyPagingItems = lazyPagingItems,
+            refreshState = refreshState,
+            headerIndicator = headerIndicator,
+            verticalArrangement = verticalArrangement,
+            contentPadding = contentPadding
+        ) {
+            // 如果是老版本的Paging3这里的实现方式不同，自己根据版本来实现。
+            items(lazyPagingItems.itemCount, key = { it }) { index ->
+                lazyPagingItems[index]?.let {
+                    itemContent(it)
+                }
             }
         }
     }
-//    }
 }
 
 
@@ -589,7 +593,7 @@ fun MyTextField(
                 fontSize = textSize,
                 fontWeight = FontWeight(400),
                 color = textColor,
-                ),
+            ),
             onValueChange = {
                 if (it.length <= maxLength) {
                     onValueChange.invoke(it)

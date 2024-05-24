@@ -20,14 +20,11 @@ import com.xueh.comm_core.weight.compose.refreshheader.MyRefreshHeader
 @Composable
 fun SmartRefresh(
     isRefreshing: Boolean = false,
-    isNeedLoadMore: Boolean = false,
-    isNeedRefresh: Boolean = true,
     isFirstRefresh: Boolean = true,
+    enableLoadMore: Boolean = false,
+    enableRefresh: Boolean = true,
     scrollState: LazyListState = rememberLazyListState(),//滑动状态
-    refreshState: SmartSwipeRefreshState = rememberSmartSwipeRefreshState().also {
-        it.enableLoadMore = isNeedLoadMore
-        it.enableRefresh = isNeedRefresh
-    },//下拉刷新状态
+    refreshState: SmartSwipeRefreshState = rememberSmartSwipeRefreshState(),//下拉刷新状态
     headerIndicator: @Composable () -> Unit = { MyRefreshHeader(refreshState) },
     footerIndicator: @Composable () -> Unit = { MyRefreshHeader(refreshState) },
     onRefresh: (suspend () -> Unit)? = null,
@@ -41,6 +38,8 @@ fun SmartRefresh(
         refreshState.flingHeaderIndicatorStrategy = ThresholdScrollStrategy.None
         refreshState.flingFooterIndicatorStrategy = ThresholdScrollStrategy.Fixed(80.dp.toPx())
         refreshState.needFirstRefresh = isFirstRefresh
+        refreshState.enableRefresh = enableRefresh
+        refreshState.enableLoadMore = enableLoadMore
     }
 
     if (isRefreshing) {

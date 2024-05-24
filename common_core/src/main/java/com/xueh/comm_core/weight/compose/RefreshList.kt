@@ -27,13 +27,15 @@ import com.xueh.comm_core.weight.compose.refreshheader.MyRefreshHeader
 
 @Composable
 fun <T : Any> RefreshList(
-    isFirstRefresh:Boolean=true,
+    enableLoadMore: Boolean = false,
+    enableRefresh: Boolean = true,
+    isFirstRefresh: Boolean = true,
     lazyPagingItems: LazyPagingItems<T>,
     lazyListState: LazyListState = rememberLazyListState(),
     refreshState: SmartSwipeRefreshState = rememberSmartSwipeRefreshState(),//下拉刷新状态
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
     contentPadding: PaddingValues = PaddingValues(horizontal = 15.dp),
-    headerIndicator: @Composable () -> Unit = {MyRefreshHeader(refreshState) },
+    headerIndicator: @Composable () -> Unit = { MyRefreshHeader(refreshState) },
     itemContent: LazyListScope.() -> Unit,
 ) {
     //是不是在loading
@@ -47,8 +49,10 @@ fun <T : Any> RefreshList(
     }
 
     SmartRefresh(
-        isFirstRefresh=isFirstRefresh,
-        isRefreshing=isRefreshing,
+        enableLoadMore = enableLoadMore,
+        enableRefresh = enableRefresh,
+        isFirstRefresh = isFirstRefresh,
+        isRefreshing = isRefreshing,
         scrollState = lazyListState,
         refreshState = refreshState,
         headerIndicator = headerIndicator,
