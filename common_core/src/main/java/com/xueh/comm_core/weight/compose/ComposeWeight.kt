@@ -16,9 +16,13 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
@@ -50,6 +54,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.blankj.utilcode.util.Utils
 import com.loren.component.view.composesmartrefresh.SmartSwipeRefreshState
 import com.loren.component.view.composesmartrefresh.rememberSmartSwipeRefreshState
+import com.xueh.comm_core.R
 import com.xueh.comm_core.helper.compose.rememberMutableStateOf
 import com.xueh.comm_core.helper.isEmpty
 import com.xueh.comm_core.weight.compose.refreshheader.MyRefreshHeader
@@ -96,7 +101,7 @@ fun ImageLoadCompose(
         error = error,
         onLoading = onLoading,
         onSuccess = onSuccess,
-        onError=onError,
+        onError = onError,
     )
 }
 
@@ -238,10 +243,7 @@ fun BoxText(
 ) {
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         androidx.compose.material3.Text(
-            text = text,
-            color = textColor,
-            fontSize = fontSize,
-            fontWeight = fontWeight
+            text = text, color = textColor, fontSize = fontSize, fontWeight = fontWeight
         )
     }
 }
@@ -403,8 +405,7 @@ fun <T : Any> CommonPagingPage(
     var lastFirstIndex by rememberMutableStateOf(value = 0)
     var isScrollingUp = false
     LaunchedEffect(lazyListState) {
-        snapshotFlow { lazyListState.isScrollInProgress }
-            .collect { isScrolling ->
+        snapshotFlow { lazyListState.isScrollInProgress }.collect { isScrolling ->
                 if (!isScrolling) {
                     if (lazyListState.firstVisibleItemIndex > lastFirstIndex) {
                         // 上滑
@@ -510,5 +511,105 @@ fun CommonTabPage(tabsName: List<String>, pageContent: @Composable (page: Int) -
                 pageContent(page)
             }
         }
+    }
+}
+
+
+/*
+var textFieldEnabled by remember {
+    mutableStateOf(true)
+}
+var input by remember {
+    mutableStateOf("")
+}
+
+MyTextField(
+text = input,
+delClick = {
+    input = ""
+},
+onValueChange = {
+    input = it.uppercase()
+},
+keyboardOptions = KeyboardOptions(
+keyboardType = KeyboardType.Text,
+capitalization = KeyboardCapitalization.Characters
+),
+maxLength = 7,
+textFieldPadding = 0,
+textFieldEnabled = textFieldEnabled,
+hintText = "Please enter keywords",
+hintTextColor = cl_999999,
+hintTextSize = 12.sp,
+delIconId = R.mipmap.ic_search_close,
+delIconSize = 12.dp,
+delIconEndDP = 12, modifier = Modifier
+.height(32.dp)
+.weight(1f)
+)
+*/
+@Composable
+fun MyTextField(
+    hintText: String = "",
+    hintTextColor: Color = Color(0xFF999999),
+    hintTextSize: TextUnit = 12.sp,
+    @DrawableRes delIconId: Int,
+    delIconEndDP: Int = 9,
+    delIconSize: Dp = 8.dp,
+    text: String = "",
+    modifier: Modifier = Modifier,
+    textFieldPadding: Int = 34,
+    textFieldEnabled: Boolean = true,
+    maxLength: Int = 12,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    delClick: () -> Unit,
+    onValueChange: (String) -> Unit,
+) {
+    var showDel by remember {
+        mutableStateOf(text.isNotEmpty())
+    }
+    Box(
+        modifier = modifier, contentAlignment = Alignment.CenterEnd
+    ) {
+        BasicTextField(
+            value = text,
+            onValueChange = {
+                if (it.length <= maxLength) {
+                    onValueChange.invoke(it)
+                }
+                showDel = it.isNotEmpty()
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = textFieldPadding.dp),
+            keyboardOptions = keyboardOptions,
+            maxLines = 1,
+            decorationBox = { innerTextField ->
+                Box(
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    if (text.isEmpty()) {
+                        Text(
+                            text = hintText, color = hintTextColor, fontSize = hintTextSize,
+                        )
+                    }
+                    innerTextField()
+                }
+            },
+            enabled = textFieldEnabled
+        )
+        if (showDel) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                ImageCompose(id = delIconId, modifier = Modifier
+                    .size(delIconSize)
+                    .click {
+                        delClick.invoke()
+                    })
+                SpacerW(int = delIconEndDP)
+            }
+
+        }
+
+
     }
 }
