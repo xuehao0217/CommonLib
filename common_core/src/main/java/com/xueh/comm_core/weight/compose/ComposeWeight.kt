@@ -37,6 +37,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.*
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -634,4 +635,36 @@ fun MyTextField(
 
 
     }
+}
+
+
+
+
+@Composable
+fun HighlightedText(
+    text: String,
+    textColor: Color = Color.Unspecified,
+    highlight: String,
+    highlightColor: Color = Color.Unspecified,
+    modifier: Modifier
+) {
+    val annotatedString = buildAnnotatedString {
+        withStyle(style = androidx.compose.material3.LocalTextStyle.current.toSpanStyle()) {
+            append(text)
+        }
+        val startIndexOfHighlight = text.indexOf(highlight)
+        if (startIndexOfHighlight >= 0) {
+            addStyle(
+                style = SpanStyle(color = highlightColor),
+                start = startIndexOfHighlight,
+                end = startIndexOfHighlight + highlight.length
+            )
+        }
+    }
+    androidx.compose.material3.Text(
+        text = annotatedString,
+        fontSize = 16.sp,
+        modifier = modifier,
+        color = textColor,
+    )
 }

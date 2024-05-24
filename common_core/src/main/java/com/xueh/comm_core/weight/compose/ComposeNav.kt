@@ -130,7 +130,7 @@ fun NavItem(
     navData: NavData = NavData(
         selectIcon = R.mipmap.bar_icon_back_white,
         unSelectIcon = R.mipmap.bar_icon_back_black,
-        text = "星辰",
+        text = "",
         showRed = false
     ),
     select: Boolean = true,
