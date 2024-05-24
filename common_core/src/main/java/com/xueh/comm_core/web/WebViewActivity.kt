@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.blankj.utilcode.util.ActivityUtils
+import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.just.agentweb.AgentWeb
 import com.just.agentweb.MiddlewareWebChromeBase
@@ -73,6 +74,8 @@ open class WebViewActivity : DActivity<ActivityWebViewBinding>() {
 
     var titleStr by mutableStateOf("")
     override fun initView(savedInstanceState: Bundle?) {
+        BarUtils.addMarginTopEqualStatusBarHeight(binding.tbTitleBar)
+
         titleStr = "${intent?.getStringExtra(TITLE)}"
         binding.tbTitleBar.setContent {
             CommonTitleView(name = titleStr, backClick = {
