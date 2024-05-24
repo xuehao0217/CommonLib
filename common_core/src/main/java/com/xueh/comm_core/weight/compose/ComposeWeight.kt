@@ -40,6 +40,8 @@ import androidx.paging.compose.itemKey
 import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
+import coil.compose.SubcomposeAsyncImage
+import coil.compose.SubcomposeAsyncImageScope
 import coil.compose.rememberAsyncImagePainter
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
@@ -59,7 +61,7 @@ import kotlinx.coroutines.launch
 // https://coil-kt.github.io/coil/compose/
 // https://github.com/coil-kt/coil/blob/main/README-zh.md
 @Composable
-fun ImageLoadCompose(
+fun ImageLoadAsyncImage(
     url: String, modifier: Modifier = Modifier, placeholder: Painter? = null,
     error: Painter? = null, onSuccess: ((AsyncImagePainter.State.Success) -> Unit)? = null,
 ) = AsyncImage(
@@ -71,6 +73,33 @@ fun ImageLoadCompose(
     error = error,
     onSuccess = onSuccess //加载成功
 )
+
+
+@Composable
+fun ImageLoadCompose(
+    url: String,
+    modifier: Modifier = Modifier,
+    loading: @Composable (SubcomposeAsyncImageScope.(AsyncImagePainter.State.Loading) -> Unit)? = null,
+    success: @Composable (SubcomposeAsyncImageScope.(AsyncImagePainter.State.Success) -> Unit)? = null,
+    error: @Composable (SubcomposeAsyncImageScope.(AsyncImagePainter.State.Error) -> Unit)? = null,
+    onLoading: ((AsyncImagePainter.State.Loading) -> Unit)? = null,
+    onSuccess: ((AsyncImagePainter.State.Success) -> Unit)? = null,
+    onError: ((AsyncImagePainter.State.Error) -> Unit)? = null,
+) {
+    SubcomposeAsyncImage(
+        model = ImageRequest.Builder(LocalContext.current).data(url).crossfade(true).build(),
+        modifier = modifier,
+        contentScale = ContentScale.Crop,
+        contentDescription = null,
+        loading = loading,
+        success = success,
+        error = error,
+        onLoading = onLoading,
+        onSuccess = onSuccess,
+        onError=onError,
+    )
+}
+
 
 //@Composable
 //fun ImageCompose(
@@ -361,9 +390,9 @@ fun <T : Any> CommonPagingPage(
     lazyPagingItems: LazyPagingItems<T>,
     lazyListState: LazyListState = rememberLazyListState(),
     refreshState: SmartSwipeRefreshState = rememberSmartSwipeRefreshState(),//下拉刷新状态
-    headerIndicator: @Composable () -> Unit = {MyRefreshHeader(refreshState) },
+    headerIndicator: @Composable () -> Unit = { MyRefreshHeader(refreshState) },
     modifier: Modifier = Modifier,
-    isFirstRefresh:Boolean=true,
+    isFirstRefresh: Boolean = true,
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
     onScrollStop: ((visibleItem: List<Int>, isScrollingUp: Boolean) -> Unit)? = null,
     contentPadding: PaddingValues = PaddingValues(horizontal = 15.dp),
@@ -420,22 +449,22 @@ fun <T : Any> CommonPagingPage(
 //            }
 //        }
 
-        RefreshList(
-            isFirstRefresh=isFirstRefresh,
-            lazyListState = lazyListState,
-            lazyPagingItems = lazyPagingItems,
-            refreshState=refreshState,
-            headerIndicator=headerIndicator,
-            verticalArrangement = verticalArrangement,
-            contentPadding = contentPadding
-        ) {
-            // 如果是老版本的Paging3这里的实现方式不同，自己根据版本来实现。
-            items(lazyPagingItems.itemCount,key = { it }) { index ->
-                lazyPagingItems[index]?.let {
-                    itemContent(it)
-                }
+    RefreshList(
+        isFirstRefresh = isFirstRefresh,
+        lazyListState = lazyListState,
+        lazyPagingItems = lazyPagingItems,
+        refreshState = refreshState,
+        headerIndicator = headerIndicator,
+        verticalArrangement = verticalArrangement,
+        contentPadding = contentPadding
+    ) {
+        // 如果是老版本的Paging3这里的实现方式不同，自己根据版本来实现。
+        items(lazyPagingItems.itemCount, key = { it }) { index ->
+            lazyPagingItems[index]?.let {
+                itemContent(it)
             }
         }
+    }
 //    }
 }
 
