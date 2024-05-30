@@ -24,11 +24,11 @@ abstract class BaseComposeFragment : BaseVisibilityFragment() {
         }
     }
 
-    protected fun showProgressDialog() {
+    protected fun showLoading() {
         ViewLoading.show(activity)
     }
 
-    protected fun hideProgressDialog() {
+    protected fun hideLoading() {
         ViewLoading.dismiss(activity)
     }
 

@@ -5,6 +5,11 @@ plugins {
     alias(libs.plugins.androidLibrary) apply false
 }
 
+buildscript{
+    dependencies {
+//        classpath("com.google.gms:google-services:4.4.1")
+    }
+}
 
 
 ext {

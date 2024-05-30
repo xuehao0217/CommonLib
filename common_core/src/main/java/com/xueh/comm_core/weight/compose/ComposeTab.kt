@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package androidx.compose.material
+package com.xueh.comm_core.weight.compose
 
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -31,7 +30,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.material.contentColorFor
+import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
@@ -53,6 +57,7 @@ import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastForEachIndexed
 import androidx.compose.ui.util.fastMap
 import androidx.compose.ui.util.fastMaxBy
+import com.xueh.comm_core.weight.compose.TabRowDefaults.tabIndicatorOffsetMy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -138,7 +143,7 @@ fun MyTabRow(
     indicator: @Composable @UiComposable
         (tabPositions: List<TabPosition>) -> Unit = @Composable { tabPositions ->
         TabRowDefaults.Indicator(
-            Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex])
+            Modifier.tabIndicatorOffsetMy(tabPositions[selectedTabIndex])
         )
     },
     divider: @Composable @UiComposable () -> Unit =
@@ -233,7 +238,7 @@ fun MyScrollableTabRow(
     indicator: @Composable @UiComposable
         (tabPositions: List<TabPosition>) -> Unit = @Composable { tabPositions ->
         TabRowDefaults.Indicator(
-            Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex])
+            Modifier.tabIndicatorOffsetMy(tabPositions[selectedTabIndex])
         )
     },
     divider: @Composable @UiComposable () -> Unit =
@@ -403,7 +408,7 @@ object TabRowDefaults {
      * @param currentTabPosition [TabPosition] of the currently selected tab. This is used to
      * calculate the offset of the indicator this modifier is applied to, as well as its width.
      */
-    fun Modifier.tabIndicatorOffset(
+    fun Modifier.tabIndicatorOffsetMy(
         currentTabPosition: TabPosition
     ): Modifier = composed(
         inspectorInfo = debugInspectorInfo {

@@ -30,6 +30,9 @@ object RouteConfig {
     const val Placeholder="Placeholder"
     const val NavPageWeiget="NavPageWeiget"
 
+    const val ComposeLoadPage="ComposeLoadPage"
+
+
     const val WebView="WebView"
 
     const val GoogleSample="GoogleSample"

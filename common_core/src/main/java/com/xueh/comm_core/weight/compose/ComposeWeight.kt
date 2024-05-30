@@ -293,11 +293,11 @@ fun CommonLazyColumn(
             contentPadding = contentPadding,
         ) {
             item {
-                headContent?.invoke()
+                headContent.invoke()
             }
             content(this)
             item {
-                foodContent?.invoke()
+                foodContent.invoke()
             }
         }
         ShadowVerticalView(modifier = Modifier
@@ -313,6 +313,8 @@ fun CommonLazyColumn(
 fun <T> CommonLazyColumnDatas(
     datas: List<T>,
     modifier: Modifier = Modifier.fillMaxSize(),
+    state: LazyListState = rememberLazyListState(),
+    key: ((item: T) -> Any)? = null,
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
     contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp),
     headContent: @Composable () -> Unit? = {},
@@ -323,11 +325,12 @@ fun <T> CommonLazyColumnDatas(
     CommonLazyColumn(
         modifier = modifier,
         verticalArrangement = verticalArrangement,
+        state=state,
         contentPadding = contentPadding,
         headContent = headContent,
         foodContent = foodContent,
     ) {
-        items(datas) {
+        items(datas,key = key) {
             itemContent(it)
         }
     }
@@ -450,7 +453,7 @@ fun <T : Any> CommonPagingPage(
 
             is LoadState.NotLoading -> {
                 if (lazyPagingItems.itemCount == 0) {
-                    emptyDataContent?.let { it() }
+                    emptyDataContent?.invoke(this)
                 }
             }
         }

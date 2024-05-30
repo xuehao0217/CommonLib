@@ -107,6 +107,8 @@ class ComposeFragment : BaseComposeFragment() {
                     ItemData("NavPageWeiget 使用", RouteConfig.NavPageWeiget),
                     ItemData("WebView 使用", RouteConfig.WebView),
                     ItemData("GoogleSample", RouteConfig.GoogleSample),
+
+                    ItemData("ComposeLoadPage", RouteConfig.ComposeLoadPage),
 //                    ItemData("lazyVerticalGrid使用", RouteConfig.lazyVerticalGrid),
 //                    ItemData("LazyColumnPage", RouteConfig.LazyColumnPage),
 //                    ItemData("ScrollableAppBar", RouteConfig.ScrollableAppBar),
@@ -206,6 +208,9 @@ class ComposeFragment : BaseComposeFragment() {
             }
             composable(RouteConfig.PullRefreshIndicatorTransformSample) {
                 PullRefreshIndicatorTransformSample()
+            }
+            composable(RouteConfig.ComposeLoadPage) {
+                ComposeLoadPage()
             }
         }
     }

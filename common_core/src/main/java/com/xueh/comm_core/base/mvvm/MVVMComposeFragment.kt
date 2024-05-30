@@ -20,7 +20,7 @@ abstract class MVVMComposeFragment<VM : AbsViewModel> : BaseComposeFragment() {
         viewModel = ViewModelHelper.getFragmentViewModel(this.javaClass, this)
         viewModel.apiLoading.observe(this) {
             it?.let {
-                if (it) showProgressDialog() else hideProgressDialog()
+                if (it) showLoading() else hideLoading()
             }
         }
 
