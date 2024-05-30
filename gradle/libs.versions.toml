@@ -2,8 +2,8 @@
 agp = "8.3.2"
 kotlin = "1.9.23"
 kotlinStdlib = "1.9.23"
-kotlinCoroutinesAndroidVersion = "1.7.3"
-kotlinCoroutinesCoreVersion = "1.7.3"
+kotlinCoroutinesAndroidVersion = "1.8.0"
+kotlinCoroutinesCoreVersion = "1.8.0"
 composeBom = "2024.05.00"
 #--------------基础库相关-----------------
 junit = "4.13.2"
