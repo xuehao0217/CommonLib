@@ -1,8 +1,10 @@
 package com.xueh.comm_core.weight.compose
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.loren.component.view.composesmartrefresh.SmartSwipeRefresh
@@ -19,10 +21,12 @@ import com.xueh.comm_core.weight.compose.refreshheader.MyRefreshHeader
  */
 @Composable
 fun SmartRefresh(
-    isRefreshing: Boolean = false,
     isFirstRefresh: Boolean = true,
     enableLoadMore: Boolean = false,
     enableRefresh: Boolean = true,
+    isRefreshing: Boolean = false,
+//    isLoadMore:Boolean=false,
+    modifier :Modifier= Modifier,
     scrollState: LazyListState = rememberLazyListState(),//滑动状态
     refreshState: SmartSwipeRefreshState = rememberSmartSwipeRefreshState(),//下拉刷新状态
     headerIndicator: @Composable () -> Unit = { MyRefreshHeader(refreshState) },
@@ -48,10 +52,18 @@ fun SmartRefresh(
         refreshState.refreshFlag = SmartSwipeStateFlag.SUCCESS
     }
 
+//    if (isLoadMore) {
+//        refreshState.loadMoreFlag = SmartSwipeStateFlag.REFRESHING
+//    } else {
+//        refreshState.loadMoreFlag = SmartSwipeStateFlag.SUCCESS
+//    }
+
+
     SmartSwipeRefresh(
         onRefresh = onRefresh,
         onLoadMore = onLoadMore,
         state = refreshState,
+        modifier=modifier,
         headerIndicator = headerIndicator,
         footerIndicator = footerIndicator,
         contentScrollState = scrollState,

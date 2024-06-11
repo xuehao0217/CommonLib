@@ -135,6 +135,9 @@ object HttpRequest {
         headers.put(header)
     }
 
+    fun clean(key: String) {
+        headers.clearKey(key)
+    }
     fun clearHead() = headers.clearHead()
 
     //****************************************公用参数********************************************

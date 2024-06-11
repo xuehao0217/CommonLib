@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -20,16 +21,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.blankj.utilcode.util.ToastUtils
+import com.loren.component.view.composesmartrefresh.SmartSwipeRefresh
 import com.loren.component.view.composesmartrefresh.SmartSwipeStateFlag
+import com.loren.component.view.composesmartrefresh.ThresholdScrollStrategy
 import com.loren.component.view.composesmartrefresh.rememberSmartSwipeRefreshState
+import com.scwang.smart.refresh.layout.api.RefreshFooter
 import com.xueh.comm_core.weight.compose.BoxText
 import com.xueh.comm_core.weight.compose.CommonLazyColumnDatas
-import com.xueh.comm_core.weight.compose.SmartRefresh
 import com.xueh.comm_core.weight.compose.SpacerW
 import com.xueh.comm_core.weight.compose.click
 import kotlinx.coroutines.delay
@@ -41,33 +46,41 @@ fun ComposeLoadPage (){
     var scope = rememberCoroutineScope()
     var refreshState = rememberSmartSwipeRefreshState()
     val scrollState = rememberLazyListState()
+
+    refreshState.needFirstRefresh = false
+    refreshState.enableRefresh = false
+
     var datas = remember {
-        mutableStateListOf<Int>()
+        mutableStateListOf<String>()
     }
-    datas.addAll(10..20)
-    SmartRefresh(
-        isFirstRefresh=false,
-        enableLoadMore = true,
-        enableRefresh = false,
-        scrollState = scrollState,
-        refreshState = refreshState,
+    (1..10).forEach {
+        datas.add("${it}")
+    }
+    SmartSwipeRefresh(
         onLoadMore = {
+            if (datas.size>30){
+                ToastUtils.showLong("没有更多了")
+                refreshState.loadMoreFlag= SmartSwipeStateFlag.SUCCESS
+                return@SmartSwipeRefresh
+            }
             scope.launch {
                 delay(2000)
-                datas.add(21)
+                (1..10).forEach {
+                    datas.add("${it}")
+                }
                 refreshState.loadMoreFlag= SmartSwipeStateFlag.SUCCESS
             }
 
         },
+        state = refreshState,
         footerIndicator = {
             LoadingItem()
-        }) {
+        },
+       ) {
         CommonLazyColumnDatas(
             datas = datas,
             state = scrollState,
-            key = {
-                it.toString()
-            }
+            foodContent = { Box(modifier = Modifier.fillMaxWidth().height(200.dp))}
         ) {
             BoxText(
                 text = "${it}", modifier = Modifier
@@ -77,7 +90,8 @@ fun ComposeLoadPage (){
                         datas.remove(it)
                     }
                     .clip(RoundedCornerShape(16.dp))
-                    .background(MaterialTheme.colorScheme.primary).animateItemPlacement(),
+                    .background(MaterialTheme.colorScheme.primary)
+                    .animateItemPlacement(),
             )
         }
     }

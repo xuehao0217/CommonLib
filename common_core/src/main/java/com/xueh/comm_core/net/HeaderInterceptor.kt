@@ -39,6 +39,13 @@ class HeaderInterceptor : Interceptor {
         this.headers.putAll(headers)
     }
 
+
+    fun clearKey(key: String) {
+        if (headers.containsKey(key)) {
+            headers.remove(key)
+        }
+    }
+
     fun clearHead() {
         headers.clear()
     }
