@@ -5,7 +5,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.TabPosition
 import androidx.compose.material.Text
 import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
@@ -32,7 +31,7 @@ import androidx.compose.ui.unit.*
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PagerTabIndicator(
-    tabPositions: List<TabPosition>,
+    tabPositions: List<MyTabPosition>,
     pagerState: androidx.compose.foundation.pager.PagerState,
     color: Color = MaterialTheme.colors.primarySurface,
     with: Dp = 40.dp,

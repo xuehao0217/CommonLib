@@ -467,7 +467,7 @@ fun CommonTabPage(tabsName: List<String>, pageContent: @Composable (page: Int) -
         val pagerState = rememberPagerState(pageCount = {
             tabsName.size
         })
-        TabRow(modifier = Modifier
+        MyTabRow(modifier = Modifier
             .wrapContentHeight()
             .fillMaxWidth()
             .padding(bottom = 16.dp, top = 12.dp),

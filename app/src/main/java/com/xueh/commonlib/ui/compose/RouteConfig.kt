@@ -30,7 +30,7 @@ object RouteConfig {
     const val Placeholder="Placeholder"
     const val NavPageWeiget="NavPageWeiget"
 
-    const val ComposeLoadPage="ComposeLoadPage"
+    const val ComposeTab="ComposeTab"
 
 
     const val WebView="WebView"

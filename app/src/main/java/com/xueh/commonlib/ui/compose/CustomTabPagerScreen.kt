@@ -11,6 +11,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.*
+import com.xueh.comm_core.weight.compose.MyTabRow
 import com.xueh.comm_core.weight.compose.PagerTab
 import com.xueh.comm_core.weight.compose.PagerTabIndicator
 import com.xueh.comm_core.weight.compose.click
@@ -34,7 +35,7 @@ fun CustomTabPagerScreen() {
     }) {
         Column(Modifier.padding(it)) {
             val pagerState = rememberPagerState(pageCount = {pages.size})
-            TabRow(
+            MyTabRow(
                 modifier = Modifier.fillMaxWidth(),
                 selectedTabIndex = pagerState.currentPage,
                 indicator = { tabPositions ->

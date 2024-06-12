@@ -141,7 +141,7 @@ fun MyTabRow(
     backgroundColor: Color = MaterialTheme.colors.primarySurface,
     contentColor: Color = contentColorFor(backgroundColor),
     indicator: @Composable @UiComposable
-        (tabPositions: List<TabPosition>) -> Unit = @Composable { tabPositions ->
+        (tabPositions: List<MyTabPosition>) -> Unit = @Composable { tabPositions ->
         TabRowDefaults.Indicator(
             Modifier.tabIndicatorOffsetMy(tabPositions[selectedTabIndex])
         )
@@ -169,7 +169,7 @@ fun MyTabRow(
             val tabRowHeight = tabPlaceables.fastMaxBy { it.height }?.height ?: 0
 
             val tabPositions = List(tabCount) { index ->
-                TabPosition(tabWidth.toDp() * index, tabWidth.toDp())
+                MyTabPosition(tabWidth.toDp() * index, tabWidth.toDp())
             }
 
             layout(tabRowWidth, tabRowHeight) {
@@ -236,7 +236,7 @@ fun MyScrollableTabRow(
     contentColor: Color = contentColorFor(backgroundColor),
     edgePadding: Dp = TabRowDefaults.ScrollableTabRowPadding,
     indicator: @Composable @UiComposable
-        (tabPositions: List<TabPosition>) -> Unit = @Composable { tabPositions ->
+        (tabPositions: List<MyTabPosition>) -> Unit = @Composable { tabPositions ->
         TabRowDefaults.Indicator(
             Modifier.tabIndicatorOffsetMy(tabPositions[selectedTabIndex])
         )
@@ -285,11 +285,11 @@ fun MyScrollableTabRow(
             // Position the children.
             layout(layoutWidth, layoutHeight) {
                 // Place the tabs
-                val tabPositions = mutableListOf<TabPosition>()
+                val tabPositions = mutableListOf<MyTabPosition>()
                 var left = padding
                 tabPlaceables.fastForEach {
                     it.placeRelative(left, 0)
-                    tabPositions.add(TabPosition(left = left.toDp(), width = it.width.toDp()))
+                    tabPositions.add(MyTabPosition(left = left.toDp(), width = it.width.toDp()))
                     left += it.width
                 }
 
@@ -334,12 +334,12 @@ fun MyScrollableTabRow(
  * @property width the width of this tab
  */
 @Immutable
-class TabPosition internal constructor(val left: Dp, val width: Dp) {
+class MyTabPosition internal constructor(val left: Dp, val width: Dp) {
     val right: Dp get() = left + width
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is TabPosition) return false
+        if (other !is MyTabPosition) return false
 
         if (left != other.left) return false
         if (width != other.width) return false
@@ -409,7 +409,7 @@ object TabRowDefaults {
      * calculate the offset of the indicator this modifier is applied to, as well as its width.
      */
     fun Modifier.tabIndicatorOffsetMy(
-        currentTabPosition: TabPosition
+        currentTabPosition: MyTabPosition
     ): Modifier = composed(
         inspectorInfo = debugInspectorInfo {
             name = "tabIndicatorOffset"
@@ -469,7 +469,7 @@ private class ScrollableTabData(
     fun onLaidOut(
         density: Density,
         edgeOffset: Int,
-        tabPositions: List<TabPosition>,
+        tabPositions: List<MyTabPosition>,
         selectedTab: Int
     ) {
         // Animate if the new tab is different from the old tab, or this is called for the first
@@ -497,10 +497,10 @@ private class ScrollableTabData(
      * If the tab is at the start / end, and there is not enough space to fully centre the tab, this
      * will just clamp to the min / max position given the max width.
      */
-    private fun TabPosition.calculateTabOffset(
+    private fun MyTabPosition.calculateTabOffset(
         density: Density,
         edgeOffset: Int,
-        tabPositions: List<TabPosition>
+        tabPositions: List<MyTabPosition>
     ): Int = with(density) {
         val totalTabRowWidth = tabPositions.last().right.roundToPx() + edgeOffset
         val visibleWidth = totalTabRowWidth - scrollState.maxValue

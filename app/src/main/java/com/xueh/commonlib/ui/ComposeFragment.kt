@@ -108,7 +108,7 @@ class ComposeFragment : BaseComposeFragment() {
                     ItemData("WebView 使用", RouteConfig.WebView),
                     ItemData("GoogleSample", RouteConfig.GoogleSample),
 
-                    ItemData("ComposeLoadPage", RouteConfig.ComposeLoadPage),
+                    ItemData("ComposeLoadPage", RouteConfig.ComposeTab),
 //                    ItemData("lazyVerticalGrid使用", RouteConfig.lazyVerticalGrid),
 //                    ItemData("LazyColumnPage", RouteConfig.LazyColumnPage),
 //                    ItemData("ScrollableAppBar", RouteConfig.ScrollableAppBar),
@@ -209,8 +209,8 @@ class ComposeFragment : BaseComposeFragment() {
             composable(RouteConfig.PullRefreshIndicatorTransformSample) {
                 PullRefreshIndicatorTransformSample()
             }
-            composable(RouteConfig.ComposeLoadPage) {
-                ComposeLoadPage()
+            composable(RouteConfig.ComposeTab) {
+                TabPage()
             }
         }
     }

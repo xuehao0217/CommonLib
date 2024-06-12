@@ -41,16 +41,7 @@ class ComposeViewModel : BaseViewModel<RestApi>() {
 
 
     var isFirst=true
-    fun getListDatas() = pager { api.getHome(it).data.datas }.onStart {
-        if (isFirst) {
-            ViewLoading.show(ActivityUtils.getTopActivity())
-        }
-    }.onEach {
-        if (isFirst){
-            ViewLoading.dismiss(ActivityUtils.getTopActivity())
-            isFirst=false
-        }
-    }
+    fun getListDatas() = pager { api.getHome(it).data.datas }
 
 
     var homeDatas by mutableStateOf<Flow<PagingData<HomeEntity.Data>>>(emptyFlow())
