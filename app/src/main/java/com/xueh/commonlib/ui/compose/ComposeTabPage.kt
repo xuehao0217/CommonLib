@@ -127,14 +127,14 @@ fun TabPageList(ids: List<String>,pagingStateList:List<Flow<PagingData<HomeEntit
 
         BoxWrapper {
             val bgColor by animateColorAsState(
-                targetValue = lerp(Color.Transparent, Color.White, titleBarAlpha)
+                targetValue = lerp(Color.Black, Color.White, titleBarAlpha)
             )
 
             val selectColor by animateColorAsState(
-                targetValue = lerp(Color.White, Color(0xff222222), titleBarAlpha)
+                targetValue = lerp(Color.White, Color.Black, titleBarAlpha)
             )
             val unSelectColor by animateColorAsState(
-                targetValue = lerp(Color(0xB2FFFFFF),  Color(0xff666666), titleBarAlpha)
+                targetValue = lerp(Color.White, Color.Black, titleBarAlpha)
             )
 
             NewsTab(
