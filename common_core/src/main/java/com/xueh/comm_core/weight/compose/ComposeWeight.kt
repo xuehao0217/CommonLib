@@ -325,12 +325,12 @@ fun <T> CommonLazyColumnDatas(
     CommonLazyColumn(
         modifier = modifier,
         verticalArrangement = verticalArrangement,
-        state=state,
+        state = state,
         contentPadding = contentPadding,
         headContent = headContent,
         foodContent = foodContent,
     ) {
-        items(datas,key = key) {
+        items(datas, key = key) {
             itemContent(it)
         }
     }
@@ -398,16 +398,21 @@ fun <T : Any> CommonPagingPage(
     lazyPagingItems: LazyPagingItems<T>,
     lazyListState: LazyListState = rememberLazyListState(),
     refreshState: SmartSwipeRefreshState = rememberSmartSwipeRefreshState(),//下拉刷新状态
-    headerIndicator: @Composable () -> Unit = { MyRefreshHeader(refreshState) },
-    modifier: Modifier = Modifier,
     isFirstRefresh: Boolean = true,
-    enableLoadMore: Boolean = false,
     enableRefresh: Boolean = true,
-    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
+
+    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(0.dp),
+    contentPadding: PaddingValues = PaddingValues(horizontal = 0.dp),
+
+    headerIndicator: @Composable () -> Unit = { MyRefreshHeader(refreshState) },
     onScrollStop: ((visibleItem: List<Int>, isScrollingUp: Boolean) -> Unit)? = null,
-    contentPadding: PaddingValues = PaddingValues(horizontal = 15.dp),
+
     emptyDataContent: (@Composable BoxScope.() -> Unit)? = null,
     loadingContent: (@Composable BoxScope.() -> Unit)? = null,
+
+    headContent: @Composable () -> Unit? = {},
+    foodContent: @Composable () -> Unit? = {},
+
     itemContent: @Composable LazyItemScope.(value: T) -> Unit,
 ) {
     var lastFirstIndex by rememberMutableStateOf(value = 0)
@@ -430,50 +435,24 @@ fun <T : Any> CommonPagingPage(
             }
         }
     }
-
-    Box(modifier = modifier) {
-        when (lazyPagingItems.loadState.refresh) {
-            is LoadState.Loading -> {
-                if (loadingContent.isEmpty()) {
-                    Box(modifier = Modifier.fillMaxSize(), Alignment.Center) {
-                        CircularProgressIndicator(
-                            modifier = Modifier
-                                .padding(10.dp)
-                                .height(50.dp)
-                        )
-                    }
-                } else {
-                    loadingContent?.invoke(this)
-                }
-            }
-
-            is LoadState.Error -> {
-
-            }
-
-            is LoadState.NotLoading -> {
-                if (lazyPagingItems.itemCount == 0) {
-                    emptyDataContent?.invoke(this)
-                }
-            }
-        }
-
-        RefreshList(
-            enableRefresh = enableRefresh,
-            enableLoadMore = enableLoadMore,
-            isFirstRefresh = isFirstRefresh,
-            lazyListState = lazyListState,
-            lazyPagingItems = lazyPagingItems,
-            refreshState = refreshState,
-            headerIndicator = headerIndicator,
-            verticalArrangement = verticalArrangement,
-            contentPadding = contentPadding
-        ) {
-            // 如果是老版本的Paging3这里的实现方式不同，自己根据版本来实现。
-            items(lazyPagingItems.itemCount, key = { it }) { index ->
-                lazyPagingItems[index]?.let {
-                    itemContent(it)
-                }
+    RefreshList(
+        enableRefresh = enableRefresh,
+        isFirstRefresh = isFirstRefresh,
+        lazyListState = lazyListState,
+        refreshState = refreshState,
+        lazyPagingItems = lazyPagingItems,
+        headerIndicator = headerIndicator,
+        verticalArrangement = verticalArrangement,
+        contentPadding = contentPadding,
+        emptyDataContent=emptyDataContent,
+        loadingContent=loadingContent,
+        headContent=headContent,
+        foodContent = foodContent,
+    ) {
+        // 如果是老版本的Paging3这里的实现方式不同，自己根据版本来实现。
+        items(lazyPagingItems.itemCount, key = { it }) { index ->
+            lazyPagingItems[index]?.let {
+                itemContent(it)
             }
         }
     }
@@ -639,8 +618,6 @@ fun MyTextField(
 
     }
 }
-
-
 
 
 @Composable

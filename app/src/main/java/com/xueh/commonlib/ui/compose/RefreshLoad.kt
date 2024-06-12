@@ -77,33 +77,40 @@ fun RefreshLoadUse() {
     val lazyListState = rememberLazyListState()
 
     val firstVisibleScrollOffset by remember { derivedStateOf { lazyListState.firstVisibleItemScrollOffset } }
+    val firstVisibleIndex by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }
 
     val targetHeight = BarUtils.getStatusBarHeight() + ConvertUtils.dp2px(50f)
 
     var alpha by rememberMutableStateOf(value = 0f)
 
-    LaunchedEffect(firstVisibleScrollOffset) {
-        when {
-            lazyListState.firstVisibleItemIndex > 1 -> {
-                alpha = (lazyListState.firstVisibleItemIndex.toFloat())
-            }
-
-            else -> {
-                alpha = (firstVisibleScrollOffset.toFloat() / targetHeight)
+    LaunchedEffect(Unit) {
+        snapshotFlow {firstVisibleScrollOffset  }.collect{
+            snapshotFlow { firstVisibleScrollOffset }.collect {
+                if (firstVisibleIndex <= 1) {
+                    alpha = firstVisibleScrollOffset.toFloat() / targetHeight
+                }
             }
         }
     }
 
-
     CommonPagingPage(
         homeDatas,
+        enableRefresh = true,
         lazyListState = lazyListState,
         onScrollStop = { visibleItem, isScrollingUp ->
             ToastUtils.showShort("是否上划${isScrollingUp}  ${visibleItem.toList()}")
         },
         emptyDataContent = {
-            Box(modifier = Modifier.background(Color.Blue))
-        }) {
+            Box(modifier = Modifier.fillMaxSize().background(Color.Blue))
+        },
+        loadingContent = {
+            Box(modifier = Modifier.fillMaxSize().background(Color.Red))
+        }, headContent = {
+            Box(modifier = Modifier.fillMaxWidth().height(50.dp).background(Color.Magenta))
+        }, foodContent = {
+            Box(modifier = Modifier.fillMaxWidth().height(50.dp).background(Color.Yellow))
+        }
+    ) {
         Box(
             modifier = Modifier
                 .padding(10.dp)

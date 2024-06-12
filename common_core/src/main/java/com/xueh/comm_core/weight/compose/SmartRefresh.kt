@@ -22,10 +22,7 @@ import com.xueh.comm_core.weight.compose.refreshheader.MyRefreshHeader
 @Composable
 fun SmartRefresh(
     isFirstRefresh: Boolean = true,
-    enableLoadMore: Boolean = false,
-    enableRefresh: Boolean = true,
     isRefreshing: Boolean = false,
-//    isLoadMore:Boolean=false,
     modifier :Modifier= Modifier,
     scrollState: LazyListState = rememberLazyListState(),//滑动状态
     refreshState: SmartSwipeRefreshState = rememberSmartSwipeRefreshState(),//下拉刷新状态
@@ -42,8 +39,8 @@ fun SmartRefresh(
         refreshState.flingHeaderIndicatorStrategy = ThresholdScrollStrategy.None
         refreshState.flingFooterIndicatorStrategy = ThresholdScrollStrategy.Fixed(80.dp.toPx())
         refreshState.needFirstRefresh = isFirstRefresh
-        refreshState.enableRefresh = enableRefresh
-        refreshState.enableLoadMore = enableLoadMore
+        refreshState.enableRefresh = true
+        refreshState.enableLoadMore = false
     }
 
     if (isRefreshing) {

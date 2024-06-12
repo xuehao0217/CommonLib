@@ -22,12 +22,12 @@ import androidx.paging.compose.LazyPagingItems
 import com.loren.component.view.composesmartrefresh.SmartSwipeRefreshState
 import com.loren.component.view.composesmartrefresh.SmartSwipeStateFlag
 import com.loren.component.view.composesmartrefresh.rememberSmartSwipeRefreshState
+import com.xueh.comm_core.helper.isEmpty
 import com.xueh.comm_core.weight.compose.refreshheader.MyRefreshHeader
 
 
 @Composable
 fun <T : Any> RefreshList(
-    enableLoadMore: Boolean = false,
     enableRefresh: Boolean = true,
     isFirstRefresh: Boolean = true,
     lazyPagingItems: LazyPagingItems<T>,
@@ -35,7 +35,11 @@ fun <T : Any> RefreshList(
     refreshState: SmartSwipeRefreshState = rememberSmartSwipeRefreshState(),//下拉刷新状态
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
     contentPadding: PaddingValues = PaddingValues(horizontal = 15.dp),
-    headerIndicator: @Composable () -> Unit = { MyRefreshHeader(refreshState) },
+    headContent: @Composable () -> Unit? = {},
+    foodContent: @Composable () -> Unit? = {},
+    emptyDataContent: (@Composable BoxScope.() -> Unit)? = null,
+    loadingContent: (@Composable BoxScope.() -> Unit)? = null,
+    headerIndicator: @Composable () -> Unit = { MyRefreshHeader(refreshState)},
     itemContent: LazyListScope.() -> Unit,
 ) {
     //是不是在loading
@@ -48,35 +52,90 @@ fun <T : Any> RefreshList(
         return
     }
 
-    SmartRefresh(
-        enableLoadMore = enableLoadMore,
-        enableRefresh = enableRefresh,
-        isFirstRefresh = isFirstRefresh,
-        isRefreshing = isRefreshing,
-        scrollState = lazyListState,
-        refreshState = refreshState,
-        headerIndicator = headerIndicator,
-        onRefresh = {
-            lazyPagingItems.refresh()
-        }) {
-        //刷新状态
-        CommonLazyColumn(
-            state = lazyListState,
+    //第一次进入页面的时候 loading
+    if (lazyPagingItems.itemCount == 0) {
+        Box(modifier = Modifier.fillMaxSize(), Alignment.Center) {
+            if (isRefreshing) {
+                if (loadingContent.isEmpty()) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.height(50.dp)
+                    )
+                } else {
+                    loadingContent?.invoke(this)
+                }
+            } else {
+                if (loadingContent.isEmpty()) {
+                    Text(text = "无数据")
+                }else{
+                    emptyDataContent?.invoke(this)
+                }
+            }
+        }
+    }
+
+    if (!enableRefresh) {
+        PagingCommonLazyColumn(
+            lazyPagingItems = lazyPagingItems,
+            lazyListState = lazyListState,
+            verticalArrangement = verticalArrangement,
             contentPadding = contentPadding,
-            verticalArrangement = verticalArrangement
-        ) {
-            itemContent()
-            //加载更多状态：加载中和加载错误,没有更多
-            if (!isRefreshing) {
-                item {
-                    lazyPagingItems.apply {
-                        when (loadState.append) {
-                            is LoadState.Loading -> LoadingItem()
-                            is LoadState.Error -> ErrorItem { retry() }
-                            is LoadState.NotLoading -> {
-                                if (loadState.append.endOfPaginationReached) {
-                                    NoMoreItem()
-                                }
+            headContent = headContent,
+            foodContent = foodContent,
+            itemContent = itemContent
+        )
+    } else {
+        SmartRefresh(
+            isFirstRefresh = isFirstRefresh,
+            isRefreshing = isRefreshing,
+            scrollState = lazyListState,
+            refreshState = refreshState,
+            headerIndicator = headerIndicator,
+            onRefresh = {
+                lazyPagingItems.refresh()
+            }) {
+            PagingCommonLazyColumn(
+                lazyPagingItems = lazyPagingItems,
+                lazyListState = lazyListState,
+                verticalArrangement = verticalArrangement,
+                contentPadding = contentPadding,
+                headContent = headContent,
+                foodContent = foodContent,
+                itemContent = itemContent
+            )
+        }
+    }
+
+}
+
+@Composable
+fun <T : Any> PagingCommonLazyColumn(
+    lazyPagingItems: LazyPagingItems<T>,
+    lazyListState: LazyListState = rememberLazyListState(),
+    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
+    contentPadding: PaddingValues = PaddingValues(horizontal = 15.dp),
+    headContent: @Composable () -> Unit? = {},
+    foodContent: @Composable () -> Unit? = {},
+    itemContent: LazyListScope.() -> Unit,
+) {
+    //刷新状态
+    CommonLazyColumn(
+        state = lazyListState,
+        contentPadding = contentPadding,
+        verticalArrangement = verticalArrangement,
+        headContent = headContent,
+        foodContent = foodContent,
+    ) {
+        itemContent()
+        item {
+            lazyPagingItems.apply {
+                when (loadState.append) {
+                    is LoadState.Loading -> LoadingItem()
+                    is LoadState.Error -> ErrorItem { retry() }
+                    is LoadState.NotLoading -> {
+                        if (loadState.append.endOfPaginationReached) {
+                            //只有大于0 才显示 不然就是空数据状态页
+                            if (lazyPagingItems.itemCount > 0) {
+                                NoMoreItem()
                             }
                         }
                     }
@@ -97,7 +156,8 @@ fun ErrorContent(retry: () -> Unit) {
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
             Text(
-                text = "请求出错啦", modifier = Modifier
+                text = "请求出错啦",
+                modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 10.dp)
             )
@@ -128,9 +188,11 @@ fun ErrorItem(retry: () -> Unit) {
 @Composable
 fun NoMoreItem() {
     Text(
-        text = "没有更多了", modifier = Modifier
+        text = "没有更多了",
+        modifier = Modifier
             .padding(10.dp)
-            .fillMaxWidth(), textAlign = TextAlign.Center
+            .fillMaxWidth(),
+        textAlign = TextAlign.Center
     )
 }
 
