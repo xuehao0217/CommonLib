@@ -84,6 +84,7 @@ dependencies {
     api(libs.lifecycle.runtime.compose)
     api(libs.lifecycle.viewmodel.compose)
     api( libs.compose.animation)
+    api(libs.composeViews)
 
     api(libs.coil)
     api(libs.coil.gif)

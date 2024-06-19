@@ -49,6 +49,9 @@
 
 
 #---------------------------------2.第三方包-------------------------------
+-keep class com.hjq.permissions.** {*;}
+
+
 #spiderman
 -keep class com.simple.spiderman.** { *; }
 -keepnames class com.simple.spiderman.** { *; }
@@ -58,12 +61,6 @@
 -keep public class * extends androidx.annotation.** { *; }
 -keep public class * extends androidx.core.content.FileProvider
 
-
--keep class **$Properties {*;}
-# If you do not use SQLCipher:
--dontwarn net.sqlcipher.database.**
-# If you do not use RxJava:
--dontwarn rx.**
 
 #eventBus
 -keepattributes *Annotation*
@@ -98,6 +95,14 @@
     long producerIndex;
     long consumerIndex;
 }
+# Keep generic signature of Call, Response (R8 full mode strips signatures from non-kept items).
+ -keep,allowobfuscation,allowshrinking interface retrofit2.Call
+ -keep,allowobfuscation,allowshrinking class retrofit2.Response
+
+ # With R8 full mode generic signatures are stripped for classes that are not
+ # kept. Suspend functions are wrapped in continuations where the type argument
+ # is used.
+ -keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
 
 # Gson
 -keep class com.google.gson.stream.** { *; }
@@ -106,14 +111,6 @@
 -keep class com.google.**{*;}
 -keep class com.google.gson.stream.** { *; }
 -keep class com.google.gson.examples.android.model.** { *; }
-
-#sharesdk
--keep class cn.sharesdk.**{*;}
--keep class com.sina.**{*;}
--keep class **.R$* {*;}
--keep class **.R{*;}
--keep class com.mob.**{*;}
--keep class m.framework.**{*;}
 
 # glide
 -keep public class * implements com.bumptech.glide.module.GlideModule

@@ -47,6 +47,7 @@ lifecycleViewmodelCompose = "2.8.0"
 composeSmartrefreshVersion = "2.1.0"
 animation = "1.6.7"
 any_pop_dialog_compose = "1.0.1"
+composeviews = "1.6.11.1"
 #--------------网络相关-----------------
 retrofit = "2.9.0"
 okhttpVersion = "5.0.0-alpha.10"
@@ -117,6 +118,8 @@ androidx-customview-poolingcontainer = { module = "androidx.customview:customvie
 androidx-customview = { module = "androidx.customview:customview", version.ref = "customviewVersion" }
 compose-animation= { module = "androidx.compose.animation:animation", version.ref = "animation" }
 any_pop_dialog_compose = { module = "io.github.TheMelody:any_pop_dialog_compose", version.ref = "any_pop_dialog_compose" }
+composeViews = { module = "io.github.ltttttttttttt:ComposeViews", version.ref = "composeviews" }
+
 #-----------------------------------------------网络相关-------------------------------------------------------------
 okhttp3-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptorVersion" }
 okhttp3-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttpVersion" }
