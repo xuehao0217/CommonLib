@@ -18,9 +18,19 @@ class HeaderInterceptor : Interceptor {
             .header("Content-Type", "application/json")
             .header("Accept", "application/json")
             .method(originalRequest.method, originalRequest.body)
+
+
         headers.forEach { (t, u) ->
             requestBuilder.addHeader(t, u)
         }
+
+
+//        val iterator = headers.iterator()
+//        while(iterator.hasNext()){
+//            val item = iterator.next()
+//            requestBuilder.addHeader(item.key, item.value)
+//        }
+
         return chain.proceed(requestBuilder.build())
 
 
