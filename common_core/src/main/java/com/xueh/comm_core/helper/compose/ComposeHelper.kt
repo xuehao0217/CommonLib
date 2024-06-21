@@ -10,6 +10,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavHostController
 
@@ -30,35 +32,23 @@ fun <T> rememberMutableStateOf(value: T): MutableState<T> = remember { mutableSt
 @Composable
 fun <T> rememberDerivedStateOfOf(value: T) = remember {  derivedStateOf { value }}
 
-//var life = rememberLifecycle()
-//life.onLifeResume {
-//    viewModel.getMsgList()
-//}
-
-class ComposeLifecycleObserver : DefaultLifecycleObserver {
-    private var resume: (() -> Unit)? = null
-    fun onLifeResume(scope: () -> Unit) {
-        resume = scope
-    }
-
-    override fun onResume(owner: LifecycleOwner) {
-        super.onResume(owner)
-        resume?.invoke()
-    }
-}
 
 @Composable
-fun rememberLifecycle(): ComposeLifecycleObserver {
-    val observer = ComposeLifecycleObserver()
-    var owner = LocalLifecycleOwner.current
-    DisposableEffect(key1 = "lifecycle") {
-        owner.lifecycle.addObserver(observer)
-        onDispose {
-            owner.lifecycle.removeObserver(observer)
-        }
+inline fun <T> rememberMutableStateOf(
+    crossinline initValue: @DisallowComposableCalls () -> T
+) = remember { mutableStateOf(initValue()) }
+
+
+@Composable
+fun ComposeLifecycle(block:(Lifecycle.Event)->Unit){
+    val lifecycle by rememberUpdatedState( androidx.lifecycle.compose.LocalLifecycleOwner.current.lifecycle)
+    LaunchedEffect(lifecycle) {
+        lifecycle.addObserver(object : LifecycleEventObserver {
+            override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+                block(event)
+            }
+        })
     }
-    val ctx = LocalLifecycleOwner.current
-    return remember(ctx) { observer }
 }
 
 
