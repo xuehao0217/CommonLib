@@ -139,6 +139,7 @@ object HttpRequest {
         headers.clearKey(key)
     }
     fun clearHead() = headers.clearHead()
+    fun clearService()=mServiceMap.clear()
 
     //****************************************公用参数********************************************
 

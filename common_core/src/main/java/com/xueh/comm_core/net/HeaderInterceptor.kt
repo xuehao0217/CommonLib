@@ -42,8 +42,12 @@ class HeaderInterceptor : Interceptor {
     }
 
     fun put(key: String, value: String) {
+        if (headers.containsKey(key)){
+            clearKey(key)
+        }
         headers[key] = value
     }
+
 
     fun put(headers: HashMap<String, String>) {
         this.headers.putAll(headers)
