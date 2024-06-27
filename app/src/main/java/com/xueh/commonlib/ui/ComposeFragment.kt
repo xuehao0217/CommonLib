@@ -109,6 +109,7 @@ class ComposeFragment : BaseComposeFragment() {
                     ItemData("GoogleSample", RouteConfig.GoogleSample),
 
                     ItemData("ComposeLoadPage", RouteConfig.ComposeTab),
+                    ItemData("ComposePager", RouteConfig.ComposePager),
 //                    ItemData("lazyVerticalGrid使用", RouteConfig.lazyVerticalGrid),
 //                    ItemData("LazyColumnPage", RouteConfig.LazyColumnPage),
 //                    ItemData("ScrollableAppBar", RouteConfig.ScrollableAppBar),
@@ -211,6 +212,10 @@ class ComposeFragment : BaseComposeFragment() {
             }
             composable(RouteConfig.ComposeTab) {
                 TabPage()
+            }
+
+            composable(RouteConfig.ComposePager) {
+                PagerPage()
             }
         }
     }

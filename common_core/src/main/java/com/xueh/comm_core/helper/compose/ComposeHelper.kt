@@ -40,17 +40,20 @@ inline fun <T> rememberMutableStateOf(
 
 
 @Composable
-fun ComposeLifecycle(block:(Lifecycle.Event)->Unit){
-    val lifecycle by rememberUpdatedState( androidx.lifecycle.compose.LocalLifecycleOwner.current.lifecycle)
-    LaunchedEffect(lifecycle) {
-        lifecycle.addObserver(object : LifecycleEventObserver {
+fun ComposeLifecycle(block: (Lifecycle.Event) -> Unit) {
+    val lifecycle by rememberUpdatedState(androidx.lifecycle.compose.LocalLifecycleOwner.current.lifecycle)
+    DisposableEffect(lifecycle) {
+        var lifecycleEventObserver = object : LifecycleEventObserver {
             override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
                 block(event)
             }
-        })
+        }
+        lifecycle.addObserver(lifecycleEventObserver)
+        onDispose {
+            lifecycle.removeObserver(lifecycleEventObserver)
+        }
     }
 }
-
 
 
 /**

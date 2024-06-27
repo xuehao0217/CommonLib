@@ -40,6 +40,7 @@ object RouteConfig {
     const val CustomPullRefreshSample="CustomPullRefreshSample"
     const val PullRefreshIndicatorTransformSample="PullRefreshIndicatorTransformSample"
 
+    const val ComposePager="ComposePager"
 
     const val name="name"
     const val age="age"
