@@ -19,9 +19,13 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,7 +35,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import com.melody.dialog.any_pop.AnyPopDialog
+import com.melody.dialog.any_pop.AnyPopDialogProperties
+import com.melody.dialog.any_pop.DirectionState
 import kotlin.math.roundToInt
 
 /**
@@ -150,12 +161,10 @@ private fun Modifier.clickableNoRipple(onClick: () -> Unit): Modifier =
     }
 
 
-
-
 @Composable
 fun CustomDialog(
     contentAlignment: Alignment = Alignment.TopStart,
-    dialogBackgroundColor:Color=Color(0x99000000),
+    dialogBackgroundColor: Color = Color(0x99000000),
     modifier: Modifier = Modifier,
     visible: Boolean,
     cancelable: Boolean = true,
@@ -196,8 +205,7 @@ fun CustomDialog(
                 }
                 .offset(offset = {
                     IntOffset(0, offsetYAnimate.roundToInt())
-                })
-            ,
+                }),
             visible = visible,
             enter = slideInVertically(
                 animationSpec = tween(durationMillis = 400, easing = LinearOutSlowInEasing),
@@ -213,11 +221,15 @@ fun CustomDialog(
                     offsetY = 0f
                 }
             }
-            Box(contentAlignment = contentAlignment, modifier = Modifier.fillMaxSize().clickableNoRipple {
-                if (canceledOnTouchOutside) {
-                    onDismissRequest()
-                }
-            }){
+            Box(
+                contentAlignment = contentAlignment,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickableNoRipple {
+                        if (canceledOnTouchOutside) {
+                            onDismissRequest()
+                        }
+                    }) {
                 content()
             }
 
@@ -225,3 +237,66 @@ fun CustomDialog(
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@Composable
+fun BaseAnyPopDialog(
+    showDialog: MutableState<Boolean>,
+    direction: DirectionState,
+    content: @Composable () -> Unit,
+) {
+    if (showDialog.value) {
+        var isActiveClose by remember { mutableStateOf(false) }
+        AnyPopDialog(
+            modifier = Modifier.fillMaxWidth(), isActiveClose = isActiveClose,
+            properties = AnyPopDialogProperties(direction = direction),
+            content = {
+                content()
+            },
+            onDismiss = {
+                showDialog.value = false
+            }
+        )
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+@Composable
+fun BaseComposeDialog(
+    alertDialog: MutableState<Boolean>,
+    properties: DialogProperties = DialogProperties(usePlatformDefaultWidth = false),
+    content: @Composable () -> Unit,
+) {
+    if (alertDialog.value) {
+        Dialog(
+            onDismissRequest = {
+                alertDialog.value = false
+            },
+            properties = properties,
+        ) {
+            content()
+        }
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@Composable
+fun ComposeLoadingDialog(
+    alertDialog: MutableState<Boolean>,
+    properties: DialogProperties = DialogProperties(usePlatformDefaultWidth = false),
+) {
+    if (alertDialog.value) {
+        BaseComposeDialog(
+            alertDialog,
+            properties = properties
+        ) {
+            Box(modifier = Modifier.fillMaxSize(), Alignment.Center) {
+                CircularProgressIndicator(
+                    strokeWidth = 2.5.dp,
+                    modifier = Modifier.size(30.dp)
+                )
+            }
+        }
+    }
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////

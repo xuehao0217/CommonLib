@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagingData
 import com.blankj.utilcode.util.ActivityUtils
+import com.xueh.comm_core.base.mvvm.BaseRequstViewModel
 import com.xueh.comm_core.base.mvvm.BaseViewModel
 import com.xueh.comm_core.helper.pager
 import com.xueh.comm_core.net.HttpRequest
@@ -19,7 +20,7 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
-class ComposeViewModel : BaseViewModel<RestApi>() {
+class ComposeViewModel : BaseRequstViewModel<RestApi>() {
     override fun initApi() = HttpRequest.getService(RestApi::class.java)
 
     // val bannerDatas by viewModel.bannerLiveData.observeAsState()

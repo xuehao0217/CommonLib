@@ -1,6 +1,7 @@
 package com.xueh.comm_core.base.mvvm.ibase
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,6 +23,7 @@ abstract class AbsViewModel : ViewModel() {
     open val apiException: MutableLiveData<Throwable> = MutableLiveData()
     open val apiLoading: MutableLiveData<Boolean> = MutableLiveData()
 
+    open  var apiComposeLoading = mutableStateOf(false)
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

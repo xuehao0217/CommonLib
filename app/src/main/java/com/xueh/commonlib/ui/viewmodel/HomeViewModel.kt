@@ -2,6 +2,7 @@ package com.xueh.commonlib.ui.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import com.blankj.utilcode.util.*
+import com.xueh.comm_core.base.mvvm.BaseRequstViewModel
 import com.xueh.comm_core.base.mvvm.BaseViewModel
 import com.xueh.comm_core.helper.getDownloadProgress
 import com.xueh.comm_core.helper.getPart
@@ -20,7 +21,7 @@ import retrofit2.Response
  * 创建日期: 2019/12/30 10:51
  * 备注：
  */
-class HomeViewModel : BaseViewModel<RestApi>() {
+class HomeViewModel : BaseRequstViewModel<RestApi>() {
 
     override fun initApi() = HttpRequest.getService(RestApi::class.java)
 

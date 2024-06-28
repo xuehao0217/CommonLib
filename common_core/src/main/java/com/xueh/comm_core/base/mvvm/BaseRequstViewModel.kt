@@ -20,14 +20,10 @@ import kotlinx.coroutines.flow.onStart
  * 创建日期: 2019/12/30 11:56
  * 备注：
  */
-abstract class BaseViewModel : RequestViewModel() {
-    fun showLoading() {
-        apiLoading.postValue(true)
-        apiComposeLoading.value=true
+abstract class BaseRequstViewModel<E> : BaseViewModel() {
+    protected val api by lazy {
+        initApi()
     }
 
-    fun hideLoading() {
-        apiLoading.postValue(false)
-        apiComposeLoading.value=false
-    }
+    protected abstract fun initApi(): E
 }
