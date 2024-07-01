@@ -62,15 +62,20 @@ open class RequestViewModel : AbsViewModel() {
 
     protected open fun onApiStart() {
         apiLoading.value = true
+        apiLoadingState.value=true
     }
 
     protected open fun onApiError(e: Exception?) {
         apiLoading.value = false
         apiException.value = e
+
+        apiLoadingState.value=false
+        apiExceptionState.value = Throwable(e)
     }
 
     protected open fun onApiFinally() {
         apiLoading.value = false
+        apiLoadingState.value=false
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////

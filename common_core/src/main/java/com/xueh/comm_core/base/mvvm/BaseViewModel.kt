@@ -23,11 +23,11 @@ import kotlinx.coroutines.flow.onStart
 abstract class BaseViewModel : RequestViewModel() {
     fun showLoading() {
         apiLoading.postValue(true)
-        apiComposeLoading.value=true
+        apiLoadingState.value=true
     }
 
     fun hideLoading() {
         apiLoading.postValue(false)
-        apiComposeLoading.value=false
+        apiLoadingState.value=false
     }
 }

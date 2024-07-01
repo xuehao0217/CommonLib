@@ -52,6 +52,7 @@ import com.xueh.commonlib.ui.compose.CommonLazyColumnDatasPage
 import com.xueh.commonlib.ui.compose.CommonPaging
 import com.xueh.commonlib.ui.compose.CommonRefreshColumnData
 import com.xueh.commonlib.ui.compose.CommonTabPage
+import com.xueh.commonlib.ui.compose.ComoposeViewModelPage
 import com.xueh.commonlib.ui.compose.ConstraintPage
 import com.xueh.commonlib.ui.compose.DialogPage
 import com.xueh.commonlib.ui.compose.LazyColumnPage
@@ -153,6 +154,7 @@ class ComposeActivity : BaseComposeActivity() {
 
                     ItemData("ComposeLoadPage", RouteConfig.ComposeTab),
                     ItemData("ComposePager", RouteConfig.ComposePager),
+                    ItemData("ComposeViewModel", RouteConfig.ComposeViewModelPage),
 //                    ItemData("lazyVerticalGrid使用", RouteConfig.lazyVerticalGrid),
 //                    ItemData("LazyColumnPage", RouteConfig.LazyColumnPage),
 //                    ItemData("ScrollableAppBar", RouteConfig.ScrollableAppBar),
@@ -259,6 +261,10 @@ class ComposeActivity : BaseComposeActivity() {
 
             composable(RouteConfig.ComposePager) {
                 PagerPage()
+            }
+
+            composable(RouteConfig.ComposeViewModelPage) {
+                ComoposeViewModelPage()
             }
         }
     }

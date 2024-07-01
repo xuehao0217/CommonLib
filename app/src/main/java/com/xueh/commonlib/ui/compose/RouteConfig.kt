@@ -41,6 +41,7 @@ object RouteConfig {
     const val PullRefreshIndicatorTransformSample="PullRefreshIndicatorTransformSample"
 
     const val ComposePager="ComposePager"
+    const val ComposeViewModelPage="ComposeViewModel"
 
     const val name="name"
     const val age="age"

@@ -23,7 +23,9 @@ abstract class AbsViewModel : ViewModel() {
     open val apiException: MutableLiveData<Throwable> = MutableLiveData()
     open val apiLoading: MutableLiveData<Boolean> = MutableLiveData()
 
-    open  var apiComposeLoading = mutableStateOf(false)
+
+    open var apiLoadingState = mutableStateOf(false)
+    open var apiExceptionState = mutableStateOf(Throwable())
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -32,9 +34,7 @@ abstract class AbsViewModel : ViewModel() {
     //开启协程 如果有上一个任务 则取消
     //key 协程的 key
     fun launchCancelLast(key: String, block: suspend CoroutineScope.() -> Unit) = run {
-        jobs[key]?.let {
-            it.cancel()
-        }
+        jobs[key]?.cancel()
         viewModelScope.launchSafety {
             block.invoke(this)
         }.apply {
