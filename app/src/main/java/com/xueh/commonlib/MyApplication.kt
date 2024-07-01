@@ -61,17 +61,4 @@ class MyApplication : BaseApplication() {
             .setFilePrefix("log")
             .dir = PathUtils.getExternalAppCachePath()
     }
-
-//    private fun initState() {
-//        UiStatusManager.getInstance()
-//            .addUiStatusConfig(UiStatus.LOADING, R.layout.state_loading)
-//            .addUiStatusConfig(UiStatus.EMPTY, R.layout.state_empty)
-//            //添加R.id.tv_net_error 点击事件
-//            .addUiStatusConfig(
-//                UiStatus.NETWORK_ERROR,
-//                R.layout.state_net_error,
-//                R.id.tv_net_error,
-//                null
-//            )
-//    }
 }
