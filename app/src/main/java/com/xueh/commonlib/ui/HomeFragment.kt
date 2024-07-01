@@ -50,7 +50,7 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
             .onBindAdapter<ItemLayoutBinding, String> { item ->
                 tvItem.text = item
             }.apply {
-                setNewInstance(mutableListOf("查看网络日志","compose actvity"))
+                setNewInstance(mutableListOf("查看网络日志","ComposeActvity"))
                 setOnItemClickListener { adapter, view, position ->
                     when(position){
                         0->{
