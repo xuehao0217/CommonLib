@@ -54,6 +54,7 @@ import androidx.paging.compose.itemKey
 import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.ToastUtils
+import com.xueh.comm_core.base.mvvm.BaseComposeViewModel
 import com.xueh.comm_core.helper.compose.rememberMutableStateOf
 import com.xueh.comm_core.weight.compose.BoxText
 import com.xueh.comm_core.weight.compose.CommonPagingPage
@@ -71,66 +72,75 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun RefreshLoadUse() {
-    val viewModel: ComposeViewModel = viewModel()
-    val homeDatas = viewModel.getListDatas().collectAsLazyPagingItems()
+    BaseComposeViewModel <ComposeViewModel>{viewModel->
+        val homeDatas = viewModel.getListDatas().collectAsLazyPagingItems()
 
-    val lazyListState = rememberLazyListState()
+        val lazyListState = rememberLazyListState()
 
-    val firstVisibleScrollOffset by remember { derivedStateOf { lazyListState.firstVisibleItemScrollOffset } }
-    val firstVisibleIndex by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }
+        val firstVisibleScrollOffset by remember { derivedStateOf { lazyListState.firstVisibleItemScrollOffset } }
+        val firstVisibleIndex by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }
 
-    val targetHeight = BarUtils.getStatusBarHeight() + ConvertUtils.dp2px(50f)
+        val targetHeight = BarUtils.getStatusBarHeight() + ConvertUtils.dp2px(50f)
 
-    var alpha by rememberMutableStateOf(value = 0f)
+        var alpha by rememberMutableStateOf(value = 0f)
 
-    LaunchedEffect(Unit) {
-        snapshotFlow {firstVisibleScrollOffset  }.collect{
-            snapshotFlow { firstVisibleScrollOffset }.collect {
-                if (firstVisibleIndex <= 1) {
-                    alpha = firstVisibleScrollOffset.toFloat() / targetHeight
+        LaunchedEffect(Unit) {
+            snapshotFlow {firstVisibleScrollOffset  }.collect{
+                snapshotFlow { firstVisibleScrollOffset }.collect {
+                    if (firstVisibleIndex <= 1) {
+                        alpha = firstVisibleScrollOffset.toFloat() / targetHeight
+                    }
                 }
             }
         }
-    }
 
-    CommonPagingPage(
-        homeDatas,
-        enableRefresh = true,
-        lazyListState = lazyListState,
-        onScrollStop = { visibleItem, isScrollingUp ->
-            ToastUtils.showShort("是否上划${isScrollingUp}  ${visibleItem.toList()}")
-        },
-        emptyDataContent = {
-            Box(modifier = Modifier.fillMaxSize().background(Color.Blue))
-        },
-        loadingContent = {
-            Box(modifier = Modifier.fillMaxSize().background(Color.Red))
-        }, headContent = {
-            Box(modifier = Modifier.fillMaxWidth().height(50.dp).background(Color.Magenta))
-        }, foodContent = {
-            Box(modifier = Modifier.fillMaxWidth().height(50.dp).background(Color.Yellow))
-        }
-    ) {
-        Box(
-            modifier = Modifier
-                .padding(10.dp)
-                .clip(CircleShape)
-                .background(androidx.compose.material3.MaterialTheme.colorScheme.primary)
-                .fillMaxWidth()
-                .height(50.dp)
-                .border(1.5.dp, MaterialTheme.colors.secondary, shape = CircleShape),
-
-            contentAlignment = Alignment.Center
+        CommonPagingPage(
+            homeDatas,
+            enableRefresh = true,
+            lazyListState = lazyListState,
+            onScrollStop = { visibleItem, isScrollingUp ->
+                ToastUtils.showShort("是否上划${isScrollingUp}  ${visibleItem.toList()}")
+            },
+            emptyDataContent = {
+                Box(modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Blue))
+            },
+            loadingContent = {
+                Box(modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Red))
+            }, headContent = {
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+                    .background(Color.Magenta))
+            }, foodContent = {
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+                    .background(Color.Yellow))
+            }
         ) {
-            Text(
-                text = it.title,
-                color = Color.White,
-                textAlign = TextAlign.Center,
-            )
+            Box(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .clip(CircleShape)
+                    .background(androidx.compose.material3.MaterialTheme.colorScheme.primary)
+                    .fillMaxWidth()
+                    .height(50.dp)
+                    .border(1.5.dp, MaterialTheme.colors.secondary, shape = CircleShape),
+
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = it.title,
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                )
+            }
         }
     }
-
-
 }
 
 
