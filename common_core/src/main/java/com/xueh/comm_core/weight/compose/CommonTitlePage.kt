@@ -34,6 +34,7 @@ import com.xueh.comm_core.base.compose.theme.ComposeMaterial3Theme
 @Composable
 fun CommonTitlePage(
     title: String,
+    modifier: Modifier=Modifier,
     showBackIcon: Boolean = true,
     @DrawableRes backIcon: Int = if (appThemeState.darkTheme) R.mipmap.bar_icon_back_white else R.mipmap.bar_icon_back_black,
     backClick: (() -> Unit)? = null,
@@ -54,7 +55,7 @@ fun CommonTitlePage(
     ComposeMaterial3Theme {
         GrayAppAdapter(isGray = false) {
             Scaffold(
-                modifier = Modifier.systemBarsPadding(),
+                modifier = Modifier.systemBarsPadding().then(modifier),
 //                topBar = {
 //                Spacer(
 //                    modifier = Modifier

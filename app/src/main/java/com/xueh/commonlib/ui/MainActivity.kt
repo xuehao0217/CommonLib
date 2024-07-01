@@ -8,14 +8,14 @@ import com.xueh.commonlib.databinding.ActivityMainBinding
 
 class MainActivity : DActivity<ActivityMainBinding>() {
 
-    private val fragments = arrayOf(ComposeFragment(),HomeFragment(), MyFragment())
-    private val tabs = arrayOf("Compose", "首页", "我的")
+    private val fragments = arrayOf(HomeFragment(), MyFragment())
+    private val tabs = arrayOf( "首页", "我的")
 
     //未选中icon
-    private val normalIcon = intArrayOf(R.mipmap.ic_home_normal, R.mipmap.ic_home_normal,R.mipmap.ic_my_normal)
+    private val normalIcon = intArrayOf( R.mipmap.ic_home_normal,R.mipmap.ic_my_normal)
 
     //选中时icon
-    private val selectIcon = intArrayOf(R.mipmap.ic_home_select,R.mipmap.ic_home_select, R.mipmap.ic_my_select)
+    private val selectIcon = intArrayOf(R.mipmap.ic_home_select, R.mipmap.ic_my_select)
 
     override fun initData() {
     }

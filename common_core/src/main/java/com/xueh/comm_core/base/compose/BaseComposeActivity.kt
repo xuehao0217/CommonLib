@@ -6,8 +6,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.Modifier
 import com.xueh.comm_core.weight.xml.ViewLoading
 
 //ComponentActivity
@@ -31,19 +35,14 @@ abstract class BaseComposeActivity : ComponentActivity() {
                 )
                 onDispose {}
             }
-            setComposeContent()
+            Column(Modifier.fillMaxSize().navigationBarsPadding()) {
+                setComposeContent()
+            }
         }
     }
 
     @Composable
     abstract fun setComposeContent()
-    protected fun showProgressDialog() {
-        ViewLoading.show(this)
-    }
-
-    protected fun hideProgressDialog() {
-        ViewLoading.dismiss(this)
-    }
 }
 
 

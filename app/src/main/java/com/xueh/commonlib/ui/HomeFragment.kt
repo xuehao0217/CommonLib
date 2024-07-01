@@ -50,14 +50,14 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
             .onBindAdapter<ItemLayoutBinding, String> { item ->
                 tvItem.text = item
             }.apply {
-                setNewInstance(mutableListOf("查看网络日志"))
+                setNewInstance(mutableListOf("查看网络日志","compose actvity"))
                 setOnItemClickListener { adapter, view, position ->
                     when(position){
                         0->{
                             startActivity(Chucker.getLaunchIntent(requireContext()))
                         }
                         1->{
-
+                            startActivity(ComposeActivity::class.java)
                         }
                     }
 
