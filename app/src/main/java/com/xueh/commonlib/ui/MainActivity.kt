@@ -2,7 +2,7 @@ package com.xueh.commonlib.ui
 
 import android.graphics.Color
 import android.os.Bundle
-import com.xueh.comm_core.base.DActivity
+import com.xueh.comm_core.base.xml.DActivity
 import com.xueh.commonlib.R
 import com.xueh.commonlib.databinding.ActivityMainBinding
 

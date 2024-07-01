@@ -1,9 +1,7 @@
 package com.xueh.commonlib.ui
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import com.xueh.comm_core.base.DActivity
+import com.xueh.comm_core.base.xml.DActivity
 import com.xueh.comm_core.utils.time.Interval
 import com.xueh.commonlib.R
 import com.xueh.commonlib.databinding.ActivitySplashBinding

@@ -4,9 +4,11 @@ import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.blankj.utilcode.util.ToastUtils
 import com.chuckerteam.chucker.api.Chucker
-import com.xueh.comm_core.base.mvvm.MVVMFragment
+import com.xueh.comm_core.base.xml.MVVMFragment
 import com.xueh.comm_core.helper.*
-import com.xueh.comm_core.net.HttpRequest
+import com.xueh.comm_core.helper.xml.addLinearItemDecoration
+import com.xueh.comm_core.helper.xml.linear
+import com.xueh.comm_core.helper.xml.onBindAdapter
 import com.xueh.commonlib.R
 import com.xueh.commonlib.databinding.FragmentHomeBinding
 import com.xueh.commonlib.databinding.ItemLayoutBinding

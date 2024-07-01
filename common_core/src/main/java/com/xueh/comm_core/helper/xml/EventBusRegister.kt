@@ -1,0 +1,13 @@
+package com.xueh.comm_core.helper.xml
+
+/**
+ * @Class: BindEventBus
+ * @Remark: 辅助注册EventBus注解
+ *
+ */
+//https://www.jianshu.com/p/01dcd491e126?u_atoken=0dbd4c35-04a3-4f2b-8a9e-8201f3c1a364&u_asession=01lRyaW8rYmfA02IJGjsi9hAQJvcTFJRlxJYAH__0iV66kc4gUmN96yHUwpAZTwnPzX0KNBwm7Lovlpxjd_P_q4JsKWYrT3W_NKPr8w6oU7K9X2sQ5lQotah3Rpc_ebfHizdjoMV1y19BFQvaXcOyBfmBkFo3NEHBv0PZUm6pbxQU&u_asig=05LslP7H6SeYZsF7tNt3W_eHu8QtGcymFVONJ6FpIKA5NCa9dpKUw-Yg7-02pliZ_ht2Tg3CYqRAoOPs56nuEbxTgT3KORoHFzhj1UKbxOcjBt1nlAw7dZYrpvZCfVD05JhPFdOZZLEn2skD0vrfgpeSKam9Ync7ECMQdUOrj-wDT9JS7q8ZD7Xtz2Ly-b0kmuyAKRFSVJkkdwVUnyHAIJzYDYaD2Fws7VTuv-dre6dTVc5Oc3AiHEyzh8f0RrkN9HqBR97QLsOYcZJeUxi-_JXu3h9VXwMyh6PgyDIVSG1W9lBjntI3IksTWNIlVraVazko3vS8lKQvxYTphZ3n_8OX5noziOXujBV4XjDsudtCGmaYRzZHx0MeT7IQEkCdcLmWspDxyAEEo4kbsryBKb9Q&u_aref=UvGTSEMj09YfxTWq8TjpcuhzwdU%3D
+@Target(AnnotationTarget.CLASS)
+@kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
+annotation class EventBusRegister
+
+//todo
