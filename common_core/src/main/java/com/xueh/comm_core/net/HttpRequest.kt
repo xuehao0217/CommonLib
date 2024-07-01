@@ -21,7 +21,6 @@ https://github.com/RunFeifei/Run
 object HttpRequest {
     private val serviceMap= mutableMapOf<String, Retrofit>()
     lateinit var baseUrl: String
-    @JvmOverloads
     fun init(url: String, requestDSL: (RequestDsl.() -> Unit)? = null) {
         this.baseUrl = url
         this.requestDSL = requestDSL
