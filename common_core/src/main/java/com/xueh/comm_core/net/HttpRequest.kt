@@ -28,7 +28,7 @@ object HttpRequest {
 
     //************************************************************************************************
 
-    fun <T> getService(serviceClass: Class<T>): T = getCustomService(baseUrl, serviceClass)
+    fun <T> getService(serviceClass: Class<T>) = getCustomService(baseUrl, serviceClass)
 
     fun <T> getCustomService(domain: String, serviceClass: Class<T>): T {
         var retrofit = serviceMap[domain]
