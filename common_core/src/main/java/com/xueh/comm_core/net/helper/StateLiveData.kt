@@ -1,4 +1,4 @@
-package com.xueh.comm_core.net.livedata
+package com.xueh.comm_core.net.helper
 
 import androidx.lifecycle.MutableLiveData
 

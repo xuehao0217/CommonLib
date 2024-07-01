@@ -1,10 +1,11 @@
 package com.xueh.comm_core.net
 
-import android.content.Context
-import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.Utils
 import com.xueh.comm_core.BuildConfig
-import me.jessyan.progressmanager.ProgressManager
+import com.xueh.comm_core.net.helper.CookieJar
+import com.xueh.comm_core.net.helper.XTrustManager
+import com.xueh.comm_core.net.interceptor.HeaderInterceptor
+import com.xueh.comm_core.net.interceptor.LoggingInterceptor
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -12,7 +13,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.security.SecureRandom
 import java.util.*
 import java.util.concurrent.TimeUnit
-import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.SSLContext
 
 /***************************************************************************************************
@@ -93,7 +93,7 @@ object HttpRequest {
             .connectTimeout(TIME_CONNECT, TimeUnit.SECONDS)
             .readTimeout(TIME_CONNECT, TimeUnit.SECONDS)
             .writeTimeout(TIME_CONNECT, TimeUnit.SECONDS)
-            .cookieJar(com.xueh.comm_core.net.cookie.CookieJar.getInstance())
+            .cookieJar(CookieJar.getInstance())
     }
 
     //**********************************************************************************************

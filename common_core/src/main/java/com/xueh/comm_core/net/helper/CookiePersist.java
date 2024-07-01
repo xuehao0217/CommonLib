@@ -1,5 +1,5 @@
 
-package com.xueh.comm_core.net.cookie;
+package com.xueh.comm_core.net.helper;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

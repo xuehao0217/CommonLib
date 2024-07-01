@@ -1,4 +1,4 @@
-package com.xueh.comm_core.net;
+package com.xueh.comm_core.net.helper;
 
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;

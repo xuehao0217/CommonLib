@@ -1,8 +1,7 @@
-package com.xueh.comm_core.net.cookie;
+package com.xueh.comm_core.net.helper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.CookieManager;

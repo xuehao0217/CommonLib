@@ -1,4 +1,4 @@
-package com.xueh.comm_core.net
+package com.xueh.comm_core.net.helper
 
 import java.security.cert.X509Certificate
 import javax.net.ssl.X509TrustManager

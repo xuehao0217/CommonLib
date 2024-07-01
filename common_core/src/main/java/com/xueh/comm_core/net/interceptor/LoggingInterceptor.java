@@ -1,11 +1,10 @@
-package com.xueh.comm_core.net;
+package com.xueh.comm_core.net.interceptor;
 
 
 import android.text.TextUtils;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.orhanobut.logger.Logger;
-import com.xueh.comm_core.net.tools.OkLog;
+import com.xueh.comm_core.net.helper.OkLog;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

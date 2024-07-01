@@ -1,4 +1,4 @@
-package com.xueh.comm_core.net
+package com.xueh.comm_core.net.interceptor
 
 import okhttp3.Interceptor
 import okhttp3.Response

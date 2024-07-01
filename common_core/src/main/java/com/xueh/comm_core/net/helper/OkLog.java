@@ -1,4 +1,4 @@
-package com.xueh.comm_core.net.tools;
+package com.xueh.comm_core.net.helper;
 
 import android.text.TextUtils;
 import android.util.Log;
