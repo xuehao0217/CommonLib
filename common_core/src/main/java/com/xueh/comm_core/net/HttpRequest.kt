@@ -101,10 +101,6 @@ object HttpRequest {
 
     //******************************** 动态配置OkHttp Retrofit **************************************
     private var requestDSL: (RequestDsl.() -> Unit)? = null
-
-//    fun setting(requestDSL: (RequestDsl.() -> Unit)? = null) {
-//        this.requestDSL = requestDSL
-//    }
     private fun getRetrofit(base_url: String): Retrofit {
         val dsl = if (requestDSL != null) RequestDsl().apply(requestDSL!!) else null
         val finalOkHttpBuilder = dsl?.buidOkHttp?.invoke(getOkHttp()) ?: getOkHttp()
