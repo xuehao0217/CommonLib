@@ -1,13 +1,8 @@
 package com.xueh.comm_core.net.coroutinedsl
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.blankj.utilcode.util.NetworkUtils
-import com.blankj.utilcode.util.ToastUtils
-import com.xueh.comm_core.R
 import com.xueh.comm_core.base.mvvm.ibase.AbsViewModel
 import com.xueh.comm_core.net.BaseResult
-import com.xueh.comm_core.utils.CommonUtils.getString
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*

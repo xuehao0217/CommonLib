@@ -1,19 +1,14 @@
 package com.xueh.comm_core.helper
 
-import android.graphics.Outline
 import android.util.Log
 import android.view.View
-import android.view.ViewOutlineProvider
 import android.widget.ImageView
-import android.widget.TextView
-import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.core.content.FileProvider
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
 import com.blankj.utilcode.util.*
 import com.xueh.comm_core.helper.coroutine.GlobalCoroutineExceptionHandler
-import com.xueh.comm_core.utils.CommonUtils
 import com.xueh.comm_core.utils.GlideUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,8 +31,6 @@ import kotlin.properties.Delegates
  */
 
 //*****************************************常用方法***********************************************************
-fun getColor(colorRes: Int) = CommonUtils.getColor(colorRes)
-
 fun getDrawable(@DrawableRes id: Int) = ResourceUtils.getDrawable(id)
 
 fun hasNetWorkConection() = NetworkUtils.isConnected()
