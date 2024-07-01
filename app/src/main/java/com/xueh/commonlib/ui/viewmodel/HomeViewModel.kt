@@ -61,10 +61,6 @@ class HomeViewModel : BaseRequstViewModel<RestApi>() {
     }
 
 
-    fun loadLiveData() = apiLiveData {
-        api.bannerList3()
-    }
-
     fun loadFlow() {
         apiFlow(request = {
             api.bannerList3()

@@ -157,57 +157,6 @@ open class RequestViewModel : AbsViewModel() {
         }
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //包装了LiveData
-    /**
-     * LiveDataResult 必须加泛型 不然response的泛型就会被擦除!!
-     * damn it
-     */
-    sealed class LiveDataResult<T> {
-        class Start<T> : LiveDataResult<T>()
-        class Finally<T> : LiveDataResult<T>()
-        data class Response<T>(val response: T) : LiveDataResult<T>()
-        data class Error<T>(val exception: Exception) : LiveDataResult<T>()
-    }
-
-    //    viewModel.loadLiveData().observe(this@HomeFragment) {
-    //        when (it) {
-    //            is RequestViewModel.LiveDataResult.Response -> {
-    //                ToastUtils.showShort(it.response.data.toString())
-    //            }
-    //            is RequestViewModel.LiveDataResult.Error -> {
-    //
-    //            }
-    //            is RequestViewModel.LiveDataResult.Start -> {
-    //
-    //            }
-    //            is RequestViewModel.LiveDataResult.Finally -> {
-    //
-    //            }
-    //        }
-    //    }
-    protected fun <Response> apiLiveData(
-        context: CoroutineContext = EmptyCoroutineContext,
-        timeoutInMs: Long = 3000L,
-        request: suspend () -> Response,
-    ) = androidx.lifecycle.liveData(context, timeoutInMs) {
-        onApiStart()
-        emit(LiveDataResult.Start())
-        kotlin.runCatching {
-            emit(withContext(Dispatchers.IO) {
-                LiveDataResult.Response(request())
-            })
-        }.onFailure {
-            it.printStackTrace()
-            onApiError(Exception(it))
-            emit(LiveDataResult.Error<Response>(Exception(it)))
-        }
-        onApiFinally()
-        emit(LiveDataResult.Finally())
-    }
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 
