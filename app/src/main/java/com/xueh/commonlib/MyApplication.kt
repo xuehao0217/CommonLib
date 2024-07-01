@@ -45,11 +45,11 @@ class MyApplication : BaseApplication() {
                         .build()
                 }
             }
-            retrofit {
-                it.apply {
+//            retrofit {
+//                it.apply {
 //                        addConverterFactory(GsonConverterFactory.create(GsonFactory.getSingletonGson()))
-                }
-            }
+//                }
+//            }
         }
         HttpRequest.putHead("name","xh")
     }
