@@ -42,18 +42,6 @@ object HttpRequest {
         return retrofit.create(serviceClass)
     }
 
-
-//    private fun getRetrofit(base_url: String): Retrofit {
-//        return Retrofit.Builder()
-//            .baseUrl(base_url)
-//            .client(
-//                ProgressManager.getInstance().with(getOkHttp())
-//                    .build()
-//            )
-//            .addConverterFactory(GsonConverterFactory.create()) //返回内容的转换器
-//            .build()
-//    }
-
     //***************************************公用参数*****************************************
 
     private var headers = HeaderInterceptor()
