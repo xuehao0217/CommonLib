@@ -18,7 +18,7 @@ inline fun <reified V : BaseViewModel> BaseComposeViewModel(content: @Composable
     LaunchedEffect(Unit) {
         snapshotFlow { viewModel.apiExceptionState.value }
             .collect {
-                LogUtils.iTag("ComposeException","ComposeException===${it}")
+                LogUtils.iTag("BaseComposeViewModel","apiExceptionState===${it}")
             }
     }
 
