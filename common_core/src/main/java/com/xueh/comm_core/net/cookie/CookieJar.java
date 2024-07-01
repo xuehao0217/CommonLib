@@ -29,8 +29,8 @@ import okhttp3.HttpUrl;
 public class CookieJar extends PersistentCookieJar {
 
     private static CookieJar instance;
-    private static SetCookieCache setCookieCache = new SetCookieCache();
-    private static CookiePersist cookiePersist = new CookiePersist();
+    private static final SetCookieCache setCookieCache = new SetCookieCache();
+    private static final CookiePersist cookiePersist = new CookiePersist();
 
     private static final String DOMAINS_PREFERENCES = "domains";
     private static CookieManager webCookieManager;
@@ -60,9 +60,7 @@ public class CookieJar extends PersistentCookieJar {
             SharedPreferences sharedPreferences = getSharedPreferences();
             String domains = sharedPreferences.getString(CookieJar.DOMAINS_PREFERENCES, null);
             if (TextUtils.isEmpty(domains)) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    webCookieManager.flush();
-                }
+                webCookieManager.flush();
                 return;
             }
             try {
@@ -70,7 +68,7 @@ public class CookieJar extends PersistentCookieJar {
                 Set<String> set = gson.fromJson(domains, new TypeToken<HashSet<String>>() {
                 }.getType());
 
-                if (set == null || set.size() == 0) {
+                if (set == null || set.isEmpty()) {
                     return;
                 }
                 // 将sessionId保存到slSessionId
@@ -84,9 +82,7 @@ public class CookieJar extends PersistentCookieJar {
             }
 
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            webCookieManager.flush();
-        }
+        webCookieManager.flush();
     }
 
 
@@ -107,17 +103,17 @@ public class CookieJar extends PersistentCookieJar {
             if (TextUtils.isEmpty(domains)) {
                 set.add(domain);
                 String strJson = gson.toJson(set);
-                sharedPreferences.edit().putString(DOMAINS_PREFERENCES, strJson).commit();
+                sharedPreferences.edit().putString(DOMAINS_PREFERENCES, strJson).apply();
                 return true;
             }
             set = gson.fromJson(domains, new TypeToken<HashSet<String>>() {
             }.getType());
-            if (set == null || set.size() == 0) {
+            if (set == null || set.isEmpty()) {
                 set = new HashSet<String>();
             }
             set.add(domain);
             String strJson = gson.toJson(set);
-            sharedPreferences.edit().putString(DOMAINS_PREFERENCES, strJson).commit();
+            sharedPreferences.edit().putString(DOMAINS_PREFERENCES, strJson).apply();
             return true;
         } catch (Exception e) {
             Log.e("updateWebCookie", "updateWebCookie fail");
@@ -129,9 +125,7 @@ public class CookieJar extends PersistentCookieJar {
 
     public synchronized boolean removeAll() {
         webCookieManager.removeAllCookie();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            webCookieManager.flush();
-        }
+        webCookieManager.flush();
         super.clear();
         return true;
     }

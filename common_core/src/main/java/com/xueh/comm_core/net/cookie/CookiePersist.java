@@ -46,7 +46,7 @@ public class CookiePersist implements CookiePersistor {
         for (Cookie cookie : cookies) {
             editor.putString(createCookieKey(cookie), new SerializableCookie().encode(cookie));
         }
-        editor.commit();
+        editor.apply();
     }
 
     @Override
@@ -55,7 +55,7 @@ public class CookiePersist implements CookiePersistor {
         for (Cookie cookie : cookies) {
             editor.remove(createCookieKey(cookie));
         }
-        editor.commit();
+        editor.apply();
     }
 
     private static String createCookieKey(Cookie cookie) {
