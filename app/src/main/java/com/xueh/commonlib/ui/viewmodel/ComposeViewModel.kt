@@ -29,7 +29,7 @@ class ComposeViewModel : BaseRequstViewModel<RestApi>() {
     var bannerMutableState by mutableStateOf<List<BannerVO>>(listOf())
 
     fun loadDsl() {
-        apiDSL<List<BannerVO>> {
+        apiDSL {
             onRequest {
                 api.bannerList3().data
             }
@@ -41,7 +41,6 @@ class ComposeViewModel : BaseRequstViewModel<RestApi>() {
 
 
 
-    var isFirst=true
     fun getListDatas() = pager { api.getHome(it).data.datas }
 
 
