@@ -18,7 +18,6 @@ class HeaderInterceptor : Interceptor {
             .header("Accept", "application/json")
             .method(originalRequest.method, originalRequest.body)
 
-
         headers.forEach { (t, u) ->
             requestBuilder.addHeader(t, u)
         }

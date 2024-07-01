@@ -19,9 +19,8 @@ import javax.net.ssl.SSLContext
 https://github.com/RunFeifei/Run
  ****************************************************************************************************/
 object HttpRequest {
-    private val mServiceMap: MutableMap<String, Retrofit> = HashMap()
+    private val serviceMap= mutableMapOf<String, Retrofit>()
     lateinit var baseUrl: String
-
     @JvmOverloads
     fun init(url: String, requestDSL: (RequestDsl.() -> Unit)? = null) {
         this.baseUrl = url
@@ -33,12 +32,12 @@ object HttpRequest {
     fun <T> getService(serviceClass: Class<T>): T = getCustomService(baseUrl, serviceClass)
 
     fun <T> getCustomService(domain: String, serviceClass: Class<T>): T {
-        var retrofit = mServiceMap[domain]
+        var retrofit = serviceMap[domain]
         if (retrofit == null) {
             retrofit = getRetrofit(domain)
             //只缓存最常用的
             if (baseUrl == domain) {
-                mServiceMap[domain] = retrofit
+                serviceMap[domain] = retrofit
             }
         }
         return retrofit.create(serviceClass)
@@ -74,7 +73,7 @@ object HttpRequest {
     }
 
     fun clearHead() = headers.clearHead()
-    fun clearService() = mServiceMap.clear()
+    fun clearService() = serviceMap.clear()
 
     //****************************************公用参数********************************************
 
@@ -115,10 +114,10 @@ object HttpRequest {
 
     //******************************** 动态配置OkHttp Retrofit **************************************
     private var requestDSL: (RequestDsl.() -> Unit)? = null
-    fun setting(requestDSL: (RequestDsl.() -> Unit)? = null) {
-        this.requestDSL = requestDSL
-    }
 
+//    fun setting(requestDSL: (RequestDsl.() -> Unit)? = null) {
+//        this.requestDSL = requestDSL
+//    }
     private fun getRetrofit(base_url: String): Retrofit {
         val dsl = if (requestDSL != null) RequestDsl().apply(requestDSL!!) else null
         val finalOkHttpBuilder = dsl?.buidOkHttp?.invoke(getOkHttp()) ?: getOkHttp()
@@ -145,5 +144,4 @@ class RequestDsl {
     infix fun retrofit(builder: ((Retrofit.Builder) -> Retrofit.Builder)?) {
         this.buidRetrofit = builder
     }
-
 }
