@@ -1,8 +1,8 @@
 package com.xueh.commonlib.ui
 
 import android.os.Bundle
+import com.drake.interval.Interval
 import com.xueh.comm_core.base.xml.DActivity
-import com.xueh.comm_core.utils.time.Interval
 import com.xueh.commonlib.R
 import com.xueh.commonlib.databinding.ActivitySplashBinding
 import java.util.concurrent.TimeUnit

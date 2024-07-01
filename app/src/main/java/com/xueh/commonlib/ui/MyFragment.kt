@@ -5,11 +5,11 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
+import com.drake.interval.Interval
 import com.xueh.comm_core.base.xml.DFragment
 import com.xueh.comm_core.helper.activityresult.CropImageActivityResul
 import com.xueh.comm_core.helper.activityresult.CropImageResult
 import com.xueh.comm_core.helper.activityresult.TakeCameraUri
-import com.xueh.comm_core.utils.time.Interval
 import com.xueh.comm_core.web.WebViewComposeActivity
 import com.xueh.commonlib.databinding.FragmentMyBinding
 import java.util.concurrent.TimeUnit

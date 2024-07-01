@@ -16,9 +16,9 @@ gson = "2.10.1"
 runtimeLivedata = "1.6.8"
 datastore = "1.1.1"
 #--------------工具相关-----------------
+interval = "1.0.3"
 utilcodex = "1.31.0"
 agentweb = "v5.1.1-androidx"
-eventbus = "3.3.1"
 xxpermissions = "18.63"
 glideVersion = "4.16.0"
 logger = "2.2.0"
@@ -56,6 +56,7 @@ progressmanagerVersion = "1.5.0"
 chucker = "3.5.2"
 spiderman = "v1.1.8"
 #--------------XML相关-----------------
+eventbus = "3.3.1"
 constraintlayout = "2.1.4"
 recyclerviewVersion = "1.3.2"
 viewpager2 = "1.1.0"
@@ -128,7 +129,7 @@ chucker = { module = "com.github.chuckerteam.chucker:library", version.ref = "ch
 progressmanager = { module = "me.jessyan:progressmanager", version.ref = "progressmanagerVersion" }
 spiderman = { module = "com.github.simplepeng.SpiderMan:spiderman", version.ref = "spiderman" }
 #------------------------------------------------工具相关--------------------------------------------------------------
-eventbus = { module = "org.greenrobot:eventbus", version.ref = "eventbus" }
+interval = { module = "com.github.liangjingkanji:Interval", version.ref = "interval" }
 utilcodex = { module = "com.blankj:utilcodex", version.ref = "utilcodex" }
 agentweb = { module = "io.github.justson:agentweb-core", version.ref = "agentweb" }
 xxPermissions = { module = "com.github.getActivity:XXPermissions", version.ref = "xxpermissions" }
@@ -138,6 +139,7 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerviewVersion" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
+eventbus = { module = "org.greenrobot:eventbus", version.ref = "eventbus" }
 androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2" }
 github-brvah = { module = "com.github.CymChad:BaseRecyclerViewAdapterHelper", version.ref = "brvah" }
 immersionbar = { module = "com.gyf.immersionbar:immersionbar", version.ref = "immersionbar" }

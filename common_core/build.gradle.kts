@@ -107,6 +107,7 @@ dependencies {
     releaseApi(libs.chucker.no.op)
 
     //---------------工具类的库--------------------------
+    api (libs.interval)
     api(libs.agentweb)
     api(libs.gson)
     api(libs.utilcodex)
