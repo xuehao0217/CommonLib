@@ -52,9 +52,6 @@ dependencies {
     api(libs.junit)
     api(libs.androidx.appcompat)
     api(libs.androidx.datastore)
-    api(libs.androidx.customview)
-    api(libs.androidx.customview.poolingcontainer)
-
     api(libs.androidx.paging.common)
     api(libs.androidx.paging.runtime)
     //----------------KTX相关--------------------------
@@ -126,12 +123,12 @@ dependencies {
     api(libs.recyclerview)
     api(libs.github.glide)
     api(libs.immersionbar)
-    api(libs.refresh.layout)
-    api(libs.refresh.header)
+//    api(libs.refresh.layout)
+//    api(libs.refresh.header)
+//    api(libs.magicIndicator)
+//    api(libs.xpopup)
     api(libs.androidx.constraintlayout)
     api(libs.androidx.viewpager2)
-    api(libs.magicIndicator)
-    api(libs.xpopup)
     api(libs.github.brvah)
     api(libs.easyNavigation)
 }

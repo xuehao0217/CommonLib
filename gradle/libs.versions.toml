@@ -13,8 +13,6 @@ material = "1.12.0"
 multidex = "2.0.1"
 appcompat = "1.7.0"
 gson = "2.10.1"
-customviewPoolingContainer = "1.0.0"
-customviewVersion = "1.2.0-alpha02"
 runtimeLivedata = "1.6.8"
 datastore = "1.1.1"
 #--------------工具相关-----------------
@@ -114,8 +112,6 @@ accompanist-swiperefresh = { module = "com.google.accompanist:accompanist-swiper
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 ccompanist = { module = "com.google.accompanist:accompanist-insets", version.ref = "googleAccompanistInsets" }
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingComposeVersion" }
-androidx-customview-poolingcontainer = { module = "androidx.customview:customview-poolingcontainer", version.ref = "customviewPoolingContainer" }
-androidx-customview = { module = "androidx.customview:customview", version.ref = "customviewVersion" }
 compose-animation= { module = "androidx.compose.animation:animation", version.ref = "animation" }
 any_pop_dialog_compose = { module = "io.github.TheMelody:any_pop_dialog_compose", version.ref = "any_pop_dialog_compose" }
 composeViews = { module = "io.github.ltttttttttttt:ComposeViews", version.ref = "composeviews" }
@@ -145,11 +141,12 @@ androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayo
 androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2" }
 github-brvah = { module = "com.github.CymChad:BaseRecyclerViewAdapterHelper", version.ref = "brvah" }
 immersionbar = { module = "com.gyf.immersionbar:immersionbar", version.ref = "immersionbar" }
-magicIndicator = { module = "com.github.hackware1993:MagicIndicator", version.ref = "magicindicator" }
 easyNavigation = { module = "com.github.Vincent7Wong:EasyNavigation", version.ref = "easynavigationVersion" }
 refresh-header = { module = "com.scwang.smart:refresh-header-classics", version.ref = "refreshHeader" }
 refresh-layout = { module = "com.scwang.smart:refresh-layout-kernel", version.ref = "refreshLayout" }
 xpopup = { module = "com.lxj:xpopup", version.ref = "xpopup" }
+magicIndicator = { module = "com.github.hackware1993:MagicIndicator", version.ref = "magicindicator" }
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
