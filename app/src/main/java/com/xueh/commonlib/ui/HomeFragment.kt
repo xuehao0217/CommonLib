@@ -6,6 +6,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.chuckerteam.chucker.api.Chucker
 import com.xueh.comm_core.base.mvvm.MVVMFragment
 import com.xueh.comm_core.helper.*
+import com.xueh.comm_core.net.HttpRequest
 import com.xueh.commonlib.R
 import com.xueh.commonlib.databinding.FragmentHomeBinding
 import com.xueh.commonlib.databinding.ItemLayoutBinding
@@ -49,7 +50,15 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
             }.apply {
                 setNewInstance(mutableListOf("查看网络日志"))
                 setOnItemClickListener { adapter, view, position ->
-                    startActivity(Chucker.getLaunchIntent(requireContext()))
+                    when(position){
+                        0->{
+                            startActivity(Chucker.getLaunchIntent(requireContext()))
+                        }
+                        1->{
+
+                        }
+                    }
+
                 }
             }
     }

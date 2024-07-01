@@ -30,32 +30,28 @@ class MyApplication : BaseApplication() {
             retentionPeriod = RetentionManager.Period.ONE_HOUR
         )
 
-// Create the Interceptor
         val chuckerInterceptor = ChuckerInterceptor.Builder(this@MyApplication)
             .collector(chuckerCollector)
             .maxContentLength(250_000L)
             .redactHeaders("Auth-Token", "Bearer")
             .alwaysReadResponseBody(true)
             .build()
-        HttpRequest.apply {
-            setting {
-                okHttp {
-                    it.apply {
-                        addInterceptor(chuckerInterceptor)
-                        ProgressManager.getInstance().with(this)
-                            .build()
-                    }
-                }
-                retrofit {
-                    it.apply {
-//                        addConverterFactory(GsonConverterFactory.create(GsonFactory.getSingletonGson()))
-                    }
+
+        HttpRequest.init("https://www.wanandroid.com/"){
+            okHttp {
+                it.apply {
+                    addInterceptor(chuckerInterceptor)
+                    ProgressManager.getInstance().with(this)
+                        .build()
                 }
             }
-
-            setBaseUrl("https://www.wanandroid.com/")
-            putHead(hashMapOf("name" to "xuehao"))
+            retrofit {
+                it.apply {
+//                        addConverterFactory(GsonConverterFactory.create(GsonFactory.getSingletonGson()))
+                }
+            }
         }
+        HttpRequest.putHead("name","xh")
     }
 
     private fun initLog() {

@@ -14,8 +14,7 @@ class HeaderInterceptor : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
-        val requestBuilder = originalRequest.newBuilder()
-            .header("Content-Type", "application/json")
+        val requestBuilder = originalRequest.newBuilder().header("Content-Type", "application/json")
             .header("Accept", "application/json")
             .method(originalRequest.method, originalRequest.body)
 
@@ -34,26 +33,30 @@ class HeaderInterceptor : Interceptor {
         return chain.proceed(requestBuilder.build())
     }
 
-    fun put(key: String, value: String) {
-        if (headers.containsKey(key)){
+    fun put(key: String, value: String): HeaderInterceptor {
+        if (headers.containsKey(key)) {
             clearKey(key)
         }
         headers[key] = value
+        return this
     }
 
 
-    fun put(headers: HashMap<String, String>) {
+    fun put(headers: HashMap<String, String>): HeaderInterceptor {
         this.headers.putAll(headers)
+        return this
     }
 
 
-    fun clearKey(key: String) {
+    fun clearKey(key: String): HeaderInterceptor {
         if (headers.containsKey(key)) {
             headers.remove(key)
         }
+        return this
     }
 
-    fun clearHead() {
+    fun clearHead(): HeaderInterceptor {
         headers.clear()
+        return this
     }
 }
