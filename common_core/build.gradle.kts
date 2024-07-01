@@ -123,13 +123,13 @@ dependencies {
     api(libs.recyclerview)
     api(libs.github.glide)
     api(libs.immersionbar)
-//    api(libs.refresh.layout)
-//    api(libs.refresh.header)
-//    api(libs.magicIndicator)
-//    api(libs.xpopup)
     api(libs.androidx.constraintlayout)
     api(libs.androidx.viewpager2)
     api(libs.github.brvah)
     api(libs.easyNavigation)
+//    api(libs.refresh.layout)
+//    api(libs.refresh.header)
+//    api(libs.magicIndicator)
+//    api(libs.xpopup)
 }
 
