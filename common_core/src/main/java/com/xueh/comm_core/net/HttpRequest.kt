@@ -134,6 +134,10 @@ object HttpRequest {
     fun putHead(header: HashMap<String, String>) {
         headers.put(header)
     }
+    fun putHead(key: String, v: String) {
+        clearService()
+        headers.put(key, v)
+    }
 
     fun clean(key: String) {
         headers.clearKey(key)

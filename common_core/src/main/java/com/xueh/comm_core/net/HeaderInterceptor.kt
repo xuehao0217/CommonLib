@@ -32,13 +32,6 @@ class HeaderInterceptor : Interceptor {
 //        }
 
         return chain.proceed(requestBuilder.build())
-
-
-//        val requestBuilder = chain.request().newBuilder()
-//        headers.forEach { (t, u) ->
-//            requestBuilder.addHeader(t, u)
-//        }
-//        return chain.proceed(requestBuilder.build())
     }
 
     fun put(key: String, value: String) {
