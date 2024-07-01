@@ -99,9 +99,9 @@ class ViewModelDsl<Response> {
     }
 
     //解析了BaseResult
-    internal lateinit var requestParseData: suspend () -> BaseResult<Response>
-    infix fun onRequestParseData(request: suspend () -> BaseResult<Response>) {
-        this.requestParseData = request
+    internal lateinit var requestBaseResult: suspend () -> BaseResult<Response>
+    infix fun onRequestBaseResult(request: suspend () -> BaseResult<Response>) {
+        this.requestBaseResult = request
     }
     /////////////////////////////////////////////////////////////////////////////////////
 

@@ -32,7 +32,7 @@ class HomeViewModel : BaseRequstViewModel<RestApi>() {
 
     fun loadDsl() {
         apiDslResult {
-            onRequestParseData {
+            onRequestBaseResult {
                 api.bannerList3()
             }
             onResponse {

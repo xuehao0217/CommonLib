@@ -140,7 +140,7 @@ open class RequestViewModel : AbsViewModel() {
                 ViewModelDsl<Response>().apply(apiDSL).start?.invoke()
             }
             onRequest {
-                ViewModelDsl<Response>().apply(apiDSL).requestParseData()
+                ViewModelDsl<Response>().apply(apiDSL).requestBaseResult()
             }
             onResponse {
                 if (it.isSuccess()) {
