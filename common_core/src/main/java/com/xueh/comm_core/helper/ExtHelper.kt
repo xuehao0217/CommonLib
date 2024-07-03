@@ -223,7 +223,7 @@ fun <T> launchIOCoroutine(
             block(result)
         } catch (e: Exception) {
             onError(e)
-            Log.e("launchIOAndCancel", "Exception in launchIOAndCancel", e)
+            LogUtils.e("launchIOCoroutine", "Exception in launchIOAndCancel", e)
         } finally {
             scope.cancel()
             onFinally()
