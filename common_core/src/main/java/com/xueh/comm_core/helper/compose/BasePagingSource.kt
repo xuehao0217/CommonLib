@@ -45,7 +45,17 @@ abstract class BasePagingSource<T : Any> : PagingSource<Int, T>() {
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, T>): Int? = null
+    override fun getRefreshKey(state: PagingState<Int, T>): Int? {
+        // 获取当前分页状态的锚定位置
+        val anchorPosition = state.anchorPosition ?: return null
+
+        // 找到距离锚定位置最近的分页页码
+        val page = state.closestPageToPosition(anchorPosition)
+
+        // 返回前一页的键值加一，或者下一页的键值减一
+        return page?.prevKey?.plus(1) ?: page?.nextKey?.minus(1)
+    }
+
 
     abstract suspend fun getDataList(page: Int): List<T>
 }

@@ -1,5 +1,6 @@
 package com.xueh.comm_core.helper
 
+import android.util.Log
 import androidx.core.content.FileProvider
 import com.blankj.utilcode.util.*
 import com.xueh.comm_core.helper.coroutine.GlobalCoroutineExceptionHandler
@@ -7,6 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.jessyan.progressmanager.ProgressListener
 import me.jessyan.progressmanager.ProgressManager
 import me.jessyan.progressmanager.body.ProgressInfo
@@ -206,12 +208,25 @@ inline fun <T> kotlinx.coroutines.flow.Flow<T>.collect(scope: CoroutineScope, cr
 }
 
 
-fun launchMainAndCancel(error: () -> Unit={},block: suspend CoroutineScope.() -> Unit) = CoroutineScope(Dispatchers.Main).launch {
-    try {
-        block()
-    } catch (e: Exception) {
-        error()
-    } finally {
-        cancel()
+fun <T> launchIOCoroutine(
+    blockIO: suspend CoroutineScope.() -> T,
+    onError: (Exception) -> Unit = {},
+    onFinally: () -> Unit = {},
+    block: suspend CoroutineScope.(T) -> Unit
+) {
+    val scope = CoroutineScope(Dispatchers.Main)
+    scope.launch {
+        try {
+            val result = withContext(Dispatchers.IO) {
+                blockIO()
+            }
+            block(result)
+        } catch (e: Exception) {
+            onError(e)
+            Log.e("launchIOAndCancel", "Exception in launchIOAndCancel", e)
+        } finally {
+            scope.cancel()
+            onFinally()
+        }
     }
 }
