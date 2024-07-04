@@ -32,12 +32,13 @@ import kotlinx.coroutines.launch
 
 @Preview
 @Composable
-fun WebViewPage(url: String="",onBack: () -> Unit = {}) {
+fun WebViewPage(url: String="",onBack: () -> Unit = {},webViewExt: ((webView: WebView?) -> Unit)?=null) {
     var rememberWebViewProgress by remember { mutableStateOf(-1) }
     Box {
         CustomWebView(
             modifier = Modifier.fillMaxSize(),
             url = url,
+            webViewExt =webViewExt,
             onProgressChange = { progress ->
                 rememberWebViewProgress = progress
             },
@@ -83,6 +84,7 @@ fun WebViewPage(url: String="",onBack: () -> Unit = {}) {
 fun CustomWebView(
     modifier: Modifier = Modifier,
     url: String,
+    webViewExt:((webView: WebView?) -> Unit)?=null ,
     onBack: (webView: WebView?) -> Unit,
     onProgressChange: (progress: Int) -> Unit = {},
     initSettings: (webSettings: WebSettings?) -> Unit = {},
@@ -144,7 +146,6 @@ fun CustomWebView(
         }
     }
     var webView: WebView? = null
-    val coroutineScope = rememberCoroutineScope()
     AndroidView(modifier = modifier, factory = { ctx ->
         WebView(ctx).apply {
             this.webViewClient = webViewClient
@@ -154,7 +155,10 @@ fun CustomWebView(
             webView = this
             loadUrl(url)
         }
-    })
+    }){
+        webViewExt?.invoke(it)
+    }
+    val coroutineScope = rememberCoroutineScope()
     BackHandler {
         coroutineScope.launch {
             //自行控制点击了返回按键之后，关闭页面还是返回上一级网页
