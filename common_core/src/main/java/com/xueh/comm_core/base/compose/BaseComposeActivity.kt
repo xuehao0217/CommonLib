@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import com.xueh.comm_core.weight.compose.CommonTitleView
 import com.xueh.comm_core.weight.xml.ViewLoading
 
 //ComponentActivity
@@ -35,7 +37,20 @@ abstract class BaseComposeActivity : ComponentActivity() {
                 )
                 onDispose {}
             }
-            Column(Modifier.fillMaxSize().navigationBarsPadding()) {
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .navigationBarsPadding()
+            ) {
+                if (showTitleView()) {
+                    CommonTitleView(
+                        title = setTitle(),
+                        showBackIcon = showBackIcon(),
+                        titleBackgroundColor = Color.White,
+                        backClick = {
+                            finish()
+                        })
+                }
                 setComposeContent()
             }
         }
@@ -43,6 +58,13 @@ abstract class BaseComposeActivity : ComponentActivity() {
 
     @Composable
     abstract fun setComposeContent()
+
+    protected open fun showTitleView() = true
+
+    protected open fun setTitle() = ""
+
+    protected open fun showBackIcon() = true
+
 }
 
 

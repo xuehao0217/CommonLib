@@ -50,7 +50,7 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
             .onBindAdapter<ItemLayoutBinding, String> { item ->
                 tvItem.text = item
             }.apply {
-                setNewInstance(mutableListOf("查看网络日志","ComposeActvity"))
+                setNewInstance(mutableListOf("查看网络日志","ComposeActvity","TestComposeActvity"))
                 setOnItemClickListener { adapter, view, position ->
                     when(position){
                         0->{
@@ -58,6 +58,9 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
                         }
                         1->{
                             startActivity(ComposeActivity::class.java)
+                        }
+                        2->{
+                            startActivity(TestComposeActivity::class.java)
                         }
                     }
 

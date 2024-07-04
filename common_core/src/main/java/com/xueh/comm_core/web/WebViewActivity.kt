@@ -75,7 +75,7 @@ open class WebViewActivity : DActivity<ActivityWebViewBinding>() {
 
         titleStr = "${intent?.getStringExtra(TITLE)}"
         binding.tbTitleBar.setContent {
-            CommonTitleView(name = titleStr, backClick = {
+            CommonTitleView(title = titleStr, backClick = {
                 finish()
             })
         }

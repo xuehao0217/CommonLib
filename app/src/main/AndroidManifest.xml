@@ -20,6 +20,7 @@
         tools:replace="android:theme">
         <activity android:name=".ui.MainActivity" />
         <activity android:name=".ui.ComposeActivity" />
+        <activity android:name=".ui.TestComposeActivity" />
         <activity
             android:name=".ui.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

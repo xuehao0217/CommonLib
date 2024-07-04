@@ -34,7 +34,7 @@ import com.xueh.comm_core.base.compose.theme.ComposeMaterial3Theme
 @Composable
 fun CommonTitlePage(
     title: String,
-    modifier: Modifier=Modifier,
+    modifier: Modifier = Modifier,
     showBackIcon: Boolean = true,
     @DrawableRes backIcon: Int = if (appThemeState.darkTheme) R.mipmap.bar_icon_back_white else R.mipmap.bar_icon_back_black,
     backClick: (() -> Unit)? = null,
@@ -55,7 +55,9 @@ fun CommonTitlePage(
     ComposeMaterial3Theme {
         GrayAppAdapter(isGray = false) {
             Scaffold(
-                modifier = Modifier.systemBarsPadding().then(modifier),
+                modifier = Modifier
+                    .systemBarsPadding()
+                    .then(modifier),
 //                topBar = {
 //                Spacer(
 //                    modifier = Modifier
@@ -103,63 +105,12 @@ fun CommonTitlePage(
             }
         }
     }
-
-//    BaseComposeView {
-//        GrayAppAdapter {
-//            Scaffold(topBar = {
-//                Spacer(
-//                    modifier = Modifier
-//                        .height(
-//                            BarUtils
-//                                .getStatusBarHeight().toFloat().dp().dp
-//                        )
-//                        .background(titleBackground)
-//                        .fillMaxWidth()
-//                )
-//            }, bottomBar = {
-//                Spacer(
-//                    modifier = Modifier
-//                        .height(
-//                                BarUtils
-//                                    .getNavBarHeight()
-//                                    .toFloat().dp().dp
-//                        )
-//                        .background(contentBackground)
-//                        .fillMaxWidth()
-//                )
-//            }) {
-//                Column(
-//                    modifier = Modifier
-//                        .background(contentBackground)
-//                        .padding(it)
-//                ) {
-//                    CommonTitleView(
-//                        title,
-//                        showBackIcon = showBackIcon,
-//                        titleBackground = titleBackground,
-//                        backIcon = backIcon,
-//                        rightContent = titleRightContent,
-//                        backClick = backClick
-//                    )
-//                    if (showTitleBottomLine) {
-//                        Divider()
-//                    }
-//                    androidx.compose.material.Surface(
-//                        modifier = Modifier
-//                            .fillMaxSize(), color = contentBackground
-//                    ) {
-//                        content.invoke()
-//                    }
-//                }
-//            }
-//        }
-//    }
 }
 
 
 @Composable
 fun CommonTitleView(
-    name: String,
+    title: String,
     @DrawableRes backIcon: Int = if (appThemeState.darkTheme) R.mipmap.bar_icon_back_white else R.mipmap.bar_icon_back_black,
     titleBackgroundColor: Color? = null,
     showBackIcon: Boolean = true,
@@ -169,27 +120,24 @@ fun CommonTitleView(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
+            .statusBarsPadding()
             .background(titleBackgroundColor ?: MaterialTheme.colorScheme.background)
             .height(44.dp)
     ) {
         val (iv_close, row_title, surface_right_view) = createRefs()
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
+        Text(
+            text = "${title}",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            maxLines = 1,
+            color = if (appThemeState.darkTheme) Color.White else Color.Black,
             modifier = Modifier.constrainAs(row_title) {
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
                 top.linkTo(parent.top)
                 bottom.linkTo(parent.bottom)
-            }) {
-            Text(
-                text = "${name}",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                maxLines = 1,
-                color = if (appThemeState.darkTheme) Color.White else Color.Black,
-            )
-        }
+            }
+        )
         if (showBackIcon) {
             ImageCompose(id = backIcon, modifier = Modifier
                 .size(28.dp)
@@ -201,15 +149,12 @@ fun CommonTitleView(
                 .click {
                     backClick?.invoke()
                 })
-
         }
-        Surface(modifier = Modifier
-            .background(titleBackgroundColor ?: MaterialTheme.colorScheme.background)
-            .constrainAs(surface_right_view) {
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-                end.linkTo(parent.end, 16.dp)
-            }) {
+        Box(modifier = Modifier.constrainAs(surface_right_view) {
+            top.linkTo(parent.top)
+            bottom.linkTo(parent.bottom)
+            end.linkTo(parent.end, 16.dp)
+        }) {
             rightContent?.invoke()
         }
     }
