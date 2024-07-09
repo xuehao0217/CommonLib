@@ -35,21 +35,17 @@ fun PagerPage (){
         }
 
         snapshotFlow { pagerState.targetPage }.collect {
-            // Do something with each page change, for example:
-            // viewModel.sendPageSelectedEvent(page)
             Log.i("PagerPage", "targetPage to $it")
         }
 
         snapshotFlow { pagerState.settledPage }.collect {
-            // Do something with each page change, for example:
-            // viewModel.sendPageSelectedEvent(page)
             Log.i("PagerPage", "settledPage to $it")
         }
     }
 
     VerticalPager(
         state = pagerState,
-        modifier = Modifier.fillMaxSize(), beyondBoundsPageCount = pagerState.pageCount
+        modifier = Modifier.fillMaxSize(), beyondBoundsPageCount =1
     ) { page ->
 
         Box(modifier = Modifier.fillMaxSize().background(Color.Blue), contentAlignment = Alignment.Center,){
