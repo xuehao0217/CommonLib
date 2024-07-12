@@ -82,7 +82,7 @@ object HttpRequest {
                 builder.hostnameVerifier { hostname, session ->
                     true
                 }
-                builder.addNetworkInterceptor(AndroidLoggingInterceptor.build(hideVerticalLine=true))
+                builder.addNetworkInterceptor(AndroidLoggingInterceptor.build(isDebug = BuildConfig.DEBUG, hideVerticalLine=true,requestTag="HTTP",responseTag="HTTP"))
             } catch (e: Exception) {
                 throw RuntimeException(e)
             }
