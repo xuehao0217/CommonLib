@@ -1,11 +1,11 @@
 package com.xueh.comm_core.net
 
 import com.blankj.utilcode.util.Utils
+import com.safframework.http.interceptor.AndroidLoggingInterceptor
 import com.xueh.comm_core.BuildConfig
 import com.xueh.comm_core.net.helper.CookieJar
 import com.xueh.comm_core.net.helper.XTrustManager
 import com.xueh.comm_core.net.interceptor.HeaderInterceptor
-import com.xueh.comm_core.net.interceptor.LoggingInterceptor
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -82,7 +82,7 @@ object HttpRequest {
                 builder.hostnameVerifier { hostname, session ->
                     true
                 }
-                builder.addNetworkInterceptor(LoggingInterceptor())
+                builder.addNetworkInterceptor(AndroidLoggingInterceptor.build(hideVerticalLine=true))
             } catch (e: Exception) {
                 throw RuntimeException(e)
             }

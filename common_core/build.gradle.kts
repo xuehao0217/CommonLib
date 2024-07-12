@@ -100,6 +100,7 @@ dependencies {
     api(libs.converter.gson)
     api(libs.okhttp3.okhttp)
     api(libs.okhttp3.logging.interceptor)
+    api(libs.logginginterceptor)
     api(libs.cookieJar)
 
     //----------------网络请求查看日志相关--------------------------

@@ -50,6 +50,7 @@ composeviews = "1.6.11.1"
 retrofit = "2.9.0"
 okhttpVersion = "5.0.0-alpha.10"
 loggingInterceptorVersion = "5.0.0-alpha.10"
+logginginterceptor = "v1.6.13"
 cookiejarVersion = "v1.0.1"
 converterGson = "2.9.0"
 progressmanagerVersion = "1.5.0"
@@ -127,6 +128,7 @@ cookieJar = { module = "com.github.franmontiel:PersistentCookieJar", version.ref
 chucker-no-op = { module = "com.github.chuckerteam.chucker:library-no-op", version.ref = "chucker" }
 chucker = { module = "com.github.chuckerteam.chucker:library", version.ref = "chucker" }
 progressmanager = { module = "me.jessyan:progressmanager", version.ref = "progressmanagerVersion" }
+logginginterceptor = { module = "com.github.fengzhizi715:saf-logginginterceptor", version.ref = "logginginterceptor" }
 spiderman = { module = "com.github.simplepeng.SpiderMan:spiderman", version.ref = "spiderman" }
 #------------------------------------------------工具相关--------------------------------------------------------------
 interval = { module = "com.github.liangjingkanji:Interval", version.ref = "interval" }
