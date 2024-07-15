@@ -3,7 +3,6 @@ package com.xueh.comm_core.net
 import com.blankj.utilcode.util.Utils
 import com.safframework.http.interceptor.AndroidLoggingInterceptor
 import com.xueh.comm_core.BuildConfig
-import com.xueh.comm_core.net.helper.CookieJar
 import com.xueh.comm_core.net.helper.XTrustManager
 import com.xueh.comm_core.net.interceptor.HeaderInterceptor
 import okhttp3.Cache
@@ -93,7 +92,6 @@ object HttpRequest {
             .connectTimeout(TIME_CONNECT, TimeUnit.SECONDS)
             .readTimeout(TIME_CONNECT, TimeUnit.SECONDS)
             .writeTimeout(TIME_CONNECT, TimeUnit.SECONDS)
-            .cookieJar(CookieJar.getInstance())
     }
 
     //**********************************************************************************************
