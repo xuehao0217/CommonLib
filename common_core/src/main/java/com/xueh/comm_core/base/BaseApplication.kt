@@ -2,6 +2,7 @@ package com.xueh.comm_core.base
 
 import android.app.Application
 import androidx.multidex.MultiDex
+import androidx.multidex.MultiDexApplication
 import com.blankj.utilcode.util.ProcessUtils
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
@@ -10,11 +11,10 @@ import com.orhanobut.logger.Logger
  * 创建日期: 2019/12/27 13:40
  * 备注：
  */
-abstract class BaseApplication : Application() {
+abstract class BaseApplication : MultiDexApplication() {
     abstract fun init()
     override fun onCreate() {
         super.onCreate()
-        MultiDex.install(this)
         if (ProcessUtils.getCurrentProcessName().equals(getPackageName())) {
             Logger.addLogAdapter(AndroidLogAdapter())
             init()
