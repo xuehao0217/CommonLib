@@ -63,22 +63,9 @@ inline fun <T> rememberMutableStateOf(
 ): MutableState<T> = remember(key1 = key1, key2 = key2, key3 = key3) { mutableStateOf(initValue()) }
 
 
+//LifecycleEventEffect(Lifecycle.Event.ON_RESUME){
 
-@Composable
-fun ComposeLifecycle(block: (Lifecycle.Event) -> Unit) {
-    val lifecycle by rememberUpdatedState(androidx.lifecycle.compose.LocalLifecycleOwner.current.lifecycle)
-    DisposableEffect(lifecycle) {
-        var lifecycleEventObserver = object : LifecycleEventObserver {
-            override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
-                block(event)
-            }
-        }
-        lifecycle.addObserver(lifecycleEventObserver)
-        onDispose {
-            lifecycle.removeObserver(lifecycleEventObserver)
-        }
-    }
-}
+//}
 
 
 /**

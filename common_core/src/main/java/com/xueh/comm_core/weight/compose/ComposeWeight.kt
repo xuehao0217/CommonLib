@@ -522,7 +522,6 @@ onValueChange = {
 },
 keyboardOptions = KeyboardOptions(
 keyboardType = KeyboardType.Text,
-capitalization = KeyboardCapitalization.Characters,
   imeAction = ImeAction.Search,//键盘右下角
 ),
 maxLength = 7,
