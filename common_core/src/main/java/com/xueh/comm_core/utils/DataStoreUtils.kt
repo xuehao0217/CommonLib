@@ -32,7 +32,7 @@ import java.io.IOException
  *
  */
 
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "PlayAndroidDataStore")
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "AndroidDataStore")
 
 object DataStoreUtils {
 
