@@ -2,8 +2,8 @@
 agp = "8.3.2"
 kotlin = "1.9.23"
 kotlinStdlib = "1.9.23"
-kotlinCoroutinesAndroidVersion = "1.8.0"
-kotlinCoroutinesCoreVersion = "1.8.0"
+kotlinCoroutinesAndroidVersion = "1.8.1"
+kotlinCoroutinesCoreVersion = "1.8.1"
 composeBom = "2024.06.00"
 #--------------基础库相关-----------------
 junit = "4.13.2"
@@ -21,27 +21,28 @@ utilcodex = "1.31.0"
 agentweb = "v5.1.1-androidx"
 xxpermissions = "18.63"
 glideVersion = "4.16.0"
+landscapistGlide = "2.3.6"
 logger = "2.2.0"
 #--------------KTX相关-----------------
 coreKtx = "1.13.1"
-activityKtx = "1.9.0"
-fragmentKtx = "1.8.1"
-lifecycleRuntimeKtx = "2.8.3"
-lifecycleKtx = "2.8.3"
+activityKtx = "1.9.1"
+fragmentKtx = "1.8.2"
+lifecycleRuntimeKtx = "2.8.4"
+lifecycleKtx = "2.8.4"
 #--------------Compose相关-----------------
-lifecycleRuntimeComposeVersion = "2.8.3"
-activityCompose = "1.9.0"
-coilCompose = "2.4.0"
-coilVersion = "2.4.0"
+lifecycleRuntimeComposeVersion = "2.8.4"
+activityCompose = "1.9.1"
+coilCompose = "2.7.0"
+coilVersion = "2.7.0"
 constraintLayoutCompose = "1.1.0-alpha13"
 accompanist = "0.34.0"
 accompanistPlaceholder = "0.31.0-alpha"
 googleAccompanistInsets = "0.31.5-beta"
 navigationComposeVersion = "2.7.7"
-pagingCommon = "3.3.0"
-pagingComposeVersion = "3.3.0"
-pagingRuntime = "3.3.0"
-lifecycleViewmodelCompose = "2.8.3"
+pagingCommon = "3.3.1"
+pagingComposeVersion = "3.3.1"
+pagingRuntime = "3.3.1"
+lifecycleViewmodelCompose = "2.8.4"
 composeSmartrefreshVersion = "2.1.0"
 animation = "1.6.8"
 any_pop_dialog_compose = "1.0.1"
@@ -94,6 +95,7 @@ coil = { module = "io.coil-kt:coil", version.ref = "coilVersion" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 coil-gif = { module = "io.coil-kt:coil-gif", version.ref = "coilCompose" }
 github-glide = { module = "com.github.bumptech.glide:glide", version.ref = "glideVersion" }
+landscapist-glide = { module = "com.github.skydoves:landscapist-glide", version.ref = "landscapistGlide" }
 #-----------------------------------------------Compose相关-------------------------------------------------------------
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }

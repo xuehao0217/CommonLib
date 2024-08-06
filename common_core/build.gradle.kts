@@ -89,7 +89,7 @@ dependencies {
     api(libs.androidx.runtime.livedata)
     api(libs.composesmartrefresh)
     api(libs.any.pop.dialog.compose)    //https://github.com/TheMelody/AnyPopDialog-Compose
-
+    api (libs.landscapist.glide)
     //----------------Kotlin相关--------------------------
     api(libs.kotlin.stdlib)
     api(libs.kotlinx.coroutines.core)
