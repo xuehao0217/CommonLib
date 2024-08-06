@@ -44,15 +44,12 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
-import coil.ImageLoader
-import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
-import coil.compose.SubcomposeAsyncImage
-import coil.compose.SubcomposeAsyncImageScope
-import coil.compose.rememberAsyncImagePainter
-import coil.decode.GifDecoder
-import coil.decode.ImageDecoderDecoder
-import coil.request.ImageRequest
+import coil3.compose.AsyncImage
+import coil3.compose.AsyncImagePainter
+import coil3.compose.SubcomposeAsyncImage
+import coil3.compose.SubcomposeAsyncImageScope
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.blankj.utilcode.util.ToastUtils
 import com.blankj.utilcode.util.Utils
 import com.loren.component.view.composesmartrefresh.SmartSwipeRefreshState
@@ -73,7 +70,7 @@ fun ImageLoadAsyncImage(
     url: String, modifier: Modifier = Modifier, placeholder: Painter? = null,
     error: Painter? = null, onSuccess: ((AsyncImagePainter.State.Success) -> Unit)? = null,
 ) = AsyncImage(
-    model = ImageRequest.Builder(LocalContext.current).data(url).crossfade(true).build(),
+    model = ImageRequest.Builder(LocalContext.current).data(url.trim()).crossfade(true).build(),
     modifier = modifier,
     contentScale = ContentScale.Crop,
     contentDescription = null,
@@ -95,7 +92,7 @@ fun ImageLoadCompose(
     onError: ((AsyncImagePainter.State.Error) -> Unit)? = null,
 ) {
     SubcomposeAsyncImage(
-        model = ImageRequest.Builder(LocalContext.current).data(url).crossfade(true).build(),
+        model = ImageRequest.Builder(LocalContext.current).data(url.trim()).crossfade(true).build(),
         modifier = modifier,
         contentScale = ContentScale.Crop,
         contentDescription = null,
