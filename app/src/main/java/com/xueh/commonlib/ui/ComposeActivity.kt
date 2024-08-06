@@ -80,6 +80,7 @@ import com.xueh.commonlib.ui.compose.scrollableTabRow
  * 备注： https://github.com/KatieBarnett/Experiments/tree/main/jc-edge-to-edge?source=post_page-----bea553dd97ff--------------------------------
  */
 class ComposeActivity : BaseComposeActivity() {
+    override fun showTitleView()=false
     @Composable
     override fun setComposeContent() {
         var showMenu by remember {

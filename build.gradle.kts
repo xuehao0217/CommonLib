@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.androidApplication) apply false
     alias(libs.plugins.jetbrainsKotlinAndroid) apply false
     alias(libs.plugins.androidLibrary) apply false
+    alias(libs.plugins.compose.compiler) apply false
 }
 
 buildscript{
@@ -20,5 +21,4 @@ ext {
     set("targetSdk", 34)
     set("versionCode", 1)
     set("versionName", "1.0.0")
-    set("compose_compiler", "1.5.13")
 }

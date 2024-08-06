@@ -1,7 +1,6 @@
 [versions]
 agp = "8.3.2"
-kotlin = "1.9.23"
-kotlinStdlib = "1.9.23"
+kotlin = "2.0.0"
 kotlinCoroutinesAndroidVersion = "1.8.1"
 kotlinCoroutinesCoreVersion = "1.8.1"
 composeBom = "2024.06.00"
@@ -71,7 +70,7 @@ xpopup = "2.1.16"
 brvah = "3.0.7"
 
 [libraries]
-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlinStdlib" }
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinCoroutinesAndroidVersion" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutinesCoreVersion" }
 #-----------------------------------------------基础库相关-------------------------------------------------------------
@@ -158,4 +157,5 @@ magicIndicator = { module = "com.github.hackware1993:MagicIndicator", version.re
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 

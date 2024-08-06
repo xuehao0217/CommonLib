@@ -45,8 +45,8 @@ abstract class BaseComposeActivity : ComponentActivity() {
                 if (showTitleView()) {
                     CommonTitleView(
                         title = setTitle(),
+                        modifier = getTitleModifier(),
                         showBackIcon = showBackIcon(),
-                        titleBackgroundColor = Color.White,
                         backClick = {
                             finish()
                         })
@@ -64,6 +64,8 @@ abstract class BaseComposeActivity : ComponentActivity() {
     protected open fun setTitle() = ""
 
     protected open fun showBackIcon() = true
+
+    protected open fun getTitleModifier()=Modifier
 
 }
 

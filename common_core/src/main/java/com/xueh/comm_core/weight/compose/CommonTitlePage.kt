@@ -82,8 +82,8 @@ fun CommonTitlePage(
                     CommonTitleView(
                         title,
                         showBackIcon = showBackIcon,
-                        titleBackgroundColor = titleBackgroundColor
-                            ?: MaterialTheme.colorScheme.background,
+                        modifier = Modifier.background(titleBackgroundColor
+                            ?: MaterialTheme.colorScheme.background),
                         backIcon = backIcon,
                         rightContent = titleRightContent,
                         backClick = backClick
@@ -112,7 +112,7 @@ fun CommonTitlePage(
 fun CommonTitleView(
     title: String,
     @DrawableRes backIcon: Int = if (appThemeState.darkTheme) R.mipmap.bar_icon_back_white else R.mipmap.bar_icon_back_black,
-    titleBackgroundColor: Color? = null,
+    modifier: Modifier=Modifier,
     showBackIcon: Boolean = true,
     rightContent: (@Composable () -> Unit)? = null,
     backClick: (() -> Unit)? = null,
@@ -120,9 +120,7 @@ fun CommonTitleView(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
-            .statusBarsPadding()
-            .background(titleBackgroundColor ?: MaterialTheme.colorScheme.background)
-            .height(44.dp)
+            .height(44.dp).then(modifier)
     ) {
         val (iv_close, row_title, surface_right_view) = createRefs()
         Text(
