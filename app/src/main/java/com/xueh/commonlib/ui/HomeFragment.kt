@@ -9,6 +9,7 @@ import com.xueh.comm_core.helper.*
 import com.xueh.comm_core.helper.xml.addLinearItemDecoration
 import com.xueh.comm_core.helper.xml.linear
 import com.xueh.comm_core.helper.xml.onBindAdapter
+import com.xueh.comm_core.web.WebViewComposeActivity
 import com.xueh.commonlib.R
 import com.xueh.commonlib.databinding.FragmentHomeBinding
 import com.xueh.commonlib.databinding.ItemLayoutBinding
@@ -60,6 +61,7 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
                             startActivity(ComposeActivity::class.java)
                         }
                         2->{
+//                            WebViewComposeActivity.start("https://www.baidu.com/")
                             startActivity(TestComposeActivity::class.java)
                         }
                     }

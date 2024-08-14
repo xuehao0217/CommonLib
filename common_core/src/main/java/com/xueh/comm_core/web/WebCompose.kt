@@ -27,18 +27,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import com.blankj.utilcode.util.LogUtils
 import kotlinx.coroutines.launch
 
 
 @Preview
 @Composable
 fun WebViewPage(url: String="",onBack: () -> Unit = {},webViewExt: ((webView: WebView?) -> Unit)?=null) {
-    var rememberWebViewProgress by remember { mutableStateOf(-1) }
+    LogUtils.iTag("WebViewPage","url==${url}")
+    var rememberWebViewProgress: Int by remember { mutableStateOf(-1) }
     Box {
         CustomWebView(
             modifier = Modifier.fillMaxSize(),
-            url = url,
-            webViewExt =webViewExt,
+            url =url,
             onProgressChange = { progress ->
                 rememberWebViewProgress = progress
             },
@@ -66,6 +67,9 @@ fun WebViewPage(url: String="",onBack: () -> Unit = {},webViewExt: ((webView: We
                     onBack()
                 }
             }, onReceivedError = {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    //Log.d("AAAA", ">>>>>>${it?.description}")
+                }
             }
         )
         LinearProgressIndicator(
@@ -73,54 +77,44 @@ fun WebViewPage(url: String="",onBack: () -> Unit = {},webViewExt: ((webView: We
             modifier = Modifier
                 .fillMaxWidth()
                 .height(if (rememberWebViewProgress == 100) 0.dp else 5.dp),
-            color = Color.Red
+            color = Color(0xFFF87D39)
         )
     }
 }
 
-
-//https://gist.github.com/TheMelody/6ec3fcba6d57f544465651acc480ff39
 @Composable
-fun CustomWebView(
-    modifier: Modifier = Modifier,
-    url: String,
-    webViewExt:((webView: WebView?) -> Unit)?=null ,
-    onBack: (webView: WebView?) -> Unit,
-    onProgressChange: (progress: Int) -> Unit = {},
-    initSettings: (webSettings: WebSettings?) -> Unit = {},
-    onReceivedError: (error: WebResourceError?) -> Unit = {}
-) {
-    val webViewChromeClient = object : WebChromeClient() {
+fun CustomWebView(modifier: Modifier = Modifier,
+                  url:String,
+                  onBack: (webView:WebView?) -> Unit,
+                  onProgressChange: (progress:Int)->Unit = {},
+                  initSettings: (webSettings:WebSettings?) -> Unit = {},
+                  onReceivedError: (error: WebResourceError?) -> Unit = {}){
+    val webViewChromeClient = object:WebChromeClient(){
         override fun onProgressChanged(view: WebView?, newProgress: Int) {
             //回调网页内容加载进度
             onProgressChange(newProgress)
             super.onProgressChanged(view, newProgress)
         }
     }
-    val webViewClient = object : WebViewClient() {
-        override fun onPageStarted(
-            view: WebView?, url: String?,
-            favicon: Bitmap?
-        ) {
+    val webViewClient = object: WebViewClient(){
+        override fun onPageStarted(view: WebView?, url: String?,
+                                   favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
             onProgressChange(-1)
         }
-
         override fun onPageFinished(view: WebView?, url: String?) {
             super.onPageFinished(view, url)
             onProgressChange(100)
         }
-
         override fun shouldOverrideUrlLoading(
             view: WebView?,
             request: WebResourceRequest?
         ): Boolean {
-            if (null == request?.url) return false
+            if(null == request?.url) return false
             val showOverrideUrl = request.url.toString()
             try {
                 if (!showOverrideUrl.startsWith("http://")
-                    && !showOverrideUrl.startsWith("https://")
-                ) {
+                    && !showOverrideUrl.startsWith("https://")) {
                     //处理非http和https开头的链接地址
                     Intent(Intent.ACTION_VIEW, Uri.parse(showOverrideUrl)).apply {
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -128,7 +122,7 @@ fun CustomWebView(
                     }
                     return true
                 }
-            } catch (e: Exception) {
+            }catch (e:Exception){
                 //没有安装和找到能打开(「xxxx://openlink.cc....」、「weixin://xxxxx」等)协议的应用
                 return true
             }
@@ -145,8 +139,9 @@ fun CustomWebView(
             onReceivedError(error)
         }
     }
-    var webView: WebView? = null
-    AndroidView(modifier = modifier, factory = { ctx ->
+    var webView:WebView? = null
+    val coroutineScope = rememberCoroutineScope()
+    AndroidView(modifier = modifier,factory = { ctx ->
         WebView(ctx).apply {
             this.webViewClient = webViewClient
             this.webChromeClient = webViewChromeClient
@@ -155,10 +150,7 @@ fun CustomWebView(
             webView = this
             loadUrl(url)
         }
-    }){
-        webViewExt?.invoke(it)
-    }
-    val coroutineScope = rememberCoroutineScope()
+    })
     BackHandler {
         coroutineScope.launch {
             //自行控制点击了返回按键之后，关闭页面还是返回上一级网页
