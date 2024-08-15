@@ -1,4 +1,7 @@
+import com.android.build.gradle.internal.api.ApkVariantOutputImpl
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Date
 
 plugins {
@@ -67,17 +70,17 @@ android {
         }
     }
 
-//    android.applicationVariants.all {
-//        outputs.all {
-//            if (this is ApkVariantOutputImpl) {
-//                val config = project.android.defaultConfig
-//                val versionName = config.versionName
-//                val formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd.HH.mm")
-//                val createTime = LocalDateTime.now().format(formatter)
-//                this.outputFileName = "${rootProject.extra["appName"]}_${this.name}_${versionName}_$createTime.apk"
-//            }
-//        }
-//    }
+    android.applicationVariants.all {
+        outputs.all {
+            if (this is ApkVariantOutputImpl) {
+                val config = project.android.defaultConfig
+                val versionName = config.versionName
+                val formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd.HH.mm")
+                val createTime = LocalDateTime.now().format(formatter)
+                this.outputFileName = "${rootProject.extra["appName"]}_${this.name}_${versionName}_$createTime.apk"
+            }
+        }
+    }
 
     defaultConfig {
         setProperty("archivesBaseName", "${rootProject.extra["appName"]}-v${versionName}-${SimpleDateFormat("yyyy.MMdd.HH.mm.ss").format(Date())}")
