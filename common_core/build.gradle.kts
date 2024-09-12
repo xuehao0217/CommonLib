@@ -89,6 +89,8 @@ dependencies {
     api(libs.composesmartrefresh)
     api(libs.any.pop.dialog.compose)    //https://github.com/TheMelody/AnyPopDialog-Compose
     api (libs.landscapist.glide)
+
+    api(libs.compose.webview)
     //----------------Kotlin相关--------------------------
     api(libs.kotlin.stdlib)
     api(libs.kotlinx.coroutines.core)
