@@ -113,6 +113,7 @@ fun CommonTitleView(
     title: String,
     @DrawableRes backIcon: Int = if (appThemeState.darkTheme) R.mipmap.bar_icon_back_white else R.mipmap.bar_icon_back_black,
     modifier: Modifier=Modifier,
+    titleBackgroundColor: Color = Color.White,
     showBackIcon: Boolean = true,
     rightContent: (@Composable () -> Unit)? = null,
     backClick: (() -> Unit)? = null,
@@ -120,6 +121,7 @@ fun CommonTitleView(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
+            .background(titleBackgroundColor)
             .height(44.dp).then(modifier)
     ) {
         val (iv_close, row_title, surface_right_view) = createRefs()

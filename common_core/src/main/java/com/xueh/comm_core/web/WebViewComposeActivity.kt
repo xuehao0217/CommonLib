@@ -22,7 +22,10 @@ class WebViewComposeActivity : BaseComposeActivity() {
         }
     }
 
-
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
     @Composable
     override fun setComposeContent() {
         WebViewPage("${intent?.getStringExtra(URL)}") {
