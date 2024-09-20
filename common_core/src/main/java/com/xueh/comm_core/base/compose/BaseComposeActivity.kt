@@ -6,13 +6,21 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import com.google.accompanist.insets.statusBarsHeight
+import com.xueh.comm_core.R
 import com.xueh.comm_core.weight.compose.CommonTitleView
 import com.xueh.comm_core.weight.xml.ViewLoading
 
@@ -43,13 +51,20 @@ abstract class BaseComposeActivity : ComponentActivity() {
                     .navigationBarsPadding()
             ) {
                 if (showTitleView()) {
-                    CommonTitleView(
-                        title = setTitle(),
-                        modifier = getTitleModifier(),
-                        showBackIcon = showBackIcon(),
-                        backClick = {
-                            finish()
-                        })
+                    Column(
+                        Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .then(if (showStatusBars()) Modifier.statusBarsPadding() else Modifier)
+                    ) {
+                        CommonTitleView(
+                            title = setTitle(),
+                            showBackIcon = showBackIcon(),
+                            backClick = {
+                                finish()
+                            })
+                    }
+
                 }
                 setComposeContent()
             }
@@ -65,8 +80,8 @@ abstract class BaseComposeActivity : ComponentActivity() {
 
     protected open fun showBackIcon() = true
 
-    protected open fun getTitleModifier()=Modifier
 
+    protected open fun showStatusBars()=true
 }
 
 

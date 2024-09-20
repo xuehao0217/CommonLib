@@ -16,14 +16,14 @@ import com.kevinnzou.web.rememberWebViewNavigator
 import com.kevinnzou.web.rememberWebViewState
 
 @Composable
-fun ComposeWebView (url:String){
+fun ComposeWebView(url: String) {
     val state = rememberWebViewState(url = url)
     val navigator = rememberWebViewNavigator()
     Column {
         val loadingState = state.loadingState
         if (loadingState is LoadingState.Loading) {
             LinearProgressIndicator(
-                progress = loadingState.progress,
+                progress = { loadingState.progress },
                 modifier = Modifier.fillMaxWidth()
             )
         }

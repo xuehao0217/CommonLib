@@ -99,9 +99,9 @@ open class WebViewActivity : BaseActivity<ActivityWebViewBinding>() {
         val uri = Uri.parse(intent.getStringExtra(URL))
         val hideTitle = uri.getQueryParameter("hideTitle") ?: ""
 
-
         if (hideTitle.isNotEmpty()) {
             BarUtils.transparentStatusBar(this)
+            BarUtils.setStatusBarLightMode(this,false)
             binding.composeViewTitle.setContent {
                 WebTitle(titleStr, alpha) {
                     this.finish()
@@ -110,7 +110,7 @@ open class WebViewActivity : BaseActivity<ActivityWebViewBinding>() {
             binding.tbTitleBar.visibility = View.GONE
             binding.composeViewTitle.visibility = View.VISIBLE
         } else {
-            BarUtils.addMarginTopEqualStatusBarHeight(binding.tbTitleBar)
+            BarUtils.setStatusBarLightMode(this,true)
             binding.composeViewTitle.visibility = View.GONE
             binding.tbTitleBar.visibility = View.VISIBLE
             binding.tbTitleBar.setContent {
@@ -145,7 +145,10 @@ open class WebViewActivity : BaseActivity<ActivityWebViewBinding>() {
 
 
         agentWeb.webCreator.webView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-            alpha = scrollY.toFloat() / (BarUtils.getStatusBarHeight() + dp2px(50f))
+            if (hideTitle.isNotEmpty()){
+                alpha = scrollY.toFloat() / (BarUtils.getStatusBarHeight() + dp2px(50f))
+                BarUtils.setStatusBarLightMode(this,if(alpha>=1) true else false)
+            }
         }
     }
 

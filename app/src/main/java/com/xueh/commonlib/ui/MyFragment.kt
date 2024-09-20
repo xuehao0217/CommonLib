@@ -80,8 +80,8 @@ class MyFragment : DFragment<FragmentMyBinding>() {
                 interval.resume()
             }
             tvWeb.setOnClickListener {
-//                WebViewComposeActivity.start("https://www.baidu.com/")
-                WebViewActivity.start("https://test-h5.streamify.one/specialTopic?hideTitle=1&topicId=topic_6pnk6S2TRks1")
+                WebViewComposeActivity.start("https://www.baidu.com/")
+//                WebViewActivity.start("https://www.baidu.com/")
             }
         }
 
