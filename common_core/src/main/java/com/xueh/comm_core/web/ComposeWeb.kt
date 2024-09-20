@@ -16,7 +16,7 @@ import com.kevinnzou.web.rememberWebViewNavigator
 import com.kevinnzou.web.rememberWebViewState
 
 @Composable
-fun ComposeWeb (url:String){
+fun ComposeWebView (url:String){
     val state = rememberWebViewState(url = url)
     val navigator = rememberWebViewNavigator()
     Column {
