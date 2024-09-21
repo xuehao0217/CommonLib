@@ -64,7 +64,7 @@ fun <T : Any> RefreshList(
                     loadingContent?.invoke(this)
                 }
             } else {
-                if (loadingContent.isEmpty()) {
+                if (emptyDataContent.isEmpty()) {
                     Text(text = "无数据")
                 }else{
                     emptyDataContent?.invoke(this)
