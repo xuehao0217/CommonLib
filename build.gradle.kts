@@ -14,11 +14,11 @@ buildscript{
 
 
 ext {
-    set("compileSdk", 34)
+    set("compileSdk", 35)
     set("minSdk", 23)
     set("applicationId", "com.xueh.commonlib")
     set("appName", "commonlib")
-    set("targetSdk", 34)
+    set("targetSdk", 35)
     set("versionCode", 1)
     set("versionName", "1.0.0")
 }

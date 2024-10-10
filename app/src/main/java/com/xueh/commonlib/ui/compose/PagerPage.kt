@@ -45,7 +45,7 @@ fun PagerPage (){
 
     VerticalPager(
         state = pagerState,
-        modifier = Modifier.fillMaxSize(), beyondBoundsPageCount =1
+        modifier = Modifier.fillMaxSize(), beyondViewportPageCount =1
     ) { page ->
 
         Box(modifier = Modifier.fillMaxSize().background(Color.Blue), contentAlignment = Alignment.Center,){
