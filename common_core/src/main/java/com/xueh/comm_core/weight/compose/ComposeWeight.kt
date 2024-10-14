@@ -267,18 +267,17 @@ fun ShadowVerticalView(height: Int = 50, modifier: Modifier = Modifier) {
 
 //公用列表
 @Composable
-fun CommonLazyColumn(
+inline fun CommonLazyColumn(
     modifier: Modifier = Modifier,
     state: LazyListState = rememberLazyListState(),
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
     contentPadding: PaddingValues = PaddingValues(horizontal = 15.dp),
-    headContent: @Composable () -> Unit? = {},
-    foodContent: @Composable () -> Unit? = {},
-    content: LazyListScope.() -> Unit,
+    crossinline headContent: @Composable () -> Unit? = {},
+    crossinline foodContent: @Composable () -> Unit? = {},
+    crossinline content: LazyListScope.() -> Unit,
 ) {
-
     ConstraintLayout(modifier = modifier) {
-        var (column, bottom_v) = createRefs()
+        val (column, bottom_v) = createRefs()
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -307,16 +306,16 @@ fun CommonLazyColumn(
 
 //公用数据列表
 @Composable
-fun <T> CommonLazyColumnDatas(
-    datas: List<T>,
+inline fun <T> CommonLazyColumnData(
+    data: List<T>,
     modifier: Modifier = Modifier.fillMaxSize(),
     state: LazyListState = rememberLazyListState(),
-    key: ((item: T) -> Any)? = null,
+    noinline key: ((item: T) -> Any)? = null,
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
     contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp),
-    headContent: @Composable () -> Unit? = {},
-    foodContent: @Composable () -> Unit? = {},
-    itemContent: @Composable LazyItemScope.(item: T) -> Unit,
+    crossinline headContent: @Composable () -> Unit? = {},
+    crossinline foodContent: @Composable () -> Unit? = {},
+    crossinline itemContent: @Composable LazyItemScope.(item: T) -> Unit,
 ) {
 
     CommonLazyColumn(
@@ -327,7 +326,7 @@ fun <T> CommonLazyColumnDatas(
         headContent = headContent,
         foodContent = foodContent,
     ) {
-        items(datas, key = key) {
+        items(data, key = key) {
             itemContent(it)
         }
     }
@@ -342,8 +341,8 @@ fun CommonRefreshPage(
     content: @Composable () -> Unit,
 ) {
 //    var refreshing by remember { mutableStateOf(false) }
-    var refreshState = rememberSmartSwipeRefreshState()
-    var listState = rememberLazyListState()
+    val refreshState = rememberSmartSwipeRefreshState()
+    val listState = rememberLazyListState()
     SmartRefresh(
         isRefreshing = isRefreshing,
         scrollState = listState,
@@ -358,7 +357,7 @@ fun CommonRefreshPage(
 //公用下拉刷新列表数据页面
 @Composable
 fun <T> CommonRefreshColumnDataPage(
-    datas: List<T>,
+    data: List<T>,
     isRefreshing: Boolean,
     onRefresh: (suspend () -> Unit)? = null,
     emptContent: @Composable () -> Unit? = {},
@@ -367,8 +366,8 @@ fun <T> CommonRefreshColumnDataPage(
     itemContent: @Composable LazyItemScope.(item: T) -> Unit,
 ) {
 //    var refreshing by remember { mutableStateOf(false) }
-    var refreshState = rememberSmartSwipeRefreshState()
-    var listState = rememberLazyListState()
+    val refreshState = rememberSmartSwipeRefreshState()
+    val listState = rememberLazyListState()
     SmartRefresh(
         isRefreshing = isRefreshing,
         scrollState = listState,
@@ -376,11 +375,11 @@ fun <T> CommonRefreshColumnDataPage(
         headerIndicator = { MyRefreshHeader(refreshState) },
         onRefresh = onRefresh
     ) {
-        if (datas.isEmpty()) {
-            emptContent?.invoke()
+        if (data.isEmpty()) {
+            emptContent.invoke()
         } else {
-            CommonLazyColumnDatas(
-                datas = datas,
+            CommonLazyColumnData(
+                data = data,
                 headContent = headContent,
                 foodContent = foodContent,
                 itemContent = itemContent
@@ -417,12 +416,12 @@ fun <T : Any> CommonPagingPage(
     LaunchedEffect(lazyListState) {
         snapshotFlow { lazyListState.isScrollInProgress }.collect { isScrolling ->
             if (!isScrolling) {
-                if (lazyListState.firstVisibleItemIndex > lastFirstIndex) {
+                isScrollingUp = if (lazyListState.firstVisibleItemIndex > lastFirstIndex) {
                     // 上滑
-                    isScrollingUp = true
+                    true
                 } else {
                     //下滑
-                    isScrollingUp = false
+                    false
                 }
                 lastFirstIndex = lazyListState.firstVisibleItemIndex
                 // 滑动停止
@@ -457,7 +456,6 @@ fun <T : Any> CommonPagingPage(
 
 
 //公用带滑动Tab页面
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CommonTabPage(tabsName: List<String>, pageContent: @Composable (page: Int) -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {

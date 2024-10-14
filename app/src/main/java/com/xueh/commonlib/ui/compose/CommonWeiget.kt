@@ -47,11 +47,11 @@ fun CommonTabPage() {
 @Preview
 @Composable
 fun CommonLazyColumnDatasPage() {
-    var datas = mutableListOf<Int>()
+    val datas = mutableListOf<Int>()
     (0..30).forEach {
         datas.add(it)
     }
-    CommonLazyColumnDatas(datas, headContent = {
+    CommonLazyColumnData(datas, headContent = {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -101,7 +101,7 @@ fun CommonRefreshColumnData() {
     var isRefresh by remember {
         mutableStateOf(false)
     }
-    var datas = remember {
+    val datas = remember {
         mutableStateListOf<Int>()
     }
     datas.addAll(10..20)
