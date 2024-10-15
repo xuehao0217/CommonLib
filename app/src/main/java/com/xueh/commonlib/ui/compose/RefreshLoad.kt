@@ -53,12 +53,15 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ConvertUtils
+import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.base.mvvm.BaseComposeViewModel
 import com.xueh.comm_core.helper.compose.rememberMutableStateOf
 import com.xueh.comm_core.weight.compose.BoxText
 import com.xueh.comm_core.weight.compose.CommonPagingPage
 import com.xueh.comm_core.weight.compose.CommonTitleView
+import com.xueh.comm_core.weight.compose.click
+import com.xueh.commonlib.entity.HomeEntity
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -72,20 +75,18 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun RefreshLoadUse() {
-    BaseComposeViewModel <ComposeViewModel>{viewModel->
+    BaseComposeViewModel<ComposeViewModel> { viewModel ->
         val homeDatas = viewModel.getListDatas().collectAsLazyPagingItems()
 
         val lazyListState = rememberLazyListState()
 
+        //-------------------------------------------监听滑动第一个条目-------------------------------------------------------
         val firstVisibleScrollOffset by remember { derivedStateOf { lazyListState.firstVisibleItemScrollOffset } }
         val firstVisibleIndex by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }
-
         val targetHeight = BarUtils.getStatusBarHeight() + ConvertUtils.dp2px(50f)
-
         var alpha by rememberMutableStateOf(value = 0f)
-
         LaunchedEffect(Unit) {
-            snapshotFlow {firstVisibleScrollOffset  }.collect{
+            snapshotFlow { firstVisibleScrollOffset }.collect {
                 snapshotFlow { firstVisibleScrollOffset }.collect {
                     if (firstVisibleIndex <= 1) {
                         alpha = firstVisibleScrollOffset.toFloat() / targetHeight
@@ -93,6 +94,16 @@ fun RefreshLoadUse() {
                 }
             }
         }
+        //--------------------------------------------------------------------------------------------------
+
+        var dataList by remember { mutableStateOf<List<HomeEntity.Data>>(emptyList()) }
+        LaunchedEffect(homeDatas) {
+            snapshotFlow { homeDatas.itemSnapshotList.items }
+                .collect { items ->
+                    dataList = items.toList()
+                }
+        }
+
 
         CommonPagingPage(
             homeDatas,
@@ -102,24 +113,34 @@ fun RefreshLoadUse() {
                 ToastUtils.showShort("是否上划${isScrollingUp}  ${visibleItem.toList()}")
             },
             emptyDataContent = {
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Blue))
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Blue)
+                )
             },
             loadingContent = {
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Red))
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Red)
+                )
             }, headContent = {
-                Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-                    .background(Color.Magenta))
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp)
+                        .background(Color.Magenta).click {
+                            ToastUtils.showShort("${homeDatas.itemSnapshotList.items}")
+                        }
+                )
             }, foodContent = {
-                Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-                    .background(Color.Yellow))
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp)
+                        .background(Color.Yellow)
+                )
             }
         ) {
             Box(
