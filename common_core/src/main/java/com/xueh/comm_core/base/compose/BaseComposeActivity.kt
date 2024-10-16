@@ -1,6 +1,7 @@
 package com.xueh.comm_core.base.compose
 
 import android.content.pm.ActivityInfo
+import android.content.res.Resources
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
@@ -19,6 +20,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import com.blankj.utilcode.util.LogUtils
 import com.google.accompanist.insets.statusBarsHeight
 import com.xueh.comm_core.R
 import com.xueh.comm_core.weight.compose.CommonTitleView
@@ -82,6 +84,21 @@ abstract class BaseComposeActivity : ComponentActivity() {
 
 
     protected open fun showStatusBars()=true
+
+
+    override fun getResources(): Resources {
+        val resources = super.getResources()
+        val configuration = resources.configuration
+        if (configuration.fontScale != 1.0f) {
+            LogUtils.e(configuration.fontScale)
+            configuration.fontScale = 1.0f
+            // 但是这个函数被标记为过期了
+            //resources.updateConfiguration(configuration, resources.displayMetrics)
+            // 那么我们直接这么来
+            return createConfigurationContext(configuration).resources
+        }
+        return resources
+    }
 }
 
 
