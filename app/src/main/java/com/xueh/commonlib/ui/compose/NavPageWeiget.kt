@@ -35,11 +35,11 @@ import kotlinx.coroutines.launch
 @Preview
 @Composable
 fun NavPageWeigetPage() {
-    var  showRed by rememberMutableStateOf {
+    var  showRed = rememberMutableStateOf {
         false
     }
     val navList = mutableListOf(
-        NavData(selectIcon = R.mipmap.ic_home_select, unSelectIcon = R.mipmap.ic_home_normal, text = "首页"),
+        NavData(selectIcon = R.mipmap.ic_home_select, unSelectIcon = R.mipmap.ic_home_normal, text = "首页",showRed=showRed),
         NavData(selectIcon = R.mipmap.ic_my_select, unSelectIcon = R.mipmap.ic_my_normal, text = "我的"),
         NavData(selectIcon = R.mipmap.ic_my_select, unSelectIcon = R.mipmap.ic_my_normal, text = "我的2"),
     )
@@ -54,9 +54,9 @@ fun NavPageWeigetPage() {
     
     LaunchedEffect(Unit) {
         delay(4000)
-        showRed=!showRed
+        showRed.value=!showRed.value
         delay(4000)
-        showRed=!showRed
+        showRed.value=!showRed.value
     }
 }
 
