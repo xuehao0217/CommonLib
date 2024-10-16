@@ -2,6 +2,9 @@ package com.xueh.commonlib.ui
 
 import android.graphics.Color
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
+import com.blankj.utilcode.util.AppUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.base.xml.DActivity
 import com.xueh.commonlib.R
 import com.xueh.commonlib.databinding.ActivityMainBinding
@@ -37,8 +40,18 @@ class MainActivity : DActivity<ActivityMainBinding>() {
             .build()
     }
 
-
+    private var  backPressedTime=0L
     override fun initListener() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (System.currentTimeMillis() - backPressedTime <= 2000) {
+                    AppUtils.exitApp()
+                } else {
+                    backPressedTime = System.currentTimeMillis()
+                    ToastUtils.showShort("Press again to exit the app")
+                }
+            }
+        })
     }
 
 }
