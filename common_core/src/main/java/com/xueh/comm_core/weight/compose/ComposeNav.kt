@@ -33,7 +33,7 @@ data class NavData(
     var selectIcon: Int,
     var unSelectIcon: Int,
     var text: String,
-    var showRed: Boolean = false,
+    var showRed: MutableState<Boolean> = mutableStateOf(false),
 )
 
 
@@ -128,7 +128,6 @@ fun NavItem(
         selectIcon = R.mipmap.bar_icon_back_white,
         unSelectIcon = R.mipmap.bar_icon_back_black,
         text = "",
-        showRed = false
     ),
     select: Boolean = true,
     selectTextColor: Color = androidx.compose.material3.MaterialTheme.colorScheme.primary,
@@ -147,7 +146,7 @@ fun NavItem(
                 modifier = Modifier.size(24.dp)
             )
             Box(contentAlignment = Alignment.TopEnd, modifier = Modifier.size(imageSize.dp)) {
-                if (navData.showRed) {
+                if (navData.showRed.value) {
                     Box(
                         modifier = Modifier
                             .size(6.dp)

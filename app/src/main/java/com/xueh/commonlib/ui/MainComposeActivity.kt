@@ -36,6 +36,7 @@ import com.xueh.commonlib.ui.compose.NavPage3
 class MainComposeActivity : BaseComposeActivity() {
     companion object{
         var interceptTab by mutableStateOf(false)
+        var showRedPoint  = mutableStateOf(false)
     }
     override fun showTitleView() = false
 
@@ -53,12 +54,12 @@ class MainComposeActivity : BaseComposeActivity() {
                 selectIcon = R.mipmap.ic_home_select,
                 unSelectIcon = R.mipmap.ic_home_normal,
                 text = "首页",
-                showRed =true
             ),
             NavData(
                 selectIcon = R.mipmap.ic_my_select,
                 unSelectIcon = R.mipmap.ic_my_normal,
-                text = "我的"
+                text = "我的",
+                showRed =showRedPoint
             ),
             NavData(
                 selectIcon = R.mipmap.ic_my_select,

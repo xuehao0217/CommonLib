@@ -52,7 +52,6 @@ import com.xueh.commonlib.ui.compose.PlaceholderPage
 import com.xueh.commonlib.ui.compose.RefreshLoadUse
 import com.xueh.commonlib.ui.compose.RouteConfig
 import com.xueh.commonlib.ui.compose.google.GoogleSamplePage
-import com.xueh.commonlib.ui.compose.itemView
 import com.xueh.comm_core.base.compose.theme.appThemeState
 import com.xueh.comm_core.base.compose.theme.blue500
 import com.xueh.comm_core.base.compose.theme.green500
@@ -69,6 +68,7 @@ import com.xueh.commonlib.ui.compose.CommonTabPage
 import com.xueh.commonlib.ui.compose.ComoposeViewModelPage
 import com.xueh.commonlib.ui.compose.ConstraintPage
 import com.xueh.commonlib.ui.compose.DialogPage
+import com.xueh.commonlib.ui.compose.ItemView
 import com.xueh.commonlib.ui.compose.LazyColumnPage
 import com.xueh.commonlib.ui.compose.NavPageWeigetPage
 import com.xueh.commonlib.ui.compose.NavigateParams1View
@@ -83,7 +83,6 @@ import com.xueh.commonlib.ui.compose.google.CustomPullRefreshSample
 import com.xueh.commonlib.ui.compose.google.GoogleSamplePage
 import com.xueh.commonlib.ui.compose.google.PullRefreshIndicatorTransformSample
 import com.xueh.commonlib.ui.compose.google.PullRefreshSample
-import com.xueh.commonlib.ui.compose.itemView
 import com.xueh.commonlib.ui.compose.lazyVerticalGrid
 import com.xueh.commonlib.ui.compose.scrollableTabRow
 
@@ -170,9 +169,9 @@ class HomePage : NavContent {
 //                    ItemData("LazyColumnPage", RouteConfig.LazyColumnPage),
 //                    ItemData("ScrollableAppBar", RouteConfig.ScrollableAppBar),
                 )
-                LazyColumn() {
+                LazyColumn {
                     itemsIndexed(str) { _, item ->
-                        itemView(item.str, false) {
+                        ItemView(item.str, false) {
                             if (item.router == RouteConfig.Parameter) {
                                 navController.navigate("${RouteConfig.Parameter}/Kevin")
                             } else {

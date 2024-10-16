@@ -39,9 +39,9 @@ fun NavPageWeigetPage() {
         false
     }
     val navList = mutableListOf(
-        NavData(selectIcon = R.mipmap.ic_home_select, unSelectIcon = R.mipmap.ic_home_normal, text = "首页", showRed = showRed),
-        NavData(selectIcon = R.mipmap.ic_my_select, unSelectIcon = R.mipmap.ic_my_normal, text = "我的", showRed = false),
-        NavData(selectIcon = R.mipmap.ic_my_select, unSelectIcon = R.mipmap.ic_my_normal, text = "我的2", showRed = false),
+        NavData(selectIcon = R.mipmap.ic_home_select, unSelectIcon = R.mipmap.ic_home_normal, text = "首页"),
+        NavData(selectIcon = R.mipmap.ic_my_select, unSelectIcon = R.mipmap.ic_my_normal, text = "我的"),
+        NavData(selectIcon = R.mipmap.ic_my_select, unSelectIcon = R.mipmap.ic_my_normal, text = "我的2"),
     )
     val pages = mutableListOf(NavPage1(),NavPage2(),NavPage3())
 

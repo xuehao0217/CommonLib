@@ -20,14 +20,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.xueh.commonlib.ui.HomePage
+import com.xueh.commonlib.ui.compose.ItemView
 import com.xueh.commonlib.ui.compose.RouteConfig
-import com.xueh.commonlib.ui.compose.itemView
 
 
 @Preview
 @Composable
 fun GoogleSamplePage(controller: NavHostController) {
-    var str = listOf(
+    val str = listOf(
         HomePage.ItemData("PullRefreshSample", RouteConfig.PullRefreshSample),
         HomePage.ItemData("CustomPullRefreshSample", RouteConfig.CustomPullRefreshSample),
         HomePage.ItemData(
@@ -37,7 +37,7 @@ fun GoogleSamplePage(controller: NavHostController) {
     )
     Column{
         str.forEach {
-            itemView(item = it.str, showimg = false) {
+            ItemView(item = it.str) {
                 controller.navigate(it.router)
             }
         }

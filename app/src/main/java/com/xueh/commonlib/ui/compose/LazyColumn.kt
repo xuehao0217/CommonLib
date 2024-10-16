@@ -64,7 +64,7 @@ fun LazyColumnPage(viewModel: ComposeViewModel = androidx.lifecycle.viewmodel.co
 
         androidx.compose.foundation.lazy.LazyColumn(state = listState) {
             itemsIndexed(viewModel.bannerMutableState) { _, item ->
-                itemView(item.title) {
+                ItemView(item.title) {
                     ToastUtils.showShort("点击了 ${item.title}")
                 }
             }
@@ -93,9 +93,9 @@ var imageUrl =
     "https://c-ssl.dtstatic.com/uploads/item/202105/29/20210529001057_aSeLB.thumb.1000_0.jpeg"
 
 @Composable
-fun itemView(item: String, showimg: Boolean = true, clickEvent: () -> Unit) {
+fun ItemView(item: String, showImg: Boolean = false, clickEvent: () -> Unit) {
     Column(modifier = Modifier.padding(horizontal = 15.dp)) {
-        if (showimg) {
+        if (showImg) {
             ImageLoadCompose(imageUrl)
         }
         Spacer(modifier = Modifier.height(10.dp))

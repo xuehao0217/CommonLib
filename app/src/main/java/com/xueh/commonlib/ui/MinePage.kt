@@ -12,21 +12,24 @@ import androidx.compose.ui.graphics.Color
 import com.blankj.utilcode.util.ActivityUtils
 import com.lt.compose_views.compose_pager.ComposePagerScope
 import com.lt.compose_views.nav.NavContent
+import com.xueh.commonlib.ui.compose.ItemView
 import com.xueh.commonlib.ui.compose.RouteConfig
-import com.xueh.commonlib.ui.compose.itemView
 import com.xueh.commonlib.ui.xml.MainActivity
 
 class MinePage : NavContent {
-    override val route: String="MinePage"
+    override val route: String = "MinePage"
+
     @Composable
     override fun Content(scope: ComposePagerScope) {
-        Column(Modifier.statusBarsPadding()){
-            itemView("XML", false){
+        Column(Modifier.statusBarsPadding()) {
+            ItemView("XML 页面", false) {
                 ActivityUtils.startActivity(MainActivity::class.java)
             }
-
-            itemView("是否拦截第三个Tab ${MainComposeActivity.interceptTab}", false){
-                MainComposeActivity.interceptTab= ! MainComposeActivity.interceptTab
+            ItemView("是否拦截第三个Tab ${MainComposeActivity.interceptTab}" ) {
+                MainComposeActivity.interceptTab = !MainComposeActivity.interceptTab
+            }
+            ItemView("是否显示小红点 ${MainComposeActivity.showRedPoint.value}") {
+                MainComposeActivity.showRedPoint.value = !MainComposeActivity.showRedPoint.value
             }
         }
 
@@ -35,9 +38,12 @@ class MinePage : NavContent {
 
 
 class TabPage3 : NavContent {
-    override val route: String="TabPage3"
+    override val route: String = "TabPage3"
+
     @Composable
     override fun Content(scope: ComposePagerScope) {
-        Box(modifier = Modifier.fillMaxSize().background(Color.Yellow))
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Yellow))
     }
 }
