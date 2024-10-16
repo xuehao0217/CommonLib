@@ -1,4 +1,4 @@
-package com.xueh.commonlib.ui
+package com.xueh.commonlib.ui.xml
 
 import android.graphics.Color
 import android.os.Bundle
@@ -44,12 +44,13 @@ class MainActivity : DActivity<ActivityMainBinding>() {
     override fun initListener() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (System.currentTimeMillis() - backPressedTime <= 2000) {
-                    AppUtils.exitApp()
-                } else {
-                    backPressedTime = System.currentTimeMillis()
-                    ToastUtils.showShort("Press again to exit the app")
-                }
+                finish()
+//                if (System.currentTimeMillis() - backPressedTime <= 2000) {
+//                    AppUtils.exitApp()
+//                } else {
+//                    backPressedTime = System.currentTimeMillis()
+//                    ToastUtils.showShort("Press again to exit the app")
+//                }
             }
         })
     }

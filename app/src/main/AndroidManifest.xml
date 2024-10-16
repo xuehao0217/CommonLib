@@ -18,8 +18,8 @@
         android:theme="@style/AppStyle"
         android:usesCleartextTraffic="true"
         tools:replace="android:theme">
-        <activity android:name=".ui.MainActivity" />
-        <activity android:name=".ui.ComposeActivity" />
+        <activity android:name=".ui.xml.MainActivity" />
+        <activity android:name=".ui.MainComposeActivity" />
         <activity android:name=".ui.TestComposeActivity" />
         <activity
             android:name=".ui.SplashActivity"

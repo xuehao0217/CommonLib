@@ -17,7 +17,7 @@ import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.fade
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.shimmer
-import com.xueh.comm_core.helper.compose.rememberMutableStateOf
+import com.lt.compose_views.util.rememberMutableStateOf
 import com.xueh.comm_core.weight.compose.SpacerH
 import com.xueh.commonlib.R
 import kotlinx.coroutines.delay
@@ -29,7 +29,7 @@ import kotlinx.coroutines.delay
  */
 @Composable
 fun PlaceholderPage() {
-    var visible by rememberMutableStateOf(value = true)
+    var visible by rememberMutableStateOf{true}
     Column {
         LaunchedEffect(Unit) {
             delay(5000)

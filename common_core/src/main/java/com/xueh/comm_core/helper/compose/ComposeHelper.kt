@@ -21,48 +21,6 @@ import androidx.navigation.NavHostController
  * 备注：
  */
 
-
-/**
- * 快捷使用remember { mutableStateOf(T) }
- * Quick use remember { mutableStateOf(T) }
- */
-@Composable
-fun <T> rememberMutableStateOf(value: T) = remember { mutableStateOf(value) }
-
-@Composable
-fun <T> rememberDerivedStateOfOf(value: T) = remember {  derivedStateOf { value }}
-
-/**
- * 快捷使用remember { mutableStateOf(T) }
- * Quick use remember { mutableStateOf(T) }
- */
-@Composable
-inline fun <T> rememberMutableStateOf(
-    crossinline initValue: @DisallowComposableCalls () -> T
-) = remember { mutableStateOf(initValue()) }
-
-@Composable
-inline fun <T> rememberMutableStateOf(
-    key1: Any?,
-    crossinline initValue: @DisallowComposableCalls () -> T
-): MutableState<T> = remember(key1 = key1) { mutableStateOf(initValue()) }
-
-@Composable
-inline fun <T> rememberMutableStateOf(
-    key1: Any?,
-    key2: Any?,
-    crossinline initValue: @DisallowComposableCalls () -> T
-): MutableState<T> = remember(key1 = key1, key2 = key2) { mutableStateOf(initValue()) }
-
-@Composable
-inline fun <T> rememberMutableStateOf(
-    key1: Any?,
-    key2: Any?,
-    key3: Any?,
-    crossinline initValue: @DisallowComposableCalls () -> T
-): MutableState<T> = remember(key1 = key1, key2 = key2, key3 = key3) { mutableStateOf(initValue()) }
-
-
 //LifecycleEventEffect(Lifecycle.Event.ON_RESUME){
 
 //}

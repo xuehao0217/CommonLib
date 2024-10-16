@@ -16,8 +16,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.lt.compose_views.nav.NavContent
+import com.lt.compose_views.nav.PagerNav
+import com.lt.compose_views.nav.PagerNavState
+import com.lt.compose_views.util.rememberMutableStateOf
 import com.xueh.comm_core.R
-import com.xueh.comm_core.helper.compose.rememberMutableStateOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -34,29 +37,31 @@ data class NavData(
 )
 
 
-@OptIn(ExperimentalFoundationApi::class)
-@Preview
 @Composable
 fun NavPage(
+    pages: List<NavContent> = mutableListOf(),
     selectTextColor: Color = androidx.compose.material3.MaterialTheme.colorScheme.primary,
     unSelectTextColor: Color = Color.Gray,
     textFontSize: Int = 10,
     imageSize: Int = 24,
-    interceptIndex: Int = -1,
-    interceptClick: () -> Unit = {},
+    interceptClick: () -> Int = { -1},//表示拦截第几个角标 默认-1
     navList: MutableList<NavData> = mutableListOf(),
-    pageContent: @Composable PagerScope.(page: Int) -> Unit = {},
 ) {
-    val pagerState = rememberPagerState(pageCount = { navList.size })
-    val scope: CoroutineScope = rememberCoroutineScope()
-    var selectPos by rememberMutableStateOf(value = 0)
-    selectPos = pagerState.currentPage
-    Column {
-        HorizontalPager(
-            state = pagerState, userScrollEnabled = false, modifier = Modifier.weight(1f)
-        ) { page ->
-            pageContent(page)
-        }
+    val selectPos = rememberMutableStateOf { 0 }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .navigationBarsPadding()
+    ) {
+        val state = PagerNavState(
+            pages
+        )
+        PagerNav(
+            state,
+            Modifier
+                .fillMaxWidth()
+                .weight(1f)
+        )
         Nav(
             selectPos = selectPos,
             itemList = navList,
@@ -65,38 +70,28 @@ fun NavPage(
             textFontSize = textFontSize,
             imageSize = imageSize
         ) {
-            scope.launch {
-                if (it != interceptIndex) {
-                    pagerState.scrollToPage(page = it)
-                } else {
-                    interceptClick.invoke()
-                }
-            }
+           if (interceptClick()==it){
+               interceptClick.invoke()
+               true
+           }else{
+               state.nav(state.navContents[it].route)
+               false
+           }
         }
     }
 }
 
-//Nav(mViewModel.msgRedShow) {
-//    if (it == 0) {
-//        拦截
-//        true
-//    } else {
-//        不拦截
-//        false
-//    }
-//}
 @Preview
 @Composable
 fun Nav(
-    selectPos: Int = 0,
+    selectPos: MutableState<Int> = mutableIntStateOf(0),
     selectTextColor: Color = androidx.compose.material3.MaterialTheme.colorScheme.primary,
     unSelectTextColor: Color = Color.Gray,
     textFontSize: Int = 10,
     imageSize: Int = 24,
     itemList: MutableList<NavData> = mutableListOf(),
-    itemClick: (Int) -> Unit = {},
+    itemClick: ((Int) -> Boolean) = { false },// true 拦截 false 不拦截
 ) {
-    itemClick.invoke(selectPos)
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -110,10 +105,12 @@ fun Nav(
                     .weight(1f)
                     .fillMaxHeight()
                     .click {
-                        itemClick.invoke(index)
+                        if (!itemClick.invoke(index)) {
+                            selectPos.value = index
+                        }
                     },
                 navData,
-                selectPos == index,
+                selectPos.value == index,
                 selectTextColor = selectTextColor,
                 unSelectTextColor = unSelectTextColor,
                 imageSize = imageSize,

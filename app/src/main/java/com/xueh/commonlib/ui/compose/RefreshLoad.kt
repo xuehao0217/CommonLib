@@ -55,8 +55,8 @@ import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
+import com.lt.compose_views.util.rememberMutableStateOf
 import com.xueh.comm_core.base.mvvm.BaseComposeViewModel
-import com.xueh.comm_core.helper.compose.rememberMutableStateOf
 import com.xueh.comm_core.weight.compose.BoxText
 import com.xueh.comm_core.weight.compose.CommonPagingPage
 import com.xueh.comm_core.weight.compose.CommonTitleView
@@ -84,7 +84,7 @@ fun RefreshLoadUse() {
         val firstVisibleScrollOffset by remember { derivedStateOf { lazyListState.firstVisibleItemScrollOffset } }
         val firstVisibleIndex by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }
         val targetHeight = BarUtils.getStatusBarHeight() + ConvertUtils.dp2px(50f)
-        var alpha by rememberMutableStateOf(value = 0f)
+        var alpha by rememberMutableStateOf{ 0f}
         LaunchedEffect(Unit) {
             snapshotFlow { firstVisibleScrollOffset }.collect {
                 snapshotFlow { firstVisibleScrollOffset }.collect {

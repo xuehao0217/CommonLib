@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">CommonLib</string>
+
+    <string name="default_notification_channel_id">newsday_notification_channel</string>
+    <string name="default_notification_channel_name">newsday_notification_channel</string>
+
 </resources>

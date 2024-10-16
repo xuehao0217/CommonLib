@@ -54,8 +54,8 @@ import com.blankj.utilcode.util.ToastUtils
 import com.blankj.utilcode.util.Utils
 import com.loren.component.view.composesmartrefresh.SmartSwipeRefreshState
 import com.loren.component.view.composesmartrefresh.rememberSmartSwipeRefreshState
+import com.lt.compose_views.util.rememberMutableStateOf
 import com.xueh.comm_core.R
-import com.xueh.comm_core.helper.compose.rememberMutableStateOf
 import com.xueh.comm_core.helper.isEmpty
 import com.xueh.comm_core.weight.compose.refreshheader.MyRefreshHeader
 import com.xueh.comm_core.weight.compose.refreshheader.RefreshHeader
@@ -411,7 +411,7 @@ fun <T : Any> CommonPagingPage(
 
     itemContent: @Composable LazyItemScope.(value: T) -> Unit,
 ) {
-    var lastFirstIndex by rememberMutableStateOf(value = 0)
+    var lastFirstIndex by rememberMutableStateOf{0}
     var isScrollingUp = false
     LaunchedEffect(lazyListState) {
         snapshotFlow { lazyListState.isScrollInProgress }.collect { isScrolling ->

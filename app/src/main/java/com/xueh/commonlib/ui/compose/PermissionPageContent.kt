@@ -10,7 +10,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.accompanist.permissions.rememberPermissionState
-import com.xueh.comm_core.helper.compose.rememberMutableStateOf
+import com.lt.compose_views.util.rememberMutableStateOf
 import com.xueh.comm_core.weight.compose.SpacerH
 
 /**
@@ -30,8 +30,8 @@ fun PermissionPageContent() {
         listOf(android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
     )
 
-    var singlePermissionStr by rememberMutableStateOf(value = "申请单个权限")
-    var multiplePermissionStr by rememberMutableStateOf(value = "申请多个权限")
+    var singlePermissionStr by rememberMutableStateOf{  "申请单个权限"}
+    var multiplePermissionStr by rememberMutableStateOf{"申请多个权限"}
 
     when (cameraPermissionState.status) {
         PermissionStatus.Granted -> {//已授权

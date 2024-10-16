@@ -45,7 +45,7 @@ import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
-import com.xueh.comm_core.helper.compose.rememberMutableStateOf
+import com.lt.compose_views.util.rememberMutableStateOf
 import com.xueh.comm_core.weight.compose.BoxWrapper
 import com.xueh.comm_core.weight.compose.CommonPagingPage
 import com.xueh.comm_core.weight.compose.MyScrollableTabRow
@@ -96,7 +96,7 @@ fun TabPageList(ids: List<String>,pagingStateList:List<Flow<PagingData<HomeEntit
             ids.size
         })
 
-        var titleBarAlpha by rememberMutableStateOf(value = 0f)
+        var titleBarAlpha by rememberMutableStateOf{0f}
 
         LaunchedEffect(Unit) {
             snapshotFlow { titleBarAlpha }.collect {

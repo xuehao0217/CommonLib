@@ -19,8 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
-import com.xueh.commonlib.ui.ItemData
+import com.xueh.commonlib.ui.HomePage
 import com.xueh.commonlib.ui.compose.RouteConfig
 import com.xueh.commonlib.ui.compose.itemView
 
@@ -29,9 +28,12 @@ import com.xueh.commonlib.ui.compose.itemView
 @Composable
 fun GoogleSamplePage(controller: NavHostController) {
     var str = listOf(
-        ItemData("PullRefreshSample", RouteConfig.PullRefreshSample),
-        ItemData("CustomPullRefreshSample", RouteConfig.CustomPullRefreshSample),
-        ItemData("PullRefreshIndicatorTransformSample", RouteConfig.PullRefreshIndicatorTransformSample),
+        HomePage.ItemData("PullRefreshSample", RouteConfig.PullRefreshSample),
+        HomePage.ItemData("CustomPullRefreshSample", RouteConfig.CustomPullRefreshSample),
+        HomePage.ItemData(
+            "PullRefreshIndicatorTransformSample",
+            RouteConfig.PullRefreshIndicatorTransformSample
+        ),
     )
     Column{
         str.forEach {

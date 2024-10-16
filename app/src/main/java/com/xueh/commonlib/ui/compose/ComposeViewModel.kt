@@ -20,7 +20,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 import com.xueh.comm_core.base.mvvm.BaseComposeViewModel
-import com.xueh.comm_core.helper.compose.rememberMutableStateOf
 import com.xueh.comm_core.weight.compose.BoxText
 import com.xueh.comm_core.weight.compose.CommonPagingPage
 import com.xueh.comm_core.weight.compose.click

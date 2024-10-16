@@ -8,9 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -37,8 +35,24 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.blankj.utilcode.util.ToastUtils
-import com.xueh.comm_core.base.compose.BaseComposeActivity
+import com.lt.compose_views.compose_pager.ComposePagerScope
+import com.lt.compose_views.nav.NavContent
 import com.xueh.comm_core.base.compose.theme.AppThemeColorType
+import com.xueh.comm_core.base.compose.theme.appThemeState
+import com.xueh.comm_core.base.compose.theme.blue500
+import com.xueh.comm_core.base.compose.theme.green500
+import com.xueh.comm_core.base.compose.theme.orange500
+import com.xueh.comm_core.base.compose.theme.purple
+import com.xueh.comm_core.web.WebViewPage
+import com.xueh.comm_core.weight.compose.CommonTitlePage
+import com.xueh.commonlib.ui.compose.ConstraintPage
+import com.xueh.commonlib.ui.compose.NavPageWeigetPage
+import com.xueh.commonlib.ui.compose.PermissionPageContent
+import com.xueh.commonlib.ui.compose.PlaceholderPage
+import com.xueh.commonlib.ui.compose.RefreshLoadUse
+import com.xueh.commonlib.ui.compose.RouteConfig
+import com.xueh.commonlib.ui.compose.google.GoogleSamplePage
+import com.xueh.commonlib.ui.compose.itemView
 import com.xueh.comm_core.base.compose.theme.appThemeState
 import com.xueh.comm_core.base.compose.theme.blue500
 import com.xueh.comm_core.base.compose.theme.green500
@@ -64,7 +78,6 @@ import com.xueh.commonlib.ui.compose.PagerPage
 import com.xueh.commonlib.ui.compose.PermissionPageContent
 import com.xueh.commonlib.ui.compose.PlaceholderPage
 import com.xueh.commonlib.ui.compose.RefreshLoadUse
-import com.xueh.commonlib.ui.compose.RouteConfig
 import com.xueh.commonlib.ui.compose.TabPage
 import com.xueh.commonlib.ui.compose.google.CustomPullRefreshSample
 import com.xueh.commonlib.ui.compose.google.GoogleSamplePage
@@ -74,15 +87,11 @@ import com.xueh.commonlib.ui.compose.itemView
 import com.xueh.commonlib.ui.compose.lazyVerticalGrid
 import com.xueh.commonlib.ui.compose.scrollableTabRow
 
-/**
- * 创 建 人: xueh
- * 创建日期: 2023/8/30
- * 备注： https://github.com/KatieBarnett/Experiments/tree/main/jc-edge-to-edge?source=post_page-----bea553dd97ff--------------------------------
- */
-class ComposeActivity : BaseComposeActivity() {
-    override fun showTitleView()=false
+class HomePage : NavContent {
+    override val route: String="HomePage"
+
     @Composable
-    override fun setComposeContent() {
+    override fun Content(scope: ComposePagerScope) {
         var showMenu by remember {
             mutableStateOf(false)
         }
@@ -123,6 +132,7 @@ class ComposeActivity : BaseComposeActivity() {
             }
         }
     }
+
 
 
     @OptIn(ExperimentalFoundationApi::class)
@@ -269,39 +279,42 @@ class ComposeActivity : BaseComposeActivity() {
             }
         }
     }
-}
 
-@Composable
-fun PalletMenu(
-    modifier: Modifier,
-    onPalletChange: (AppThemeColorType) -> Unit,
-) {
-    Box(modifier = Modifier.fillMaxWidth()) {
-        Column(
-            horizontalAlignment = Alignment.Start,
-            modifier = modifier
-                .background(MaterialTheme.colorScheme.background)
-                .animateContentSize(),
-        ) {
-            MenuItem(green500, "Green") {
-                onPalletChange.invoke(AppThemeColorType.GREEN)
-            }
-            MenuItem(purple, "Purple") {
-                onPalletChange.invoke(AppThemeColorType.PURPLE)
-            }
-            MenuItem(orange500, "Orange") {
-                onPalletChange.invoke(AppThemeColorType.ORANGE)
-            }
-            MenuItem(blue500, "Blue") {
-                onPalletChange.invoke(AppThemeColorType.BLUE)
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                MenuItem(dynamicLightColorScheme(LocalContext.current).primary, "Dynamic") {
-                    onPalletChange.invoke(AppThemeColorType.WALLPAPER)
+
+    @Composable
+    fun PalletMenu(
+        modifier: Modifier,
+        onPalletChange: (AppThemeColorType) -> Unit,
+    ) {
+        Box(modifier = Modifier.fillMaxWidth()) {
+            Column(
+                horizontalAlignment = Alignment.Start,
+                modifier = modifier
+                    .background(MaterialTheme.colorScheme.background)
+                    .animateContentSize(),
+            ) {
+                MenuItem(green500, "Green") {
+                    onPalletChange.invoke(AppThemeColorType.GREEN)
+                }
+                MenuItem(purple, "Purple") {
+                    onPalletChange.invoke(AppThemeColorType.PURPLE)
+                }
+                MenuItem(orange500, "Orange") {
+                    onPalletChange.invoke(AppThemeColorType.ORANGE)
+                }
+                MenuItem(blue500, "Blue") {
+                    onPalletChange.invoke(AppThemeColorType.BLUE)
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    MenuItem(dynamicLightColorScheme(LocalContext.current).primary, "Dynamic") {
+                        onPalletChange.invoke(AppThemeColorType.WALLPAPER)
+                    }
                 }
             }
         }
     }
+
+    data class ItemData(var str: String, var router: String)
 }
 
 
@@ -318,6 +331,3 @@ fun MenuItem(color: Color, name: String, onPalletChange: () -> Unit) {
         Text(text = name, modifier = Modifier.padding(8.dp))
     }
 }
-
-
-data class ItemData(var str: String, var router: String)
