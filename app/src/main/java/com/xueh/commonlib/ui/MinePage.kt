@@ -1,8 +1,10 @@
 package com.xueh.commonlib.ui
 
 import android.view.MenuItem
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -22,7 +24,20 @@ class MinePage : NavContent {
             itemView("XML", false){
                 ActivityUtils.startActivity(MainActivity::class.java)
             }
+
+            itemView("是否拦截第三个Tab ${MainComposeActivity.interceptTab}", false){
+                MainComposeActivity.interceptTab= ! MainComposeActivity.interceptTab
+            }
         }
 
+    }
+}
+
+
+class TabPage3 : NavContent {
+    override val route: String="TabPage3"
+    @Composable
+    override fun Content(scope: ComposePagerScope) {
+        Box(modifier = Modifier.fillMaxSize().background(Color.Yellow))
     }
 }
