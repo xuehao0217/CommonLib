@@ -3,7 +3,7 @@ agp = "8.3.2"
 kotlin = "2.0.20"
 kotlinCoroutinesAndroidVersion = "1.9.0"
 kotlinCoroutinesCoreVersion = "1.9.0"
-composeBom = "2024.09.03"
+composeBom = "2024.10.00"
 #--------------基础库相关-----------------
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -12,7 +12,6 @@ material = "1.12.0"
 multidex = "2.0.1"
 appcompat = "1.7.0"
 gson = "2.10.1"
-runtimeLivedata = "1.7.3"
 datastore = "1.1.1"
 #--------------工具相关-----------------
 interval = "1.0.3"
@@ -24,29 +23,22 @@ landscapistGlide = "2.3.6"
 logger = "2.2.0"
 #--------------KTX相关-----------------
 coreKtx = "1.13.1"
-activityKtx = "1.9.1"
+activityKtx = "1.9.3"
 fragmentKtx = "1.8.2"
-lifecycleRuntimeKtx = "2.8.6"
 lifecycleKtx = "2.8.6"
 #--------------Compose相关-----------------
-lifecycleRuntimeComposeVersion = "2.8.6"
-activityCompose = "1.9.1"
 coilCompose = "3.0.0-rc01"
 constraintLayoutCompose = "1.1.0-beta01"
-accompanist = "0.34.0"
-accompanistPlaceholder = "0.36.0"
+accompanist = "0.36.0"
 googleAccompanistInsets = "0.31.5-beta"
-navigationComposeVersion = "2.7.7"
-pagingCommon = "3.3.1"
-pagingComposeVersion = "3.3.1"
-pagingRuntime = "3.3.1"
-lifecycleViewmodelCompose = "2.8.6"
+navigationComposeVersion = "2.8.3"
+paging = "3.3.2"
 composeSmartrefreshVersion = "2.1.0"
-animation = "1.7.3"
+animation = "1.7.4"
 any_pop_dialog_compose = "1.0.1"
 composeviews = "1.6.11.1"
 composeWebviewVersion = "0.33.6"
-
+composeRuntimeLivedata = "1.7.4"
 #--------------网络相关-----------------
 retrofit = "2.9.0"
 okhttpVersion = "5.0.0-alpha.10"
@@ -80,16 +72,15 @@ androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "j
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-multidex = { module = "androidx.multidex:multidex", version.ref = "multidex" }
 androidx-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
-androidx-paging-common = { module = "androidx.paging:paging-common", version.ref = "pagingCommon" }
-androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "pagingRuntime" }
+androidx-paging-common = { module = "androidx.paging:paging-common", version.ref = "paging" }
+androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
 #-----------------------------------------------KTX相关-------------------------------------------------------------
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleKtx" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleKtx" }
 androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleKtx" }
-androidx-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "runtimeLivedata" }
 #-----------------------------------------------图片加载相关-------------------------------------------------------------
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coilCompose" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
@@ -98,25 +89,28 @@ github-glide = { module = "com.github.bumptech.glide:glide", version.ref = "glid
 landscapist-glide = { module = "com.github.skydoves:landscapist-glide", version.ref = "landscapistGlide" }
 #-----------------------------------------------Compose相关-------------------------------------------------------------
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityKtx" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose-android", version.ref = "constraintLayoutCompose" }
-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationComposeVersion" }
-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeComposeVersion" }
-composesmartrefresh = { module = "io.github.loren-moon:composesmartrefresh", version.ref = "composeSmartrefreshVersion" }
-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
+compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "navigationComposeVersion" }
+compose-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleKtx" }
+compose-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleKtx" }
+compose-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "composeRuntimeLivedata" }
 accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
-accompanist-placeholder = { module = "com.google.accompanist:accompanist-placeholder-material", version.ref = "accompanistPlaceholder" }
+accompanist-placeholder = { module = "com.google.accompanist:accompanist-placeholder-material", version.ref = "accompanist" }
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 accompanist-swiperefresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "accompanist" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
+
 ccompanist = { module = "com.google.accompanist:accompanist-insets", version.ref = "googleAccompanistInsets" }
-androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingComposeVersion" }
+compose-paging = { module = "androidx.paging:paging-compose", version.ref = "paging" }
 compose-animation= { module = "androidx.compose.animation:animation", version.ref = "animation" }
+
+composesmartrefresh = { module = "io.github.loren-moon:composesmartrefresh", version.ref = "composeSmartrefreshVersion" }
 any_pop_dialog_compose = { module = "io.github.TheMelody:any_pop_dialog_compose", version.ref = "any_pop_dialog_compose" }
 composeViews = { module = "io.github.ltttttttttttt:ComposeViews", version.ref = "composeviews" }
 compose-webview = { module = "io.github.kevinnzou:compose-webview", version.ref = "composeWebviewVersion" }
