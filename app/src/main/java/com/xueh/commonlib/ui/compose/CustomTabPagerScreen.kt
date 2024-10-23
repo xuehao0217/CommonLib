@@ -28,7 +28,6 @@ import java.lang.Math.*
 
 val pages = arrayOf("Home", "Shows上上 上 ", "Books")
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CustomTabPagerScreen() {
     Scaffold(topBar = {

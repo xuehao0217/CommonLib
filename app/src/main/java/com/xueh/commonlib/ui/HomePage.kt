@@ -134,7 +134,6 @@ class HomePage : NavContent {
 
 
 
-    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun NavHost() {
         val navController = rememberNavController()

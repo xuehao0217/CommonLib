@@ -80,7 +80,6 @@ fun TabPage() {
     TabPageList(ids=ids,pagingStateList)
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TabPageList(ids: List<String>,pagingStateList:List<Flow<PagingData<HomeEntity.Data>>>) {
     var onSelect:(String)->Unit={
@@ -154,7 +153,6 @@ fun TabPageList(ids: List<String>,pagingStateList:List<Flow<PagingData<HomeEntit
 }
 
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NewsTab(
     pagerState: PagerState,

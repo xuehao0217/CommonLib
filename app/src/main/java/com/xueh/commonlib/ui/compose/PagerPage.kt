@@ -18,7 +18,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
 
-@OptIn(ExperimentalFoundationApi::class)
 @Preview
 @Composable
 fun PagerPage (){

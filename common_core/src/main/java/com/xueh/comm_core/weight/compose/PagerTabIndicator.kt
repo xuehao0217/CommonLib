@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.*
  * @param  height   指示器的高度
  * @param  color    指示器的颜色
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PagerTabIndicator(
     tabPositions: List<MyTabPosition>,
@@ -77,7 +76,6 @@ fun PagerTabIndicator(
  * @param selectedFontWeight        tab选中时的文字比重
  * @param unselectedFontWeight      tab没选中时的文字比重
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PagerTab(
     modifier: Modifier = Modifier,

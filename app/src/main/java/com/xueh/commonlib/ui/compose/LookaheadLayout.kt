@@ -86,7 +86,6 @@ fun PlacementScopePreview() {
  *LazyVerticalStaggeredGridView和 LazyHorizontalStaggeredGrid
  * Copy from https://github.com/anandwana001
  **/
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LazyHorizontalStaggeredGridTest() {
     LazyHorizontalStaggeredGrid(modifier = Modifier
@@ -101,7 +100,6 @@ fun LazyHorizontalStaggeredGridTest() {
         })
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LazyVerticalStaggeredGridTest() {
     LazyVerticalStaggeredGrid(modifier = Modifier
@@ -134,7 +132,6 @@ fun SingleCard(modifier: Modifier = Modifier, text: String) {
 /**
  *SnapFlingBehavior 吸附
  **/
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SnapFlingBehaviorTest() {
     val state = rememberLazyListState()
