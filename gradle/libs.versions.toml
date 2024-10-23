@@ -15,7 +15,7 @@ gson = "2.10.1"
 datastore = "1.1.1"
 #--------------工具相关-----------------
 interval = "1.0.3"
-utilcodex = "1.31.0"
+utilcodex = "1.31.1"
 agentweb = "v5.1.1-androidx"
 xxpermissions = "20.0"
 glideVersion = "4.16.0"
