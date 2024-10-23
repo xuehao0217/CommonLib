@@ -31,11 +31,10 @@ import kotlinx.coroutines.launch
  * 创建日期: 2023/8/30
  * 备注：
  */
-@ExperimentalFoundationApi
 @Preview
 @Composable
 fun NavPageWeigetPage() {
-    var  showRed = rememberMutableStateOf {
+    val  showRed = rememberMutableStateOf {
         false
     }
     val navList = mutableListOf(
