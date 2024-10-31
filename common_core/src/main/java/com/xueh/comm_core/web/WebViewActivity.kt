@@ -118,7 +118,11 @@ open class WebViewActivity : BaseActivity<ActivityWebViewBinding>() {
                     title = titleStr,
                     titleBackgroundColor = Color.Transparent,
                     backClick = {
-                        finish()
+                        if (agentWeb.back()) {
+                            agentWeb.back()
+                        }else{
+                            finish()
+                        }
                     })
             }
         }

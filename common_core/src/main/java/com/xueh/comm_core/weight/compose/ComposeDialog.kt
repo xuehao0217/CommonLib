@@ -245,7 +245,7 @@ fun BaseAnyPopDialog(
     content: @Composable () -> Unit,
 ) {
     if (showDialog.value) {
-        var isActiveClose by remember { mutableStateOf(false) }
+        val isActiveClose by remember { mutableStateOf(false) }
         AnyPopDialog(
             modifier = Modifier.fillMaxWidth(), isActiveClose = isActiveClose,
             properties = AnyPopDialogProperties(direction = direction),
@@ -265,11 +265,13 @@ fun BaseAnyPopDialog(
 fun BaseComposeDialog(
     alertDialog: MutableState<Boolean>,
     properties: DialogProperties = DialogProperties(usePlatformDefaultWidth = false),
+    onDismiss:()->Unit={},
     content: @Composable () -> Unit,
 ) {
     if (alertDialog.value) {
         Dialog(
             onDismissRequest = {
+                onDismiss()
                 alertDialog.value = false
             },
             properties = properties,
@@ -284,11 +286,13 @@ fun BaseComposeDialog(
 fun ComposeLoadingDialog(
     alertDialog: MutableState<Boolean>,
     properties: DialogProperties = DialogProperties(usePlatformDefaultWidth = false),
+    onDismiss:()->Unit={},
 ) {
     if (alertDialog.value) {
         BaseComposeDialog(
             alertDialog,
-            properties = properties
+            properties = properties,
+            onDismiss=onDismiss,
         ) {
             Box(modifier = Modifier.fillMaxSize(), Alignment.Center) {
                 CircularProgressIndicator(
