@@ -2,6 +2,7 @@ package com.xueh.comm_core.net.interceptor
 
 import okhttp3.Interceptor
 import okhttp3.Response
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * 创 建 人: xueh
@@ -10,11 +11,12 @@ import okhttp3.Response
  */
 class HeaderInterceptor : Interceptor {
 
-    private var headers = hashMapOf<String, String>()
+    var headers = ConcurrentHashMap<String, String>()
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
-        val requestBuilder = originalRequest.newBuilder().header("Content-Type", "application/json")
+        val requestBuilder = originalRequest.newBuilder()
+            .header("Content-Type", "application/json")
             .header("Accept", "application/json")
             .method(originalRequest.method, originalRequest.body)
 
@@ -22,40 +24,30 @@ class HeaderInterceptor : Interceptor {
             requestBuilder.addHeader(t, u)
         }
 
-
-//        val iterator = headers.iterator()
-//        while(iterator.hasNext()){
-//            val item = iterator.next()
-//            requestBuilder.addHeader(item.key, item.value)
-//        }
-
         return chain.proceed(requestBuilder.build())
     }
-
-    fun put(key: String, value: String): HeaderInterceptor {
-        if (headers.containsKey(key)) {
+    @Synchronized
+    fun put(key: String, value: String) {
+        if (headers.containsKey(key)){
             clearKey(key)
         }
         headers[key] = value
-        return this
     }
 
-
-    fun put(headers: HashMap<String, String>): HeaderInterceptor {
+    @Synchronized
+    fun put(headers: HashMap<String, String>) {
         this.headers.putAll(headers)
-        return this
     }
 
+    @Synchronized
+    fun clearHead() {
+        headers.clear()
+    }
 
-    fun clearKey(key: String): HeaderInterceptor {
+    @Synchronized
+    fun clearKey(key: String) {
         if (headers.containsKey(key)) {
             headers.remove(key)
         }
-        return this
-    }
-
-    fun clearHead(): HeaderInterceptor {
-        headers.clear()
-        return this
     }
 }

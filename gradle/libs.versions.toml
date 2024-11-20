@@ -1,9 +1,9 @@
 [versions]
 agp = "8.3.2"
-kotlin = "2.0.20"
+kotlin = "2.0.21"
 kotlinCoroutinesAndroidVersion = "1.9.0"
 kotlinCoroutinesCoreVersion = "1.9.0"
-composeBom = "2024.10.01"
+composeBom = "2024.11.00"
 #--------------基础库相关-----------------
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -27,7 +27,7 @@ activityKtx = "1.9.3"
 fragmentKtx = "1.8.2"
 lifecycleKtx = "2.8.7"
 #--------------Compose相关-----------------
-coilCompose = "3.0.0-rc01"
+coilCompose = "3.0.0"
 constraintLayoutCompose = "1.1.0"
 accompanist = "0.36.0"
 googleAccompanistInsets = "0.31.5-beta"
