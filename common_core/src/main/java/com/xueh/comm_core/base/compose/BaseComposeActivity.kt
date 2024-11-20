@@ -30,7 +30,7 @@ import com.xueh.comm_core.weight.xml.ViewLoading
 //AppCompatActivity  可以解决弹窗问题
 abstract class BaseComposeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {

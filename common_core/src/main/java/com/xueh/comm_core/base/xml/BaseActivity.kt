@@ -19,7 +19,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), IBaseLogic 
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
         window.requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
