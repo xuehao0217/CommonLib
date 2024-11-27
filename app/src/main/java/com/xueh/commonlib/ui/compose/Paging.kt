@@ -51,6 +51,8 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.xueh.comm_core.base.mvvm.BaseComposeViewModel
+import com.xueh.comm_core.weight.compose.PagingVerticalGrid
+import com.xueh.comm_core.weight.compose.PagingVerticalPager
 import com.xueh.commonlib.entity.HomeEntity
 import com.xueh.commonlib.ui.compose.ItemView
 import com.xueh.commonlib.ui.compose.RouteConfig
@@ -128,15 +130,8 @@ fun PagingWithVerticalPager() {
     BaseComposeViewModel<ComposeViewModel> {
         val lazyPagingItems = it.getListDatas().collectAsLazyPagingItems()
         val pagerState = rememberPagerState { lazyPagingItems.itemCount }
-
-        VerticalPager(
-            modifier = Modifier.fillMaxSize(),
-            state = pagerState,
-            pageSize = PageSize.Fixed(200.dp),
-            key = lazyPagingItems.itemKey { it.id }
-        ) { index ->
-            val item = lazyPagingItems[index]
-            PagingItem(item)
+        PagingVerticalPager(lazyPagingItems = lazyPagingItems,pagerState) {
+            PagingItem(it)
         }
     }
 }
@@ -145,16 +140,8 @@ fun PagingWithVerticalPager() {
 fun PagingWithLazyGrid() {
     BaseComposeViewModel<ComposeViewModel> {
         val lazyPagingItems = it.getListDatas().collectAsLazyPagingItems()
-
-        LazyVerticalGrid(columns = GridCells.Fixed(2)) {
-            items(
-                count = lazyPagingItems.itemCount,
-                key = lazyPagingItems.itemKey { it.id },
-                contentType = lazyPagingItems.itemContentType { "MyPagingItems" }
-            ) { index ->
-                val item = lazyPagingItems[index]
-                PagingItem(item)
-            }
+        PagingVerticalGrid(lazyPagingItems =lazyPagingItems ) {
+            PagingItem(it)
         }
     }
 }

@@ -1,7 +1,5 @@
 package com.xueh.comm_core.weight.compose
 
-import android.os.Build
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.runtime.Composable
@@ -20,13 +18,11 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -37,25 +33,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.*
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.itemKey
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageScope
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import com.blankj.utilcode.util.ToastUtils
-import com.blankj.utilcode.util.Utils
-import com.loren.component.view.composesmartrefresh.SmartSwipeRefreshState
 import com.loren.component.view.composesmartrefresh.rememberSmartSwipeRefreshState
-import com.lt.compose_views.util.rememberMutableStateOf
-import com.xueh.comm_core.R
 import com.xueh.comm_core.helper.isEmpty
 import com.xueh.comm_core.weight.compose.refreshheader.MyRefreshHeader
 import com.xueh.comm_core.weight.compose.refreshheader.RefreshHeader
@@ -262,199 +249,6 @@ fun ShadowVerticalView(height: Int = 50, modifier: Modifier = Modifier) {
                     brush = Brush.verticalGradient(colorList),
                 )
         )
-    }
-}
-
-//公用列表
-@Composable
-inline fun CommonLazyColumn(
-    modifier: Modifier = Modifier,
-    state: LazyListState = rememberLazyListState(),
-    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
-    contentPadding: PaddingValues = PaddingValues(horizontal = 15.dp),
-    crossinline headContent: @Composable () -> Unit? = {},
-    crossinline foodContent: @Composable () -> Unit? = {},
-    crossinline content: LazyListScope.() -> Unit,
-) {
-    ConstraintLayout(modifier = modifier) {
-        val (column, bottom_v) = createRefs()
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .constrainAs(column) {
-                    top.linkTo(parent.top)
-                },
-            state = state,
-            verticalArrangement = verticalArrangement,
-            contentPadding = contentPadding,
-        ) {
-            item {
-                headContent.invoke()
-            }
-            content(this)
-            item {
-                foodContent.invoke()
-            }
-        }
-        ShadowVerticalView(modifier = Modifier
-            .fillMaxWidth()
-            .constrainAs(bottom_v) {
-                bottom.linkTo(parent.bottom)
-            })
-    }
-}
-
-//公用数据列表
-@Composable
-inline fun <T> CommonLazyColumnData(
-    data: List<T>,
-    modifier: Modifier = Modifier.fillMaxSize(),
-    state: LazyListState = rememberLazyListState(),
-    noinline key: ((item: T) -> Any)? = null,
-    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
-    contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp),
-    crossinline headContent: @Composable () -> Unit? = {},
-    crossinline foodContent: @Composable () -> Unit? = {},
-    crossinline itemContent: @Composable LazyItemScope.(item: T) -> Unit,
-) {
-
-    CommonLazyColumn(
-        modifier = modifier,
-        verticalArrangement = verticalArrangement,
-        state = state,
-        contentPadding = contentPadding,
-        headContent = headContent,
-        foodContent = foodContent,
-    ) {
-        items(data, key = key) {
-            itemContent(it)
-        }
-    }
-}
-
-
-//公用下拉刷新页面
-@Composable
-fun CommonRefreshPage(
-    isRefreshing: Boolean,
-    onRefresh: (suspend () -> Unit)? = null,
-    content: @Composable () -> Unit,
-) {
-//    var refreshing by remember { mutableStateOf(false) }
-    val refreshState = rememberSmartSwipeRefreshState()
-    val listState = rememberLazyListState()
-    SmartRefresh(
-        isRefreshing = isRefreshing,
-        scrollState = listState,
-        refreshState = refreshState,
-        headerIndicator = { RefreshHeader(refreshState) },
-        onRefresh = onRefresh,
-        content = content
-    )
-}
-
-
-//公用下拉刷新列表数据页面
-@Composable
-fun <T> CommonRefreshColumnDataPage(
-    data: List<T>,
-    isRefreshing: Boolean,
-    onRefresh: (suspend () -> Unit)? = null,
-    key: ((item: T) -> Any)? = null,
-    emptContent: @Composable () -> Unit? = {},
-    headContent: @Composable () -> Unit? = {},
-    foodContent: @Composable () -> Unit? = {},
-    itemContent: @Composable LazyItemScope.(item: T) -> Unit,
-) {
-//    var refreshing by remember { mutableStateOf(false) }
-    val refreshState = rememberSmartSwipeRefreshState()
-    val listState = rememberLazyListState()
-    SmartRefresh(
-        isRefreshing = isRefreshing,
-        scrollState = listState,
-        refreshState = refreshState,
-        headerIndicator = { MyRefreshHeader(refreshState) },
-        onRefresh = onRefresh
-    ) {
-        if (data.isEmpty()) {
-            emptContent.invoke()
-        } else {
-            CommonLazyColumnData(
-                data = data,
-                headContent = headContent,
-                foodContent = foodContent,
-                itemContent = itemContent,
-                key = key
-            )
-        }
-    }
-}
-
-//公用 下拉刷新下拉加载 页面
-@Composable
-fun <T : Any> CommonPagingPage(
-    lazyPagingItems: LazyPagingItems<T>,
-    lazyListState: LazyListState = rememberLazyListState(),
-    refreshState: SmartSwipeRefreshState = rememberSmartSwipeRefreshState(),//下拉刷新状态
-    isFirstRefresh: Boolean = true,
-    enableRefresh: Boolean = true,
-
-    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(0.dp),
-    contentPadding: PaddingValues = PaddingValues(horizontal = 0.dp),
-
-    headerIndicator: @Composable () -> Unit = { MyRefreshHeader(refreshState) },
-    onScrollStop: ((visibleItem: List<Int>, isScrollingUp: Boolean) -> Unit)? = null,
-
-    emptyDataContent: (@Composable BoxScope.() -> Unit)? = null,
-    loadingContent: (@Composable BoxScope.() -> Unit)? = null,
-
-    key: ((index: Int) -> Any)? = null,
-
-    headContent: @Composable () -> Unit? = {},
-    foodContent: @Composable () -> Unit? = {},
-
-    itemContent: @Composable LazyItemScope.(value: T) -> Unit,
-) {
-    var lastFirstIndex by rememberMutableStateOf{0}
-    var isScrollingUp = false
-    LaunchedEffect(lazyListState) {
-        snapshotFlow { lazyListState.isScrollInProgress }.collect { isScrolling ->
-            if (!isScrolling) {
-                isScrollingUp = if (lazyListState.firstVisibleItemIndex > lastFirstIndex) {
-                    // 上滑
-                    true
-                } else {
-                    //下滑
-                    false
-                }
-                lastFirstIndex = lazyListState.firstVisibleItemIndex
-                // 滑动停止
-                val visibleItemsIndex =
-                    lazyListState.layoutInfo.visibleItemsInfo.map { it.index }.toList()
-                onScrollStop?.invoke(visibleItemsIndex, isScrollingUp)
-            }
-        }
-    }
-    RefreshList(
-        enableRefresh = enableRefresh,
-        isFirstRefresh = isFirstRefresh,
-        lazyListState = lazyListState,
-        refreshState = refreshState,
-        lazyPagingItems = lazyPagingItems,
-        headerIndicator = headerIndicator,
-        verticalArrangement = verticalArrangement,
-        contentPadding = contentPadding,
-        emptyDataContent=emptyDataContent,
-        loadingContent=loadingContent,
-        headContent=headContent,
-        foodContent = foodContent,
-    ) {
-        // 如果是老版本的Paging3这里的实现方式不同，自己根据版本来实现。
-        items(lazyPagingItems.itemCount, key = key) { index ->
-            lazyPagingItems[index]?.let {
-                itemContent(it)
-            }
-        }
     }
 }
 
