@@ -43,6 +43,8 @@ object RouteConfig {
     const val ComposePager="ComposePager"
     const val ComposeViewModelPage="ComposeViewModel"
 
+    const val ComposeViewPaging="ComposeViewPaging"
+
     const val name="name"
     const val age="age"
 }

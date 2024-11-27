@@ -34,6 +34,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.paging.compose.samples.ComposePaging
 import com.blankj.utilcode.util.ToastUtils
 import com.lt.compose_views.compose_pager.ComposePagerScope
 import com.lt.compose_views.nav.NavContent
@@ -78,6 +79,7 @@ import com.xueh.commonlib.ui.compose.PagerPage
 import com.xueh.commonlib.ui.compose.PermissionPageContent
 import com.xueh.commonlib.ui.compose.PlaceholderPage
 import com.xueh.commonlib.ui.compose.RefreshLoadUse
+import com.xueh.commonlib.ui.compose.RouteConfig.ComposeViewPaging
 import com.xueh.commonlib.ui.compose.TabPage
 import com.xueh.commonlib.ui.compose.google.CustomPullRefreshSample
 import com.xueh.commonlib.ui.compose.google.GoogleSamplePage
@@ -164,6 +166,7 @@ class HomePage : NavContent {
                     ItemData("ComposeLoadPage", RouteConfig.ComposeTab),
                     ItemData("ComposePager", RouteConfig.ComposePager),
                     ItemData("ComposeViewModel", RouteConfig.ComposeViewModelPage),
+                    ItemData("ComposeViewPaging", RouteConfig.ComposeViewPaging),
 //                    ItemData("lazyVerticalGrid使用", RouteConfig.lazyVerticalGrid),
 //                    ItemData("LazyColumnPage", RouteConfig.LazyColumnPage),
 //                    ItemData("ScrollableAppBar", RouteConfig.ScrollableAppBar),
@@ -274,6 +277,10 @@ class HomePage : NavContent {
 
             composable(RouteConfig.ComposeViewModelPage) {
                 ComoposeViewModelPage()
+            }
+
+            composable(RouteConfig.ComposeViewPaging) {
+                ComposePaging()
             }
         }
     }

@@ -360,6 +360,7 @@ fun <T> CommonRefreshColumnDataPage(
     data: List<T>,
     isRefreshing: Boolean,
     onRefresh: (suspend () -> Unit)? = null,
+    key: ((item: T) -> Any)? = null,
     emptContent: @Composable () -> Unit? = {},
     headContent: @Composable () -> Unit? = {},
     foodContent: @Composable () -> Unit? = {},
@@ -382,7 +383,8 @@ fun <T> CommonRefreshColumnDataPage(
                 data = data,
                 headContent = headContent,
                 foodContent = foodContent,
-                itemContent = itemContent
+                itemContent = itemContent,
+                key = key
             )
         }
     }
@@ -405,6 +407,8 @@ fun <T : Any> CommonPagingPage(
 
     emptyDataContent: (@Composable BoxScope.() -> Unit)? = null,
     loadingContent: (@Composable BoxScope.() -> Unit)? = null,
+
+    key: ((index: Int) -> Any)? = null,
 
     headContent: @Composable () -> Unit? = {},
     foodContent: @Composable () -> Unit? = {},
@@ -446,7 +450,7 @@ fun <T : Any> CommonPagingPage(
         foodContent = foodContent,
     ) {
         // 如果是老版本的Paging3这里的实现方式不同，自己根据版本来实现。
-        items(lazyPagingItems.itemCount, key = { it }) { index ->
+        items(lazyPagingItems.itemCount, key = key) { index ->
             lazyPagingItems[index]?.let {
                 itemContent(it)
             }
