@@ -1,5 +1,6 @@
 package com.xueh.commonlib.ui
 
+import androidx.activity.OnBackPressedCallback
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,6 +15,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.lt.compose_views.nav.PagerNav
@@ -41,6 +43,7 @@ class MainComposeActivity : BaseComposeActivity() {
     override fun showTitleView() = false
 
 
+    private var backPressedTime: Long = 0
     @Composable
     override fun setComposeContent() {
         val pages = mutableListOf(
@@ -77,6 +80,18 @@ class MainComposeActivity : BaseComposeActivity() {
                 interceptPos
             }else{
                 -1
+            }
+        })
+
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (System.currentTimeMillis() - backPressedTime <= 2000) {
+                    AppUtils.exitApp()
+                } else {
+                    backPressedTime = System.currentTimeMillis()
+                    ToastUtils.showShort("Press again to exit the app")
+                }
             }
         })
     }
