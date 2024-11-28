@@ -289,7 +289,7 @@ fun <T : Any> PagingVerticalGrid(
                     itemContent(it)
                 }
             }
-            item(span = { GridItemSpan(1) }) { // Use the span variable here
+            item(span = { GridItemSpan(columns) }) { // Use the span variable here
                 lazyPagingItems.apply {
                     when (loadState.append) {
                         is LoadState.Loading -> LoadingItem()
