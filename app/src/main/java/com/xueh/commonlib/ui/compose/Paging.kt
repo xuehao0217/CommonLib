@@ -51,6 +51,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.xueh.comm_core.base.mvvm.BaseComposeViewModel
+import com.xueh.comm_core.weight.compose.PagingBaseBox
 import com.xueh.comm_core.weight.compose.PagingVerticalGrid
 import com.xueh.comm_core.weight.compose.PagingVerticalPager
 import com.xueh.commonlib.entity.HomeEntity
@@ -130,9 +131,10 @@ fun PagingWithVerticalPager() {
     BaseComposeViewModel<ComposeViewModel> {
         val lazyPagingItems = it.getListDatas().collectAsLazyPagingItems()
         val pagerState = rememberPagerState { lazyPagingItems.itemCount }
-        PagingVerticalPager(lazyPagingItems = lazyPagingItems,pagerState) {
+        PagingVerticalPager(lazyPagingItems = lazyPagingItems, pagerState) {
             PagingItem(it)
         }
+
     }
 }
 
@@ -140,7 +142,7 @@ fun PagingWithVerticalPager() {
 fun PagingWithLazyGrid() {
     BaseComposeViewModel<ComposeViewModel> {
         val lazyPagingItems = it.getListDatas().collectAsLazyPagingItems()
-        PagingVerticalGrid(lazyPagingItems =lazyPagingItems ) {
+        PagingVerticalGrid(lazyPagingItems = lazyPagingItems) {
             PagingItem(it)
         }
     }
@@ -193,7 +195,7 @@ private fun PagingItem(item: HomeEntity.Data?) {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = item?.title?:"",
+            text = item?.title ?: "",
             color = Color.White,
             textAlign = TextAlign.Center,
         )

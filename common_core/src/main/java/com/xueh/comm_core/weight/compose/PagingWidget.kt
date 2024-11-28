@@ -1,9 +1,16 @@
 package com.xueh.comm_core.weight.compose
 
+import android.R
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -22,14 +29,23 @@ import androidx.compose.foundation.pager.PagerScope
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
@@ -38,6 +54,7 @@ import com.loren.component.view.composesmartrefresh.SmartSwipeRefreshState
 import com.loren.component.view.composesmartrefresh.rememberSmartSwipeRefreshState
 import com.lt.compose_views.util.rememberMutableStateOf
 import com.xueh.comm_core.base.mvvm.BaseComposeViewModel
+import com.xueh.comm_core.helper.isEmpty
 import com.xueh.comm_core.weight.compose.refreshheader.MyRefreshHeader
 
 //公用 下拉刷新下拉加载 页面
@@ -118,16 +135,19 @@ fun <T : Any> PagingVerticalPager(
     lazyPagingItems: LazyPagingItems<T>,
     state: PagerState = rememberPagerState { lazyPagingItems.itemCount },
     modifier: Modifier = Modifier,
+    emptyDataContent: (@Composable BoxScope.() -> Unit)? = null,
+    loadingContent: (@Composable BoxScope.() -> Unit)? = null,
     key: ((index: Int) -> Any)? = null,
     pageContent: @Composable PagerScope.(T) -> Unit
 ) {
-    VerticalPager(
-        modifier = modifier,
-        state = state,
-        key = key
-    ) { index ->
-        lazyPagingItems[index]?.let {
-            pageContent(it)
+    PagingBaseBox(lazyPagingItems,modifier=modifier,emptyDataContent,loadingContent){
+        VerticalPager(
+            state = state,
+            key = key
+        ) { index ->
+            lazyPagingItems[index]?.let {
+                pageContent(it)
+            }
         }
     }
 }
@@ -139,28 +159,34 @@ fun <T : Any> PagingVerticalPager(
 @Composable
 fun <T : Any> PagingVerticalGrid(
     lazyPagingItems: LazyPagingItems<T>,
+    modifier: Modifier = Modifier,
     columns: Int = 2,
     state: LazyGridState = rememberLazyGridState(),
+
+    emptyDataContent: (@Composable BoxScope.() -> Unit)? = null,
+    loadingContent: (@Composable BoxScope.() -> Unit)? = null,
+
     contentPadding: PaddingValues = PaddingValues(0.dp),
     horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(7.dp),
     key: ((index: Int) -> Any)? = null,
     itemContent: @Composable LazyGridItemScope.(T) -> Unit
 ) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(columns), state = state, contentPadding = contentPadding,
-        horizontalArrangement = horizontalArrangement
-    ) {
-        items(
-            count = lazyPagingItems.itemCount,
-            key = key,
+    PagingBaseBox(lazyPagingItems,modifier=modifier,emptyDataContent,loadingContent) {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(columns), state = state, contentPadding = contentPadding,
+            horizontalArrangement = horizontalArrangement
         ) {
-            lazyPagingItems[it]?.let {
-                itemContent(it)
+            items(
+                count = lazyPagingItems.itemCount,
+                key = key,
+            ) {
+                lazyPagingItems[it]?.let {
+                    itemContent(it)
+                }
             }
         }
     }
 }
-
 
 
 /*
@@ -169,6 +195,9 @@ fun <T : Any> PagingVerticalGrid(
 @Composable
 fun <T : Any> PagingVerticalStaggeredGrid(
     lazyPagingItems: LazyPagingItems<T>,
+    modifier: Modifier = Modifier,
+    emptyDataContent: (@Composable BoxScope.() -> Unit)? = null,
+    loadingContent: (@Composable BoxScope.() -> Unit)? = null,
     columns: Int = 2,
     state: LazyStaggeredGridState = rememberLazyStaggeredGridState(),
     contentPadding: PaddingValues = PaddingValues(0.dp),
@@ -177,18 +206,136 @@ fun <T : Any> PagingVerticalStaggeredGrid(
     key: ((index: Int) -> Any)? = null,
     itemContent: @Composable LazyStaggeredGridItemScope.(T) -> Unit
 ) {
-    LazyVerticalStaggeredGrid(
-        columns = StaggeredGridCells.Fixed(columns), state = state, contentPadding = contentPadding,
-        verticalItemSpacing = verticalItemSpacing,
-        horizontalArrangement = horizontalArrangement
-    ) {
-        items(
-            count = lazyPagingItems.itemCount,
-            key = key,
+    PagingBaseBox(lazyPagingItems,modifier=modifier,emptyDataContent,loadingContent) {
+        LazyVerticalStaggeredGrid(
+            columns = StaggeredGridCells.Fixed(columns),
+            state = state,
+            contentPadding = contentPadding,
+            verticalItemSpacing = verticalItemSpacing,
+            horizontalArrangement = horizontalArrangement
         ) {
-            lazyPagingItems[it]?.let {
-                itemContent(it)
+            items(
+                count = lazyPagingItems.itemCount,
+                key = key,
+            ) {
+                lazyPagingItems[it]?.let {
+                    itemContent(it)
+                }
             }
         }
+    }
+}
+
+
+
+@Composable
+fun <T : Any> PagingBaseBox(
+    lazyPagingItems: LazyPagingItems<T>,
+    modifier: Modifier=Modifier,
+    emptyDataContent: (@Composable BoxScope.() -> Unit)? = null,
+    loadingContent: (@Composable BoxScope.() -> Unit)? = null,
+    content: @Composable BoxScope.() -> Unit
+) {
+    val isRefreshing = lazyPagingItems.loadState.refresh is LoadState.Loading
+    //错误页
+    val err = lazyPagingItems.loadState.refresh is LoadState.Error
+    if (err) {
+        ErrorContent { lazyPagingItems.retry() }
+        return
+    }
+    Box(modifier = modifier){
+        //第一次进入页面的时候 loading
+        if (lazyPagingItems.itemCount == 0) {
+            Box(modifier = Modifier.fillMaxSize(), Alignment.Center) {
+                if (isRefreshing) {
+                    if (loadingContent.isEmpty()) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.height(50.dp)
+                        )
+                    } else {
+                        loadingContent?.invoke(this)
+                    }
+                } else {
+                    if (emptyDataContent.isEmpty()) {
+                        Text(text = "无数据")
+                    } else {
+                        emptyDataContent?.invoke(this)
+                    }
+                }
+            }
+        }
+        content()
+    }
+}
+
+
+
+
+@Composable
+fun ErrorContent(retry: () -> Unit) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.align(Alignment.Center)) {
+            Image(
+                painter = painterResource(id = R.drawable.stat_notify_error),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(Color.Red),
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+            Text(
+                text = "请求出错啦",
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 10.dp)
+            )
+            Button(
+                onClick = { retry() },
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(10.dp),
+//                colors = buttonColors(backgroundColor = AppTheme.colors.themeUi)
+            ) {
+                Text(text = "重试")
+            }
+        }
+    }
+}
+
+@Composable
+fun ErrorItem(retry: () -> Unit) {
+    Button(
+        onClick = { retry() },
+        modifier = Modifier.padding(10.dp),
+//        colors = buttonColors(backgroundColor = AppTheme.colors.themeUi)
+    ) {
+        Text(text = "重试")
+    }
+}
+
+
+@Composable
+fun NoMoreItem() {
+    Text(
+        text = "没有更多了",
+        modifier = Modifier
+            .padding(10.dp)
+            .fillMaxWidth(),
+        textAlign = TextAlign.Center
+    )
+}
+
+
+@Composable
+fun LoadingItem() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(60.dp), contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+//            color = AppTheme.colors.themeUi,
+            modifier = Modifier
+                .padding(10.dp)
+                .height(50.dp)
+        )
     }
 }
