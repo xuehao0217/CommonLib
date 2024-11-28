@@ -27,7 +27,7 @@ activityKtx = "1.9.3"
 fragmentKtx = "1.8.5"
 lifecycleKtx = "2.8.7"
 #--------------Compose相关-----------------
-coilCompose = "3.0.3"
+coilCompose = "3.0.4"
 constraintLayoutCompose = "1.1.0"
 accompanist = "0.36.0"
 googleAccompanistInsets = "0.31.5-beta"
