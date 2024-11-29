@@ -47,11 +47,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.xueh.comm_core.base.mvvm.BaseComposeViewModel
 import com.xueh.comm_core.weight.compose.PagingBaseBox
+import com.xueh.comm_core.weight.compose.PagingRefresh
 import com.xueh.comm_core.weight.compose.PagingVerticalGrid
 import com.xueh.comm_core.weight.compose.PagingVerticalPager
 import com.xueh.commonlib.entity.HomeEntity
@@ -65,6 +67,7 @@ fun ComposePaging() {
     val PagingWithVerticalPager = "PagingWithVerticalPager"
     val PagingWithLazyGrid = "PagingWithLazyGrid"
     val PagingWithLazyList = "PagingWithLazyList"
+    val CustomRefresh = "CustomRefresh"
 
     val PagingList = "PagingList"
     val navController = rememberNavController()
@@ -86,6 +89,9 @@ fun ComposePaging() {
                 ItemView(PagingWithLazyList, false) {
                     navController.navigate(PagingWithLazyList)
                 }
+                ItemView(CustomRefresh, false) {
+                    navController.navigate(CustomRefresh)
+                }
             }
         }
 
@@ -103,6 +109,24 @@ fun ComposePaging() {
 
         composable(PagingWithHorizontalPager) {
             PagingWithHorizontalPager()
+        }
+
+        composable(CustomRefresh) {
+            CustomRefreshSample()
+        }
+    }
+}
+
+@Composable
+fun CustomRefreshSample() {
+    BaseComposeViewModel<ComposeViewModel> {
+        val lazyPagingItems = it.getListDatas().collectAsLazyPagingItems()
+        PagingRefresh(lazyPagingItems, headerIndicator = {
+            Box(modifier = Modifier.fillMaxWidth().height(150.dp).background(Color.Yellow))
+        }){
+            PagingVerticalGrid(it) {
+                PagingItem(it)
+            }
         }
     }
 }
@@ -201,3 +225,4 @@ private fun PagingItem(item: HomeEntity.Data?) {
         )
     }
 }
+
