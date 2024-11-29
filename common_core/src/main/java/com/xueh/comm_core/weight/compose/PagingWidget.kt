@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyItemScope
-import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -36,7 +35,6 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
-import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.PagerScope
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.VerticalPager
@@ -48,10 +46,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -62,13 +56,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemContentType
-import androidx.paging.compose.itemKey
 import com.loren.component.view.composesmartrefresh.SmartSwipeRefreshState
 import com.loren.component.view.composesmartrefresh.rememberSmartSwipeRefreshState
-import com.lt.compose_views.util.rememberMutableStateOf
-import com.xueh.comm_core.base.mvvm.BaseComposeViewModel
 import com.xueh.comm_core.helper.isEmpty
 import com.xueh.comm_core.weight.compose.refreshheader.MyRefreshHeader
 
@@ -88,33 +77,29 @@ fun <T : Any> PagingRefreshList(
     headerIndicator: @Composable () -> Unit = { MyRefreshHeader(refreshState) },
     itemContent: @Composable LazyItemScope.(value: T) -> Unit,
 ) {
-//    //是不是在loading
+    //是不是在loading
     val isRefreshing = lazyPagingItems.loadState.refresh is LoadState.Loading
-    PagingBaseBox(
-        lazyPagingItems = lazyPagingItems,
-        emptyDataContent = emptyDataContent,
-        loadingContent = loadingContent
-    ) {
-        SmartRefresh(
-            isFirstRefresh = isFirstRefresh,
-            isRefreshing = isRefreshing,
-            scrollState = lazyListState,
-            refreshState = refreshState,
-            headerIndicator = headerIndicator,
-            onRefresh = {
-                lazyPagingItems.refresh()
-            }) {
-            PagingLazyColumn(
-                lazyPagingItems = lazyPagingItems,
-                lazyListState = lazyListState,
-                key = key,
-                verticalArrangement = verticalArrangement,
-                contentPadding = contentPadding,
-                headContent = headContent,
-                foodContent = foodContent,
-                itemContent = itemContent
-            )
-        }
+    SmartRefresh(
+        isFirstRefresh = isFirstRefresh,
+        isRefreshing = isRefreshing,
+        scrollState = lazyListState,
+        refreshState = refreshState,
+        headerIndicator = headerIndicator,
+        onRefresh = {
+            lazyPagingItems.refresh()
+        }) {
+        PagingLazyColumn(
+            lazyPagingItems = lazyPagingItems,
+            lazyListState = lazyListState,
+            key = key,
+            verticalArrangement = verticalArrangement,
+            contentPadding = contentPadding,
+            emptyDataContent=emptyDataContent,
+            loadingContent=loadingContent,
+            headContent = headContent,
+            foodContent = foodContent,
+            itemContent = itemContent
+        )
     }
 }
 
@@ -127,32 +112,40 @@ fun <T : Any> PagingLazyColumn(
     key: ((index: Int) -> Any)? = null,
     headContent: @Composable () -> Unit? = {},
     foodContent: @Composable () -> Unit? = {},
+    emptyDataContent: (@Composable BoxScope.() -> Unit)? = null,
+    loadingContent: (@Composable BoxScope.() -> Unit)? = null,
     itemContent: @Composable LazyItemScope.(T) -> Unit,
 ) {
     //刷新状态
-    CommonLazyColumn(
-        state = lazyListState,
-        contentPadding = contentPadding,
-        verticalArrangement = verticalArrangement,
-        headContent = headContent,
-        foodContent = foodContent,
+    PagingBaseBox(
+        lazyPagingItems = lazyPagingItems,
+        emptyDataContent = emptyDataContent,
+        loadingContent = loadingContent
     ) {
-        // 如果是老版本的Paging3这里的实现方式不同，自己根据版本来实现。
-        items(lazyPagingItems.itemCount, key = key) { index ->
-            lazyPagingItems[index]?.let {
-                itemContent(it)
+        CommonLazyColumn(
+            state = lazyListState,
+            contentPadding = contentPadding,
+            verticalArrangement = verticalArrangement,
+            headContent = headContent,
+            foodContent = foodContent,
+        ) {
+            // 如果是老版本的Paging3这里的实现方式不同，自己根据版本来实现。
+            items(lazyPagingItems.itemCount, key = key) { index ->
+                lazyPagingItems[index]?.let {
+                    itemContent(it)
+                }
             }
-        }
-        item {
-            lazyPagingItems.apply {
-                when (loadState.append) {
-                    is LoadState.Loading -> LoadingItem()
-                    is LoadState.Error -> ErrorItem { retry() }
-                    is LoadState.NotLoading -> {
-                        if (loadState.append.endOfPaginationReached) {
-                            //只有大于0 才显示 不然就是空数据状态页
-                            if (lazyPagingItems.itemCount > 0) {
-                                NoMoreItem()
+            item {
+                lazyPagingItems.apply {
+                    when (loadState.append) {
+                        is LoadState.Loading -> LoadingItem()
+                        is LoadState.Error -> ErrorItem { retry() }
+                        is LoadState.NotLoading -> {
+                            if (loadState.append.endOfPaginationReached) {
+                                //只有大于0 才显示 不然就是空数据状态页
+                                if (lazyPagingItems.itemCount > 0) {
+                                    NoMoreItem()
+                                }
                             }
                         }
                     }
@@ -302,7 +295,7 @@ fun <T : Any> PagingBaseBox(
     modifier: Modifier = Modifier,
     emptyDataContent: (@Composable BoxScope.() -> Unit)? = null,
     loadingContent: (@Composable BoxScope.() -> Unit)? = null,
-    content: @Composable BoxScope.() -> Unit
+    content: @Composable BoxScope.(LazyPagingItems<T>) -> Unit
 ) {
     val isRefreshing = lazyPagingItems.loadState.refresh is LoadState.Loading
     //错误页
@@ -332,7 +325,7 @@ fun <T : Any> PagingBaseBox(
                 }
             }
         }
-        content()
+        content(lazyPagingItems)
     }
 }
 
