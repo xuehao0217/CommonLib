@@ -4,6 +4,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -14,6 +15,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavHostController
+import com.lt.compose_views.util.rememberMutableStateOf
 
 /**
  * 创 建 人: xueh
@@ -85,3 +87,42 @@ fun CheckPermission( permission:String,onPermissionGranted: () -> Unit) {
 
 @Composable
 fun ScreenHeightInDp()= LocalDensity.current.run { LocalContext.current.resources.displayMetrics.heightPixels.toFloat().toDp() }
+
+
+
+//LazyListState 滑动停止 可见条目
+@Composable
+fun LazyListState.onScrollStopVisibleList(scrollStop: (visibleItem: List<Int>) -> Unit){
+    LaunchedEffect(this) {
+        snapshotFlow { isScrollInProgress }.collect { isScrolling ->
+            if (!isScrolling) {
+                // 滑动停止
+                val visibleItemsIndex =
+                    layoutInfo.visibleItemsInfo.map { it.index }.toList()
+                scrollStop.invoke(visibleItemsIndex)
+            }
+        }
+    }
+}
+
+//LazyListState 滑动方向
+@Composable
+fun LazyListState.onScrollDirection(scrollDirection: (isScrollingUp: Boolean) -> Unit){
+    var lastFirstIndex by rememberMutableStateOf { 0 }
+    var isScrollingUp :Boolean
+    LaunchedEffect(this) {
+        snapshotFlow { isScrollInProgress }.collect { isScrolling ->
+            if (!isScrolling) {
+                isScrollingUp = if (firstVisibleItemIndex > lastFirstIndex) {
+                    // 上滑
+                    true
+                } else {
+                    //下滑
+                    false
+                }
+                lastFirstIndex = firstVisibleItemIndex
+                scrollDirection.invoke( isScrollingUp)
+            }
+        }
+    }
+}

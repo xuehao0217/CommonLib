@@ -129,7 +129,7 @@ fun CommonRefreshColumnData() {
 @Preview
 @Composable
 fun CommonPaging(viewModel: ComposeViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
-    CommonPagingPage(viewModel.getTestDatas().collectAsLazyPagingItems()) {
+    PagingRefreshList(viewModel.getTestDatas().collectAsLazyPagingItems()) {
         BoxText(
             text = "${it}", modifier = Modifier
                 .fillMaxWidth()

@@ -57,14 +57,10 @@ import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.lt.compose_views.util.rememberMutableStateOf
 import com.xueh.comm_core.base.mvvm.BaseComposeViewModel
-import com.xueh.comm_core.weight.compose.BoxText
-import com.xueh.comm_core.weight.compose.CommonPagingPage
-import com.xueh.comm_core.weight.compose.CommonTitleView
+import com.xueh.comm_core.weight.compose.PagingRefreshList
 import com.xueh.comm_core.weight.compose.click
 import com.xueh.commonlib.entity.HomeEntity
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 /**
  * 创 建 人: xueh
@@ -104,14 +100,9 @@ fun RefreshLoadUse() {
                 }
         }
 
-
-        CommonPagingPage(
+        PagingRefreshList(
             homeDatas,
-            enableRefresh = true,
             lazyListState = lazyListState,
-            onScrollStop = { visibleItem, isScrollingUp ->
-                ToastUtils.showShort("是否上划${isScrollingUp}  ${visibleItem.toList()}")
-            },
             emptyDataContent = {
                 Box(
                     modifier = Modifier

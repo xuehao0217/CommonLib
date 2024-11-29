@@ -72,75 +72,10 @@ import com.xueh.comm_core.base.mvvm.BaseComposeViewModel
 import com.xueh.comm_core.helper.isEmpty
 import com.xueh.comm_core.weight.compose.refreshheader.MyRefreshHeader
 
-//公用 下拉刷新下拉加载 页面
 @Composable
-fun <T : Any> CommonPagingPage(
+fun <T : Any> PagingRefreshList(
     lazyPagingItems: LazyPagingItems<T>,
-    lazyListState: LazyListState = rememberLazyListState(),
-    refreshState: SmartSwipeRefreshState = rememberSmartSwipeRefreshState(),//下拉刷新状态
     isFirstRefresh: Boolean = true,
-    enableRefresh: Boolean = true,
-
-    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(0.dp),
-    contentPadding: PaddingValues = PaddingValues(horizontal = 0.dp),
-
-    headerIndicator: @Composable () -> Unit = { MyRefreshHeader(refreshState) },
-    onScrollStop: ((visibleItem: List<Int>, isScrollingUp: Boolean) -> Unit)? = null,
-
-    emptyDataContent: (@Composable BoxScope.() -> Unit)? = null,
-    loadingContent: (@Composable BoxScope.() -> Unit)? = null,
-
-    key: ((index: Int) -> Any)? = null,
-
-    headContent: @Composable () -> Unit? = {},
-    foodContent: @Composable () -> Unit? = {},
-
-    itemContent: @Composable LazyItemScope.(value: T) -> Unit,
-) {
-    var lastFirstIndex by rememberMutableStateOf { 0 }
-    var isScrollingUp = false
-    LaunchedEffect(lazyListState) {
-        snapshotFlow { lazyListState.isScrollInProgress }.collect { isScrolling ->
-            if (!isScrolling) {
-                isScrollingUp = if (lazyListState.firstVisibleItemIndex > lastFirstIndex) {
-                    // 上滑
-                    true
-                } else {
-                    //下滑
-                    false
-                }
-                lastFirstIndex = lazyListState.firstVisibleItemIndex
-                // 滑动停止
-                val visibleItemsIndex =
-                    lazyListState.layoutInfo.visibleItemsInfo.map { it.index }.toList()
-                onScrollStop?.invoke(visibleItemsIndex, isScrollingUp)
-            }
-        }
-    }
-    RefreshList(
-        enableRefresh = enableRefresh,
-        isFirstRefresh = isFirstRefresh,
-        lazyListState = lazyListState,
-        refreshState = refreshState,
-        key = key,
-        lazyPagingItems = lazyPagingItems,
-        headerIndicator = headerIndicator,
-        verticalArrangement = verticalArrangement,
-        contentPadding = contentPadding,
-        emptyDataContent = emptyDataContent,
-        loadingContent = loadingContent,
-        headContent = headContent,
-        foodContent = foodContent,
-        itemContent = itemContent,
-    )
-}
-
-
-@Composable
-fun <T : Any> RefreshList(
-    enableRefresh: Boolean = true,
-    isFirstRefresh: Boolean = true,
-    lazyPagingItems: LazyPagingItems<T>,
     key: ((index: Int) -> Any)? = null,
     lazyListState: LazyListState = rememberLazyListState(),
     refreshState: SmartSwipeRefreshState = rememberSmartSwipeRefreshState(),//下拉刷新状态
@@ -160,7 +95,15 @@ fun <T : Any> RefreshList(
         emptyDataContent = emptyDataContent,
         loadingContent = loadingContent
     ) {
-        if (!enableRefresh) {
+        SmartRefresh(
+            isFirstRefresh = isFirstRefresh,
+            isRefreshing = isRefreshing,
+            scrollState = lazyListState,
+            refreshState = refreshState,
+            headerIndicator = headerIndicator,
+            onRefresh = {
+                lazyPagingItems.refresh()
+            }) {
             PagingLazyColumn(
                 lazyPagingItems = lazyPagingItems,
                 lazyListState = lazyListState,
@@ -171,31 +114,8 @@ fun <T : Any> RefreshList(
                 foodContent = foodContent,
                 itemContent = itemContent
             )
-        } else {
-            SmartRefresh(
-                isFirstRefresh = isFirstRefresh,
-                isRefreshing = isRefreshing,
-                scrollState = lazyListState,
-                refreshState = refreshState,
-                headerIndicator = headerIndicator,
-                onRefresh = {
-                    lazyPagingItems.refresh()
-                }) {
-                PagingLazyColumn(
-                    lazyPagingItems = lazyPagingItems,
-                    lazyListState = lazyListState,
-                    key = key,
-                    verticalArrangement = verticalArrangement,
-                    contentPadding = contentPadding,
-                    headContent = headContent,
-                    foodContent = foodContent,
-                    itemContent = itemContent
-                )
-            }
         }
-
     }
-
 }
 
 @Composable
@@ -207,7 +127,7 @@ fun <T : Any> PagingLazyColumn(
     key: ((index: Int) -> Any)? = null,
     headContent: @Composable () -> Unit? = {},
     foodContent: @Composable () -> Unit? = {},
-    itemContent: @Composable LazyItemScope.(value: T) -> Unit,
+    itemContent: @Composable LazyItemScope.(T) -> Unit,
 ) {
     //刷新状态
     CommonLazyColumn(
@@ -417,11 +337,9 @@ fun <T : Any> PagingBaseBox(
 }
 
 
-
-
 @Composable
 @OptIn(ExperimentalMaterialApi::class)
-fun <T : Any>  PagingRefresh(
+fun <T : Any> PagingRefresh(
     lazyPagingItems: LazyPagingItems<T>,
     headerIndicator: @Composable AnimatedVisibilityScope.() -> Unit,
     content: @Composable ColumnScope.(LazyPagingItems<T>) -> Unit

@@ -47,10 +47,10 @@ import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.lt.compose_views.util.rememberMutableStateOf
 import com.xueh.comm_core.weight.compose.BoxWrapper
-import com.xueh.comm_core.weight.compose.CommonPagingPage
 import com.xueh.comm_core.weight.compose.MyScrollableTabRow
 import com.xueh.comm_core.weight.compose.PagerTab
 import com.xueh.comm_core.weight.compose.PagerTabIndicator
+import com.xueh.comm_core.weight.compose.PagingRefreshList
 import com.xueh.comm_core.weight.compose.SpacerW
 import com.xueh.comm_core.weight.compose.click
 import com.xueh.commonlib.entity.HomeEntity
@@ -237,13 +237,10 @@ fun HomeList(
         }
     }
 
-    CommonPagingPage(
-        enableRefresh = true,
+    PagingRefreshList(
         isFirstRefresh = false,
         lazyPagingItems = lazyPagingItemsState,
         lazyListState = lazyListState,
-        onScrollStop = { visibleItem, isScrollingUp ->
-        }
     ) {
         Box(
             modifier = Modifier

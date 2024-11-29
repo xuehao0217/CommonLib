@@ -30,6 +30,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.VerticalPager
@@ -51,7 +52,11 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
+import com.blankj.utilcode.util.LogUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.base.mvvm.BaseComposeViewModel
+import com.xueh.comm_core.helper.compose.onScrollDirection
+import com.xueh.comm_core.helper.compose.onScrollStopVisibleList
 import com.xueh.comm_core.weight.compose.PagingBaseBox
 import com.xueh.comm_core.weight.compose.PagingLazyColumn
 import com.xueh.comm_core.weight.compose.PagingRefresh
@@ -131,7 +136,10 @@ fun CustomRefreshSample() {
     BaseComposeViewModel<ComposeViewModel> {
         val lazyPagingItems = it.getListDatas().collectAsLazyPagingItems()
         PagingRefresh(lazyPagingItems, headerIndicator = {
-            Box(modifier = Modifier.fillMaxWidth().height(150.dp).background(Color.Yellow))
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .height(150.dp)
+                .background(Color.Yellow))
         }){
             PagingVerticalGrid(it) {
                 PagingItem(it)
@@ -145,9 +153,19 @@ fun RefreshPagingListSample() {
     BaseComposeViewModel<ComposeViewModel> {
         val lazyPagingItems = it.getListDatas().collectAsLazyPagingItems()
         PagingRefresh(lazyPagingItems, headerIndicator = {
-            Box(modifier = Modifier.fillMaxWidth().height(150.dp).background(Color.Blue))
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .height(150.dp)
+                .background(Color.Blue))
         }){
-            PagingLazyColumn(it){
+            val state = rememberLazyListState()
+            state.onScrollStopVisibleList{
+                ToastUtils.showShort("onScrollStopVisibleList==${it.toList()}")
+            }
+            state.onScrollDirection {
+                LogUtils.iTag("AAA","onScrollDirection==${it}")
+            }
+            PagingLazyColumn(it,state){
                 PagingItem(it)
             }
         }
