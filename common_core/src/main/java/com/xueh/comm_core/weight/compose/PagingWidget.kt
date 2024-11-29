@@ -161,7 +161,7 @@ fun <T : Any> RefreshList(
         loadingContent = loadingContent
     ) {
         if (!enableRefresh) {
-            PagingCommonLazyColumn(
+            PagingLazyColumn(
                 lazyPagingItems = lazyPagingItems,
                 lazyListState = lazyListState,
                 key = key,
@@ -181,7 +181,7 @@ fun <T : Any> RefreshList(
                 onRefresh = {
                     lazyPagingItems.refresh()
                 }) {
-                PagingCommonLazyColumn(
+                PagingLazyColumn(
                     lazyPagingItems = lazyPagingItems,
                     lazyListState = lazyListState,
                     key = key,
@@ -199,7 +199,7 @@ fun <T : Any> RefreshList(
 }
 
 @Composable
-fun <T : Any> PagingCommonLazyColumn(
+fun <T : Any> PagingLazyColumn(
     lazyPagingItems: LazyPagingItems<T>,
     lazyListState: LazyListState = rememberLazyListState(),
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),

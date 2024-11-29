@@ -53,6 +53,7 @@ import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.xueh.comm_core.base.mvvm.BaseComposeViewModel
 import com.xueh.comm_core.weight.compose.PagingBaseBox
+import com.xueh.comm_core.weight.compose.PagingLazyColumn
 import com.xueh.comm_core.weight.compose.PagingRefresh
 import com.xueh.comm_core.weight.compose.PagingVerticalGrid
 import com.xueh.comm_core.weight.compose.PagingVerticalPager
@@ -68,6 +69,7 @@ fun ComposePaging() {
     val PagingWithLazyGrid = "PagingWithLazyGrid"
     val PagingWithLazyList = "PagingWithLazyList"
     val CustomRefresh = "CustomRefresh"
+    val RefreshPagingListSample = "RefreshPagingListSample"
 
     val PagingList = "PagingList"
     val navController = rememberNavController()
@@ -92,6 +94,9 @@ fun ComposePaging() {
                 ItemView(CustomRefresh, false) {
                     navController.navigate(CustomRefresh)
                 }
+                ItemView(RefreshPagingListSample, false) {
+                    navController.navigate(RefreshPagingListSample)
+                }
             }
         }
 
@@ -114,6 +119,10 @@ fun ComposePaging() {
         composable(CustomRefresh) {
             CustomRefreshSample()
         }
+
+        composable(RefreshPagingListSample) {
+            RefreshPagingListSample()
+        }
     }
 }
 
@@ -131,6 +140,19 @@ fun CustomRefreshSample() {
     }
 }
 
+@Composable
+fun RefreshPagingListSample() {
+    BaseComposeViewModel<ComposeViewModel> {
+        val lazyPagingItems = it.getListDatas().collectAsLazyPagingItems()
+        PagingRefresh(lazyPagingItems, headerIndicator = {
+            Box(modifier = Modifier.fillMaxWidth().height(150.dp).background(Color.Blue))
+        }){
+            PagingLazyColumn(it){
+                PagingItem(it)
+            }
+        }
+    }
+}
 @Composable
 fun PagingWithHorizontalPager() {
     BaseComposeViewModel<ComposeViewModel> {
