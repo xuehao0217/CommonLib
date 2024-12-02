@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -104,6 +106,34 @@ fun LazyListState.onScrollStopVisibleList(scrollStop: (visibleItem: List<Int>) -
         }
     }
 }
+
+@Composable
+fun LazyGridState.onScrollStopVisibleList(scrollStop: (visibleItem: List<Int>) -> Unit){
+    LaunchedEffect(this) {
+        snapshotFlow { isScrollInProgress }.collect { isScrolling ->
+            if (!isScrolling) {
+                // 滑动停止
+                val visibleItemsIndex =
+                    layoutInfo.visibleItemsInfo.map { it.index }.toList()
+                scrollStop.invoke(visibleItemsIndex)
+            }
+        }
+    }
+}
+@Composable
+fun LazyStaggeredGridState.onScrollStopVisibleList(scrollStop: (visibleItem: List<Int>) -> Unit){
+    LaunchedEffect(this) {
+        snapshotFlow { isScrollInProgress }.collect { isScrolling ->
+            if (!isScrolling) {
+                // 滑动停止
+                val visibleItemsIndex =
+                    layoutInfo.visibleItemsInfo.map { it.index }.toList()
+                scrollStop.invoke(visibleItemsIndex)
+            }
+        }
+    }
+}
+
 
 //LazyListState 滑动方向
 @Composable
