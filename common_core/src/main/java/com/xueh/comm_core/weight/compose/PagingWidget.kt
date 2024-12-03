@@ -392,6 +392,29 @@ fun <T : Any> PagingRefresh(
 
 
 @Composable
+fun <T : Any> SmartRefreshPaging(
+    lazyPagingItems: LazyPagingItems<T>,
+    isFirstRefresh: Boolean = true,
+    refreshState: SmartSwipeRefreshState = rememberSmartSwipeRefreshState(),//下拉刷新状态
+    headerIndicator: @Composable () -> Unit = { MyRefreshHeader(refreshState) },
+    content: @Composable () -> Unit,
+) {
+    //是不是在loading
+    val isRefreshing = lazyPagingItems.loadState.refresh is LoadState.Loading
+    SmartRefresh(
+        isFirstRefresh = isFirstRefresh,
+        isRefreshing = isRefreshing,
+        refreshState = refreshState,
+        headerIndicator = headerIndicator,
+        onRefresh = {
+            lazyPagingItems.refresh()
+        }) {
+        content()
+    }
+}
+
+
+@Composable
 fun ErrorContent(retry: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.align(Alignment.Center)) {
