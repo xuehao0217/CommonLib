@@ -23,7 +23,12 @@ import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.NetworkUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.helper.isNotEmpty
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 
 
 abstract class BasePagingSource<T : Any> : PagingSource<Int, T>() {
@@ -76,3 +81,43 @@ fun <T : Any> ViewModel.pager(
         }
     }
 }.cachedIn(viewModelScope)
+
+
+
+
+
+//https://juejin.cn/post/7416848881407180838
+class PagingDataModifier<T : Any>(
+    /** 原始数据 */
+    sourceFlow: Flow<PagingData<T>>,
+    /** 获取项的ID */
+    private val getID: (T) -> Any,
+) {
+    private val _modifyFlow = MutableStateFlow<Map<Any, T>>(emptyMap())
+
+    /** 数据流 */
+    val flow = sourceFlow
+        .onEach { _modifyFlow.update { emptyMap() } }
+        .combine(_modifyFlow) { data, modify ->
+            if (modify.isEmpty()) {
+                data
+            } else {
+                data.map { modify[getID(it)] ?: it }
+            }
+        }
+
+
+
+    /** 更新项  根据  item 的 getID 更新的数据*/
+    fun update(item: T) {
+        _modifyFlow.update { modify ->
+            val id = getID(item)
+            if (modify[id] == item) {
+                // 数据未变化，不更新Flow
+                modify
+            } else {
+                modify + (id to item)
+            }
+        }
+    }
+}
