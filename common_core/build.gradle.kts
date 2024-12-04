@@ -117,10 +117,7 @@ dependencies {
     api(libs.eventbus)
     api(libs.xxPermissions)
     api(libs.logger)
-    //捕获崩溃信息
-    debugApi(libs.spiderman) {
-        exclude(group = "androidx.appcompat")
-    }
+
     //--------------XML相关一些库--------------------------
     api(libs.material)
     api(libs.recyclerview)
@@ -130,6 +127,10 @@ dependencies {
     api(libs.androidx.viewpager2)
     api(libs.github.brvah)
     api(libs.easyNavigation)
+//    //捕获崩溃信息
+//    debugApi(libs.spiderman) {
+//        exclude(group = "androidx.appcompat")
+//    }
 //    api(libs.refresh.layout)
 //    api(libs.refresh.header)
 //    api(libs.magicIndicator)

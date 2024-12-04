@@ -103,14 +103,14 @@ fun RefreshLoadUse() {
         PagingRefreshList(
             homeDatas,
             lazyListState = lazyListState,
-            emptyDataContent = {
+            pagingEmptyContent = {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(Color.Blue)
                 )
             },
-            loadingContent = {
+            pagingLoadingContent = {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
