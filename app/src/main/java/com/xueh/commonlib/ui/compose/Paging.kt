@@ -142,14 +142,14 @@ fun ComposePaging() {
 fun CustomRefreshSample() {
     BaseComposeViewModel<ComposeViewModel> {
         val lazyPagingItems = it.getListDatas().collectAsLazyPagingItems()
-        PagingRefresh(lazyPagingItems, headerIndicator = {
+        lazyPagingItems.PagingRefresh(headerIndicator ={
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(150.dp)
                     .background(Color.Yellow)
             )
-        }) {
+        } ){
             PagingVerticalGrid(it) {
                 PagingItem(it)
             }
@@ -161,14 +161,14 @@ fun CustomRefreshSample() {
 fun RefreshPagingListSample() {
     BaseComposeViewModel<ComposeViewModel> {
         val lazyPagingItems = it.getListDatas().collectAsLazyPagingItems()
-        PagingRefresh(lazyPagingItems, headerIndicator = {
+        lazyPagingItems.PagingRefresh(headerIndicator ={
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(150.dp)
                     .background(Color.Blue)
             )
-        }) {
+        } ) {
             val state = rememberLazyListState()
             state.onScrollStopVisibleList {
                 ToastUtils.showShort("onScrollStopVisibleList==${it.toList()}")
@@ -180,6 +180,7 @@ fun RefreshPagingListSample() {
                 PagingItem(it)
             }
         }
+
     }
 }
 

@@ -1,10 +1,19 @@
 package com.xueh.comm_core.weight.compose
 
 import android.R
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,7 +30,10 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -191,6 +203,32 @@ fun LazyPagingItems<*>.PagingBaseBox(
         }
     } else {
         content(this)
+    }
+}
+
+
+@Composable
+@OptIn(ExperimentalMaterialApi::class)
+fun <T : Any> LazyPagingItems<T>.PagingRefresh(
+    headerIndicator: @Composable AnimatedVisibilityScope.() -> Unit,
+    content: @Composable ColumnScope.(LazyPagingItems<T>) -> Unit
+) {
+    val isRefreshing = isRefreshing()
+    val state = rememberPullRefreshState(isRefreshing, onRefresh = {
+        refresh()
+    })
+    Column(
+        Modifier
+            .fillMaxSize()
+            .pullRefresh(state)
+    ) {
+        AnimatedVisibility(
+            visible = isRefreshing, enter = fadeIn() + scaleIn() + expandVertically(),
+            exit = fadeOut() + scaleOut() + shrinkVertically(),
+        ) {
+            headerIndicator()
+        }
+        content(this@PagingRefresh)
     }
 }
 

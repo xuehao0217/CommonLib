@@ -300,33 +300,6 @@ fun <T : Any> PagingVerticalPager(
 
 
 @Composable
-@OptIn(ExperimentalMaterialApi::class)
-fun <T : Any> PagingRefresh(
-    lazyPagingItems: LazyPagingItems<T>,
-    headerIndicator: @Composable AnimatedVisibilityScope.() -> Unit,
-    content: @Composable ColumnScope.(LazyPagingItems<T>) -> Unit
-) {
-    val isRefreshing = lazyPagingItems.isRefreshing()
-    val state = rememberPullRefreshState(isRefreshing, onRefresh = {
-        lazyPagingItems.refresh()
-    })
-    Column(
-        Modifier
-            .fillMaxSize()
-            .pullRefresh(state)
-    ) {
-        AnimatedVisibility(
-            visible = isRefreshing, enter = fadeIn() + scaleIn() + expandVertically(),
-            exit = fadeOut() + scaleOut() + shrinkVertically(),
-        ) {
-            headerIndicator()
-        }
-        content(lazyPagingItems)
-    }
-}
-
-
-@Composable
 fun <T : Any> SmartRefreshPaging(
     lazyPagingItems: LazyPagingItems<T>,
     isFirstRefresh: Boolean = true,
