@@ -235,13 +235,13 @@ fun <T : Any> LazyPagingItems<T>.PagingRefresh(
 
 fun LazyListScope.PagingAppendItem(
     items: LazyPagingItems<*>,
-    key: Any? = "paging append ui state",
-    contentType: Any? = "paging append ui state",
-    content: @Composable LazyItemScope.() -> Unit = { items.PagingStateAppend() },
+    key: Any? = null,
+    contentType: Any? = null,
+    content: @Composable LazyItemScope.() -> Unit = { items.PagingStateAppend() }
 ) {
     if (items.isStateAppend()) {
         item(
-            key = key,
+            key = key ?: "append_item",
             contentType = contentType,
             content = content,
         )
@@ -250,14 +250,14 @@ fun LazyListScope.PagingAppendItem(
 
 fun LazyGridScope.PagingAppendItem(
     items: LazyPagingItems<*>,
-    key: Any? = "paging append ui state",
-    contentType: Any? = "paging append ui state",
-    span: (LazyGridItemSpanScope.() -> GridItemSpan)? = { GridItemSpan(maxLineSpan) },
-    content: @Composable LazyGridItemScope.() -> Unit = { items.PagingStateAppend() },
+    key: Any? = null,
+    contentType: Any? = null,
+    span: (LazyGridItemSpanScope.() -> GridItemSpan) = { GridItemSpan(maxLineSpan) },
+    content: @Composable LazyGridItemScope.() -> Unit = { items.PagingStateAppend() }
 ) {
     if (items.isStateAppend()) {
         item(
-            key = key,
+            key = key ?: "append_item",
             contentType = contentType,
             span = span,
             content = content,
@@ -267,13 +267,13 @@ fun LazyGridScope.PagingAppendItem(
 
 fun LazyStaggeredGridScope.PagingAppendItem(
     items: LazyPagingItems<*>,
-    key: Any? = "paging append ui state",
-    contentType: Any? = "paging append ui state",
+    key: Any? = null,
+    contentType: Any? = null,
     span: StaggeredGridItemSpan = StaggeredGridItemSpan.FullLine,
     content: @Composable LazyStaggeredGridItemScope.() -> Unit = { items.PagingStateAppend() }
 ) {
     if (items.isStateAppend()) {
-        item(key = key, contentType = contentType, span = span, content = content)
+        item(key = key ?: "append_item", contentType = contentType, span = span, content = content)
     }
 }
 

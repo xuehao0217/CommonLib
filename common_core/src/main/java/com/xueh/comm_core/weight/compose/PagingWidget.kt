@@ -121,6 +121,9 @@ fun <T : Any> PagingLazyColumn(
     pagingEmptyContent: (@Composable BoxScope.() -> Unit)? = null,
     pagingLoadingContent: (@Composable BoxScope.() -> Unit)? = null,
     pagingErrorContent: (@Composable (retry: () -> Unit) -> Unit)? = null,
+    pagingAppendStateContent: @Composable (LazyItemScope.() -> Unit) = {
+        lazyPagingItems.PagingStateAppend()
+    },
     itemContent: @Composable LazyItemScope.(T) -> Unit,
 ) {
     if (onScrollStopVisibleList != null) {
@@ -152,7 +155,9 @@ fun <T : Any> PagingLazyColumn(
                     itemContent(it)
                 }
             }
-            PagingAppendItem(lazyPagingItems)
+            PagingAppendItem(lazyPagingItems) {
+                pagingAppendStateContent()
+            }
         }
     }
 }
@@ -169,6 +174,7 @@ fun <T : Any> PagingVerticalGrid(
     pagingEmptyContent: (@Composable BoxScope.() -> Unit)? = null,
     pagingLoadingContent: (@Composable BoxScope.() -> Unit)? = null,
     pagingErrorContent: (@Composable (retry: () -> Unit) -> Unit)? = null,
+    pagingAppendStateContent: @Composable (LazyGridItemScope.() -> Unit) = { lazyPagingItems.PagingStateAppend() },
     onScrollStopVisibleList: ((list: List<T>) -> Unit)? = null,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(7.dp),
@@ -203,7 +209,9 @@ fun <T : Any> PagingVerticalGrid(
                     itemContent(it)
                 }
             }
-            PagingAppendItem(lazyPagingItems)
+            PagingAppendItem(lazyPagingItems) {
+                pagingAppendStateContent()
+            }
         }
     }
 }
@@ -220,6 +228,9 @@ fun <T : Any> PagingVerticalStaggeredGrid(
     pagingLoadingContent: (@Composable BoxScope.() -> Unit)? = null,
     pagingErrorContent: (@Composable (retry: () -> Unit) -> Unit)? = null,
     columns: Int = 2,
+    pagingAppendStateContent: @Composable (LazyStaggeredGridItemScope.() -> Unit) = {
+        lazyPagingItems.PagingStateAppend()
+    },
     state: LazyStaggeredGridState = rememberLazyStaggeredGridState(),
     onScrollStopVisibleList: ((list: List<T>) -> Unit)? = null,
     contentPadding: PaddingValues = PaddingValues(0.dp),
@@ -259,7 +270,9 @@ fun <T : Any> PagingVerticalStaggeredGrid(
                     itemContent(it)
                 }
             }
-            PagingAppendItem(lazyPagingItems)
+            PagingAppendItem(lazyPagingItems) {
+                pagingAppendStateContent()
+            }
         }
     }
 }
@@ -287,7 +300,7 @@ fun <T : Any> PagingVerticalPager(
     ) {
 
         VerticalPager(
-            modifier=modifier,
+            modifier = modifier,
             state = state,
             key = key
         ) { index ->
