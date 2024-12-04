@@ -40,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.paging.CombinedLoadStates
@@ -67,10 +68,8 @@ inline fun LazyPagingItems<*>.PagingStateRefresh(
     /** 加载中 */
     stateLoading: @Composable () -> Unit = { PagingLoadingItem() },
     /** 加载错误 */
-    stateError: @Composable (Throwable, retry: () -> Unit) -> Unit = { error, retry ->
-        PagingErrorContent {
-            retry.invoke()
-        }
+    stateError: @Composable (Throwable) -> Unit = { error ->
+        PagingRefreshErrorContent(this)
     },
     /** 没有更多数据 */
     stateNoMore: @Composable () -> Unit = {
@@ -80,7 +79,7 @@ inline fun LazyPagingItems<*>.PagingStateRefresh(
     if (itemCount == 0) {
         when (val loadState = loadState.refresh) {
             is LoadState.Loading -> stateLoading()
-            is LoadState.Error -> stateError(loadState.error) { retry() }
+            is LoadState.Error -> stateError(loadState.error)
             is LoadState.NotLoading -> stateNoMore()
         }
     }
@@ -103,10 +102,8 @@ inline fun LazyPagingItems<*>.PagingStateAppend(
     /** 加载中 */
     stateLoading: @Composable () -> Unit = { PagingLoadingItem() },
     /** 加载错误 */
-    stateError: @Composable (Throwable, retry: () -> Unit) -> Unit = { error, retry ->
-        PagingErrorContent {
-            retry.invoke()
-        }
+    stateError: @Composable (Throwable) -> Unit = { error ->
+        PagingAppendErrorItem(this)
     },
     /** 没有更多数据 */
     stateNoMore: @Composable () -> Unit = {
@@ -116,7 +113,7 @@ inline fun LazyPagingItems<*>.PagingStateAppend(
     if (isStateAppend()) {
         when (val loadState = loadState.append) {
             is LoadState.Loading -> stateLoading()
-            is LoadState.Error -> stateError(loadState.error) { retry() }
+            is LoadState.Error -> stateError(loadState.error)
             is LoadState.NotLoading -> {
                 if (loadState.endOfPaginationReached) {
                     //只有大于0 才显示 不然就是空数据状态页
@@ -149,15 +146,13 @@ inline fun LazyPagingItems<*>.PagingStatePrepend(
     /** 加载中 */
     stateLoading: @Composable () -> Unit = { PagingLoadingItem() },
     /** 加载错误 */
-    stateError: @Composable (Throwable, retry: () -> Unit) -> Unit = { error, retry ->
-        PagingErrorContent {
-            retry.invoke()
-        }
+    stateError: @Composable (Throwable) -> Unit = { error ->
+        PagingAppendErrorItem(item = this)
     },
 ) {
     when (val loadState = loadState.prepend) {
         is LoadState.Loading -> stateLoading()
-        is LoadState.Error -> stateError(loadState.error) { retry() }
+        is LoadState.Error -> stateError(loadState.error)
         else -> {}
     }
 }
@@ -169,16 +164,16 @@ inline fun LazyPagingItems<*>.PagingStatePrepend(
 fun LazyPagingItems<*>.PagingBaseBox(
     pagingEmptyContent: (@Composable BoxScope.() -> Unit)? = null,
     pagingLoadingContent: (@Composable BoxScope.() -> Unit)? = null,
-    pagingErrorContent: (@Composable (retry: () -> Unit) -> Unit)? = null,
+    pagingErrorContent: (@Composable (item: LazyPagingItems<*>) -> Unit)? = null,
     content: @Composable (LazyPagingItems<*>) -> Unit
 ) {
     val isRefreshing = isRefreshing()
     val err = isRefreshError()
     if (err) {
         if (pagingErrorContent != null) {
-            pagingErrorContent.invoke { retry() }
+            pagingErrorContent(this)
         } else {
-            PagingErrorContent { retry() }
+            PagingRefreshErrorContent(this)
         }
     }
 
@@ -279,7 +274,7 @@ fun LazyStaggeredGridScope.PagingAppendItem(
 
 //-------------------- widget --------------------
 @Composable
-fun PagingErrorContent(retry: () -> Unit) {
+fun PagingRefreshErrorContent(item: LazyPagingItems<*>) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.align(Alignment.Center)) {
             Image(
@@ -295,7 +290,7 @@ fun PagingErrorContent(retry: () -> Unit) {
                     .padding(top = 10.dp)
             )
             Button(
-                onClick = { retry() },
+                onClick = { item.retry() },
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(10.dp),
@@ -307,10 +302,25 @@ fun PagingErrorContent(retry: () -> Unit) {
     }
 }
 
+
 @Composable
-fun PagingErrorItem(retry: () -> Unit) {
+fun PagingAppendErrorItem(item: LazyPagingItems<*>) {
+    Text(
+        text = "加载失败",
+        modifier = Modifier
+            .padding(10.dp)
+            .fillMaxWidth()
+            .click {
+                item.retry()
+            },
+        textAlign = TextAlign.Center
+    )
+}
+
+@Composable
+fun PagingErrorItem(item: LazyPagingItems<*>) {
     Button(
-        onClick = { retry() },
+        onClick = { item.retry() },
         modifier = Modifier.padding(10.dp),
 //        colors = buttonColors(backgroundColor = AppTheme.colors.themeUi)
     ) {

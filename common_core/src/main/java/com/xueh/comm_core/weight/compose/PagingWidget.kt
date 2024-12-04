@@ -76,7 +76,7 @@ fun <T : Any> PagingRefreshList(
     foodContent: @Composable () -> Unit? = {},
     pagingEmptyContent: (@Composable BoxScope.() -> Unit)? = null,
     pagingLoadingContent: (@Composable BoxScope.() -> Unit)? = null,
-    pagingErrorContent: (@Composable (retry: () -> Unit) -> Unit)? = null,
+    pagingErrorContent: (@Composable (item: LazyPagingItems<*>) -> Unit)? = null,
     headerIndicator: @Composable () -> Unit = { MyRefreshHeader(refreshState) },
     itemContent: @Composable LazyItemScope.(value: T) -> Unit,
 ) {
@@ -120,7 +120,7 @@ fun <T : Any> PagingLazyColumn(
     onScrollStopVisibleList: ((list: List<T>) -> Unit)? = null,
     pagingEmptyContent: (@Composable BoxScope.() -> Unit)? = null,
     pagingLoadingContent: (@Composable BoxScope.() -> Unit)? = null,
-    pagingErrorContent: (@Composable (retry: () -> Unit) -> Unit)? = null,
+    pagingErrorContent: (@Composable (item: LazyPagingItems<*>) -> Unit)? = null,
     pagingAppendStateContent: @Composable (LazyItemScope.() -> Unit) = {
         lazyPagingItems.PagingStateAppend()
     },
@@ -140,6 +140,7 @@ fun <T : Any> PagingLazyColumn(
         pagingEmptyContent = pagingEmptyContent,
         pagingLoadingContent = pagingLoadingContent,
         pagingErrorContent = pagingErrorContent,
+
     ) {
         CommonLazyColumn(
             modifier = modifier,
@@ -173,7 +174,7 @@ fun <T : Any> PagingVerticalGrid(
     state: LazyGridState = rememberLazyGridState(),
     pagingEmptyContent: (@Composable BoxScope.() -> Unit)? = null,
     pagingLoadingContent: (@Composable BoxScope.() -> Unit)? = null,
-    pagingErrorContent: (@Composable (retry: () -> Unit) -> Unit)? = null,
+    pagingErrorContent: (@Composable (item: LazyPagingItems<*>) -> Unit)? = null,
     pagingAppendStateContent: @Composable (LazyGridItemScope.() -> Unit) = { lazyPagingItems.PagingStateAppend() },
     onScrollStopVisibleList: ((list: List<T>) -> Unit)? = null,
     contentPadding: PaddingValues = PaddingValues(0.dp),
@@ -226,7 +227,7 @@ fun <T : Any> PagingVerticalStaggeredGrid(
     modifier: Modifier = Modifier,
     pagingEmptyContent: (@Composable BoxScope.() -> Unit)? = null,
     pagingLoadingContent: (@Composable BoxScope.() -> Unit)? = null,
-    pagingErrorContent: (@Composable (retry: () -> Unit) -> Unit)? = null,
+    pagingErrorContent: (@Composable (item: LazyPagingItems<*>) -> Unit)? = null,
     columns: Int = 2,
     pagingAppendStateContent: @Composable (LazyStaggeredGridItemScope.() -> Unit) = {
         lazyPagingItems.PagingStateAppend()
@@ -289,7 +290,7 @@ fun <T : Any> PagingVerticalPager(
     modifier: Modifier = Modifier,
     pagingEmptyContent: (@Composable BoxScope.() -> Unit)? = null,
     pagingLoadingContent: (@Composable BoxScope.() -> Unit)? = null,
-    pagingErrorContent: (@Composable (retry: () -> Unit) -> Unit)? = null,
+    pagingErrorContent: (@Composable (item: LazyPagingItems<*>) -> Unit)? = null,
     key: ((index: Int) -> Any)? = null,
     pageContent: @Composable PagerScope.(T) -> Unit
 ) {
