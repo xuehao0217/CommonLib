@@ -44,19 +44,17 @@ abstract class BasePagingSource<T : Any> : PagingSource<Int, T>() {
                 nextKey = if (datas.isNotEmpty()) nextPage + 1 else null
             )
         } catch (e: Exception) {
-            LogUtils.e("BasePagingSource","${e}")
+            LogUtils.e("BasePagingSource", "${e}")
 //            ToastUtils.showLong("${e}")
             LoadResult.Error(e)
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, T>)=null
+    override fun getRefreshKey(state: PagingState<Int, T>) = null
 
 
     abstract suspend fun getDataList(page: Int): List<T>
 }
-
-
 
 
 //val datas = Pager(PagingConfig(pageSize = 20)) {
@@ -76,48 +74,119 @@ fun <T : Any> ViewModel.pager(
     }
 }.flow.filter {
     NetworkUtils.isConnected().also {
-        if (!it){
+        if (!it) {
             ToastUtils.showShort("网络异常，请检查网络设置")
         }
     }
 }.cachedIn(viewModelScope)
 
 
-
-
-
 //https://juejin.cn/post/7416848881407180838
-class PagingDataModifier<T : Any>(
-    /** 原始数据 */
-    sourceFlow: Flow<PagingData<T>>,
-    /** 获取项的ID */
+fun <T : Any> Flow<PagingData<T>>.modifier(
+    onEach: PagingDataModifier<T>.(PagingData<T>) -> Unit = {
+        clearRemove()
+        clearUpdate()
+    },
+    getID: (T) -> Any,
+): PagingDataModifier<T> {
+    return PagingDataModifier(
+        flow = this,
+        onEach = onEach,
+        getID = getID,
+    )
+}
+
+class PagingDataModifier<T : Any> internal constructor(
+    flow: Flow<PagingData<T>>,
+    private val onEach: PagingDataModifier<T>.(PagingData<T>) -> Unit,
     private val getID: (T) -> Any,
 ) {
-    private val _modifyFlow = MutableStateFlow<Map<Any, T>>(emptyMap())
+    private val _removeFlow = MutableStateFlow<Set<Any>>(emptySet())
+    private val _updateFlow = MutableStateFlow<Map<Any, T>>(emptyMap())
 
     /** 数据流 */
-    val flow = sourceFlow
-        .onEach { _modifyFlow.update { emptyMap() } }
-        .combine(_modifyFlow) { data, modify ->
-            if (modify.isEmpty()) {
-                data
+    val flow = flow
+        .onEach { onEach(it) }
+        .modify()
+
+    /**
+     * 移除ID为[id]的项
+     */
+    fun remove(id: Any) {
+        _removeFlow.update { value ->
+            if (value.contains(id)) {
+                value
             } else {
-                data.map { modify[getID(it)] ?: it }
-            }
-        }
-
-
-
-    /** 更新项  根据  item 的 getID 更新的数据*/
-    fun update(item: T) {
-        _modifyFlow.update { modify ->
-            val id = getID(item)
-            if (modify[id] == item) {
-                // 数据未变化，不更新Flow
-                modify
-            } else {
-                modify + (id to item)
+                value + id
             }
         }
     }
+
+    /**
+     * 清空所有删除的项
+     */
+    fun clearRemove() {
+        _removeFlow.update { emptySet() }
+    }
+
+    /**
+     * 更新项
+     */
+    fun update(item: T) {
+        _updateFlow.update { value ->
+            val id = getID(item)
+            if (value[id] == item) {
+                value
+            } else {
+                value + (id to item)
+            }
+        }
+    }
+
+    /**
+     * 清空所有更新的项
+     */
+    fun clearUpdate() {
+        _updateFlow.update { emptyMap() }
+    }
+
+
+    private fun Flow<PagingData<T>>.modify(): Flow<PagingData<T>> {
+        return combine(_removeFlow) { data, holder ->
+            data.takeIf { holder.isEmpty() }
+                ?: data.filter { item ->
+                    !holder.contains(getID(item))
+                }
+        }.combine(_updateFlow) { data, holder ->
+            data.takeIf { holder.isEmpty() }
+                ?: data.map { item ->
+                    holder[getID(item)] ?: item
+                }
+        }
+    }
+}
+
+
+fun <Key : Any, Value : Any> PagerFlow(
+    pageSize: Int = 20,
+    prefetchDistance: Int = pageSize,
+    enablePlaceholders: Boolean = false,
+    initialLoadSize: Int = pageSize,
+    maxSize: Int = PagingConfig.MAX_SIZE_UNBOUNDED,
+    jumpThreshold: Int = PagingSource.LoadResult.Page.COUNT_UNDEFINED,
+    initialKey: Key? = null,
+    pagingSourceFactory: () -> PagingSource<Key, Value>,
+): Flow<PagingData<Value>> {
+    return Pager(
+        config = PagingConfig(
+            pageSize = pageSize,
+            prefetchDistance = prefetchDistance,
+            enablePlaceholders = enablePlaceholders,
+            initialLoadSize = initialLoadSize,
+            maxSize = maxSize,
+            jumpThreshold = jumpThreshold,
+        ),
+        initialKey = initialKey,
+        pagingSourceFactory = pagingSourceFactory,
+    ).flow
 }
