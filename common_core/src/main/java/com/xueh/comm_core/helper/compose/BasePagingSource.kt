@@ -103,7 +103,7 @@ class PagingDataModifier<T : Any> internal constructor(
 ) {
     private val _removeFlow = MutableStateFlow<Set<Any>>(emptySet())
     private val _updateFlow = MutableStateFlow<Map<Any, T>>(emptyMap())
-
+    private val _addFlow = MutableStateFlow<Map<Any, T>>(emptyMap())
     /** 数据流 */
     val flow = flow
         .onEach { onEach(it) }
@@ -151,6 +151,21 @@ class PagingDataModifier<T : Any> internal constructor(
     }
 
 
+
+    /**
+     * 添加
+     */
+    fun add(item: T, getID: (T) -> Any,) {
+        _addFlow.update { value ->
+            val id = getID(item)
+            if (value[id] == id) {
+                value
+            } else {
+                value + (id to item)
+            }
+        }
+    }
+
     private fun Flow<PagingData<T>>.modify(): Flow<PagingData<T>> {
         return combine(_removeFlow) { data, holder ->
             data.takeIf { holder.isEmpty() }
@@ -161,6 +176,12 @@ class PagingDataModifier<T : Any> internal constructor(
             data.takeIf { holder.isEmpty() }
                 ?: data.map { item ->
                     holder[getID(item)] ?: item
+                }
+        }.combine(_addFlow) { data, holder ->
+            LogUtils.iTag("AAA","data==${data}  holder==${holder.keys}   ${holder.values}")
+            data.takeIf { holder.isEmpty() }
+                ?: data.filter { item ->
+                    !holder.contains(getID(item))
                 }
         }
     }

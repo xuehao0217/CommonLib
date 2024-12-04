@@ -48,9 +48,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
@@ -58,7 +60,9 @@ import androidx.paging.insertHeaderItem
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.base.mvvm.BaseComposeViewModel
+import com.xueh.comm_core.helper.compose.PagerFlow
 import com.xueh.comm_core.helper.compose.PagingDataModifier
+import com.xueh.comm_core.helper.compose.modifier
 import com.xueh.comm_core.helper.compose.onScrollDirection
 import com.xueh.comm_core.helper.compose.onScrollStopVisibleList
 import com.xueh.comm_core.weight.compose.PagingBaseBox
@@ -72,6 +76,7 @@ import com.xueh.commonlib.ui.compose.ItemView
 import com.xueh.commonlib.ui.compose.RouteConfig
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 
 @Composable
@@ -142,14 +147,14 @@ fun ComposePaging() {
 fun CustomRefreshSample() {
     BaseComposeViewModel<ComposeViewModel> {
         val lazyPagingItems = it.getListDatas().collectAsLazyPagingItems()
-        lazyPagingItems.PagingRefresh(headerIndicator ={
+        lazyPagingItems.PagingRefresh(headerIndicator = {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(150.dp)
                     .background(Color.Yellow)
             )
-        } ){
+        }) {
             PagingVerticalGrid(it) {
                 PagingItem(it)
             }
@@ -161,14 +166,14 @@ fun CustomRefreshSample() {
 fun RefreshPagingListSample() {
     BaseComposeViewModel<ComposeViewModel> {
         val lazyPagingItems = it.getListDatas().collectAsLazyPagingItems()
-        lazyPagingItems.PagingRefresh(headerIndicator ={
+        lazyPagingItems.PagingRefresh(headerIndicator = {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(150.dp)
                     .background(Color.Blue)
             )
-        } ) {
+        }) {
             val state = rememberLazyListState()
             state.onScrollStopVisibleList {
                 ToastUtils.showShort("onScrollStopVisibleList==${it.toList()}")
@@ -229,12 +234,11 @@ fun PagingWithLazyGrid() {
 @Composable
 fun PagingWithLazyList() {
     BaseComposeViewModel<ComposeViewModel> {
-        val _modifier = PagingDataModifier(
-            it.getListDatas(),
-        ) { it.id }
+        val _modifier = it.getListDatas().modifier {
+            it.id
+        }
 
         val lazyPagingItems = _modifier.flow.collectAsLazyPagingItems()
-//
         LazyColumn {
             stickyHeader(
                 key = "Header",
@@ -249,7 +253,7 @@ fun PagingWithLazyList() {
                                 _modifier.update(
                                     HomeEntity.Data(
                                         title = "AAAAAAAAAAAAAAA",
-                                        id = 29178
+                                        id = lazyPagingItems.get(0)?.id?:0
                                     )
                                 )
                             },
@@ -263,7 +267,7 @@ fun PagingWithLazyList() {
                             .background(Color.Red)
                             .fillMaxWidth()
                             .clickable {
-//                                _modifier.remove(HomeEntity.Data(id = 29178))
+                                _modifier.remove(lazyPagingItems.get(0)?.id?:0)
                             },
                         contentAlignment = Alignment.Center
                     ) {
@@ -276,11 +280,18 @@ fun PagingWithLazyList() {
                             .background(Color.Red)
                             .fillMaxWidth()
                             .clickable {
-//                                _modifier.addAtIndex(0,HomeEntity.Data(title = "bbbbbbbbbb", id = 123))
+                                _modifier.add(
+                                    HomeEntity.Data(
+                                        title = "cccc",
+                                        id = lazyPagingItems.get(0)?.id?:0
+                                    )
+                                ){
+                                    it.id
+                                }
                             },
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(text = "addA ", fontSize = 32.sp)
+                        Text(text = "add ", fontSize = 32.sp)
                     }
                 }
 
