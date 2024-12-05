@@ -49,6 +49,7 @@ class ComposeViewModel : BaseRequstViewModel<RestApi>() {
 //                        // 用例：模拟第一次调用引发异常
 //                        throw Exception("模拟异常") // 你可以替换成具体网络调用
 //                    }else{
+                        delay(3000)
                         api.getHome(pageNumber).data.datas
 //                    }
                 }

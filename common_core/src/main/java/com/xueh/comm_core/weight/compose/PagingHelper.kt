@@ -64,14 +64,14 @@ fun LazyPagingItems<*>.isRefreshError() = loadState.refresh is LoadState.Error
 @Composable
 inline fun LazyPagingItems<*>.PagingStateRefresh(
     /** 加载中 */
-    stateLoading: @Composable () -> Unit = { PagingLoadingItem() },
+    stateLoading: @Composable () -> Unit = { PagingRefreshLoading() },
     /** 加载错误 */
     stateError: @Composable (Throwable) -> Unit = { error ->
-        PagingRefreshErrorContent(this)
+        PagingRefreshError(this)
     },
     /** 没有数据 */
     stateEmpty: @Composable () -> Unit = {
-        PagingEmptyContent()
+        PagingRefreshEmpty()
     },
     content: @Composable () -> Unit = {
     },
@@ -102,14 +102,14 @@ fun LazyPagingItems<*>.isStateAppend(): Boolean {
 @Composable
 inline fun LazyPagingItems<*>.PagingStateAppend(
     /** 加载中 */
-    stateLoading: @Composable () -> Unit = { PagingLoadingItem() },
+    stateLoading: @Composable () -> Unit = { PagingAppendLoading() },
     /** 加载错误 */
     stateError: @Composable (Throwable) -> Unit = { error ->
-        PagingAppendErrorItem(this)
+        PagingAppendError(this)
     },
     /** 没有更多数据 */
     stateNoMore: @Composable () -> Unit = {
-        PagingNoMoreItem()
+        PagingAppendNoMore()
     },
 ) {
     if (isStateAppend()) {
@@ -145,10 +145,10 @@ fun LazyPagingItems<*>.isStatePrepend(): Boolean {
 @Composable
 inline fun LazyPagingItems<*>.PagingStatePrepend(
     /** 加载中 */
-    stateLoading: @Composable () -> Unit = { PagingLoadingItem() },
+    stateLoading: @Composable () -> Unit = { PagingAppendLoading() },
     /** 加载错误 */
     stateError: @Composable (Throwable) -> Unit = { error ->
-        PagingAppendErrorItem(item = this)
+        PagingAppendError(item = this)
     },
 ) {
     when (val loadState = loadState.prepend) {
@@ -228,9 +228,9 @@ fun LazyStaggeredGridScope.PagingAppendItem(
     }
 }
 
-//-------------------- widget --------------------
+//-------------------- widget  Refresh--------------------
 @Composable
-fun PagingRefreshErrorContent(item: LazyPagingItems<*>) {
+fun PagingRefreshError(item: LazyPagingItems<*>) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.align(Alignment.Center)) {
             Image(
@@ -258,15 +258,32 @@ fun PagingRefreshErrorContent(item: LazyPagingItems<*>) {
     }
 }
 
+
 @Composable
-fun PagingEmptyContent() {
+fun PagingRefreshLoading() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize(), contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+//            color = AppTheme.colors.themeUi,
+            modifier = Modifier
+                .padding(10.dp)
+                .height(50.dp)
+        )
+    }
+}
+
+@Composable
+fun PagingRefreshEmpty() {
     Box(modifier = Modifier.fillMaxSize(), Alignment.Center) {
         Text(text = "无数据")
     }
 }
 
+//-------------------- widget Append--------------------
 @Composable
-fun PagingAppendErrorItem(item: LazyPagingItems<*>) {
+fun PagingAppendError(item: LazyPagingItems<*>) {
     Text(
         text = "加载失败",
         modifier = Modifier
@@ -280,7 +297,7 @@ fun PagingAppendErrorItem(item: LazyPagingItems<*>) {
 }
 
 @Composable
-fun PagingNoMoreItem() {
+fun PagingAppendNoMore() {
     Text(
         text = "没有更多了",
         modifier = Modifier
@@ -290,9 +307,8 @@ fun PagingNoMoreItem() {
     )
 }
 
-
 @Composable
-fun PagingLoadingItem() {
+fun PagingAppendLoading() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -306,3 +322,4 @@ fun PagingLoadingItem() {
         )
     }
 }
+
