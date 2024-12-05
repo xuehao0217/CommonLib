@@ -65,7 +65,6 @@ import com.xueh.comm_core.helper.compose.PagingDataModifier
 import com.xueh.comm_core.helper.compose.modifier
 import com.xueh.comm_core.helper.compose.onScrollDirection
 import com.xueh.comm_core.helper.compose.onScrollStopVisibleList
-import com.xueh.comm_core.weight.compose.PagingBaseBox
 import com.xueh.comm_core.weight.compose.PagingLazyColumn
 import com.xueh.comm_core.weight.compose.PagingRefresh
 import com.xueh.comm_core.weight.compose.PagingVerticalGrid
@@ -155,7 +154,7 @@ fun CustomRefreshSample() {
                     .background(Color.Yellow)
             )
         }) {
-            PagingVerticalGrid(it) {
+            it.PagingVerticalGrid {
                 PagingItem(it)
             }
         }
@@ -181,7 +180,7 @@ fun RefreshPagingListSample() {
             state.onScrollDirection {
                 LogUtils.iTag("AAA", "onScrollDirection==${it}")
             }
-            PagingLazyColumn(it, state) {
+            it.PagingLazyColumn(state) {
                 PagingItem(it)
             }
         }
@@ -212,8 +211,7 @@ fun PagingWithHorizontalPager() {
 fun PagingWithVerticalPager() {
     BaseComposeViewModel<ComposeViewModel> {
         val lazyPagingItems = it.getListDatas().collectAsLazyPagingItems()
-        val pagerState = rememberPagerState { lazyPagingItems.itemCount }
-        PagingVerticalPager(lazyPagingItems = lazyPagingItems, pagerState) {
+        lazyPagingItems.PagingVerticalPager {
             PagingItem(it)
         }
 
@@ -224,7 +222,7 @@ fun PagingWithVerticalPager() {
 fun PagingWithLazyGrid() {
     BaseComposeViewModel<ComposeViewModel> {
         val lazyPagingItems = it.getListDatas().collectAsLazyPagingItems()
-        PagingVerticalGrid(lazyPagingItems = lazyPagingItems) {
+        lazyPagingItems.PagingVerticalGrid {
             PagingItem(it)
         }
     }
@@ -253,7 +251,7 @@ fun PagingWithLazyList() {
                                 _modifier.update(
                                     HomeEntity.Data(
                                         title = "AAAAAAAAAAAAAAA",
-                                        id = lazyPagingItems.get(0)?.id?:0
+                                        id = lazyPagingItems.get(0)?.id ?: 0
                                     )
                                 )
                             },
@@ -267,7 +265,7 @@ fun PagingWithLazyList() {
                             .background(Color.Red)
                             .fillMaxWidth()
                             .clickable {
-                                _modifier.remove(lazyPagingItems.get(0)?.id?:0)
+                                _modifier.remove(lazyPagingItems.get(0)?.id ?: 0)
                             },
                         contentAlignment = Alignment.Center
                     ) {
@@ -282,10 +280,10 @@ fun PagingWithLazyList() {
                             .clickable {
                                 _modifier.add(
                                     HomeEntity.Data(
-                                        title = "cccc",
-                                        id = lazyPagingItems.get(0)?.id?:0
+                                        title = "vvvvvv",
+                                        id = 1111
                                     )
-                                ){
+                                ) {
                                     it.id
                                 }
                             },

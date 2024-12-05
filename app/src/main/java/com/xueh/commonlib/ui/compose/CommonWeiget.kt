@@ -1,4 +1,3 @@
-
 package com.xueh.commonlib.ui.compose
 
 import androidx.compose.foundation.background
@@ -129,7 +128,7 @@ fun CommonRefreshColumnData() {
 @Preview
 @Composable
 fun CommonPaging(viewModel: ComposeViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
-    PagingRefreshList(viewModel.getTestDatas().collectAsLazyPagingItems()) {
+    viewModel.getTestDatas().collectAsLazyPagingItems().PagingRefreshList {
         BoxText(
             text = "${it}", modifier = Modifier
                 .fillMaxWidth()

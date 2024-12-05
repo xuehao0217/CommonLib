@@ -26,7 +26,6 @@ import androidx.compose.foundation.lazy.grid.LazyGridItemSpanScope
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridItemScope
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridScope
-import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
@@ -40,7 +39,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.paging.CombinedLoadStates
@@ -71,17 +69,21 @@ inline fun LazyPagingItems<*>.PagingStateRefresh(
     stateError: @Composable (Throwable) -> Unit = { error ->
         PagingRefreshErrorContent(this)
     },
-    /** 没有更多数据 */
-    stateNoMore: @Composable () -> Unit = {
-        PagingNoMoreItem()
+    /** 没有数据 */
+    stateEmpty: @Composable () -> Unit = {
+        PagingEmptyContent()
+    },
+    content: @Composable () -> Unit = {
     },
 ) {
     if (itemCount == 0) {
         when (val loadState = loadState.refresh) {
             is LoadState.Loading -> stateLoading()
             is LoadState.Error -> stateError(loadState.error)
-            is LoadState.NotLoading -> stateNoMore()
+            is LoadState.NotLoading -> stateEmpty()
         }
+    } else {
+        content()
     }
 }
 
@@ -128,7 +130,6 @@ inline fun LazyPagingItems<*>.PagingStateAppend(
 
 
 //-------------------- prepend --------------------
-
 /**
  * 是否显示[CombinedLoadStates.prepend]状态
  */
@@ -157,51 +158,7 @@ inline fun LazyPagingItems<*>.PagingStatePrepend(
     }
 }
 
-
 //-------------------- EXT --------------------
-
-@Composable
-fun LazyPagingItems<*>.PagingBaseBox(
-    pagingEmptyContent: (@Composable BoxScope.() -> Unit)? = null,
-    pagingLoadingContent: (@Composable BoxScope.() -> Unit)? = null,
-    pagingErrorContent: (@Composable (item: LazyPagingItems<*>) -> Unit)? = null,
-    content: @Composable (LazyPagingItems<*>) -> Unit
-) {
-    val isRefreshing = isRefreshing()
-    val err = isRefreshError()
-    if (err) {
-        if (pagingErrorContent != null) {
-            pagingErrorContent(this)
-        } else {
-            PagingRefreshErrorContent(this)
-        }
-    }
-
-    //第一次进入页面的时候 loading
-    if (itemCount == 0) {
-        Box(modifier = Modifier.fillMaxSize(), Alignment.Center) {
-            if (isRefreshing) {
-                if (pagingLoadingContent.isEmpty()) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.height(50.dp)
-                    )
-                } else {
-                    pagingLoadingContent?.invoke(this)
-                }
-            } else {
-                if (pagingEmptyContent.isEmpty()) {
-                    Text(text = "无数据")
-                } else {
-                    pagingEmptyContent?.invoke(this)
-                }
-            }
-        }
-    } else {
-        content(this)
-    }
-}
-
-
 @Composable
 @OptIn(ExperimentalMaterialApi::class)
 fun <T : Any> LazyPagingItems<T>.PagingRefresh(
@@ -226,7 +183,6 @@ fun <T : Any> LazyPagingItems<T>.PagingRefresh(
         content(this@PagingRefresh)
     }
 }
-
 
 fun LazyListScope.PagingAppendItem(
     items: LazyPagingItems<*>,
@@ -302,6 +258,12 @@ fun PagingRefreshErrorContent(item: LazyPagingItems<*>) {
     }
 }
 
+@Composable
+fun PagingEmptyContent() {
+    Box(modifier = Modifier.fillMaxSize(), Alignment.Center) {
+        Text(text = "无数据")
+    }
+}
 
 @Composable
 fun PagingAppendErrorItem(item: LazyPagingItems<*>) {
@@ -316,18 +278,6 @@ fun PagingAppendErrorItem(item: LazyPagingItems<*>) {
         textAlign = TextAlign.Center
     )
 }
-
-@Composable
-fun PagingErrorItem(item: LazyPagingItems<*>) {
-    Button(
-        onClick = { item.retry() },
-        modifier = Modifier.padding(10.dp),
-//        colors = buttonColors(backgroundColor = AppTheme.colors.themeUi)
-    ) {
-        Text(text = "重试")
-    }
-}
-
 
 @Composable
 fun PagingNoMoreItem() {

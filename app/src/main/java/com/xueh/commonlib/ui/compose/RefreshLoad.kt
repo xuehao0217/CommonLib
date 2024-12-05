@@ -80,7 +80,7 @@ fun RefreshLoadUse() {
         val firstVisibleScrollOffset by remember { derivedStateOf { lazyListState.firstVisibleItemScrollOffset } }
         val firstVisibleIndex by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }
         val targetHeight = BarUtils.getStatusBarHeight() + ConvertUtils.dp2px(50f)
-        var alpha by rememberMutableStateOf{ 0f}
+        var alpha by rememberMutableStateOf { 0f }
         LaunchedEffect(Unit) {
             snapshotFlow { firstVisibleScrollOffset }.collect {
                 snapshotFlow { firstVisibleScrollOffset }.collect {
@@ -100,17 +100,16 @@ fun RefreshLoadUse() {
                 }
         }
 
-        PagingRefreshList(
-            homeDatas,
+        homeDatas.PagingRefreshList(
             lazyListState = lazyListState,
-            pagingEmptyContent = {
+            stateEmpty = {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(Color.Blue)
                 )
             },
-            pagingLoadingContent = {
+            stateLoading = {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -121,7 +120,8 @@ fun RefreshLoadUse() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp)
-                        .background(Color.Magenta).click {
+                        .background(Color.Magenta)
+                        .click {
                             ToastUtils.showShort("${homeDatas.itemSnapshotList.items}")
                         }
                 )

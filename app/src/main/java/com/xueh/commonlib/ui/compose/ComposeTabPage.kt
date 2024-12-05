@@ -62,10 +62,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun TabPage() {
     val viewModel: ComposeViewModel = viewModel()
-    var onSelect:(String)->Unit={
+    var onSelect: (String) -> Unit = {
 
     }
-    var ids= listOf("AAA","BBB","CCCCCCCC","DDDD","EEEEEEEEEEEEEE","FFFF","GGGGGGG")
+    var ids = listOf("AAA", "BBB", "CCCCCCCC", "DDDD", "EEEEEEEEEEEEEE", "FFFF", "GGGGGGG")
 
     var pagingStateList = remember {
         mutableStateListOf<Flow<PagingData<HomeEntity.Data>>>()
@@ -77,12 +77,12 @@ fun TabPage() {
         }
     }
 
-    TabPageList(ids=ids,pagingStateList)
+    TabPageList(ids = ids, pagingStateList)
 }
 
 @Composable
-fun TabPageList(ids: List<String>,pagingStateList:List<Flow<PagingData<HomeEntity.Data>>>) {
-    var onSelect:(String)->Unit={
+fun TabPageList(ids: List<String>, pagingStateList: List<Flow<PagingData<HomeEntity.Data>>>) {
+    var onSelect: (String) -> Unit = {
 
     }
     val scope: CoroutineScope = rememberCoroutineScope()
@@ -95,7 +95,7 @@ fun TabPageList(ids: List<String>,pagingStateList:List<Flow<PagingData<HomeEntit
             ids.size
         })
 
-        var titleBarAlpha by rememberMutableStateOf{0f}
+        var titleBarAlpha by rememberMutableStateOf { 0f }
 
         LaunchedEffect(Unit) {
             snapshotFlow { titleBarAlpha }.collect {
@@ -113,9 +113,9 @@ fun TabPageList(ids: List<String>,pagingStateList:List<Flow<PagingData<HomeEntit
         }
 
 
-        if (pagingStateList.isNotEmpty()){
+        if (pagingStateList.isNotEmpty()) {
             HorizontalPager(state = pagerState) { page ->
-                HomeList(ids[page],pagingStateList[page].collectAsLazyPagingItems()) { id, alpha ->
+                HomeList(ids[page], pagingStateList[page].collectAsLazyPagingItems()) { id, alpha ->
                     hashMap[id] = alpha
                     if (page == pagerState.currentPage) {
                         titleBarAlpha = alpha
@@ -216,7 +216,7 @@ fun NewsTab(
 
 @Composable
 fun HomeList(
-    id:String,
+    id: String,
     lazyPagingItemsState: LazyPagingItems<HomeEntity.Data>,
     block: (String, Float) -> Unit
 ) {
@@ -237,9 +237,8 @@ fun HomeList(
         }
     }
 
-    PagingRefreshList(
+    lazyPagingItemsState.PagingRefreshList(
         isFirstRefresh = false,
-        lazyPagingItems = lazyPagingItemsState,
         lazyListState = lazyListState,
     ) {
         Box(
