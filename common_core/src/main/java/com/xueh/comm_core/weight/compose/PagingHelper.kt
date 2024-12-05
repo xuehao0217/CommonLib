@@ -48,13 +48,13 @@ fun LazyPagingItems<*>.isRefreshError() = loadState.refresh is LoadState.Error
  */
 @Composable
 inline fun LazyPagingItems<*>.PagingStateRefresh(
-    /** 加载中 */
+    // 加载中
     stateLoading: @Composable () -> Unit = { PagingRefreshLoading() },
-    /** 加载错误 */
+    // 加载错误
     stateError: @Composable (Throwable) -> Unit = { error ->
         PagingRefreshError(this)
     },
-    /** 没有数据 */
+    // 没有数据
     stateEmpty: @Composable () -> Unit = {
         PagingRefreshEmpty()
     },
@@ -82,13 +82,13 @@ fun LazyPagingItems<*>.isStateAppend(): Boolean {
  */
 @Composable
 inline fun LazyPagingItems<*>.PagingStateAppend(
-    /** 加载中 */
+    //加载中
     stateLoading: @Composable () -> Unit = { PagingAppendLoading() },
-    /** 加载错误 */
+    // 加载错误
     stateError: @Composable (Throwable) -> Unit = { error ->
         PagingAppendError(this)
     },
-    /** 没有更多数据 */
+    //没有更多数据
     stateNoMore: @Composable () -> Unit = {
         PagingAppendNoMore()
     },
@@ -125,9 +125,9 @@ fun LazyPagingItems<*>.isStatePrepend(): Boolean {
  */
 @Composable
 inline fun LazyPagingItems<*>.PagingStatePrepend(
-    /** 加载中 */
+    //加载中
     stateLoading: @Composable () -> Unit = { PagingAppendLoading() },
-    /** 加载错误 */
+    // 加载错误
     stateError: @Composable (Throwable) -> Unit = { error ->
         PagingAppendError(item = this)
     },
