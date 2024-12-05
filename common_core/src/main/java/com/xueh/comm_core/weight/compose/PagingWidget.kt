@@ -70,6 +70,7 @@ fun <T : Any> LazyPagingItems<T>.PagingRefreshList(
     foodContent: @Composable () -> Unit = {},
     pagingRefreshStateContent: @Composable (() -> Unit) = { PagingStateRefresh() },
     pagingAppendStateContent: @Composable (() -> Unit) = { PagingStateAppend() },
+    onScrollStopVisibleList: ((list: List<T>) -> Unit)? = null,
     headerIndicator: @Composable () -> Unit = { MyRefreshHeader(refreshState) },
     itemContent: @Composable LazyItemScope.(value: T) -> Unit,
 ) {
@@ -91,6 +92,7 @@ fun <T : Any> LazyPagingItems<T>.PagingRefreshList(
             contentPadding = contentPadding,
             pagingRefreshStateContent = pagingRefreshStateContent,
             pagingAppendStateContent = pagingAppendStateContent,
+            onScrollStopVisibleList=onScrollStopVisibleList,
             headContent = headContent,
             foodContent = foodContent,
             itemContent = itemContent
