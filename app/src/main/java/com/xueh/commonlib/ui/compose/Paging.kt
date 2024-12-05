@@ -149,7 +149,7 @@ fun CustomRefreshSample() {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(150.dp)
+                    .height(100.dp)
                     .background(Color.Yellow)
             )
         }) {
@@ -169,7 +169,7 @@ fun RefreshPagingListSample() {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(150.dp)
+                    .height(100.dp)
                     .background(Color.Blue)
             )
         }) {

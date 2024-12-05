@@ -2,6 +2,7 @@ package com.xueh.comm_core.weight.compose
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -293,12 +294,11 @@ fun <T : Any> LazyPagingItems<T>.PagingRefreshColumn(
     modifier: Modifier = Modifier,
     state: PullToRefreshState = rememberPullToRefreshState(),
     headerIndicator: @Composable AnimatedVisibilityScope.() -> Unit,
-    content: @Composable ColumnScope.(LazyPagingItems<T>) -> Unit
+    content: @Composable BoxScope.(LazyPagingItems<T>) -> Unit
 ) {
     val isRefreshing = isRefreshing()
-
     Column(
-        modifier.pullToRefresh(state = state, isRefreshing = isRefreshing, onRefresh ={
+        modifier.animateContentSize().pullToRefresh(state = state, isRefreshing = isRefreshing, onRefresh = {
             this.refresh()
         }),
     ) {
@@ -308,6 +308,10 @@ fun <T : Any> LazyPagingItems<T>.PagingRefreshColumn(
         ) {
             headerIndicator()
         }
-        content(this@PagingRefreshColumn)
+        Box(modifier = Modifier
+            .weight(1F)
+            .fillMaxSize(), contentAlignment = Alignment.Center) {
+            content(this@PagingRefreshColumn)
+        }
     }
 }
