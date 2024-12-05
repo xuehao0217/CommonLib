@@ -58,6 +58,8 @@ import com.blankj.utilcode.util.ToastUtils
 import com.lt.compose_views.util.rememberMutableStateOf
 import com.xueh.comm_core.base.mvvm.BaseComposeViewModel
 import com.xueh.comm_core.weight.compose.PagingRefreshList
+import com.xueh.comm_core.weight.compose.PagingStateAppend
+import com.xueh.comm_core.weight.compose.PagingStateRefresh
 import com.xueh.comm_core.weight.compose.click
 import com.xueh.commonlib.entity.HomeEntity
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
@@ -94,46 +96,43 @@ fun RefreshLoadUse() {
 
         var dataList by remember { mutableStateOf<List<HomeEntity.Data>>(emptyList()) }
         LaunchedEffect(homeDatas) {
-            snapshotFlow { homeDatas.itemSnapshotList.items }
-                .collect { items ->
-                    dataList = items.toList()
-                }
+            snapshotFlow { homeDatas.itemSnapshotList.items }.collect { items ->
+                dataList = items.toList()
+            }
         }
 
-        homeDatas.PagingRefreshList(
-            lazyListState = lazyListState,
-            stateEmpty = {
+        homeDatas.PagingRefreshList(lazyListState = lazyListState, pagingRefreshStateContent = {
+            homeDatas.PagingStateRefresh(stateEmpty = {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(Color.Blue)
                 )
-            },
-            stateLoading = {
+            }, stateError = {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(Color.Red)
                 )
-            }, headContent = {
+            })
+        }, pagingAppendStateContent = {
+            homeDatas.PagingStateAppend(stateError = {
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+                    .background(Color.Red)
+                    .click {
+                        homeDatas.retry()
+                    })
+            }, stateNoMore = {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp)
-                        .background(Color.Magenta)
-                        .click {
-                            ToastUtils.showShort("${homeDatas.itemSnapshotList.items}")
-                        }
+                        .background(Color.Green)
                 )
-            }, foodContent = {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp)
-                        .background(Color.Yellow)
-                )
-            }
-        ) {
+            })
+        }) {
             Box(
                 modifier = Modifier
                     .padding(10.dp)

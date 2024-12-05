@@ -73,8 +73,6 @@ inline fun LazyPagingItems<*>.PagingStateRefresh(
     stateEmpty: @Composable () -> Unit = {
         PagingRefreshEmpty()
     },
-    content: @Composable () -> Unit = {
-    },
 ) {
     if (itemCount == 0) {
         when (val loadState = loadState.refresh) {
@@ -82,8 +80,6 @@ inline fun LazyPagingItems<*>.PagingStateRefresh(
             is LoadState.Error -> stateError(loadState.error)
             is LoadState.NotLoading -> stateEmpty()
         }
-    } else {
-        content()
     }
 }
 

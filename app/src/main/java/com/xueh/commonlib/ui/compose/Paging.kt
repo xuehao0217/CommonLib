@@ -74,9 +74,6 @@ import com.xueh.commonlib.entity.HomeEntity
 import com.xueh.commonlib.ui.compose.ItemView
 import com.xueh.commonlib.ui.compose.RouteConfig
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.firstOrNull
 
 @Composable
 fun ComposePaging() {

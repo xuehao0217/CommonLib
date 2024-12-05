@@ -37,11 +37,10 @@ fun <T : Any> LazyPagingItems<T>.PagingRefreshList(
     refreshState: SmartSwipeRefreshState = rememberSmartSwipeRefreshState(),//下拉刷新状态
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
     contentPadding: PaddingValues = PaddingValues(horizontal = 15.dp),
-    headContent: @Composable () -> Unit? = {},
-    foodContent: @Composable () -> Unit? = {},
-    stateLoading: @Composable () -> Unit = { PagingRefreshLoading() },
-    stateError: @Composable (Throwable) -> Unit = { error -> PagingRefreshError(this) },
-    stateEmpty: @Composable () -> Unit = { PagingRefreshEmpty() },
+    headContent: @Composable () -> Unit = {},
+    foodContent: @Composable () -> Unit = {},
+    pagingRefreshStateContent: @Composable (() -> Unit) = { PagingStateRefresh() },
+    pagingAppendStateContent: @Composable (() -> Unit) = { PagingStateAppend() },
     headerIndicator: @Composable () -> Unit = { MyRefreshHeader(refreshState) },
     itemContent: @Composable LazyItemScope.(value: T) -> Unit,
 ) {
@@ -61,9 +60,8 @@ fun <T : Any> LazyPagingItems<T>.PagingRefreshList(
             key = key,
             verticalArrangement = verticalArrangement,
             contentPadding = contentPadding,
-            stateLoading = stateLoading,
-            stateError = stateError,
-            stateEmpty = stateEmpty,
+            pagingRefreshStateContent = pagingRefreshStateContent,
+            pagingAppendStateContent = pagingAppendStateContent,
             headContent = headContent,
             foodContent = foodContent,
             itemContent = itemContent
@@ -75,18 +73,14 @@ fun <T : Any> LazyPagingItems<T>.PagingRefreshList(
 fun <T : Any> LazyPagingItems<T>.PagingLazyColumn(
     lazyListState: LazyListState = rememberLazyListState(),
     modifier: Modifier = Modifier,
-    stateLoading: @Composable () -> Unit = { PagingRefreshLoading() },
-    stateError: @Composable (Throwable) -> Unit = { error -> PagingRefreshError(this) },
-    stateEmpty: @Composable () -> Unit = { PagingRefreshEmpty() },
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
     contentPadding: PaddingValues = PaddingValues(horizontal = 15.dp),
     key: ((index: Int) -> Any)? = null,
-    headContent: @Composable () -> Unit? = {},
-    foodContent: @Composable () -> Unit? = {},
+    headContent: @Composable () -> Unit = {},
+    foodContent: @Composable () -> Unit = {},
     onScrollStopVisibleList: ((list: List<T>) -> Unit)? = null,
-    pagingAppendStateContent: @Composable (LazyItemScope.() -> Unit) = {
-        PagingStateAppend()
-    },
+    pagingRefreshStateContent: @Composable (() -> Unit) = { PagingStateRefresh() },
+    pagingAppendStateContent: @Composable (() -> Unit) = { PagingStateAppend() },
     itemContent: @Composable LazyItemScope.(T) -> Unit,
 ) {
     if (onScrollStopVisibleList != null) {
@@ -99,28 +93,23 @@ fun <T : Any> LazyPagingItems<T>.PagingLazyColumn(
             }
         }
     }
-    PagingStateRefresh(
-        stateLoading = stateLoading,
-        stateError = stateError,
-        stateEmpty = stateEmpty,
+    pagingRefreshStateContent()
+    CommonLazyColumn(
+        modifier = modifier,
+        state = lazyListState,
+        contentPadding = contentPadding,
+        verticalArrangement = verticalArrangement,
+        headContent = headContent,
+        foodContent = foodContent,
     ) {
-        CommonLazyColumn(
-            modifier = modifier,
-            state = lazyListState,
-            contentPadding = contentPadding,
-            verticalArrangement = verticalArrangement,
-            headContent = headContent,
-            foodContent = foodContent,
-        ) {
-            // 如果是老版本的Paging3这里的实现方式不同，自己根据版本来实现。
-            items(itemCount, key = key) { index ->
-                this@PagingLazyColumn[index]?.let {
-                    itemContent(it)
-                }
+        // 如果是老版本的Paging3这里的实现方式不同，自己根据版本来实现。
+        items(itemCount, key = key) { index ->
+            this@PagingLazyColumn[index]?.let {
+                itemContent(it)
             }
-            PagingAppendItem(this@PagingLazyColumn) {
-                pagingAppendStateContent()
-            }
+        }
+        PagingAppendItem(this@PagingLazyColumn) {
+            pagingAppendStateContent()
         }
     }
 }
@@ -133,10 +122,8 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalGrid(
     modifier: Modifier = Modifier,
     columns: Int = 2,
     state: LazyGridState = rememberLazyGridState(),
-    stateLoading: @Composable () -> Unit = { PagingRefreshLoading() },
-    stateError: @Composable (Throwable) -> Unit = { error -> PagingRefreshError(this) },
-    stateEmpty: @Composable () -> Unit = { PagingRefreshEmpty() },
-    pagingAppendStateContent: @Composable (LazyGridItemScope.() -> Unit) = { PagingStateAppend() },
+    pagingRefreshStateContent: @Composable (() -> Unit) = { PagingStateRefresh() },
+    pagingAppendStateContent: @Composable (() -> Unit) = { PagingStateAppend() },
     onScrollStopVisibleList: ((list: List<T>) -> Unit)? = null,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(7.dp),
@@ -153,27 +140,22 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalGrid(
             }
         }
     }
-    PagingStateRefresh(
-        stateLoading = stateLoading,
-        stateError = stateError,
-        stateEmpty = stateEmpty,
+    pagingRefreshStateContent()
+    LazyVerticalGrid(
+        modifier = modifier,
+        columns = GridCells.Fixed(columns), state = state, contentPadding = contentPadding,
+        horizontalArrangement = horizontalArrangement
     ) {
-        LazyVerticalGrid(
-            modifier = modifier,
-            columns = GridCells.Fixed(columns), state = state, contentPadding = contentPadding,
-            horizontalArrangement = horizontalArrangement
+        items(
+            count = itemCount,
+            key = key,
         ) {
-            items(
-                count = itemCount,
-                key = key,
-            ) {
-                this@PagingVerticalGrid[it]?.let {
-                    itemContent(it)
-                }
+            this@PagingVerticalGrid[it]?.let {
+                itemContent(it)
             }
-            PagingAppendItem(this@PagingVerticalGrid) {
-                pagingAppendStateContent()
-            }
+        }
+        PagingAppendItem(this@PagingVerticalGrid) {
+            pagingAppendStateContent()
         }
     }
 }
@@ -185,10 +167,9 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalGrid(
 @Composable
 fun <T : Any> LazyPagingItems<T>.PagingVerticalStaggeredGrid(
     modifier: Modifier = Modifier,
-    stateLoading: @Composable () -> Unit = { PagingRefreshLoading() },
-    stateError: @Composable (Throwable) -> Unit = { error -> PagingRefreshError(this) },
-    stateEmpty: @Composable () -> Unit = { PagingRefreshEmpty() }, columns: Int = 2,
-    pagingAppendStateContent: @Composable (LazyStaggeredGridItemScope.() -> Unit) = { PagingStateAppend() },
+    columns: Int = 2,
+    pagingRefreshStateContent: @Composable (() -> Unit) = { PagingStateRefresh() },
+    pagingAppendStateContent: @Composable (() -> Unit) = { PagingStateAppend() },
     state: LazyStaggeredGridState = rememberLazyStaggeredGridState(),
     onScrollStopVisibleList: ((list: List<T>) -> Unit)? = null,
     contentPadding: PaddingValues = PaddingValues(0.dp),
@@ -207,30 +188,25 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalStaggeredGrid(
             }
         }
     }
-    PagingStateRefresh(
-        stateLoading = stateLoading,
-        stateError = stateError,
-        stateEmpty = stateEmpty,
+    pagingRefreshStateContent()
+    LazyVerticalStaggeredGrid(
+        modifier = modifier,
+        columns = StaggeredGridCells.Fixed(columns),
+        state = state,
+        contentPadding = contentPadding,
+        verticalItemSpacing = verticalItemSpacing,
+        horizontalArrangement = horizontalArrangement
     ) {
-        LazyVerticalStaggeredGrid(
-            modifier = modifier,
-            columns = StaggeredGridCells.Fixed(columns),
-            state = state,
-            contentPadding = contentPadding,
-            verticalItemSpacing = verticalItemSpacing,
-            horizontalArrangement = horizontalArrangement
+        items(
+            count = itemCount,
+            key = key,
         ) {
-            items(
-                count = itemCount,
-                key = key,
-            ) {
-                this@PagingVerticalStaggeredGrid[it]?.let {
-                    itemContent(it)
-                }
+            this@PagingVerticalStaggeredGrid[it]?.let {
+                itemContent(it)
             }
-            PagingAppendItem(this@PagingVerticalStaggeredGrid) {
-                pagingAppendStateContent()
-            }
+        }
+        PagingAppendItem(this@PagingVerticalStaggeredGrid) {
+            pagingAppendStateContent()
         }
     }
 }
@@ -244,21 +220,18 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalStaggeredGrid(
 fun <T : Any> LazyPagingItems<T>.PagingVerticalPager(
     state: PagerState = rememberPagerState { itemCount },
     modifier: Modifier = Modifier,
-    stateLoading: @Composable () -> Unit = { PagingRefreshLoading() },
-    stateError: @Composable (Throwable) -> Unit = { error -> PagingRefreshError(this) },
-    stateEmpty: @Composable () -> Unit = { PagingRefreshEmpty() },
+    pagingRefreshStateContent: @Composable (() -> Unit) = { PagingStateRefresh() },
     key: ((index: Int) -> Any)? = null,
     pageContent: @Composable PagerScope.(T) -> Unit
 ) {
-    PagingStateRefresh(stateLoading = stateLoading, stateError = stateError, stateEmpty) {
-        VerticalPager(
-            modifier = modifier,
-            state = state,
-            key = key
-        ) { index ->
-            this@PagingVerticalPager[index]?.let {
-                pageContent(it)
-            }
+    pagingRefreshStateContent()
+    VerticalPager(
+        modifier = modifier,
+        state = state,
+        key = key
+    ) { index ->
+        this@PagingVerticalPager[index]?.let {
+            pageContent(it)
         }
     }
 }

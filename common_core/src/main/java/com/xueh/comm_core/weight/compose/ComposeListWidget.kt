@@ -25,8 +25,8 @@ inline fun CommonLazyColumn(
     state: LazyListState = rememberLazyListState(),
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
     contentPadding: PaddingValues = PaddingValues(horizontal = 15.dp),
-    crossinline headContent: @Composable () -> Unit? = {},
-    crossinline foodContent: @Composable () -> Unit? = {},
+    crossinline headContent: @Composable () -> Unit = {},
+    crossinline foodContent: @Composable () -> Unit = {},
     crossinline content: LazyListScope.() -> Unit,
 ) {
     ConstraintLayout(modifier = modifier) {
@@ -66,8 +66,8 @@ inline fun <T> CommonLazyColumnData(
     noinline key: ((item: T) -> Any)? = null,
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
     contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp),
-    crossinline headContent: @Composable () -> Unit? = {},
-    crossinline foodContent: @Composable () -> Unit? = {},
+    crossinline headContent: @Composable () -> Unit = {},
+    crossinline foodContent: @Composable () -> Unit = {},
     crossinline itemContent: @Composable LazyItemScope.(item: T) -> Unit,
 ) {
 
@@ -114,9 +114,9 @@ fun <T> CommonRefreshColumnDataPage(
     isRefreshing: Boolean,
     onRefresh: (suspend () -> Unit)? = null,
     key: ((item: T) -> Any)? = null,
-    emptContent: @Composable () -> Unit? = {},
-    headContent: @Composable () -> Unit? = {},
-    foodContent: @Composable () -> Unit? = {},
+    emptContent: @Composable () -> Unit = {},
+    headContent: @Composable () -> Unit = {},
+    foodContent: @Composable () -> Unit = {},
     itemContent: @Composable LazyItemScope.(item: T) -> Unit,
 ) {
 //    var refreshing by remember { mutableStateOf(false) }
