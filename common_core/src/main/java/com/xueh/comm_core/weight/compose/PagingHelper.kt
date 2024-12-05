@@ -3,6 +3,8 @@ package com.xueh.comm_core.weight.compose
 import android.R
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -10,6 +12,7 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -18,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -33,6 +37,11 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,6 +49,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
@@ -155,31 +165,6 @@ inline fun LazyPagingItems<*>.PagingStatePrepend(
 }
 
 //-------------------- EXT --------------------
-@Composable
-@OptIn(ExperimentalMaterialApi::class)
-fun <T : Any> LazyPagingItems<T>.PagingRefresh(
-    headerIndicator: @Composable AnimatedVisibilityScope.() -> Unit,
-    content: @Composable ColumnScope.(LazyPagingItems<T>) -> Unit
-) {
-    val isRefreshing = isRefreshing()
-    val state = rememberPullRefreshState(isRefreshing, onRefresh = {
-        refresh()
-    })
-    Column(
-        Modifier
-            .fillMaxSize()
-            .pullRefresh(state)
-    ) {
-        AnimatedVisibility(
-            visible = isRefreshing, enter = fadeIn() + scaleIn() + expandVertically(),
-            exit = fadeOut() + scaleOut() + shrinkVertically(),
-        ) {
-            headerIndicator()
-        }
-        content(this@PagingRefresh)
-    }
-}
-
 fun LazyListScope.PagingAppendItem(
     items: LazyPagingItems<*>,
     key: Any? = null,

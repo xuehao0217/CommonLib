@@ -39,6 +39,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -66,7 +67,7 @@ import com.xueh.comm_core.helper.compose.modifier
 import com.xueh.comm_core.helper.compose.onScrollDirection
 import com.xueh.comm_core.helper.compose.onScrollStopVisibleList
 import com.xueh.comm_core.weight.compose.PagingLazyColumn
-import com.xueh.comm_core.weight.compose.PagingRefresh
+import com.xueh.comm_core.weight.compose.PagingRefreshColumn
 import com.xueh.comm_core.weight.compose.PagingVerticalGrid
 import com.xueh.comm_core.weight.compose.PagingVerticalPager
 import com.xueh.comm_core.weight.compose.SpacerH
@@ -139,11 +140,12 @@ fun ComposePaging() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomRefreshSample() {
     BaseComposeViewModel<ComposeViewModel> {
         val lazyPagingItems = it.getListDatas().collectAsLazyPagingItems()
-        lazyPagingItems.PagingRefresh(headerIndicator = {
+        lazyPagingItems.PagingRefreshColumn(headerIndicator = {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -158,11 +160,12 @@ fun CustomRefreshSample() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RefreshPagingListSample() {
     BaseComposeViewModel<ComposeViewModel> {
         val lazyPagingItems = it.getListDatas().collectAsLazyPagingItems()
-        lazyPagingItems.PagingRefresh(headerIndicator = {
+        lazyPagingItems.PagingRefreshColumn(headerIndicator = {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -177,7 +180,7 @@ fun RefreshPagingListSample() {
             state.onScrollDirection {
                 LogUtils.iTag("AAA", "onScrollDirection==${it}")
             }
-            it.PagingLazyColumn(state) {
+            lazyPagingItems.PagingLazyColumn(state) {
                 PagingItem(it)
             }
         }
