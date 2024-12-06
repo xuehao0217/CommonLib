@@ -37,45 +37,32 @@ open class RequestViewModel : AbsViewModel() {
             }
 
             onStart {
-                val override = ViewModelDsl<Response>().apply(apiDSL).start?.invoke()
-                if (override == null || !override) {
-                    onApiStart()
-                }
-                override
+                ViewModelDsl<Response>().apply(apiDSL).start?.invoke() ?: onApiStart()
             }
             onError { error ->
-                val override = ViewModelDsl<Response>().apply(apiDSL).error?.invoke(error)
-                if (override == null || !override) {
-                    onApiError(error)
-                }
-                override
-
+                ViewModelDsl<Response>().apply(apiDSL).error?.invoke(error) ?: onApiError(error)
             }
             onFinally {
-                val override = ViewModelDsl<Response>().apply(apiDSL).finally?.invoke()
-                if (override == null || !override) {
-                    onApiFinally()
-                }
-                override
+                ViewModelDsl<Response>().apply(apiDSL).finally?.invoke()?: onApiFinally()
             }
         }
 
     protected open fun onApiStart() {
         apiLoading.value = true
-        apiLoadingState.value=true
+        apiLoadingState.value = true
     }
 
     protected open fun onApiError(e: Exception) {
         apiLoading.value = false
         apiException.value = e
 
-        apiLoadingState.value=false
+        apiLoadingState.value = false
         apiExceptionState.value = e
     }
 
     protected open fun onApiFinally() {
         apiLoading.value = false
-        apiLoadingState.value=false
+        apiLoadingState.value = false
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -116,20 +103,20 @@ open class RequestViewModel : AbsViewModel() {
             flow {
                 emit(request())
             }.flowOn(Dispatchers.IO).onStart {
-                start?.invoke()?:onApiStart()
+                start?.invoke() ?: onApiStart()
             }.collect {
                 if (it.isSuccess()) {
                     result.invoke(it.data)
                 } else {
-                    error?.invoke(Exception(it.errorMsg))?:onApiError(Exception(it.errorMsg))
+                    error?.invoke(Exception(it.errorMsg)) ?: onApiError(Exception(it.errorMsg))
                     //ToastUtils.showShort(it.errorMsg)
                 }
             }
         }.onCatch {
-            error?.invoke(Exception(it.message))?:onApiError(Exception(it.message))
+            error?.invoke(Exception(it.message)) ?: onApiError(Exception(it.message))
             //ToastUtils.showShort(it.message.toString())
         }.onComplete {
-            finally?.invoke()?:onApiFinally()
+            finally?.invoke() ?: onApiFinally()
         }
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -142,7 +129,7 @@ open class RequestViewModel : AbsViewModel() {
     ) {
         apiDSL<BaseResult<Response>> {
             onStart {
-                ViewModelDsl<Response>().apply(apiDSL).start?.invoke()
+                ViewModelDsl<Response>().apply(apiDSL).start?.invoke()?:onApiStart()
             }
             onRequest {
                 ViewModelDsl<Response>().apply(apiDSL).requestBaseResult()
@@ -151,13 +138,13 @@ open class RequestViewModel : AbsViewModel() {
                 if (it.isSuccess()) {
                     ViewModelDsl<Response>().apply(apiDSL).response?.invoke(it.data)
                 } else {
-                    ViewModelDsl<Response>().apply(apiDSL).error?.invoke(Exception(it.errorMsg))
+                    ViewModelDsl<Response>().apply(apiDSL).error?.invoke(Exception(it.errorMsg))?:onApiError(Exception(it.errorMsg))
                     ToastUtils.showShort(it.errorMsg)
                     Log.e("HTTP", "apiDslResult--> ${it.errorMsg}")
                 }
             }
             onFinally {
-                ViewModelDsl<Response>().apply(apiDSL).finally?.invoke()
+                ViewModelDsl<Response>().apply(apiDSL).finally?.invoke()?:onApiFinally()
             }
         }
     }

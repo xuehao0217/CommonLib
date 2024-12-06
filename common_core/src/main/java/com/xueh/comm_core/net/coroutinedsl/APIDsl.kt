@@ -19,16 +19,16 @@ class ViewModelDsl<Response> {
 
     internal lateinit var request: suspend () -> Response
 
-    internal var start: (() -> Boolean?)? = null
+    internal var start: (() -> Unit)? = null
 
     internal var response: ((Response) -> Unit)? = null
 
-    internal var error: ((Exception) -> Boolean?)? = null
+    internal var error: ((Exception) -> Unit)? = null
 
-    internal var finally: (() -> Boolean?)? = null
+    internal var finally: (() -> Unit?)? = null
 
 
-    infix fun onStart(start: (() -> (Boolean?))?) {
+    infix fun onStart(start: (() -> (Unit))?) {
         this.start = start
     }
 
@@ -40,11 +40,11 @@ class ViewModelDsl<Response> {
         this.response = response
     }
 
-    infix fun onError(error: ((Exception) -> Boolean?)?) {
+    infix fun onError(error: ((Exception) -> Unit)?) {
         this.error = error
     }
 
-    infix fun onFinally(finally: (() -> Boolean?)?) {
+    infix fun onFinally(finally: (() -> Unit)?) {
         this.finally = finally
     }
 
