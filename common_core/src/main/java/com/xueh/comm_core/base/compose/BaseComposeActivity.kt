@@ -63,7 +63,7 @@ abstract class BaseComposeActivity : ComponentActivity() {
                             title = setTitle(),
                             showBackIcon = showBackIcon(),
                             backClick = {
-                                finish()
+                                onBackPressedDispatcher.onBackPressed()
                             })
                     }
 
