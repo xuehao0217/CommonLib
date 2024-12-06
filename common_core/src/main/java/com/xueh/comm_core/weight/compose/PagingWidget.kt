@@ -289,7 +289,7 @@ fun <T : Any> LazyPagingItems<T>.PagingRefreshColumn(
 ) {
     val isRefreshing = isRefreshing()
     Column(
-        modifier.animateContentSize().pullToRefresh(state = state, isRefreshing = isRefreshing, onRefresh = {
+        modifier.fillMaxSize().animateContentSize().pullToRefresh(state = state, isRefreshing = isRefreshing, onRefresh = {
             this.refresh()
         }),
     ) {
