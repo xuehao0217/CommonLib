@@ -53,10 +53,9 @@ open class RequestViewModel : AbsViewModel() {
     }
 
     protected open fun onApiError(e: Exception) {
-        apiLoading.value = false
-        apiException.value = e
+        onApiFinally()
 
-        apiLoadingState.value = false
+        apiException.value = e
         apiExceptionState.value = e
     }
 
@@ -109,12 +108,12 @@ open class RequestViewModel : AbsViewModel() {
                     result.invoke(it.data)
                 } else {
                     error?.invoke(Exception(it.errorMsg)) ?: onApiError(Exception(it.errorMsg))
-                    //ToastUtils.showShort(it.errorMsg)
+                    Log.e("HTTP", "apiFlow---> Error---> errorCode=${it.errorCode} errorMsg=${it.errorMsg}")
                 }
             }
         }.onCatch {
             error?.invoke(Exception(it.message)) ?: onApiError(Exception(it.message))
-            //ToastUtils.showShort(it.message.toString())
+            Log.e("HTTP", "apiFlow---> Error---> ${it.message}")
         }.onComplete {
             finally?.invoke() ?: onApiFinally()
         }
@@ -139,8 +138,7 @@ open class RequestViewModel : AbsViewModel() {
                     ViewModelDsl<Response>().apply(apiDSL).response?.invoke(it.data)
                 } else {
                     ViewModelDsl<Response>().apply(apiDSL).error?.invoke(Exception(it.errorMsg))?:onApiError(Exception(it.errorMsg))
-                    ToastUtils.showShort(it.errorMsg)
-                    Log.e("HTTP", "apiDslResult--> ${it.errorMsg}")
+                    Log.e("HTTP", "apiDslResult---> Error---> errorCode=${it.errorCode} errorMsg=${it.errorMsg}")
                 }
             }
             onFinally {
