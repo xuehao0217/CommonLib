@@ -77,7 +77,7 @@ fun <T : Any> LazyPagingItems<T>.PagingRefreshList(
         PagingLazyColumn(
             lazyListState = lazyListState,
             key = key,
-            verticalArrangement = verticalArrangement,
+x            verticalArrangement = verticalArrangement,
             contentPadding = contentPadding,
             pagingRefreshStateContent = pagingRefreshStateContent,
             pagingAppendStateContent = pagingAppendStateContent,
@@ -282,14 +282,13 @@ fun <T : Any> LazyPagingItems<T>.SmartRefreshPaging(
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun <T : Any> LazyPagingItems<T>.PagingRefreshColumn(
-    modifier: Modifier = Modifier,
     state: PullToRefreshState = rememberPullToRefreshState(),
     headerIndicator: @Composable AnimatedVisibilityScope.() -> Unit,
     content: @Composable BoxScope.(LazyPagingItems<T>) -> Unit
 ) {
     val isRefreshing = isRefreshing()
     Column(
-        modifier.fillMaxSize().animateContentSize().pullToRefresh(state = state, isRefreshing = isRefreshing, onRefresh = {
+        Modifier.fillMaxSize().animateContentSize().pullToRefresh(state = state, isRefreshing = isRefreshing, onRefresh = {
             this.refresh()
         }),
     ) {
