@@ -65,11 +65,12 @@ class HomeViewModel : BaseRequstViewModel<RestApi>() {
         apiFlow(request = {
             api.bannerList3()
         }, start = {
-            apiLoading.value = true
+//            apiLoading.value = true
         }, finally = {
-            apiLoading.value = false
+//            apiLoading.value = false
         }) {
-            stateFlowDada.emit(it)
+            ToastUtils.showShort("$it")
+//            stateFlowDada.emit(it)
         }
     }
 

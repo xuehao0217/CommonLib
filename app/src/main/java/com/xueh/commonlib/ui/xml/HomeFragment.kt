@@ -78,9 +78,9 @@ class HomeFragment : MVVMFragment<FragmentHomeBinding, HomeViewModel>() {
         viewModel.banner.observe(this) {
             ToastUtils.showShort(it.toString())
         }
-        viewModel.stateFlowDada.collect(lifecycleScope){
-            ToastUtils.showShort(it.toString())
-        }
+//        viewModel.stateFlowDada.collect(lifecycleScope){
+//            ToastUtils.showShort(it.toString())
+//        }
 //        launch {
 //            viewModel.stateFlowDada.collect {
 //                ToastUtils.showShort(it.toString())
