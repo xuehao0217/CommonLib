@@ -109,8 +109,6 @@ class HomeViewModel : BaseRequstViewModel<RestApi>() {
                 Url.getDownloadProgress {
                     progressLiveData.postValue(it)
                 }
-                //true 表示拦截 可以在这里进行自定义 不展示loading
-                true
             }
 
         }
