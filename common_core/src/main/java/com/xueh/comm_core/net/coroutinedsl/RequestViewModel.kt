@@ -116,20 +116,20 @@ open class RequestViewModel : AbsViewModel() {
             flow {
                 emit(request())
             }.flowOn(Dispatchers.IO).onStart {
-                start?.invoke()
+                start?.invoke()?:onApiStart()
             }.collect {
                 if (it.isSuccess()) {
                     result.invoke(it.data)
                 } else {
-                    error?.invoke(Exception(it.errorMsg))
-                    ToastUtils.showShort(it.errorMsg)
+                    error?.invoke(Exception(it.errorMsg))?:onApiError(Exception(it.errorMsg))
+                    //ToastUtils.showShort(it.errorMsg)
                 }
             }
         }.onCatch {
-            error?.invoke(Exception(it.message))
-            ToastUtils.showShort(it.message.toString())
+            error?.invoke(Exception(it.message))?:onApiError(Exception(it.message))
+            //ToastUtils.showShort(it.message.toString())
         }.onComplete {
-            finally?.invoke()
+            finally?.invoke()?:onApiFinally()
         }
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
