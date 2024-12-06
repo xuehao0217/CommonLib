@@ -300,7 +300,7 @@ fun <T : Any> LazyPagingItems<T>.PagingRefreshColumn(
         }
         Box(modifier = Modifier
             .weight(1F)
-            .fillMaxSize(), contentAlignment = Alignment.Center) {
+            .fillMaxSize(), contentAlignment = Alignment.TopCenter) {
             content(this@PagingRefreshColumn)
         }
     }
