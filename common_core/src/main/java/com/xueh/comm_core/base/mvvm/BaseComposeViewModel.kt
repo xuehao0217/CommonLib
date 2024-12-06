@@ -11,7 +11,7 @@ import com.xueh.comm_core.weight.compose.ComposeLoadingDialog
 
 @Composable
 inline fun <reified V : BaseViewModel> BaseComposeViewModel(content: @Composable (V) -> Unit) {
-    var viewModel: V = viewModel()
+    val viewModel: V = viewModel()
     content(viewModel)
     ComposeLoadingDialog(alertDialog = viewModel.apiLoadingState)
 
