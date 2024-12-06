@@ -77,7 +77,7 @@ fun <T : Any> LazyPagingItems<T>.PagingRefreshList(
         PagingLazyColumn(
             lazyListState = lazyListState,
             key = key,
-x            verticalArrangement = verticalArrangement,
+            verticalArrangement = verticalArrangement,
             contentPadding = contentPadding,
             pagingRefreshStateContent = pagingRefreshStateContent,
             pagingAppendStateContent = pagingAppendStateContent,
