@@ -42,6 +42,7 @@ import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -54,9 +55,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
+import androidx.paging.TerminalSeparatorType
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
+import androidx.paging.insertFooterItem
 import androidx.paging.insertHeaderItem
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
@@ -75,6 +78,7 @@ import com.xueh.commonlib.entity.HomeEntity
 import com.xueh.commonlib.ui.compose.ItemView
 import com.xueh.commonlib.ui.compose.RouteConfig
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun ComposePaging() {
@@ -236,72 +240,83 @@ fun PagingWithLazyList() {
             it.id
         }
 
+        var scope = rememberCoroutineScope()
+
         val lazyPagingItems = _modifier.flow.collectAsLazyPagingItems()
-        LazyColumn {
-            stickyHeader(
-                key = "Header",
-                contentType = "My Header",
-            ) {
-                Column {
-                    Box(
-                        modifier = Modifier
-                            .background(Color.Red)
-                            .fillMaxWidth()
-                            .clickable {
-                                _modifier.update(
+
+        Column {
+            Column {
+                Box(
+                    modifier = Modifier
+                        .background(Color.Red)
+                        .fillMaxWidth()
+                        .clickable {
+                            _modifier.update(
+                                HomeEntity.Data(
+                                    title = "AAAAAAAAAAAAAAA",
+                                    id = lazyPagingItems.get(0)?.id ?: 0
+                                )
+                            )
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = "update", fontSize = 32.sp)
+                }
+                SpacerH(int = 16)
+                Box(
+                    modifier = Modifier
+                        .background(Color.Red)
+                        .fillMaxWidth()
+                        .clickable {
+                            _modifier.remove(lazyPagingItems.get(0)?.id ?: 0)
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = "remove ", fontSize = 32.sp)
+                }
+                SpacerH(int = 16)
+
+                Box(
+                    modifier = Modifier
+                        .background(Color.Red)
+                        .fillMaxWidth()
+                        .clickable {
+                            scope.launch {
+                                _modifier.addHeader(
                                     HomeEntity.Data(
-                                        title = "AAAAAAAAAAAAAAA",
-                                        id = lazyPagingItems.get(0)?.id ?: 0
+                                        title = "addHeader-DATA",
                                     )
                                 )
-                            },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(text = "update", fontSize = 32.sp)
-                    }
-                    SpacerH(int = 16)
-                    Box(
-                        modifier = Modifier
-                            .background(Color.Red)
-                            .fillMaxWidth()
-                            .clickable {
-                                _modifier.remove(lazyPagingItems.get(0)?.id ?: 0)
-                            },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(text = "remove ", fontSize = 32.sp)
-                    }
-                    SpacerH(int = 16)
-
-                    Box(
-                        modifier = Modifier
-                            .background(Color.Red)
-                            .fillMaxWidth()
-                            .clickable {
-                                _modifier.add(
-                                    HomeEntity.Data(
-                                        title = "vvvvvv",
-                                        id = 1111
-                                    )
-                                ) {
-                                    it.id
-                                }
-                            },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(text = "add ", fontSize = 32.sp)
-                    }
+                            }
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = "addHeader ", fontSize = 32.sp)
                 }
+                SpacerH(int = 16)
+                Box(
+                    modifier = Modifier
+                        .background(Color.Red)
+                        .fillMaxWidth()
+                        .clickable {
+                            scope.launch {
+                                _modifier.addFooter(
+                                    HomeEntity.Data(
+                                        title = "addFooter-DATA",
+                                    )
+                                )
+                            }
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = "addFooter ", fontSize = 32.sp)
+                }
+            }
 
+            lazyPagingItems.PagingLazyColumn {
+                PagingItem(it)
             }
-            items(
-                count = lazyPagingItems.itemCount,
-                key = lazyPagingItems.itemKey { it.id },
-                contentType = lazyPagingItems.itemContentType { "MyPagingItems" }
-            ) { index ->
-                val item = lazyPagingItems[index]
-                PagingItem(item)
-            }
+
         }
     }
 }

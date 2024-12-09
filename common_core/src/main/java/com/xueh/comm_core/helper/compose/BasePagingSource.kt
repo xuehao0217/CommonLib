@@ -103,6 +103,9 @@ class PagingDataModifier<T : Any> internal constructor(
 ) {
     private val _removeFlow = MutableStateFlow<Set<Any>>(emptySet())
     private val _updateFlow = MutableStateFlow<Map<Any, T>>(emptyMap())
+    private val _addHeaderFlow = MutableStateFlow<List<T>>(emptyList())
+    private val _addFooterFlow = MutableStateFlow<List<T>>(emptyList())
+
     /** 数据流 */
     val flow = flow
         .onEach { onEach(it) }
@@ -149,6 +152,32 @@ class PagingDataModifier<T : Any> internal constructor(
         _updateFlow.update { emptyMap() }
     }
 
+    /**
+     * 添加addHeader
+     */
+    fun addHeader(item: T) {
+        _addHeaderFlow.update { value ->
+            if (!value.contains(item)) {
+                value + item
+            } else {
+                value
+            }
+        }
+    }
+
+
+    /**
+     * 添加addFooter
+     */
+    fun addFooter(item: T) {
+        _addFooterFlow.update { value ->
+            if (!value.contains(item)) {
+                value + item
+            } else {
+                value
+            }
+        }
+    }
 
     private fun Flow<PagingData<T>>.modify(): Flow<PagingData<T>> {
         return combine(_removeFlow) { data, holder ->
@@ -161,6 +190,18 @@ class PagingDataModifier<T : Any> internal constructor(
                 ?: data.map { item ->
                     holder[getID(item)] ?: item
                 }
+        }.combine(_addHeaderFlow) { data, holder ->
+            holder.fold(data) { paging, t ->
+                paging.insertHeaderItem(
+                    item = t
+                )
+            }
+        }.combine(_addFooterFlow) { pagingData, addFooter ->
+            addFooter.fold(pagingData) { paging, t ->
+                paging.insertFooterItem(
+                    item = t
+                )
+            }
         }
     }
 }
