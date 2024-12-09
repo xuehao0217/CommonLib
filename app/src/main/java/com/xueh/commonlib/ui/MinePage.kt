@@ -32,7 +32,7 @@ class MinePage : NavContent {
             ItemView("是否显示小红点 ${MainComposeActivity.showRedPoint.value}") {
                 MainComposeActivity.showRedPoint.value = !MainComposeActivity.showRedPoint.value
             }
-            ItemView("AgentWebView ${MainComposeActivity.showRedPoint.value}") {
+            ItemView("AgentComposeWeb") {
                 AgentComposeWebActivity.start("www.baidu.com?hideTitle=1","百度")
             }
         }
