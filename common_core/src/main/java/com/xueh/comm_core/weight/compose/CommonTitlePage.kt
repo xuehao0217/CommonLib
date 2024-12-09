@@ -58,21 +58,6 @@ fun CommonTitlePage(
                 modifier = Modifier
                     .systemBarsPadding()
                     .then(modifier),
-//                topBar = {
-//                Spacer(
-//                    modifier = Modifier
-//                        //具体状态栏的颜色在这
-//                        .background(titleBackgroundColor ?: MaterialTheme.colorScheme.background)
-//                        .statusBarsHeight()
-//                        .fillMaxWidth()
-//                )
-//            }, bottomBar = {
-//                Spacer(
-//                    modifier = Modifier
-//                        .navigationBarsHeight()
-//                        .fillMaxWidth()
-//                )
-//            }
             ) {
                 Column(
                     modifier = Modifier

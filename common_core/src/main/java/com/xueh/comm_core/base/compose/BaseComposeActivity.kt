@@ -8,6 +8,7 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,14 +16,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import com.blankj.utilcode.util.LogUtils
 import com.google.accompanist.insets.statusBarsHeight
 import com.xueh.comm_core.R
+import com.xueh.comm_core.base.compose.theme.ComposeMaterial3Theme
+import com.xueh.comm_core.base.compose.theme.GrayAppAdapter
+import com.xueh.comm_core.base.compose.theme.appThemeState
 import com.xueh.comm_core.weight.compose.CommonTitleView
 import com.xueh.comm_core.weight.xml.ViewLoading
 
@@ -47,28 +54,38 @@ abstract class BaseComposeActivity : ComponentActivity() {
                 )
                 onDispose {}
             }
-            Column(
-                Modifier
-                    .fillMaxSize()
-                    .navigationBarsPadding()
-                    .then(if (showStatusBars()) Modifier.statusBarsPadding() else Modifier)
-            ) {
-                if (showTitleView()) {
+
+            val isSystemInDark = isSystemInDarkTheme()
+            LaunchedEffect(isSystemInDark) {
+                appThemeState = appThemeState.copy(darkTheme = isSystemInDark)
+            }
+            ComposeMaterial3Theme {
+                GrayAppAdapter(isGray = false) {
                     Column(
                         Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
+                            .fillMaxSize()
+                            .background(MaterialTheme.colorScheme.background)
+                            .navigationBarsPadding()
                             .then(if (showStatusBars()) Modifier.statusBarsPadding() else Modifier)
                     ) {
-                        CommonTitleView(
-                            title = setTitle(),
-                            showBackIcon = showBackIcon(),
-                            backClick = {
-                                onBackPressedDispatcher.onBackPressed()
-                            })
+                        if (showTitleView()) {
+                            Column(
+                                Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentHeight()
+                                    .then(if (showStatusBars()) Modifier.statusBarsPadding() else Modifier)
+                            ) {
+                                CommonTitleView(
+                                    title = setTitle(),
+                                    showBackIcon = showBackIcon(),
+                                    backClick = {
+                                        onBackPressedDispatcher.onBackPressed()
+                                    })
+                            }
+                        }
+                        setComposeContent()
                     }
                 }
-                setComposeContent()
             }
         }
     }
@@ -83,7 +100,7 @@ abstract class BaseComposeActivity : ComponentActivity() {
     protected open fun showBackIcon() = true
 
 
-    protected open fun showStatusBars()=true
+    protected open fun showStatusBars() = true
 
 
     override fun getResources(): Resources {
