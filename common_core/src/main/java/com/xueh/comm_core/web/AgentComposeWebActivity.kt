@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
@@ -52,49 +53,52 @@ class AgentComposeWebActivity : BaseComposeActivity() {
         }
     }
 
-    var agentWeb: AgentWeb?=null
+    var agentWeb: AgentWeb? = null
     var titleStr by mutableStateOf("")
     var alpha by mutableFloatStateOf(0f)
 
-    override fun showTitleView()=false
+    override fun showTitleView() = false
+
     @Composable
     override fun setComposeContent() {
         val uri = Uri.parse(intent.getStringExtra(WebViewActivity.URL))
         val hideTitle = uri.getQueryParameter("hideTitle") ?: ""
         if (hideTitle.isNotEmpty()) {
             BarUtils.transparentStatusBar(this)
-            BarUtils.setStatusBarLightMode(this,false)
-            WebTitle(titleStr, alpha) {
-                this.finish()
+            BarUtils.setStatusBarLightMode(this, false)
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+                AgentWeb()
+                WebTitle(titleStr, alpha) {
+                    onBackPressedDispatcher.onBackPressed()
+                }
             }
         } else {
-            BarUtils.setStatusBarLightMode(this,true)
+            BarUtils.setStatusBarLightMode(this, true)
             CommonTitleView(
                 title = titleStr,
                 titleBackgroundColor = Color.Transparent,
                 backClick = {
-                    if (agentWeb?.back()==true) {
+                    if (agentWeb?.back() == true) {
                         agentWeb?.back()
-                    }else{
-                        finish()
+                    } else {
+                        onBackPressedDispatcher.onBackPressed()
                     }
                 })
+            AgentWeb()
         }
-
-        AgentWeb()
-
         agentWeb?.webCreator?.webView?.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-            if (hideTitle.isNotEmpty()){
-                alpha = scrollY.toFloat() / (BarUtils.getStatusBarHeight() + ConvertUtils.dp2px(50f))
-                BarUtils.setStatusBarLightMode(this,if(alpha>=1) true else false)
+            if (hideTitle.isNotEmpty()) {
+                alpha =
+                    scrollY.toFloat() / (BarUtils.getStatusBarHeight() + ConvertUtils.dp2px(50f))
+                BarUtils.setStatusBarLightMode(this, if (alpha >= 1) true else false)
             }
         }
     }
 
     @Composable
-    fun AgentWeb(modifier: Modifier=Modifier.fillMaxSize()) {
+    fun AgentWeb(modifier: Modifier = Modifier.fillMaxSize()) {
         AndroidView(
-            modifier =modifier,
+            modifier = modifier,
             factory = {
                 LinearLayout(it).apply {
                     layoutParams = ViewGroup.LayoutParams(
