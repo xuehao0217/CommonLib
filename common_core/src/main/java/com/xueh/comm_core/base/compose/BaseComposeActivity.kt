@@ -51,6 +51,7 @@ abstract class BaseComposeActivity : ComponentActivity() {
                 Modifier
                     .fillMaxSize()
                     .navigationBarsPadding()
+                    .then(if (showStatusBars()) Modifier.statusBarsPadding() else Modifier)
             ) {
                 if (showTitleView()) {
                     Column(
@@ -66,7 +67,6 @@ abstract class BaseComposeActivity : ComponentActivity() {
                                 onBackPressedDispatcher.onBackPressed()
                             })
                     }
-
                 }
                 setComposeContent()
             }
