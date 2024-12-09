@@ -103,7 +103,6 @@ class PagingDataModifier<T : Any> internal constructor(
 ) {
     private val _removeFlow = MutableStateFlow<Set<Any>>(emptySet())
     private val _updateFlow = MutableStateFlow<Map<Any, T>>(emptyMap())
-    private val _addFlow = MutableStateFlow<Map<Any, T>>(emptyMap())
     /** 数据流 */
     val flow = flow
         .onEach { onEach(it) }
