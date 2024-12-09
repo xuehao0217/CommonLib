@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import com.blankj.utilcode.util.ActivityUtils
 import com.lt.compose_views.compose_pager.ComposePagerScope
 import com.lt.compose_views.nav.NavContent
+import com.xueh.comm_core.web.AgentComposeWebActivity
 import com.xueh.commonlib.ui.compose.ItemView
 import com.xueh.commonlib.ui.compose.RouteConfig
 import com.xueh.commonlib.ui.xml.MainActivity
@@ -30,6 +31,9 @@ class MinePage : NavContent {
             }
             ItemView("是否显示小红点 ${MainComposeActivity.showRedPoint.value}") {
                 MainComposeActivity.showRedPoint.value = !MainComposeActivity.showRedPoint.value
+            }
+            ItemView("AgentWebView ${MainComposeActivity.showRedPoint.value}") {
+                AgentComposeWebActivity.start("www.baidu.com?hideTitle=1","百度")
             }
         }
 
