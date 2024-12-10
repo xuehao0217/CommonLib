@@ -167,8 +167,12 @@ class PagingDataModifier<T : Any> internal constructor(
 
 
     fun removeAddHeader(id: Any) {
-        _addHeaderFlow.update { currentList ->
-            currentList.filter { getID(it) != id } // 过滤出ID不等于传入的id的项
+        if (_addHeaderFlow.value.isEmpty()) {
+            remove(id)
+        }else{
+            _addHeaderFlow.update { currentList ->
+                currentList.filter { getID(it) != id } // 过滤出ID不等于传入的id的项
+            }
         }
     }
 
@@ -187,8 +191,12 @@ class PagingDataModifier<T : Any> internal constructor(
 
 
     fun removeAddFooter(id: String) {
-        _addFooterFlow.update { currentList ->
-            currentList.filter { getID(it) != id } // 过滤出ID不等于传入的id的项
+        if (_addFooterFlow.value.isEmpty()) {
+            remove(id)
+        }else {
+            _addFooterFlow.update { currentList ->
+                currentList.filter { getID(it) != id } // 过滤出ID不等于传入的id的项
+            }
         }
     }
 
