@@ -28,6 +28,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
+import androidx.compose.foundation.pager.PagerDefaults
 import androidx.compose.foundation.pager.PagerScope
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.VerticalPager
@@ -242,12 +243,14 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalPager(
     modifier: Modifier = Modifier,
     pagingRefreshStateContent: @Composable (() -> Unit) = { PagingStateRefresh() },
     key: ((index: Int) -> Any)? = null,
+    beyondViewportPageCount: Int = PagerDefaults.BeyondViewportPageCount,
     pageContent: @Composable PagerScope.(T) -> Unit
 ) {
     pagingRefreshStateContent()
     VerticalPager(
         modifier = modifier,
         state = state,
+        beyondViewportPageCount=beyondViewportPageCount,
         key = key
     ) { index ->
         this@PagingVerticalPager[index]?.let {
