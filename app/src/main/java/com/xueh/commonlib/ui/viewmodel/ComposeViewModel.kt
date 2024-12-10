@@ -53,6 +53,10 @@ class ComposeViewModel : BaseRequstViewModel<RestApi>() {
                         api.getHome(pageNumber).data.datas
 //                    }
                 }
+
+                4-> {
+                      emptyList()
+                }
                 else -> {
                     // 处理可能的错误，这里可以通过 showError标志来控制
                     if (showError) {

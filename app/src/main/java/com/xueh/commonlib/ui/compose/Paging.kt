@@ -274,6 +274,19 @@ fun PagingWithLazyList() {
                 ) {
                     Text(text = "remove ", fontSize = 32.sp)
                 }
+
+                SpacerH(int = 16)
+                Box(
+                    modifier = Modifier
+                        .background(Color.Red)
+                        .fillMaxWidth()
+                        .clickable {
+                            _modifier.removeAddHeader(1111)
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = "removeAddHeader ", fontSize = 32.sp)
+                }
                 SpacerH(int = 16)
 
                 Box(
@@ -285,6 +298,7 @@ fun PagingWithLazyList() {
                                 _modifier.addHeader(
                                     HomeEntity.Data(
                                         title = "addHeader-DATA",
+                                        id = 1111
                                     )
                                 )
                             }
