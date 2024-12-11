@@ -34,11 +34,9 @@ googleAccompanistInsets = "0.31.5-beta"
 navigationComposeVersion = "2.8.3"
 paging = "3.3.4"
 composeSmartrefreshVersion = "2.1.0"
-animation = "1.7.5"
 any_pop_dialog_compose = "1.0.4"
 composeviews = "1.7.0.1"
 composeWebviewVersion = "0.33.6"
-composeRuntimeLivedata = "1.7.5"
 #--------------网络相关-----------------
 retrofit = "2.11.0"
 okhttpVersion = "5.0.0-alpha.14"
@@ -94,20 +92,20 @@ androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+compose-animation= { module = "androidx.compose.animation:animation",name = "animation" }
+compose-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata", name="runtime-livedata" }
+
 constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose-android", version.ref = "constraintLayoutCompose" }
 compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "navigationComposeVersion" }
 compose-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleKtx" }
 compose-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleKtx" }
-compose-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "composeRuntimeLivedata" }
 accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
 accompanist-placeholder = { module = "com.google.accompanist:accompanist-placeholder-material", version.ref = "accompanist" }
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
-accompanist-swiperefresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "accompanist" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 
 ccompanist = { module = "com.google.accompanist:accompanist-insets", version.ref = "googleAccompanistInsets" }
 compose-paging = { module = "androidx.paging:paging-compose", version.ref = "paging" }
-compose-animation= { module = "androidx.compose.animation:animation", version.ref = "animation" }
 
 composesmartrefresh = { module = "io.github.loren-moon:composesmartrefresh", version.ref = "composeSmartrefreshVersion" }
 any_pop_dialog_compose = { module = "io.github.TheMelody:any_pop_dialog_compose", version.ref = "any_pop_dialog_compose" }
