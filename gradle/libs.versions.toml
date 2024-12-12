@@ -1,6 +1,6 @@
 [versions]
 agp = "8.3.2"
-kotlin = "2.0.21"
+kotlin = "2.1.0"
 kotlinCoroutinesAndroidVersion = "1.9.0"
 kotlinCoroutinesCoreVersion = "1.9.0"
 composeBom = "2024.12.01"
