@@ -59,8 +59,7 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:requestLegacyExternalStorage="true"
         android:resizeableActivity="false"
-        android:supportsRtl="true"
-        android:usesCleartextTraffic="false">
+        android:supportsRtl="true">
         <activity android:name="com.xueh.comm_core.web.WebViewActivity" />
         <activity android:name="com.xueh.comm_core.web.AgentComposeWebActivity" />
     </application>
