@@ -4,9 +4,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <uses-permission android:name="android.permission.READ_CALENDAR" />
-    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
-
     <!-- https://github.com/getActivity/XXPermissions-->
     <!--需要注意的是：这个选项是框架用于判断当前项目是否适配了分区存储，需要注意的是，如果你的项目已经适配了分区存储特性，
     可以使用 READ_EXTERNAL_STORAGE、WRITE_EXTERNAL_STORAGE 来申请权限，如果你的项目还没有适配分区特性，
@@ -65,19 +62,6 @@
         android:resizeableActivity="false"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true">
-        <meta-data
-            android:name="android.max_aspect"
-            android:value="2.4" />
-
-        <!--适配华为（huawei）刘海屏-->
-        <meta-data
-            android:name="android.notch_support"
-            android:value="true" />
-        <!--适配小米（xiaomi）刘海屏-->
-        <meta-data
-            android:name="notch.config"
-            android:value="portrait|landscape" />
-
         <activity android:name="com.xueh.comm_core.web.WebViewActivity" />
         <activity android:name="com.xueh.comm_core.web.AgentComposeWebActivity" />
     </application>
