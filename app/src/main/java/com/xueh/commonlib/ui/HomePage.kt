@@ -62,7 +62,7 @@ import com.xueh.comm_core.web.WebViewPage
 import com.xueh.comm_core.weight.compose.CommonTitlePage
 import com.xueh.commonlib.R
 import com.xueh.commonlib.ui.compose.BarPage
-import com.xueh.commonlib.ui.compose.CommonLazyColumnDatasPage
+import com.xueh.commonlib.ui.compose.CarouselExamples
 import com.xueh.commonlib.ui.compose.CommonPaging
 import com.xueh.commonlib.ui.compose.CommonRefreshColumnData
 import com.xueh.commonlib.ui.compose.CommonTabPage
@@ -146,10 +146,10 @@ class HomePage : NavContent {
             composable(RouteConfig.ActionList) {
                 ToastUtils.showShort("${navController.currentBackStackEntry?.destination}")
 
-                var str = listOf(
+                val str = listOf(
                     ItemData("Dialog", RouteConfig.DialogPage),
                     ItemData("公用CommonTabPager", RouteConfig.CommonTabPager),
-                    ItemData("公用CommonLazyColumnDatasPage", RouteConfig.CommonLazyColumnDatas),
+                    ItemData("CarouselExamples", RouteConfig.CarouselExamples),
                     ItemData("公用CommonRefreshColumnData", RouteConfig.CommonRefreshColumnData),
                     ItemData("公用CommonPagingPage", RouteConfig.CommonPaging),
                     ItemData("ConstraintSet使用", RouteConfig.ConstraintSet),
@@ -227,8 +227,8 @@ class HomePage : NavContent {
             composable(RouteConfig.CommonTabPager) {
                 CommonTabPage()
             }
-            composable(RouteConfig.CommonLazyColumnDatas) {
-                CommonLazyColumnDatasPage()
+            composable(RouteConfig.CarouselExamples) {
+                CarouselExamples()
             }
             composable(RouteConfig.CommonRefreshColumnData) {
                 CommonRefreshColumnData()
