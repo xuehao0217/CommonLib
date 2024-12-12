@@ -79,7 +79,6 @@
             android:value="portrait|landscape" />
 
         <activity android:name="com.xueh.comm_core.web.WebViewActivity" />
-        <activity android:name="com.xueh.comm_core.web.WebViewComposeActivity" />
         <activity android:name="com.xueh.comm_core.web.AgentComposeWebActivity" />
     </application>
 
