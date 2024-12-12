@@ -109,15 +109,14 @@ dependencies {
 
     //---------------工具类的库--------------------------
     api (libs.interval)
-    api(libs.agentweb)
     api(libs.gson)
     api(libs.utilcodex)
     api(libs.progressmanager)
     api(libs.eventbus)
     api(libs.xxPermissions)
     api(libs.logger)
-
     //--------------XML相关一些库--------------------------
+    api(libs.agentweb)
     api(libs.material)
     api(libs.recyclerview)
     api(libs.github.glide)
