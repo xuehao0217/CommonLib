@@ -13,10 +13,14 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerDefaults
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,8 +36,12 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.*
+import androidx.compose.ui.text.Placeholder
+import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil3.compose.AsyncImage
@@ -194,6 +202,17 @@ fun SpacerH(int: Int) {
     Spacer(Modifier.height(int.dp))
 }
 
+@Composable
+fun SpacerWidth(int: Dp) {
+    Spacer(Modifier.width(int))
+}
+
+
+@Composable
+fun SpacerHeight(int: Dp) {
+    Spacer(Modifier.height(int))
+}
+
 
 //转圈loading
 @Composable
@@ -236,6 +255,20 @@ fun BoxText(
 }
 
 
+@Composable
+fun BoxText(
+    text: String,
+    style: TextStyle = androidx.compose.material3.LocalTextStyle.current,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier = modifier, contentAlignment = Alignment.Center) {
+        androidx.compose.material3.Text(
+            text = text, style = style
+        )
+    }
+}
+
+
 //阴影垂直
 @Composable
 fun ShadowVerticalView(height: Int = 50, modifier: Modifier = Modifier) {
@@ -255,7 +288,7 @@ fun ShadowVerticalView(height: Int = 50, modifier: Modifier = Modifier) {
 
 //公用带滑动Tab页面
 @Composable
-fun CommonTabPage(tabsName: List<String>, pageContent: @Composable (page: Int) -> Unit) {
+fun CommonTabPage(beyondViewportPageCount: Int = PagerDefaults.BeyondViewportPageCount, tabsName: List<String>, pageContent: @Composable (page: Int) -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
         val pagerState = rememberPagerState(pageCount = {
             tabsName.size
@@ -287,7 +320,7 @@ fun CommonTabPage(tabsName: List<String>, pageContent: @Composable (page: Int) -
             }
         }
 
-        HorizontalPager(state = pagerState, Modifier.weight(1f)) { page ->
+        HorizontalPager(state = pagerState, Modifier.weight(1f),beyondViewportPageCount=beyondViewportPageCount) { page ->
             if (page == pagerState.currentPage) {
 //                pageContent(page, page == pagerState.currentPage)
                 pageContent(page)
@@ -311,7 +344,7 @@ delClick = {
     input = ""
 },
 onValueChange = {
-    input = it.uppercase()
+    input = it
 },
 keyboardOptions = KeyboardOptions(
 keyboardType = KeyboardType.Text,
@@ -320,9 +353,6 @@ keyboardType = KeyboardType.Text,
 maxLength = 7,
 textFieldPadding = 0,
 textFieldEnabled = textFieldEnabled,
-hintText = "Please enter keywords",
-hintTextColor = cl_999999,
-hintTextSize = 12.sp,
 delIconId = R.mipmap.ic_search_close,
 delIconSize = 12.dp,
 keyboardActions = KeyboardActions(
@@ -338,17 +368,15 @@ delIconEndDP = 12, modifier = Modifier
 
 @Composable
 fun MyTextField(
-    hintText: String = "",
-    hintTextColor: Color = Color(0xFF999999),
-    hintTextSize: TextUnit = 12.sp,
-    @DrawableRes delIconId: Int,
-    delIconEndDP: Int = 9,
-    delIconSize: Dp = 8.dp,
     text: String = "",
-    textColor: Color = Color.Unspecified,
-    textSize: TextUnit = 12.sp,
+    style: TextStyle = androidx.compose.material3.LocalTextStyle.current,
+    hintText: String = "",
+    hintStyle: TextStyle = androidx.compose.material3.LocalTextStyle.current,
+    @DrawableRes delIconId: Int,
+    delIconEndDP: Dp = 8.dp,
+    delIconSize: Dp = 8.dp,
     modifier: Modifier = Modifier,
-    textFieldPadding: Int = 34,
+    textFieldPadding: Dp = 18.dp,
     textFieldEnabled: Boolean = true,
     maxLength: Int = 12,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -364,11 +392,7 @@ fun MyTextField(
     ) {
         BasicTextField(
             value = text,
-            textStyle = TextStyle(
-                fontSize = textSize,
-                fontWeight = FontWeight(400),
-                color = textColor,
-            ),
+            textStyle = style,
             onValueChange = {
                 if (it.length <= maxLength) {
                     onValueChange.invoke(it)
@@ -377,7 +401,7 @@ fun MyTextField(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = textFieldPadding.dp),
+                .padding(horizontal = textFieldPadding),
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions,
             maxLines = 1,
@@ -386,9 +410,7 @@ fun MyTextField(
                     contentAlignment = Alignment.CenterStart
                 ) {
                     if (text.isEmpty()) {
-                        Text(
-                            text = hintText, color = hintTextColor, fontSize = hintTextSize,
-                        )
+                        Text(text = hintText, style=hintStyle)
                     }
                     innerTextField()
                 }
@@ -402,23 +424,21 @@ fun MyTextField(
                     .click {
                         delClick.invoke()
                     })
-                SpacerW(int = delIconEndDP)
+                SpacerWidth(int = delIconEndDP)
             }
-
         }
-
-
     }
 }
 
 
 @Composable
-fun HighlightedText(
+fun HighlightText(
     text: String,
     textColor: Color = Color.Unspecified,
     highlight: String,
     highlightColor: Color = Color.Unspecified,
-    modifier: Modifier
+    modifier: Modifier,
+    style: TextStyle = androidx.compose.material3.LocalTextStyle.current
 ) {
     val annotatedString = buildAnnotatedString {
         withStyle(style = androidx.compose.material3.LocalTextStyle.current.toSpanStyle()) {
@@ -435,8 +455,52 @@ fun HighlightedText(
     }
     androidx.compose.material3.Text(
         text = annotatedString,
-        fontSize = 16.sp,
         modifier = modifier,
         color = textColor,
+        style = style
+    )
+}
+
+
+@Preview
+@Composable
+fun SplicingText(
+    str: String = "",
+    modifier: Modifier = Modifier,
+    style: TextStyle = androidx.compose.material3.LocalTextStyle.current
+) {
+    val annotatedString = buildAnnotatedString {
+        appendInlineContent(id = "topicId")
+        append(str)
+    }
+    val inlineContentMap = mapOf(
+        "topicId" to InlineTextContent(
+            Placeholder(43.sp, 18.sp, PlaceholderVerticalAlign.TextCenter)
+        ) {
+            Row {
+                BoxText(
+                    text = "Topic",
+                    textColor = Color(0xFFFFFFFF),
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight(500),
+                    modifier = Modifier
+                        .width(35.dp)
+                        .height(18.dp)
+                        .background(
+                            color = Color(0xFFFE3714),
+                            shape = RoundedCornerShape(size = 3.dp)
+                        )
+                )
+                SpacerW(int = 8)
+            }
+        },
+    )
+    androidx.compose.material3.Text(
+        annotatedString,
+        inlineContent = inlineContentMap,
+        maxLines = 2,
+        overflow = TextOverflow.Ellipsis,
+        style = style,
+        modifier = modifier,
     )
 }

@@ -94,13 +94,6 @@ fun RefreshLoadUse() {
         }
         //--------------------------------------------------------------------------------------------------
 
-        var dataList by remember { mutableStateOf<List<HomeEntity.Data>>(emptyList()) }
-        LaunchedEffect(homeDatas) {
-            snapshotFlow { homeDatas.itemSnapshotList.items }.collect { items ->
-                dataList = items.toList()
-            }
-        }
-
         homeDatas.PagingRefreshList(lazyListState = lazyListState, pagingRefreshStateContent = {
             homeDatas.PagingStateRefresh(stateEmpty = {
                 Box(
