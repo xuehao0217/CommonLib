@@ -9,7 +9,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import com.blankj.utilcode.util.LogUtils
-import com.google.accompanist.insets.statusBarsHeight
 import com.xueh.comm_core.R
 import com.xueh.comm_core.base.compose.theme.ComposeMaterial3Theme
 import com.xueh.comm_core.base.compose.theme.GrayAppAdapter

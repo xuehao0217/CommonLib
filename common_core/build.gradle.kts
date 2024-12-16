@@ -70,8 +70,6 @@ dependencies {
     api( libs.compose.animation)
     api(libs.androidx.activity.compose)
     api(libs.compose.paging)
-    api(libs.accompanist.pager.indicators)
-//    api(libs.ccompanist)
     api(libs.accompanist.systemuicontroller)
     api(libs.accompanist.permissions)
     api(libs.accompanist.placeholder)
