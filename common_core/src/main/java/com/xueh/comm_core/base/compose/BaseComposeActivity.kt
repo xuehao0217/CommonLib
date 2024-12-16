@@ -44,11 +44,11 @@ abstract class BaseComposeActivity : ComponentActivity() {
                     statusBarStyle = SystemBarStyle.auto(
                         android.graphics.Color.TRANSPARENT,
                         android.graphics.Color.TRANSPARENT,
-                    ) { false }, //这里的意思是是否需要检测深色主题模式，我们使用自己的背景，所以不需要直接设置为false,下面也是一样的
+                    ) { isSystemBarStyleDarkMode() }, //这里的意思是是否需要检测深色主题模式，我们使用自己的背景，所以不需要直接设置为false,下面也是一样的
                     navigationBarStyle = SystemBarStyle.auto(
                         android.graphics.Color.TRANSPARENT,
                         android.graphics.Color.TRANSPARENT,
-                    ) { false },
+                    ) { isSystemBarStyleDarkMode() },
                 )
                 onDispose {}
             }
@@ -100,6 +100,7 @@ abstract class BaseComposeActivity : ComponentActivity() {
 
     protected open fun showStatusBars() = true
 
+    protected open fun isSystemBarStyleDarkMode() = false
 
     override fun getResources(): Resources {
         val resources = super.getResources()
