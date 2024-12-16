@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -27,6 +29,7 @@ import com.xueh.comm_core.weight.compose.click
  * 创建日期: 2022/10/28
  * 备注：
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun DialogPage() {
@@ -34,6 +37,11 @@ fun DialogPage() {
     val fullScreenDialog = remember { mutableStateOf(false) }
     var bottomSheetDialog by remember { mutableStateOf(false) }
     var customDialog by remember { mutableStateOf(false) }
+    var showBottomSheet by remember { mutableStateOf(false) }
+    val sheetState = androidx.compose.material3.rememberModalBottomSheetState(
+        skipPartiallyExpanded = false,
+    )
+
 
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxSize()) {
         Spacer(modifier = Modifier.height(15.dp))
@@ -76,6 +84,16 @@ fun DialogPage() {
                 .click {
                     customDialog = true
                 })
+        Spacer(modifier = Modifier.height(15.dp))
+        BoxText(text = "BottomSheet",
+            textColor = Color.White,
+            modifier = Modifier
+                .size(180.dp, 44.dp)
+                .clip(RoundedCornerShape(22.dp))
+                .background(androidx.compose.material3.MaterialTheme.colorScheme.primary)
+                .click {
+                    showBottomSheet = true
+                })
     }
 
 
@@ -115,6 +133,19 @@ fun DialogPage() {
             .clip(RoundedCornerShape(18.dp))
             .background(androidx.compose.material3.MaterialTheme.colorScheme.primary)) {
 
+        }
+    }
+
+    if (showBottomSheet) {
+        ModalBottomSheet(
+            modifier = Modifier.fillMaxHeight(),
+            sheetState = sheetState,
+            onDismissRequest = { showBottomSheet = false }
+        ) {
+            androidx.compose.material3.Text(
+                "Swipe up to open sheet. Swipe down to dismiss.",
+                modifier = Modifier.padding(16.dp)
+            )
         }
     }
 

@@ -470,16 +470,16 @@ fun SplicingText(
     style: TextStyle = androidx.compose.material3.LocalTextStyle.current
 ) {
     val annotatedString = buildAnnotatedString {
-        appendInlineContent(id = "topicId")
+        appendInlineContent(id = "Splicing")
         append(str)
     }
     val inlineContentMap = mapOf(
-        "topicId" to InlineTextContent(
+        "Splicing" to InlineTextContent(
             Placeholder(43.sp, 18.sp, PlaceholderVerticalAlign.TextCenter)
         ) {
             Row {
                 BoxText(
-                    text = "Topic",
+                    text = "Splicing",
                     textColor = Color(0xFFFFFFFF),
                     fontSize = 10.sp,
                     fontWeight = FontWeight(500),
