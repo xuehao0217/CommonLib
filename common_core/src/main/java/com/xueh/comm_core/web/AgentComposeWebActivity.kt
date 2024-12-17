@@ -29,7 +29,9 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ConvertUtils
+import com.blankj.utilcode.util.Utils
 import com.just.agentweb.AgentWeb
+import com.just.agentweb.AgentWebConfig
 import com.just.agentweb.DefaultWebClient
 import com.just.agentweb.MiddlewareWebChromeBase
 import com.xueh.comm_core.R
@@ -42,6 +44,7 @@ class AgentComposeWebActivity : BaseComposeActivity() {
         const val URL = "url"
 
         fun start(url: String, title: String = "") {
+            AgentWebConfig.clearDiskCache(Utils.getApp())
             ActivityUtils.startActivity(
                 Intent(
                     ActivityUtils.getTopActivity(),

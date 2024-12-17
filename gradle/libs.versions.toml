@@ -29,7 +29,7 @@ lifecycleKtx = "2.8.7"
 #--------------Compose相关-----------------
 coilCompose = "3.0.4"
 constraintLayoutCompose = "1.1.0"
-accompanist = "0.36.0"
+accompanist = "0.37.0"
 navigationComposeVersion = "2.8.3"
 paging = "3.3.5"
 composeSmartrefreshVersion = "2.1.0"
