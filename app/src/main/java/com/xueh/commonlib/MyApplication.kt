@@ -2,9 +2,11 @@ package com.xueh.commonlib
 
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.PathUtils
+import com.blankj.utilcode.util.Utils
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.chuckerteam.chucker.api.RetentionManager
+import com.just.agentweb.AgentWebConfig
 import com.xueh.comm_core.base.BaseApplication
 import com.xueh.comm_core.net.HttpRequest
 import me.jessyan.progressmanager.ProgressManager
@@ -19,6 +21,7 @@ class MyApplication : BaseApplication() {
     override fun init() {
         initLog()
         initNet()
+        AgentWebConfig.clearDiskCache(Utils.getApp())
     }
 
     private fun initNet() {

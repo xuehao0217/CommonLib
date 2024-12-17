@@ -44,7 +44,6 @@ class AgentComposeWebActivity : BaseComposeActivity() {
         const val URL = "url"
 
         fun start(url: String, title: String = "") {
-            AgentWebConfig.clearDiskCache(Utils.getApp())
             ActivityUtils.startActivity(
                 Intent(
                     ActivityUtils.getTopActivity(),
