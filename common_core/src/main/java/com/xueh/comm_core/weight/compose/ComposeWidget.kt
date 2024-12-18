@@ -64,6 +64,7 @@ import kotlinx.coroutines.launch
 fun ImageLoadAsyncImage(
     url: String, modifier: Modifier = Modifier, placeholder: Painter? = null,
     error: Painter? = null, onSuccess: ((AsyncImagePainter.State.Success) -> Unit)? = null,
+    onError: ((AsyncImagePainter.State.Error) -> Unit)? = null,
 ) = AsyncImage(
     model = ImageRequest.Builder(LocalContext.current).data(url.trim()).crossfade(true).build(),
     modifier = modifier,
@@ -71,6 +72,7 @@ fun ImageLoadAsyncImage(
     contentDescription = null,
     placeholder = placeholder, //加载中展位图
     error = error,
+    onError = onError,
     onSuccess = onSuccess //加载成功
 )
 
