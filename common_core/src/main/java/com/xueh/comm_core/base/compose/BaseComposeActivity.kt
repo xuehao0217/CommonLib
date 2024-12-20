@@ -20,6 +20,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
@@ -34,6 +37,8 @@ import com.xueh.comm_core.weight.xml.ViewLoading
 //ComponentActivity
 //AppCompatActivity  可以解决弹窗问题
 abstract class BaseComposeActivity : ComponentActivity() {
+    // 默认状态栏图标颜色是深色
+    var isStatusBarLight by mutableStateOf(false)
     override fun onCreate(savedInstanceState: Bundle?) {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
         super.onCreate(savedInstanceState)
@@ -44,11 +49,11 @@ abstract class BaseComposeActivity : ComponentActivity() {
                     statusBarStyle = SystemBarStyle.auto(
                         android.graphics.Color.TRANSPARENT,
                         android.graphics.Color.TRANSPARENT,
-                    ) { isSystemBarStyleDarkMode() }, //这里的意思是是否需要检测深色主题模式，我们使用自己的背景，所以不需要直接设置为false,下面也是一样的
+                    ) { isStatusBarLight }, //这里的意思是是否需要检测深色主题模式，我们使用自己的背景，所以不需要直接设置为false,下面也是一样的
                     navigationBarStyle = SystemBarStyle.auto(
                         android.graphics.Color.TRANSPARENT,
                         android.graphics.Color.TRANSPARENT,
-                    ) { isSystemBarStyleDarkMode() },
+                    ) { isStatusBarLight },
                 )
                 onDispose {}
             }
@@ -99,8 +104,6 @@ abstract class BaseComposeActivity : ComponentActivity() {
 
 
     protected open fun showStatusBars() = true
-
-    protected open fun isSystemBarStyleDarkMode() = false
 
     override fun getResources(): Resources {
         val resources = super.getResources()
