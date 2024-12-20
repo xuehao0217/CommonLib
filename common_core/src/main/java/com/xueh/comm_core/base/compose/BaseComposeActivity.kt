@@ -46,14 +46,8 @@ abstract class BaseComposeActivity : ComponentActivity() {
         setContent {
             DisposableEffect(Unit) {
                 enableEdgeToEdge(
-                    statusBarStyle = SystemBarStyle.auto(
-                        android.graphics.Color.TRANSPARENT,
-                        android.graphics.Color.TRANSPARENT,
-                    ) { isStatusBarLight }, //这里的意思是是否需要检测深色主题模式，我们使用自己的背景，所以不需要直接设置为false,下面也是一样的
-                    navigationBarStyle = SystemBarStyle.auto(
-                        android.graphics.Color.TRANSPARENT,
-                        android.graphics.Color.TRANSPARENT,
-                    ) { isStatusBarLight },
+                    SystemBarStyle.auto(android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT) { isStatusBarLight },
+                    SystemBarStyle.auto(android.graphics.Color.WHITE, android.graphics.Color.BLACK) { isStatusBarLight },
                 )
                 onDispose {}
             }
