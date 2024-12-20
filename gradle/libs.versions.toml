@@ -30,6 +30,7 @@ lifecycleKtx = "2.8.7"
 coilCompose = "3.0.4"
 constraintLayoutCompose = "1.1.0"
 accompanist = "0.36.0"
+permissions = "0.37.0"
 navigationComposeVersion = "2.8.3"
 paging = "3.3.5"
 composeSmartrefreshVersion = "2.1.0"
@@ -99,7 +100,7 @@ compose-navigation = { module = "androidx.navigation:navigation-compose", versio
 compose-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleKtx" }
 compose-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleKtx" }
 accompanist-placeholder = { module = "com.google.accompanist:accompanist-placeholder-material", version.ref = "accompanist" }
-accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "permissions" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 
 compose-paging = { module = "androidx.paging:paging-compose", version.ref = "paging" }

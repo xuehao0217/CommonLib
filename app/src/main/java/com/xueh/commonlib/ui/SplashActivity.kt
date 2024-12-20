@@ -20,6 +20,9 @@ class SplashActivity : BaseComposeActivity() {
         super.onCreate(savedInstanceState)
     }
 
+    override fun showTitleView(): Boolean {
+        return false
+    }
     @Composable
     override fun setComposeContent() {
         Interval(
