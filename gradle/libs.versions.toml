@@ -1,8 +1,7 @@
 [versions]
 agp = "8.3.2"
 kotlin = "2.0.21"
-kotlinCoroutinesAndroidVersion = "1.9.0"
-kotlinCoroutinesCoreVersion = "1.9.0"
+kotlinCoroutinesVersion = "1.10.1"
 composeBom = "2024.12.01"
 #--------------基础库相关-----------------
 junit = "4.13.2"
@@ -61,8 +60,8 @@ brvah = "3.0.7"
 
 [libraries]
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
-kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinCoroutinesAndroidVersion" }
-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutinesCoreVersion" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinCoroutinesVersion" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutinesVersion" }
 #-----------------------------------------------基础库相关-------------------------------------------------------------
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
