@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.blankj.utilcode.util.Utils
 
-var appThemeType by mutableStateOf(AppThemeType.Dark)
+var appThemeType by mutableStateOf(AppThemeType.Light)
 enum class AppThemeType {
     FOLLOW_SYSTEM, Light, Dark;
     companion object {
