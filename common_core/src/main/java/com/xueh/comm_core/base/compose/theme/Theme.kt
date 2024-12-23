@@ -1,49 +1,12 @@
 package com.xueh.comm_core.base.compose.theme
 
-import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
-
-
-@Composable
-fun ComposeMaterial3Theme(
-    darkTheme: Boolean =  appThemeState.darkTheme,
-    appThemeColorState: AppThemeColorType =  appThemeState.appThemeColorType,
-    content: @Composable () -> Unit,
-) {
-    val context = LocalContext.current
-    val colors = when (appThemeColorState) {
-        AppThemeColorType.GREEN, AppThemeColorType.DEF -> if (darkTheme) DarkGreenColorPalette else LightGreenColorPalette
-        AppThemeColorType.PURPLE -> if (darkTheme) DarkPurpleColorPalette else LightPurpleColorPalette
-        AppThemeColorType.ORANGE -> if (darkTheme) DarkOrangeColorPalette else LightOrangeColorPalette
-        AppThemeColorType.BLUE -> if (darkTheme) DarkBlueColorPalette else LightBlueColorPalette
-        AppThemeColorType.WALLPAPER -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-            if (darkTheme)
-                dynamicDarkColorScheme(context)
-            else
-                dynamicLightColorScheme(context)
-        else
-            if (darkTheme)
-                DarkGreenColorPalette
-            else
-                LightGreenColorPalette
-    }
-    androidx.compose.material3.MaterialTheme(
-        colorScheme = colors,
-        content = content
-    )
-}
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //黑暗 绿色
-private val DarkGreenColorPalette = darkColorScheme(
+val DarkGreenColorPalette = darkColorScheme(
     primary = green500,
     primaryContainer = green200,
     onPrimaryContainer = green700,
@@ -62,7 +25,7 @@ private val DarkGreenColorPalette = darkColorScheme(
 )
 
 //黑暗 紫色
-private val DarkPurpleColorPalette = darkColorScheme(
+val DarkPurpleColorPalette = darkColorScheme(
     primary = purple200,
     primaryContainer = purple700,
     secondary = teal200,
@@ -80,7 +43,7 @@ private val DarkPurpleColorPalette = darkColorScheme(
 )
 
 //黑暗蓝色
-private val DarkBlueColorPalette = darkColorScheme(
+val DarkBlueColorPalette = darkColorScheme(
     primary = blue200,
     primaryContainer = blue700,
     secondary = teal200,
@@ -98,7 +61,7 @@ private val DarkBlueColorPalette = darkColorScheme(
 )
 
 //黑暗 橘色
-private val DarkOrangeColorPalette = darkColorScheme(
+val DarkOrangeColorPalette = darkColorScheme(
     primary = orange200,
     primaryContainer = orange700,
     secondary = teal200,
@@ -116,7 +79,7 @@ private val DarkOrangeColorPalette = darkColorScheme(
 )
 
 // Light pallets
-private val LightGreenColorPalette = lightColorScheme(
+val LightGreenColorPalette = lightColorScheme(
     primary = green500,
     primaryContainer = green200,
     onPrimaryContainer = green700,
@@ -133,7 +96,7 @@ private val LightGreenColorPalette = lightColorScheme(
     onSurfaceVariant = Color.Black
 )
 
-private val LightPurpleColorPalette = lightColorScheme(
+val LightPurpleColorPalette = lightColorScheme(
     primary = purple,
     primaryContainer = purple700,
     secondary = teal200,
@@ -149,7 +112,7 @@ private val LightPurpleColorPalette = lightColorScheme(
     onSurfaceVariant = Color.Black,
 )
 
-private val LightBlueColorPalette = lightColorScheme(
+val LightBlueColorPalette = lightColorScheme(
     primary = blue500,
     primaryContainer = blue700,
     secondary = teal200,
@@ -165,7 +128,7 @@ private val LightBlueColorPalette = lightColorScheme(
     onSurfaceVariant = Color.Black,
 )
 
-private val LightOrangeColorPalette = lightColorScheme(
+val LightOrangeColorPalette = lightColorScheme(
     primary = orange500,
     primaryContainer = orange700,
     secondary = teal200,

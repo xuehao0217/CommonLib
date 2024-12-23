@@ -1,8 +1,5 @@
 package com.xueh.comm_core.base.compose.theme
-
-import androidx.compose.material.Colors
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 
 
@@ -24,18 +21,37 @@ val orange700 = Color(0xFFba000d)
 
 
 val teal200 = Color(0xff80deea)
-val twitterColor = Color(0xFF1DA1F2)
-val tiktokBlue = Color(0xFF69C9D0)
-val tiktokRed = Color(0xFFEE1D52)
-val tiktokBlack = Color(0xFF010101)
 val blue = Color(0xFF5851DB)
 
-val orange = Color(0xFFF56040)
-val yellow = Color(0xFFFCAF45)
-val graySurface = Color(0xFF2A2A2A)
-val gradientGreenColors = listOf(green200, green500, green700)
-val gradientRedColors = listOf(orange, tiktokRed)
-val gradientBluePurple = listOf(blue, purple)
-val instagramGradient = listOf(blue, purple, orange, yellow)
+
+val RedBookRed = Color(0xFFFF2E4D)
+val WhiteBackground = Color(0xFFFFFFFF)
+val BlackBackground = Color(0xFF1F1D1D)
+
+@Immutable
+data class AppThemeColors(
+    val theme: Color,
+    val background: Color,
+    val title: Color,
+    val body: Color,
+    val divider: Color
+)
+
+val lightThemeColors = AppThemeColors(
+    theme = RedBookRed,
+    background = WhiteBackground,
+    title = Color.Black,
+    body = Color(0xFF666666),
+    divider = Color.LightGray
+)
+
+val darkThemeColors = AppThemeColors(
+    theme = RedBookRed,
+    background = BlackBackground,
+    title = Color.White,
+    body = Color(0xFF666666),
+    divider = Color.DarkGray
+)
+
 
 

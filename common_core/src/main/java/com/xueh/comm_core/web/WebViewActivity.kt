@@ -32,9 +32,9 @@ import com.just.agentweb.AgentWeb
 import com.just.agentweb.DefaultWebClient
 import com.just.agentweb.MiddlewareWebChromeBase
 import com.xueh.comm_core.R
+import com.xueh.comm_core.base.compose.CommonTitleView
 import com.xueh.comm_core.base.xml.BaseActivity
 import com.xueh.comm_core.databinding.ActivityWebViewBinding
-import com.xueh.comm_core.weight.compose.CommonTitleView
 
 
 /**

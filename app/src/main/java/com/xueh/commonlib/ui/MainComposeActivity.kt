@@ -22,6 +22,7 @@ import com.lt.compose_views.nav.PagerNav
 import com.lt.compose_views.nav.PagerNavState
 import com.lt.compose_views.util.rememberMutableStateOf
 import com.xueh.comm_core.base.compose.BaseComposeActivity
+import com.xueh.comm_core.weight.compose.BoxWrapper
 import com.xueh.comm_core.weight.compose.Nav
 import com.xueh.comm_core.weight.compose.NavData
 import com.xueh.comm_core.weight.compose.NavPage
@@ -36,53 +37,52 @@ import com.xueh.commonlib.ui.compose.NavPage3
  * 备注： https://github.com/KatieBarnett/Experiments/tree/main/jc-edge-to-edge?source=post_page-----bea553dd97ff--------------------------------
  */
 class MainComposeActivity : BaseComposeActivity() {
-    companion object{
+    companion object {
         var interceptTab by mutableStateOf(false)
-        var showRedPoint  = mutableStateOf(false)
+        var showRedPoint = mutableStateOf(false)
     }
+
     override fun showTitleView() = false
 
-
     private var backPressedTime: Long = 0
+
+    val pages = mutableListOf(
+        HomePage(),
+        MinePage(),
+        TabPage3(),
+    )
+
+    val navList = mutableListOf(
+        NavData(
+            selectIcon = R.mipmap.ic_home_select,
+            unSelectIcon = R.mipmap.ic_home_normal,
+            text = "首页",
+        ),
+        NavData(
+            selectIcon = R.mipmap.ic_my_select,
+            unSelectIcon = R.mipmap.ic_my_normal,
+            text = "我的",
+            showRed = showRedPoint
+        ),
+        NavData(
+            selectIcon = R.mipmap.ic_my_select,
+            unSelectIcon = R.mipmap.ic_my_normal,
+            text = "拦截"
+        ),
+    )
+
+    val interceptPos = 2
+
     @Composable
     override fun setComposeContent() {
-        val pages = mutableListOf(
-                HomePage(),
-                MinePage(),
-                TabPage3(),
-            )
-
-        val navList = mutableListOf(
-            NavData(
-                selectIcon = R.mipmap.ic_home_select,
-                unSelectIcon = R.mipmap.ic_home_normal,
-                text = "首页",
-            ),
-            NavData(
-                selectIcon = R.mipmap.ic_my_select,
-                unSelectIcon = R.mipmap.ic_my_normal,
-                text = "我的",
-                showRed =showRedPoint
-            ),
-            NavData(
-                selectIcon = R.mipmap.ic_my_select,
-                unSelectIcon = R.mipmap.ic_my_normal,
-                text = "拦截"
-            ),
-        )
-
-        val interceptPos =2
         NavPage(pages = pages, navList = navList, interceptClick = {
             ToastUtils.showShort("interceptClick")
-
-
-            if (interceptTab){
+            if (interceptTab) {
                 interceptPos
-            }else{
+            } else {
                 -1
             }
         })
-
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {

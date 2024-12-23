@@ -5,6 +5,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,13 +40,14 @@ import com.blankj.utilcode.util.ToastUtils
 import com.lt.compose_views.compose_pager.ComposePagerScope
 import com.lt.compose_views.nav.NavContent
 import com.xueh.comm_core.base.compose.theme.AppThemeColorType
-import com.xueh.comm_core.base.compose.theme.appThemeState
+import com.xueh.comm_core.base.compose.theme.AppThemeType
+import com.xueh.comm_core.base.compose.theme.appThemeColorType
+import com.xueh.comm_core.base.compose.theme.appThemeType
 import com.xueh.comm_core.base.compose.theme.blue500
 import com.xueh.comm_core.base.compose.theme.green500
 import com.xueh.comm_core.base.compose.theme.orange500
 import com.xueh.comm_core.base.compose.theme.purple
 import com.xueh.comm_core.web.WebViewPage
-import com.xueh.comm_core.weight.compose.CommonTitlePage
 import com.xueh.commonlib.ui.compose.ConstraintPage
 import com.xueh.commonlib.ui.compose.NavPageWeigetPage
 import com.xueh.commonlib.ui.compose.PermissionPageContent
@@ -76,22 +78,27 @@ import com.xueh.commonlib.ui.compose.lazyVerticalGrid
 import com.xueh.commonlib.ui.compose.scrollableTabRow
 
 class HomePage : NavContent {
-    override val route: String="HomePage"
+    override val route: String = "HomePage"
 
     @Composable
     override fun Content(scope: ComposePagerScope) {
         var showMenu by remember {
             mutableStateOf(false)
         }
-        CommonTitlePage(title = "Compose", showBackIcon = false, titleRightContent = {
-            Row(Modifier.background(MaterialTheme.colorScheme.background)) {
+        Column {
+            Row(Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.background), horizontalArrangement = Arrangement.SpaceBetween) {
+                val isDarkTheme = AppThemeType.isDark(themeType = appThemeType)
                 IconButton(onClick = {
-                    appThemeState = appThemeState.copy(darkTheme = !appThemeState.darkTheme)
+                    appThemeType = if (isDarkTheme) {
+                        AppThemeType.Light
+                    } else {
+                        AppThemeType.Dark
+                    }
                 }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_sleep),
                         contentDescription = "",
-                        tint = if (appThemeState.darkTheme) Color.White else Color.Black
+                        tint = if (AppThemeType.isDark(themeType = appThemeType)) Color.White else Color.Black
                     )
                 }
 
@@ -101,26 +108,24 @@ class HomePage : NavContent {
                     Icon(
                         Icons.Filled.Menu,
                         contentDescription = "",
-                        tint = if (appThemeState.darkTheme) Color.White else Color.Black
+                        tint = if (AppThemeType.isDark(themeType = appThemeType)) Color.White else Color.Black
                     )
                 }
             }
-        }) {
-            NavHost()
-            if (showMenu) {
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    PalletMenu(
-                        modifier = Modifier.align(Alignment.TopEnd)
-                    ) {
-                        appThemeState = appThemeState.copy(
-                            darkTheme = appThemeState.darkTheme, appThemeColorType = it
-                        )
+            Box{
+                NavHost()
+                if (showMenu) {
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        PalletMenu(
+                            modifier = Modifier.align(Alignment.TopEnd)
+                        ) {
+                            appThemeColorType = it
+                        }
                     }
                 }
             }
         }
     }
-
 
 
     @Composable
@@ -131,7 +136,7 @@ class HomePage : NavContent {
             startDestination = RouteConfig.ActionList
         ) {
             composable(RouteConfig.ActionList) {
-                ToastUtils.showShort("${navController.currentBackStackEntry?.destination}")
+//                ToastUtils.showShort("${navController.currentBackStackEntry?.destination}")
 
                 val str = listOf(
                     ItemData("Dialog", RouteConfig.DialogPage),

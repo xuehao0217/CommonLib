@@ -36,7 +36,7 @@ import com.just.agentweb.DefaultWebClient
 import com.just.agentweb.MiddlewareWebChromeBase
 import com.xueh.comm_core.R
 import com.xueh.comm_core.base.compose.BaseComposeActivity
-import com.xueh.comm_core.weight.compose.CommonTitleView
+import com.xueh.comm_core.base.compose.CommonTitleView
 
 class AgentComposeWebActivity : BaseComposeActivity() {
     companion object {

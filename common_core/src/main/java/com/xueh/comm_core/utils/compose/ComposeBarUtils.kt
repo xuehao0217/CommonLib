@@ -15,8 +15,6 @@ import androidx.core.view.WindowCompat.getInsetsController
 import androidx.core.view.WindowInsetsCompat.Type.ime
 import com.blankj.utilcode.util.BarUtils.setStatusBarColor
 import com.google.accompanist.systemuicontroller.SystemUiController
-import com.xueh.comm_core.base.compose.theme.appThemeState
-
 /**
  * 设置为沉浸式状态栏
  */
