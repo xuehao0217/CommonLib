@@ -135,9 +135,7 @@ fun <T : Any> LazyPagingItems<T>.PagingLazyColumn(
     }
 }
 
-/*
-*  key = lazyPagingItems.itemKey { it.id }
-* */
+
 @Composable
 fun <T : Any> LazyPagingItems<T>.PagingVerticalGrid(
     modifier: Modifier = Modifier,
@@ -182,9 +180,6 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalGrid(
 }
 
 
-/*
-*  key = lazyPagingItems.itemKey { it.id }
-* */
 @Composable
 fun <T : Any> LazyPagingItems<T>.PagingVerticalStaggeredGrid(
     modifier: Modifier = Modifier,
@@ -234,7 +229,6 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalStaggeredGrid(
 
 
 /*
-*  key = lazyPagingItems.itemKey { it.id }
 *  val pagerState = rememberPagerState { lazyPagingItems.itemCount }
 * */
 @Composable
