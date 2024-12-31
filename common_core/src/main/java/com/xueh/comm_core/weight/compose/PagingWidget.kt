@@ -54,8 +54,8 @@ fun <T : Any> LazyPagingItems<T>.PagingRefreshList(
     key: ((index: Int) -> Any)? = null,
     lazyListState: LazyListState = rememberLazyListState(),
     refreshState: SmartSwipeRefreshState = rememberSmartSwipeRefreshState(),//下拉刷新状态
-    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
-    contentPadding: PaddingValues = PaddingValues(horizontal = 15.dp),
+    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(0.dp),
+    contentPadding: PaddingValues = PaddingValues(horizontal = 0.dp),
     headContent: @Composable () -> Unit = {},
     foodContent: @Composable () -> Unit = {},
     pagingRefreshStateContent: @Composable (() -> Unit) = { PagingStateRefresh() },
@@ -94,8 +94,8 @@ fun <T : Any> LazyPagingItems<T>.PagingRefreshList(
 fun <T : Any> LazyPagingItems<T>.PagingLazyColumn(
     lazyListState: LazyListState = rememberLazyListState(),
     modifier: Modifier = Modifier,
-    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
-    contentPadding: PaddingValues = PaddingValues(horizontal = 15.dp),
+    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(0.dp),
+    contentPadding: PaddingValues = PaddingValues(horizontal = 0.dp),
     key: ((index: Int) -> Any)? = null,
     headContent: @Composable () -> Unit = {},
     foodContent: @Composable () -> Unit = {},
