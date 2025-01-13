@@ -114,7 +114,6 @@ fun <T : Any> LazyPagingItems<T>.PagingLazyColumn(
             }
         }
     }
-    pagingRefreshStateContent()
     CommonLazyColumn(
         modifier = modifier,
         state = lazyListState,
@@ -133,6 +132,7 @@ fun <T : Any> LazyPagingItems<T>.PagingLazyColumn(
             pagingAppendStateContent()
         }
     }
+    pagingRefreshStateContent()
 }
 
 
@@ -159,7 +159,6 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalGrid(
             }
         }
     }
-    pagingRefreshStateContent()
     LazyVerticalGrid(
         modifier = modifier,
         columns = GridCells.Fixed(columns), state = state, contentPadding = contentPadding,
@@ -177,6 +176,7 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalGrid(
             pagingAppendStateContent()
         }
     }
+    pagingRefreshStateContent()
 }
 
 
@@ -204,7 +204,6 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalStaggeredGrid(
             }
         }
     }
-    pagingRefreshStateContent()
     LazyVerticalStaggeredGrid(
         modifier = modifier,
         columns = StaggeredGridCells.Fixed(columns),
@@ -225,6 +224,7 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalStaggeredGrid(
             pagingAppendStateContent()
         }
     }
+    pagingRefreshStateContent()
 }
 
 
@@ -240,7 +240,6 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalPager(
     beyondViewportPageCount: Int = PagerDefaults.BeyondViewportPageCount,
     pageContent: @Composable PagerScope.(T) -> Unit
 ) {
-    pagingRefreshStateContent()
     VerticalPager(
         modifier = modifier,
         state = state,
@@ -251,6 +250,7 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalPager(
             pageContent(it)
         }
     }
+    pagingRefreshStateContent()
 }
 
 //--------------------------------------------------------------------------------------------------
