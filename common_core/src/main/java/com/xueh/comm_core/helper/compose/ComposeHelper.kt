@@ -156,3 +156,74 @@ fun LazyListState.onScrollDirection(scrollDirection: (isScrollingUp: Boolean) ->
         }
     }
 }
+
+
+
+
+
+
+
+
+
+class OrderedStateMap<K, V> {
+    private val stateMap = mutableStateMapOf<K, V>()
+    private val orderList = mutableStateListOf<K>()
+
+    operator fun get(key: K): V? = stateMap[key]
+
+    // 获取所有key（按添加顺序）
+    val orderedKeys: List<K> get() = orderList.toList()
+    operator fun set(key: K, value: V) {
+        stateMap[key] = value
+        if (!orderList.contains(key)) {
+            orderList.add(key)
+        }
+    }
+
+    fun put(key: K, value: V): V? {
+        val previous = stateMap.put(key, value)
+        if (!orderList.contains(key)) {
+            orderList.add(key)
+        }
+        return previous
+    }
+
+    fun remove(key: K): V? {
+        orderList.remove(key)
+        return stateMap.remove(key)
+    }
+
+    fun clear() {
+        orderList.clear()
+        stateMap.clear()
+    }
+
+    // 获取有序的条目列表
+    fun orderedEntries(): List<Map.Entry<K, V>> {
+        return orderList.mapNotNull { key ->
+            stateMap[key]?.let { value ->
+                object : Map.Entry<K, V> {
+                    override val key: K = key
+                    override val value: V = value
+                }
+            }
+        }
+    }
+
+    // 其他便利方法
+    val size: Int get() = stateMap.size
+    fun isEmpty(): Boolean = stateMap.isEmpty()
+    fun containsKey(key: K): Boolean = stateMap.containsKey(key)
+    fun containsValue(value: V): Boolean = stateMap.containsValue(value)
+
+    fun putAll(from: Map<out K, V>) {
+        from.forEach { (key, value) -> put(key, value) }
+    }
+}
+
+// 创建函数
+fun <K, V> orderedStateMapOf(vararg pairs: Pair<K, V>): OrderedStateMap<K, V> {
+    return OrderedStateMap<K, V>().apply {
+        putAll(pairs.toMap())
+    }
+}
