@@ -7,13 +7,17 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerScope
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lt.compose_views.nav.NavContent
@@ -21,6 +25,7 @@ import com.lt.compose_views.nav.PagerNav
 import com.lt.compose_views.nav.PagerNavState
 import com.lt.compose_views.util.rememberMutableStateOf
 import com.xueh.comm_core.R
+import com.xueh.comm_core.base.compose.theme.appThemeType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -40,43 +45,54 @@ data class NavData(
 @Composable
 fun NavPage(
     pages: List<NavContent> = mutableListOf(),
-    selectTextColor: Color = androidx.compose.material3.MaterialTheme.colorScheme.primary,
+    selectTextColor: Color = MaterialTheme.colorScheme.primary,
     unSelectTextColor: Color = Color.Gray,
-    textFontSize: Int = 10,
-    imageSize: Int = 24,
-    interceptClick: () -> Int = { -1},//表示拦截第几个角标 默认-1
+    fontSize: TextUnit = 12.sp,
+    imageSize: Dp = 24.dp,
     navList: MutableList<NavData> = mutableListOf(),
+    interceptClick: () -> Int = { -1 },
 ) {
-    val selectPos = rememberMutableStateOf { 0 }
+    // 使用 rememberSaveable 保存选中位置
+    val selectPos = rememberSaveable { mutableIntStateOf(0) }
+
+    val state = remember {
+        PagerNavState(pages)
+    }
+
+    // 确保状态同步
+    LaunchedEffect(selectPos.intValue, appThemeType) {
+        if (state.navContents.isNotEmpty() && selectPos.intValue < state.navContents.size) {
+            state.nav(state.navContents[selectPos.intValue].route)
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .navigationBarsPadding()
     ) {
-        val state = PagerNavState(
-            pages
-        )
         PagerNav(
             state,
             Modifier
                 .fillMaxWidth()
                 .weight(1f)
         )
+
         Nav(
             selectPos = selectPos,
             itemList = navList,
             selectTextColor = selectTextColor,
             unSelectTextColor = unSelectTextColor,
-            textFontSize = textFontSize,
+            fontSize = fontSize,
             imageSize = imageSize
-        ) {
-           if (interceptClick()==it){
-               interceptClick.invoke()
-               true
-           }else{
-               state.nav(state.navContents[it].route)
-               false
-           }
+        ) { clickPos ->
+            if (interceptClick() == clickPos) {
+                interceptClick.invoke()
+                true
+            } else {
+                selectPos.intValue = clickPos
+                false
+            }
         }
     }
 }
@@ -85,10 +101,10 @@ fun NavPage(
 @Composable
 fun Nav(
     selectPos: MutableState<Int> = mutableIntStateOf(0),
-    selectTextColor: Color = androidx.compose.material3.MaterialTheme.colorScheme.primary,
+    selectTextColor: Color = MaterialTheme.colorScheme.primary,
     unSelectTextColor: Color = Color.Gray,
-    textFontSize: Int = 10,
-    imageSize: Int = 24,
+    fontSize: TextUnit = TextUnit.Unspecified,
+    imageSize: Dp = 24.dp,
     itemList: MutableList<NavData> = mutableListOf(),
     itemClick: ((Int) -> Boolean) = { false },// true 拦截 false 不拦截
 ) {
@@ -114,7 +130,7 @@ fun Nav(
                 selectTextColor = selectTextColor,
                 unSelectTextColor = unSelectTextColor,
                 imageSize = imageSize,
-                textFontSize = textFontSize,
+                fontSize = fontSize,
             )
         }
     }
@@ -132,8 +148,8 @@ fun NavItem(
     select: Boolean = true,
     selectTextColor: Color = androidx.compose.material3.MaterialTheme.colorScheme.primary,
     unSelectTextColor: Color = Color.Gray,
-    imageSize: Int = 24,
-    textFontSize: Int = 10,
+    imageSize: Dp = 24.dp,
+    fontSize: TextUnit = TextUnit.Unspecified,
 ) {
     Column(
         modifier = modifier,
@@ -145,7 +161,7 @@ fun NavItem(
                 id = if (select) navData.selectIcon else navData.unSelectIcon,
                 modifier = Modifier.size(24.dp)
             )
-            Box(contentAlignment = Alignment.TopEnd, modifier = Modifier.size(imageSize.dp)) {
+            Box(contentAlignment = Alignment.TopEnd, modifier = Modifier.size(imageSize)) {
                 if (navData.showRed.value) {
                     Box(
                         modifier = Modifier
@@ -158,7 +174,7 @@ fun NavItem(
         }
         Text(
             text = navData.text,
-            fontSize = textFontSize.sp,
+            fontSize = fontSize,
             color = if (select) selectTextColor else unSelectTextColor
         )
     }
