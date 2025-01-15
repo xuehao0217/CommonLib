@@ -25,12 +25,14 @@ import com.lt.compose_views.nav.NavContent
 import com.xueh.comm_core.base.compose.theme.AppBaseTheme
 import com.xueh.comm_core.base.compose.theme.AppThemeColorType
 import com.xueh.comm_core.base.compose.theme.AppThemeType
+import com.xueh.comm_core.base.compose.theme.appThemeColorType
 import com.xueh.comm_core.base.compose.theme.appThemeType
 //import com.xueh.comm_core.base.compose.theme.AppBaseTheme
 //import com.xueh.comm_core.base.compose.theme.AppThemeType
 //import com.xueh.comm_core.base.compose.theme.appThemeType
 import com.xueh.comm_core.web.AgentComposeWebActivity
 import com.xueh.comm_core.weight.compose.BoxWrapper
+import com.xueh.comm_core.weight.compose.click
 import com.xueh.commonlib.ui.compose.ItemView
 import com.xueh.commonlib.ui.compose.RouteConfig
 import com.xueh.commonlib.ui.xml.MainActivity
@@ -97,6 +99,16 @@ class TabPage3 : NavContent {
             }
             ItemView("修改Theme FOLLOW_SYSTEM") {
                 appThemeType = AppThemeType.FOLLOW_SYSTEM
+            }
+            AppBaseTheme {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp)
+                        .background(AppBaseTheme.colors.theme)
+                        .click {
+
+                        })
             }
         }
     }

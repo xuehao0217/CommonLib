@@ -46,7 +46,7 @@ val lightThemeColors = AppThemeColors(
 )
 
 val darkThemeColors = AppThemeColors(
-    theme = RedBookRed,
+    theme = purple200,
     background = BlackBackground,
     title = Color.White,
     body = Color(0xFF666666),
