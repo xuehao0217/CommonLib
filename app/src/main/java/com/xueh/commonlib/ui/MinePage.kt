@@ -41,14 +41,8 @@ import com.xueh.comm_core.helper.compose.onScrollStopVisibleList
 //import com.xueh.comm_core.base.compose.theme.AppThemeType
 //import com.xueh.comm_core.base.compose.theme.appThemeType
 import com.xueh.comm_core.web.AgentComposeWebActivity
-import com.xueh.comm_core.weight.compose.BoxWrapper
-import com.xueh.comm_core.weight.compose.PagingLazyColumn
-import com.xueh.comm_core.weight.compose.PagingRefreshColumn
-import com.xueh.comm_core.weight.compose.UltraSwipeRefresh
 import com.xueh.comm_core.weight.compose.click
 import com.xueh.commonlib.ui.compose.ItemView
-import com.xueh.commonlib.ui.compose.RouteConfig
-import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
 import com.xueh.commonlib.ui.xml.MainActivity
 
 class MinePage : NavContent {

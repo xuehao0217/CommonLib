@@ -51,8 +51,8 @@ import com.xueh.comm_core.weight.compose.MyScrollableTabRow
 import com.xueh.comm_core.weight.compose.PagerTab
 import com.xueh.comm_core.weight.compose.PagerTabIndicator
 import com.xueh.comm_core.weight.compose.PagingLazyColumn
+import com.xueh.comm_core.weight.compose.PagingRefresh
 import com.xueh.comm_core.weight.compose.SpacerW
-import com.xueh.comm_core.weight.compose.UltraSwipeRefresh
 import com.xueh.comm_core.weight.compose.click
 import com.xueh.commonlib.entity.HomeEntity
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
@@ -238,7 +238,7 @@ fun HomeList(
         }
     }
 
-    lazyPagingItemsState.UltraSwipeRefresh {
+    lazyPagingItemsState.PagingRefresh {
         lazyPagingItemsState.PagingLazyColumn(lazyListState = lazyListState) {
             Box(
                 modifier = Modifier
