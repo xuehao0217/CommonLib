@@ -50,8 +50,9 @@ import com.xueh.comm_core.weight.compose.BoxWrapper
 import com.xueh.comm_core.weight.compose.MyScrollableTabRow
 import com.xueh.comm_core.weight.compose.PagerTab
 import com.xueh.comm_core.weight.compose.PagerTabIndicator
-import com.xueh.comm_core.weight.compose.PagingRefreshList
+import com.xueh.comm_core.weight.compose.PagingLazyColumn
 import com.xueh.comm_core.weight.compose.SpacerW
+import com.xueh.comm_core.weight.compose.UltraSwipeRefresh
 import com.xueh.comm_core.weight.compose.click
 import com.xueh.commonlib.entity.HomeEntity
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
@@ -237,30 +238,29 @@ fun HomeList(
         }
     }
 
-    lazyPagingItemsState.PagingRefreshList(
-        isFirstRefresh = false,
-        lazyListState = lazyListState,
-    ) {
-        Box(
-            modifier = Modifier
-                .padding(10.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.primary)
-                .fillMaxWidth()
-                .height(50.dp)
-                .border(
-                    1.5.dp,
-                    androidx.compose.material.MaterialTheme.colors.secondary,
-                    shape = CircleShape
-                ),
+    lazyPagingItemsState.UltraSwipeRefresh {
+        lazyPagingItemsState.PagingLazyColumn(lazyListState = lazyListState) {
+            Box(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.primary)
+                    .fillMaxWidth()
+                    .height(50.dp)
+                    .border(
+                        1.5.dp,
+                        androidx.compose.material.MaterialTheme.colors.secondary,
+                        shape = CircleShape
+                    ),
 
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = it.title,
-                color = Color.White,
-                textAlign = TextAlign.Center,
-            )
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = it.title,
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                )
+            }
         }
     }
 }

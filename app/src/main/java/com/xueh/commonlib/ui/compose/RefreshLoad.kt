@@ -57,9 +57,10 @@ import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.lt.compose_views.util.rememberMutableStateOf
 import com.xueh.comm_core.base.mvvm.BaseComposeViewModel
-import com.xueh.comm_core.weight.compose.PagingRefreshList
+import com.xueh.comm_core.weight.compose.PagingLazyColumn
 import com.xueh.comm_core.weight.compose.PagingStateAppend
 import com.xueh.comm_core.weight.compose.PagingStateRefresh
+import com.xueh.comm_core.weight.compose.UltraSwipeRefresh
 import com.xueh.comm_core.weight.compose.click
 import com.xueh.commonlib.entity.HomeEntity
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
@@ -93,55 +94,56 @@ fun RefreshLoadUse() {
             }
         }
         //--------------------------------------------------------------------------------------------------
-
-        homeDatas.PagingRefreshList(lazyListState = lazyListState, pagingRefreshStateContent = {
-            homeDatas.PagingStateRefresh(stateEmpty = {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.Blue)
-                )
-            }, stateError = {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.Red)
-                )
-            })
-        }, pagingAppendStateContent = {
-            homeDatas.PagingStateAppend(stateError = {
-                Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-                    .background(Color.Red)
-                    .click {
-                        homeDatas.retry()
-                    })
-            }, stateNoMore = {
-                Box(
-                    modifier = Modifier
+        homeDatas.UltraSwipeRefresh {
+            homeDatas.PagingLazyColumn(pagingRefreshStateContent = {
+                homeDatas.PagingStateRefresh(stateEmpty = {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color.Blue)
+                    )
+                }, stateError = {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color.Red)
+                    )
+                })
+            }, pagingAppendStateContent = {
+                homeDatas.PagingStateAppend(stateError = {
+                    Box(modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp)
-                        .background(Color.Green)
-                )
-            })
-        }) {
-            Box(
-                modifier = Modifier
-                    .padding(10.dp)
-                    .clip(CircleShape)
-                    .background(androidx.compose.material3.MaterialTheme.colorScheme.primary)
-                    .fillMaxWidth()
-                    .height(50.dp)
-                    .border(1.5.dp, MaterialTheme.colors.secondary, shape = CircleShape),
+                        .background(Color.Red)
+                        .click {
+                            homeDatas.retry()
+                        })
+                }, stateNoMore = {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(50.dp)
+                            .background(Color.Green)
+                    )
+                })
+            }) {
+                Box(
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .clip(CircleShape)
+                        .background(androidx.compose.material3.MaterialTheme.colorScheme.primary)
+                        .fillMaxWidth()
+                        .height(50.dp)
+                        .border(1.5.dp, MaterialTheme.colors.secondary, shape = CircleShape),
 
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = it.title,
-                    color = Color.White,
-                    textAlign = TextAlign.Center,
-                )
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = it.title,
+                        color = Color.White,
+                        textAlign = TextAlign.Center,
+                    )
+                }
             }
         }
     }

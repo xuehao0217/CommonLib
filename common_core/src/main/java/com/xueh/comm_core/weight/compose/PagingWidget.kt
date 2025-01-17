@@ -16,8 +16,6 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -36,79 +34,23 @@ import androidx.compose.foundation.pager.PagerScope
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.Divider
-import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.pulltorefresh.pullToRefresh
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.paging.compose.LazyPagingItems
 import com.king.ultraswiperefresh.NestedScrollMode
 import com.king.ultraswiperefresh.UltraSwipeRefresh
 import com.king.ultraswiperefresh.indicator.classic.ClassicRefreshFooter
 import com.king.ultraswiperefresh.indicator.classic.ClassicRefreshHeader
 import com.king.ultraswiperefresh.rememberUltraSwipeRefreshState
-import com.loren.component.view.composesmartrefresh.SmartSwipeRefreshState
-import com.loren.component.view.composesmartrefresh.rememberSmartSwipeRefreshState
 import com.xueh.comm_core.helper.compose.onScrollStopVisibleList
-import com.xueh.comm_core.weight.compose.refreshheader.MyRefreshHeader
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-
-@Composable
-fun <T : Any> LazyPagingItems<T>.PagingRefreshList(
-    isFirstRefresh: Boolean = true,
-    key: ((index: Int) -> Any)? = null,
-    lazyListState: LazyListState = rememberLazyListState(),
-    refreshState: SmartSwipeRefreshState = rememberSmartSwipeRefreshState(),//下拉刷新状态
-    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(0.dp),
-    contentPadding: PaddingValues = PaddingValues(horizontal = 0.dp),
-    headContent: @Composable () -> Unit = {},
-    foodContent: @Composable () -> Unit = {},
-    pagingRefreshStateContent: @Composable (() -> Unit) = { PagingStateRefresh() },
-    pagingAppendStateContent: @Composable (() -> Unit) = { PagingStateAppend() },
-    onScrollStopVisibleList: ((list: List<T>) -> Unit)? = null,
-    headerIndicator: @Composable () -> Unit = { MyRefreshHeader(refreshState) },
-    itemContent: @Composable LazyItemScope.(value: T) -> Unit,
-) {
-    //是不是在loading
-    val isRefreshing = isRefreshing()
-    SmartRefresh(
-        isFirstRefresh = isFirstRefresh,
-        isRefreshing = isRefreshing,
-        scrollState = lazyListState,
-        refreshState = refreshState,
-        headerIndicator = headerIndicator,
-        onRefresh = {
-            refresh()
-        }) {
-        PagingLazyColumn(
-            lazyListState = lazyListState,
-            key = key,
-            verticalArrangement = verticalArrangement,
-            contentPadding = contentPadding,
-            pagingRefreshStateContent = pagingRefreshStateContent,
-            pagingAppendStateContent = pagingAppendStateContent,
-            onScrollStopVisibleList=onScrollStopVisibleList,
-            headContent = headContent,
-            foodContent = foodContent,
-            itemContent = itemContent
-        )
-    }
-}
 
 @Composable
 fun <T : Any> LazyPagingItems<T>.PagingLazyColumn(
@@ -300,29 +242,6 @@ fun <T : Any> LazyPagingItems<T>. UltraSwipeRefresh(modifier: Modifier = Modifie
             ClassicRefreshFooter(it)
         }
     ) {
-        content()
-    }
-}
-
-
-
-@Composable
-fun <T : Any> LazyPagingItems<T>.SmartRefreshPaging(
-    isFirstRefresh: Boolean = true,
-    refreshState: SmartSwipeRefreshState = rememberSmartSwipeRefreshState(),//下拉刷新状态
-    headerIndicator: @Composable () -> Unit = { MyRefreshHeader(refreshState) },
-    content: @Composable () -> Unit,
-) {
-    //是不是在loading
-    val isRefreshing = isRefreshing()
-    SmartRefresh(
-        isFirstRefresh = isFirstRefresh,
-        isRefreshing = isRefreshing,
-        refreshState = refreshState,
-        headerIndicator = headerIndicator,
-        onRefresh = {
-            refresh()
-        }) {
         content()
     }
 }

@@ -23,9 +23,7 @@ object RouteConfig {
     const val DialogPage="DialogPage"
     const val CommonTabPager="CommonTabPager"
     const val CarouselExamples="CarouselExamples"
-    const val CommonRefreshColumnData="CommonRefreshColumnData"
     const val ComposePermission="CommonPermission"
-    const val CommonPaging="CommonPagingPage"
     const val Placeholder="Placeholder"
     const val NavPageWeiget="NavPageWeiget"
 

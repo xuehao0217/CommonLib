@@ -43,17 +43,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
-import androidx.constraintlayout.compose.ConstraintLayout
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageScope
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import com.loren.component.view.composesmartrefresh.rememberSmartSwipeRefreshState
 import com.xueh.comm_core.helper.isEmpty
-import com.xueh.comm_core.weight.compose.refreshheader.MyRefreshHeader
-import com.xueh.comm_core.weight.compose.refreshheader.RefreshHeader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

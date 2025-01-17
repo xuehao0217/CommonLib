@@ -83,7 +83,6 @@ dependencies {
     api(libs.coil.compose)
     api(libs.coil.compose.okhttp)
 
-    api(libs.composesmartrefresh)
     api(libs.any.pop.dialog.compose)    //https://github.com/TheMelody/AnyPopDialog-Compose
     api (libs.landscapist.glide)
 

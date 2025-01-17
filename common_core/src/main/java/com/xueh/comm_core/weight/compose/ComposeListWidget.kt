@@ -14,9 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.loren.component.view.composesmartrefresh.rememberSmartSwipeRefreshState
-import com.xueh.comm_core.weight.compose.refreshheader.MyRefreshHeader
-import com.xueh.comm_core.weight.compose.refreshheader.RefreshHeader
 
 //公用列表
 @Composable
@@ -70,7 +67,6 @@ inline fun <T> CommonLazyColumnData(
     crossinline foodContent: @Composable () -> Unit = {},
     crossinline itemContent: @Composable LazyItemScope.(item: T) -> Unit,
 ) {
-
     CommonLazyColumn(
         modifier = modifier,
         verticalArrangement = verticalArrangement,
@@ -85,60 +81,3 @@ inline fun <T> CommonLazyColumnData(
     }
 }
 
-
-//公用下拉刷新页面
-@Composable
-fun CommonRefreshPage(
-    isRefreshing: Boolean,
-    onRefresh: (suspend () -> Unit)? = null,
-    content: @Composable () -> Unit,
-) {
-//    var refreshing by remember { mutableStateOf(false) }
-    val refreshState = rememberSmartSwipeRefreshState()
-    val listState = rememberLazyListState()
-    SmartRefresh(
-        isRefreshing = isRefreshing,
-        scrollState = listState,
-        refreshState = refreshState,
-        headerIndicator = { RefreshHeader(refreshState) },
-        onRefresh = onRefresh,
-        content = content
-    )
-}
-
-
-//公用下拉刷新列表数据页面
-@Composable
-fun <T> CommonRefreshColumnDataPage(
-    data: List<T>,
-    isRefreshing: Boolean,
-    onRefresh: (suspend () -> Unit)? = null,
-    key: ((item: T) -> Any)? = null,
-    emptContent: @Composable () -> Unit = {},
-    headContent: @Composable () -> Unit = {},
-    foodContent: @Composable () -> Unit = {},
-    itemContent: @Composable LazyItemScope.(item: T) -> Unit,
-) {
-//    var refreshing by remember { mutableStateOf(false) }
-    val refreshState = rememberSmartSwipeRefreshState()
-    val listState = rememberLazyListState()
-    SmartRefresh(
-        isRefreshing = isRefreshing,
-        scrollState = listState,
-        refreshState = refreshState,
-        headerIndicator = { MyRefreshHeader(refreshState) },
-        onRefresh = onRefresh
-    ) {
-        if (data.isEmpty()) {
-            emptContent.invoke()
-        } else {
-            CommonLazyColumnData(
-                data = data,
-                headContent = headContent,
-                foodContent = foodContent,
-                itemContent = itemContent,
-                key = key
-            )
-        }
-    }
-}

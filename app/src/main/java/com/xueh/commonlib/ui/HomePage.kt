@@ -58,8 +58,6 @@ import com.xueh.commonlib.ui.compose.google.GoogleSamplePage
 import com.xueh.commonlib.R
 import com.xueh.commonlib.ui.compose.BarPage
 import com.xueh.commonlib.ui.compose.CarouselExamples
-import com.xueh.commonlib.ui.compose.CommonPaging
-import com.xueh.commonlib.ui.compose.CommonRefreshColumnData
 import com.xueh.commonlib.ui.compose.CommonTabPage
 import com.xueh.commonlib.ui.compose.ComoposeViewModelPage
 import com.xueh.commonlib.ui.compose.DialogPage
@@ -142,8 +140,6 @@ class HomePage : NavContent {
                     ItemData("Dialog", RouteConfig.DialogPage),
                     ItemData("公用CommonTabPager", RouteConfig.CommonTabPager),
                     ItemData("CarouselExamples", RouteConfig.CarouselExamples),
-                    ItemData("公用CommonRefreshColumnData", RouteConfig.CommonRefreshColumnData),
-                    ItemData("公用CommonPagingPage", RouteConfig.CommonPaging),
                     ItemData("ConstraintSet使用", RouteConfig.ConstraintSet),
                     ItemData("scrollableTab使用", RouteConfig.scrollableTabRow),
                     ItemData("路由传参", RouteConfig.Parameter),
@@ -221,13 +217,6 @@ class HomePage : NavContent {
             }
             composable(RouteConfig.CarouselExamples) {
                 CarouselExamples()
-            }
-            composable(RouteConfig.CommonRefreshColumnData) {
-                CommonRefreshColumnData()
-            }
-
-            composable(RouteConfig.CommonPaging) {
-                CommonPaging()
             }
 
             composable(RouteConfig.ComposePermission) {
