@@ -217,7 +217,7 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalPager(
 
 //--------------------------------------------------------------------------------------------------
 @Composable
-fun <T : Any> LazyPagingItems<T>. PagingRefresh(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+fun <T : Any> LazyPagingItems<T>. PagingRefresh(modifier: Modifier = Modifier, content: @Composable (LazyPagingItems<T>) -> Unit) {
     val state = rememberUltraSwipeRefreshState()
     val isRefresh= isRefreshing()
     LaunchedEffect(isRefresh) {
@@ -242,7 +242,7 @@ fun <T : Any> LazyPagingItems<T>. PagingRefresh(modifier: Modifier = Modifier, c
             ClassicRefreshFooter(it)
         }
     ) {
-        content()
+        content(this)
     }
 }
 
