@@ -9,9 +9,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,7 +23,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.blankj.utilcode.util.ActivityUtils
+import com.blankj.utilcode.util.LogUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.lt.compose_views.compose_pager.ComposePagerScope
 import com.lt.compose_views.nav.NavContent
 import com.xueh.comm_core.base.compose.theme.AppBaseTheme
@@ -27,14 +34,21 @@ import com.xueh.comm_core.base.compose.theme.AppThemeColorType
 import com.xueh.comm_core.base.compose.theme.AppThemeType
 import com.xueh.comm_core.base.compose.theme.appThemeColorType
 import com.xueh.comm_core.base.compose.theme.appThemeType
+import com.xueh.comm_core.base.mvvm.BaseComposeViewModel
+import com.xueh.comm_core.helper.compose.onScrollDirection
+import com.xueh.comm_core.helper.compose.onScrollStopVisibleList
 //import com.xueh.comm_core.base.compose.theme.AppBaseTheme
 //import com.xueh.comm_core.base.compose.theme.AppThemeType
 //import com.xueh.comm_core.base.compose.theme.appThemeType
 import com.xueh.comm_core.web.AgentComposeWebActivity
 import com.xueh.comm_core.weight.compose.BoxWrapper
+import com.xueh.comm_core.weight.compose.PagingLazyColumn
+import com.xueh.comm_core.weight.compose.PagingRefreshColumn
+import com.xueh.comm_core.weight.compose.UltraSwipeRefresh
 import com.xueh.comm_core.weight.compose.click
 import com.xueh.commonlib.ui.compose.ItemView
 import com.xueh.commonlib.ui.compose.RouteConfig
+import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
 import com.xueh.commonlib.ui.xml.MainActivity
 
 class MinePage : NavContent {

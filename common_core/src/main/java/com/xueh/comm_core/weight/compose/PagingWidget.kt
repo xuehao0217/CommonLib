@@ -9,12 +9,15 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -33,20 +36,37 @@ import androidx.compose.foundation.pager.PagerScope
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.Divider
+import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.pulltorefresh.pullToRefresh
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.paging.compose.LazyPagingItems
+import com.king.ultraswiperefresh.NestedScrollMode
+import com.king.ultraswiperefresh.UltraSwipeRefresh
+import com.king.ultraswiperefresh.indicator.classic.ClassicRefreshFooter
+import com.king.ultraswiperefresh.indicator.classic.ClassicRefreshHeader
+import com.king.ultraswiperefresh.rememberUltraSwipeRefreshState
 import com.loren.component.view.composesmartrefresh.SmartSwipeRefreshState
 import com.loren.component.view.composesmartrefresh.rememberSmartSwipeRefreshState
 import com.xueh.comm_core.helper.compose.onScrollStopVisibleList
 import com.xueh.comm_core.weight.compose.refreshheader.MyRefreshHeader
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun <T : Any> LazyPagingItems<T>.PagingRefreshList(
@@ -255,6 +275,38 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalPager(
 
 //--------------------------------------------------------------------------------------------------
 @Composable
+fun <T : Any> LazyPagingItems<T>. UltraSwipeRefresh(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+    val state = rememberUltraSwipeRefreshState()
+    val isRefresh= isRefreshing()
+    LaunchedEffect(isRefresh) {
+        state.isRefreshing=isRefresh
+    }
+    UltraSwipeRefresh(
+        state = state,
+        loadMoreEnabled = false,
+        onRefresh = {
+            this.refresh()
+        },
+        onLoadMore = {
+
+        },
+        modifier = modifier,
+        headerScrollMode = NestedScrollMode.Translate,
+        footerScrollMode = NestedScrollMode.Translate,
+        headerIndicator = {
+            ClassicRefreshHeader(it)
+        },
+        footerIndicator = {
+            ClassicRefreshFooter(it)
+        }
+    ) {
+        content()
+    }
+}
+
+
+
+@Composable
 fun <T : Any> LazyPagingItems<T>.SmartRefreshPaging(
     isFirstRefresh: Boolean = true,
     refreshState: SmartSwipeRefreshState = rememberSmartSwipeRefreshState(),//下拉刷新状态
@@ -285,9 +337,12 @@ fun <T : Any> LazyPagingItems<T>.PagingRefreshColumn(
 ) {
     val isRefreshing = isRefreshing()
     Column(
-        Modifier.fillMaxSize().animateContentSize().pullToRefresh(state = state, isRefreshing = isRefreshing, onRefresh = {
-            this.refresh()
-        }),
+        Modifier
+            .fillMaxSize()
+            .animateContentSize()
+            .pullToRefresh(state = state, isRefreshing = isRefreshing, onRefresh = {
+                this.refresh()
+            }),
     ) {
         AnimatedVisibility(
             visible = isRefreshing, enter = fadeIn() + scaleIn() + expandVertically(),
@@ -302,3 +357,9 @@ fun <T : Any> LazyPagingItems<T>.PagingRefreshColumn(
         }
     }
 }
+
+
+
+
+
+

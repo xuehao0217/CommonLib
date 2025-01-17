@@ -88,6 +88,9 @@ dependencies {
     api (libs.landscapist.glide)
 
     api(libs.compose.webview)
+
+    api (libs.refresh)
+    api (libs.refresh.indicator)
     //----------------Kotlin相关--------------------------
     api(libs.kotlin.stdlib)
     api(libs.kotlinx.coroutines.core)
