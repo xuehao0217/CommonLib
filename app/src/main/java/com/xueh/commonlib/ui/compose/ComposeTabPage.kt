@@ -239,7 +239,7 @@ fun HomeList(
     }
 
     lazyPagingItemsState.PagingRefresh {
-        lazyPagingItemsState.PagingLazyColumn(lazyListState = lazyListState) {
+        it.PagingLazyColumn(lazyListState = lazyListState) {
             Box(
                 modifier = Modifier
                     .padding(10.dp)
