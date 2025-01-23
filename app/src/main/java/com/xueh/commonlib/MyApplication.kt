@@ -25,25 +25,9 @@ class MyApplication : BaseApplication() {
     }
 
     private fun initNet() {
-        val chuckerCollector = ChuckerCollector(
-            context = this@MyApplication,
-            // Toggles visibility of the notification
-            showNotification = true,
-            // Allows to customize the retention period of collected data
-            retentionPeriod = RetentionManager.Period.ONE_HOUR
-        )
-
-        val chuckerInterceptor = ChuckerInterceptor.Builder(this@MyApplication)
-            .collector(chuckerCollector)
-            .maxContentLength(250_000L)
-            .redactHeaders("Auth-Token", "Bearer")
-            .alwaysReadResponseBody(true)
-            .build()
-
         HttpRequest.init("https://www.wanandroid.com/"){
             okHttp {
                 it.apply {
-                    addInterceptor(chuckerInterceptor)
                     ProgressManager.getInstance().with(this)
                         .build()
                 }

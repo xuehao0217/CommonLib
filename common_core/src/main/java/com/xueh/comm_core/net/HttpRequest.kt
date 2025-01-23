@@ -1,6 +1,9 @@
 package com.xueh.comm_core.net
 
 import com.blankj.utilcode.util.Utils
+import com.chuckerteam.chucker.api.ChuckerCollector
+import com.chuckerteam.chucker.api.ChuckerInterceptor
+import com.chuckerteam.chucker.api.RetentionManager
 import com.safframework.http.interceptor.AndroidLoggingInterceptor
 import com.xueh.comm_core.BuildConfig
 import com.xueh.comm_core.net.helper.XTrustManager
@@ -18,7 +21,7 @@ import javax.net.ssl.SSLContext
 https://github.com/RunFeifei/Run
  ****************************************************************************************************/
 object HttpRequest {
-    private val serviceMap= mutableMapOf<String, Retrofit>()
+    private val serviceMap = mutableMapOf<String, Retrofit>()
     lateinit var baseUrl: String
     fun init(url: String, requestDSL: (RequestDsl.() -> Unit)? = null) {
         this.baseUrl = url
@@ -64,6 +67,22 @@ object HttpRequest {
     //****************************************公用参数********************************************
 
 
+    //***************************************ChuckerInterceptor*****************************************
+    var chuckerInterceptor = ChuckerInterceptor.Builder(Utils.getApp())
+        .collector(
+            ChuckerCollector(
+                context = Utils.getApp(),
+                // Toggles visibility of the notification
+                showNotification = true,
+                // Allows to customize the retention period of collected data
+                retentionPeriod = RetentionManager.Period.ONE_HOUR
+            )
+        )
+        .maxContentLength(250_000L)
+        .redactHeaders("Auth-Token", "Bearer")
+        .alwaysReadResponseBody(true)
+        .build()
+
     //***************************************OkHttp*****************************************
     private const val TIME_CONNECT = 60L
     private fun getOkHttp(): OkHttpClient.Builder {
@@ -81,7 +100,14 @@ object HttpRequest {
                 builder.hostnameVerifier { hostname, session ->
                     true
                 }
-                builder.addNetworkInterceptor(AndroidLoggingInterceptor.build(isDebug = BuildConfig.DEBUG, hideVerticalLine=true,requestTag="HTTP",responseTag="HTTP"))
+                builder.addNetworkInterceptor(
+                    AndroidLoggingInterceptor.build(
+                        isDebug = BuildConfig.DEBUG,
+                        hideVerticalLine = true,
+                        requestTag = "HTTP",
+                        responseTag = "HTTP"
+                    )
+                )
             } catch (e: Exception) {
                 throw RuntimeException(e)
             }
@@ -89,6 +115,7 @@ object HttpRequest {
         return builder
             .cache(Cache(Utils.getApp().cacheDir, 10 * 1024 * 1024L))
             .addInterceptor(headers)
+            .addInterceptor(chuckerInterceptor)
             .connectTimeout(TIME_CONNECT, TimeUnit.SECONDS)
             .readTimeout(TIME_CONNECT, TimeUnit.SECONDS)
             .writeTimeout(TIME_CONNECT, TimeUnit.SECONDS)
