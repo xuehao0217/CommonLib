@@ -64,6 +64,7 @@ abstract class BaseComposeActivity : ComponentActivity() {
 
         setContent {
             // statusBar图标颜色模式
+            //true是白色  false是黑色
             val isDark = AppThemeType.isDark(
                 themeType = appThemeType
             )
