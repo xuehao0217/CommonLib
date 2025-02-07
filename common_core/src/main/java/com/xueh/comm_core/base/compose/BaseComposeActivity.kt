@@ -64,21 +64,23 @@ abstract class BaseComposeActivity : ComponentActivity() {
 
         setContent {
             // statusBar图标颜色模式
-            //true是白色  false是黑色
             val isDark = AppThemeType.isDark(
                 themeType = appThemeType
             )
-
-            DisposableEffect(isDark,isSystemBarLight) {
+            DisposableEffect(isDark, isSystemBarLight) {
                 enableEdgeToEdge(
                     SystemBarStyle.auto(
                         android.graphics.Color.TRANSPARENT,
                         android.graphics.Color.TRANSPARENT
-                    ) { isDark||isSystemBarLight },
+                    ) {
+                        //false statusBar图标颜色模式黑色
+                        //true  statusBar图标颜色模式白色
+                        isDark || isSystemBarLight
+                    },
                     SystemBarStyle.auto(
                         android.graphics.Color.WHITE,
                         android.graphics.Color.BLACK
-                    ) { isDark||isSystemBarLight  },
+                    ) { isDark || isSystemBarLight },
                 )
                 onDispose { }
             }
@@ -99,7 +101,7 @@ abstract class BaseComposeActivity : ComponentActivity() {
                                     .wrapContentHeight()
                                     .then(if (showStatusBars()) Modifier.statusBarsPadding() else Modifier)
                             ) {
-                               getTitleView()
+                                getTitleView()
                             }
                         }
                         setComposeContent()
@@ -122,7 +124,7 @@ abstract class BaseComposeActivity : ComponentActivity() {
     protected open fun showStatusBars() = true
 
     @Composable
-    protected open fun getTitleView()=CommonTitleView(
+    protected open fun getTitleView() = CommonTitleView(
         title = setTitle(),
         showBackIcon = showBackIcon(),
         backClick = {
@@ -145,19 +147,17 @@ abstract class BaseComposeActivity : ComponentActivity() {
 }
 
 
-
-
 @Composable
 fun CommonTitleView(
     title: String,
     @DrawableRes backIcon: Int = R.mipmap.bar_icon_back_black,
-    modifier: Modifier=Modifier,
+    modifier: Modifier = Modifier,
     titleBackgroundColor: Color = Color.White,
     showBackIcon: Boolean = true,
     rightContent: (@Composable () -> Unit)? = null,
     backClick: (() -> Unit)? = null,
 ) {
-    val isDark= AppThemeType.isDark(themeType = appThemeType)
+    val isDark = AppThemeType.isDark(themeType = appThemeType)
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
