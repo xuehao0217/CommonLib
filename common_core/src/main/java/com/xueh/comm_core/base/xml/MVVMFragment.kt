@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.viewbinding.ViewBinding
 import com.blankj.utilcode.util.ToastUtils
-import com.xueh.comm_core.base.mvvm.ibase.AbsViewModel
+import com.xueh.comm_core.base.mvvm.AbsViewModel
 import com.xueh.comm_core.helper.xml.ViewModelHelper
 
 

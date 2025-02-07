@@ -1,7 +1,7 @@
 package com.xueh.comm_core.net.coroutinedsl
 
 import androidx.lifecycle.viewModelScope
-import com.xueh.comm_core.base.mvvm.ibase.AbsViewModel
+import com.xueh.comm_core.base.mvvm.AbsViewModel
 import com.xueh.comm_core.net.BaseResult
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers

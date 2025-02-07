@@ -1,17 +1,11 @@
-package com.xueh.comm_core.base.mvvm.ibase
+package com.xueh.comm_core.base.mvvm
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.blankj.utilcode.util.LogUtils
-import com.blankj.utilcode.util.NetworkUtils
-import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.helper.launchSafety
-import com.xueh.comm_core.net.BaseResult
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
 
 /**
  * 创 建 人: xueh

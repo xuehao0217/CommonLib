@@ -3,7 +3,7 @@ package com.xueh.comm_core.base.xml
 import android.os.Bundle
 import android.util.Log
 import androidx.viewbinding.ViewBinding
-import com.xueh.comm_core.base.mvvm.ibase.AbsViewModel
+import com.xueh.comm_core.base.mvvm.AbsViewModel
 import com.xueh.comm_core.helper.xml.ViewModelHelper
 
 /**
