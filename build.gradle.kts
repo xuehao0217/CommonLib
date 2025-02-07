@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid) apply false
     alias(libs.plugins.androidLibrary) apply false
     alias(libs.plugins.compose.compiler) apply false
-    id("com.github.ben-manes.versions") version "0.51.0" //  ./gradlew dependencyUpdates
+    id("com.github.ben-manes.versions") version "0.52.0" //  ./gradlew dependencyUpdates
 }
 
 buildscript{
