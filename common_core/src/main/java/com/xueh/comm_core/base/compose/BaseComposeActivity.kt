@@ -51,7 +51,7 @@ import com.xueh.comm_core.weight.xml.ViewLoading
 //AppCompatActivity  可以解决弹窗问题
 abstract class BaseComposeActivity : ComponentActivity() {
     //statusBar图标颜色模式
-    // true是白色  false是黑色
+    //true是白色  false是黑色
     var isSystemBarLight by mutableStateOf(false)
     override fun onCreate(savedInstanceState: Bundle?) {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
