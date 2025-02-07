@@ -115,7 +115,7 @@ class TabPage3 : NavContent {
                         .height(100.dp)
                         .background(AppBaseTheme.colors.theme)
                         .click {
-
+                            ActivityUtils.startActivity(TestComposeActivity::class.java)
                         })
             }
         }
