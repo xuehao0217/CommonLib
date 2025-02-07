@@ -50,6 +50,7 @@ import com.xueh.comm_core.weight.xml.ViewLoading
 //ComponentActivity
 //AppCompatActivity  可以解决弹窗问题
 abstract class BaseComposeActivity : ComponentActivity() {
+    var isSystemBarDark by mutableStateOf(false)
     override fun onCreate(savedInstanceState: Bundle?) {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
         super.onCreate(savedInstanceState)
@@ -65,16 +66,16 @@ abstract class BaseComposeActivity : ComponentActivity() {
                 themeType = appThemeType
             )
 
-            DisposableEffect(isDark) {
+            DisposableEffect(isDark,isSystemBarDark) {
                 enableEdgeToEdge(
                     SystemBarStyle.auto(
                         android.graphics.Color.TRANSPARENT,
                         android.graphics.Color.TRANSPARENT
-                    ) { isDark },
+                    ) { isDark||isSystemBarDark },
                     SystemBarStyle.auto(
                         android.graphics.Color.WHITE,
                         android.graphics.Color.BLACK
-                    ) { isDark },
+                    ) { isDark||isSystemBarDark  },
                 )
                 onDispose { }
             }
