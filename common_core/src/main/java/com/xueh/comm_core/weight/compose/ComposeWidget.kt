@@ -77,6 +77,7 @@ fun ImageLoadAsyncImage(
 fun ImageLoadCompose(
     url: String,
     modifier: Modifier = Modifier,
+    contentScale: ContentScale = ContentScale.Crop,
     loading: @Composable (SubcomposeAsyncImageScope.(AsyncImagePainter.State.Loading) -> Unit)? = null,
     success: @Composable (SubcomposeAsyncImageScope.(AsyncImagePainter.State.Success) -> Unit)? = null,
     error: @Composable (SubcomposeAsyncImageScope.(AsyncImagePainter.State.Error) -> Unit)? = null,
@@ -87,7 +88,7 @@ fun ImageLoadCompose(
     SubcomposeAsyncImage(
         model = ImageRequest.Builder(LocalContext.current).data(url.trim()).crossfade(true).build(),
         modifier = modifier,
-        contentScale = ContentScale.Crop,
+        contentScale = contentScale,
         contentDescription = null,
         loading = loading,
         success = success,
