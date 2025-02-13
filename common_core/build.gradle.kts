@@ -125,6 +125,8 @@ dependencies {
     api(libs.androidx.viewpager2)
     api(libs.github.brvah)
     api(libs.easyNavigation)
+
+    debugApi (libs.squareup.leakcanary)
 //    //捕获崩溃信息
 //    debugApi(libs.spiderman) {
 //        exclude(group = "androidx.appcompat")

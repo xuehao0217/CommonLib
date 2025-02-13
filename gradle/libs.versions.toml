@@ -46,6 +46,7 @@ progressmanagerVersion = "1.5.0"
 chucker = "4.1.0"
 spiderman = "v1.1.8"
 #--------------XML相关-----------------
+leakcanaryAndroidVersion = "2.14"
 eventbus = "3.3.1"
 constraintlayout = "2.2.0"
 recyclerviewVersion = "1.4.0"
@@ -127,6 +128,7 @@ utilcodex = { module = "com.blankj:utilcodex", version.ref = "utilcodex" }
 agentweb = { module = "io.github.justson:agentweb-core", version.ref = "agentweb" }
 xxPermissions = { module = "com.github.getActivity:XXPermissions", version.ref = "xxpermissions" }
 logger = { module = "com.orhanobut:logger", version.ref = "logger" }
+squareup-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanaryAndroidVersion" }
 #------------------------------------------------XML相关--------------------------------------------------------------
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
