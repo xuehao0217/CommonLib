@@ -1,7 +1,7 @@
 [versions]
 agp = "8.3.2"
-kotlin = "2.0.21"
-kotlinCoroutinesVersion = "1.9.0"
+kotlin = "2.1.10"
+kotlinCoroutinesVersion = "1.10.1"
 composeBom = "2025.02.00"
 #--------------基础库相关-----------------
 junit = "4.13.2"
@@ -26,7 +26,7 @@ activityKtx = "1.10.0"
 fragmentKtx = "1.8.6"
 lifecycleKtx = "2.9.0-alpha10"
 #--------------Compose相关-----------------
-coilCompose = "3.0.4"
+coilCompose = "3.1.0"
 constraintLayoutCompose = "1.1.0"
 accompanist = "0.36.0"
 permissions = "0.37.0"
