@@ -104,11 +104,11 @@ dependencies {
     api(libs.logginginterceptor)
     api(libs.cookieJar)
 
-    //----------------网络请求查看日志相关--------------------------
+    //网络请求查看日志相关
     debugApi(libs.chucker)
     releaseApi(libs.chucker.no.op)
-
     //---------------工具类的库--------------------------
+    debugApi (libs.squareup.leakcanary)
     api (libs.interval)
     api(libs.gson)
     api(libs.utilcodex)
@@ -117,7 +117,6 @@ dependencies {
     api(libs.xxPermissions)
     api(libs.logger)
     api(libs.mmkv)
-    debugApi (libs.squareup.leakcanary)
     api(libs.agentweb)
     //--------------XML相关一些库--------------------------
     api(libs.material)
