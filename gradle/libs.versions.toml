@@ -20,6 +20,7 @@ xxpermissions = "20.0"
 glideVersion = "4.16.0"
 landscapistGlide = "2.4.6"
 logger = "2.2.0"
+mmkv = "2.1.0"
 #--------------KTX相关-----------------
 coreKtx = "1.15.0"
 activityKtx = "1.10.0"
@@ -129,6 +130,7 @@ agentweb = { module = "io.github.justson:agentweb-core", version.ref = "agentweb
 xxPermissions = { module = "com.github.getActivity:XXPermissions", version.ref = "xxpermissions" }
 logger = { module = "com.orhanobut:logger", version.ref = "logger" }
 squareup-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanaryAndroidVersion" }
+mmkv = { module = "com.tencent:mmkv", version.ref = "mmkv" }
 #------------------------------------------------XML相关--------------------------------------------------------------
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }

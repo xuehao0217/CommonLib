@@ -116,6 +116,7 @@ dependencies {
     api(libs.eventbus)
     api(libs.xxPermissions)
     api(libs.logger)
+    api(libs.mmkv)
     //--------------XML相关一些库--------------------------
     api(libs.agentweb)
     api(libs.material)
