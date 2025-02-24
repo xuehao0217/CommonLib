@@ -9,6 +9,7 @@ import com.chuckerteam.chucker.api.RetentionManager
 import com.just.agentweb.AgentWebConfig
 import com.xueh.comm_core.base.BaseApplication
 import com.xueh.comm_core.net.HttpRequest
+import com.xueh.comm_core.utils.MMKVUtil
 import me.jessyan.progressmanager.ProgressManager
 
 
@@ -21,6 +22,7 @@ class MyApplication : BaseApplication() {
     override fun init() {
         initLog()
         initNet()
+        MMKVUtil.init(this)
         AgentWebConfig.clearDiskCache(Utils.getApp())
     }
 
