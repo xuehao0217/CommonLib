@@ -70,9 +70,7 @@ dependencies {
     api( libs.compose.animation)
     api(libs.androidx.activity.compose)
     api(libs.compose.paging)
-    api(libs.accompanist.systemuicontroller)
     api(libs.accompanist.permissions)
-    api(libs.accompanist.placeholder)
     api(libs.compose.navigation)
     api(libs.compose.lifecycle.runtime)
     api(libs.compose.lifecycle.viewmodel)
@@ -90,6 +88,8 @@ dependencies {
 
     api (libs.refresh)
     api (libs.refresh.indicator)
+
+    api(libs.accompanist.placeholder)
     //----------------Kotlin相关--------------------------
     api(libs.kotlin.stdlib)
     api(libs.kotlinx.coroutines.core)
