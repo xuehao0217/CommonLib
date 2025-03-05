@@ -104,7 +104,11 @@ open class WebViewActivity : BaseActivity<ActivityWebViewBinding>() {
             BarUtils.setStatusBarLightMode(this,false)
             binding.composeViewTitle.setContent {
                 WebTitle(titleStr, alpha) {
-                    this.finish()
+                    if (agentWeb.back()) {
+                        agentWeb.back()
+                    }else{
+                        finish()
+                    }
                 }
             }
             binding.tbTitleBar.visibility = View.GONE
