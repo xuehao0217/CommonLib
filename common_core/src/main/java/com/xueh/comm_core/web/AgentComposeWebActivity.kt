@@ -71,7 +71,11 @@ class AgentComposeWebActivity : BaseComposeActivity() {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
                 AgentWeb()
                 WebTitle(titleStr, alpha) {
-                    onBackPressedDispatcher.onBackPressed()
+                    if (agentWeb?.back() == true) {
+                        agentWeb?.back()
+                    } else {
+                        onBackPressedDispatcher.onBackPressed()
+                    }
                 }
             }
         } else {
