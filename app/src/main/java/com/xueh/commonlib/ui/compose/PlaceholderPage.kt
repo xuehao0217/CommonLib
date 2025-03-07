@@ -47,7 +47,7 @@ fun PlaceholderPage() {
         SpacerH(int = 15)
 
         Text(
-            text = "fade  Content to display after content has loaded",
+            text = "fade  Content to display after content has loadedfade  Content to display after content has loadedfade  Content to display after content has loadedfade  Content to display after content has loaded",
             modifier = Modifier
                 .padding(16.dp)
                 .placeholder(

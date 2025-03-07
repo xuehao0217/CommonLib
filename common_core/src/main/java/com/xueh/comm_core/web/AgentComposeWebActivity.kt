@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.Composable
@@ -24,11 +25,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ConvertUtils
+import com.blankj.utilcode.util.IntentUtils
 import com.blankj.utilcode.util.Utils
 import com.just.agentweb.AgentWeb
 import com.just.agentweb.AgentWebConfig
@@ -37,6 +41,8 @@ import com.just.agentweb.MiddlewareWebChromeBase
 import com.xueh.comm_core.R
 import com.xueh.comm_core.base.compose.BaseComposeActivity
 import com.xueh.comm_core.base.compose.CommonTitleView
+import com.xueh.comm_core.weight.compose.ImageCompose
+import com.xueh.comm_core.weight.compose.click
 
 class AgentComposeWebActivity : BaseComposeActivity() {
     companion object {
@@ -65,6 +71,8 @@ class AgentComposeWebActivity : BaseComposeActivity() {
     override fun setComposeContent() {
         val uri = Uri.parse(intent.getStringExtra(WebViewActivity.URL))
         val hideTitle = uri.getQueryParameter("hideTitle") ?: ""
+        showShare = (uri.getQueryParameter("showShare") ?: "").isNotEmpty()
+
         if (hideTitle.isNotEmpty()) {
             BarUtils.transparentStatusBar(this)
             BarUtils.setStatusBarLightMode(this, false)
@@ -83,6 +91,9 @@ class AgentComposeWebActivity : BaseComposeActivity() {
             CommonTitleView(
                 title = titleStr,
                 titleBackgroundColor = Color.Transparent,
+                rightContent = {
+                    TitleRightShare()
+                },
                 backClick = {
                     if (agentWeb?.back() == true) {
                         agentWeb?.back()
@@ -129,8 +140,9 @@ class AgentComposeWebActivity : BaseComposeActivity() {
                             if (!TextUtils.isEmpty(title) && titleStr.isEmpty()) {
                                 if (title.length > 10) {
                                     titleStr = title.substring(0, 10) + "..."
+                                }else{
+                                    titleStr = title
                                 }
-                                titleStr = title
                             }
                         }
                     })
@@ -165,6 +177,7 @@ class AgentComposeWebActivity : BaseComposeActivity() {
         } else super.onKeyDown(keyCode, event)
     }
 
+    var showShare by mutableStateOf(false)
 
     @Preview
     @Composable
@@ -185,7 +198,9 @@ class AgentComposeWebActivity : BaseComposeActivity() {
                     titleBackgroundColor = Color.Transparent,
                     title = "",
                     backIcon = R.mipmap.bar_icon_back_white,
-                    backClick = back
+                    backClick = back, rightContent = {
+                        TitleRightShare(colorFilter = ColorFilter.tint(Color.White))
+                    }
                 )
             }
             Column(
@@ -199,9 +214,28 @@ class AgentComposeWebActivity : BaseComposeActivity() {
                 CommonTitleView(
                     titleBackgroundColor = Color.White,
                     title = title,
-                    backIcon = R.mipmap.bar_icon_back_black, backClick = back
+                    backIcon = R.mipmap.bar_icon_back_black, backClick = back,
+                    rightContent = {
+                        TitleRightShare()
+                    }
                 )
             }
+        }
+    }
+
+
+    @Composable
+    fun TitleRightShare(colorFilter: ColorFilter? = null) {
+        if (showShare) {
+            ImageCompose(id = R.mipmap.ic_share,
+                Modifier
+                    .size(24.dp)
+                    .click {
+                        ActivityUtils.startActivity(
+                            IntentUtils.getShareTextIntent(getUrl())
+                        )
+                    }, colorFilter = colorFilter
+            )
         }
     }
 }
