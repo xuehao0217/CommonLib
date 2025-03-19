@@ -16,6 +16,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
+import java.text.SimpleDateFormat
 
 
 /**
@@ -230,3 +231,19 @@ fun <T> launchIOCoroutine(
         }
     }
 }
+
+
+//yyyy-MM-dd HH:mm:ss
+// 年月日
+fun Long.DateFormatYMD() = TimeUtils.millis2String(
+    this,
+    SimpleDateFormat("yyyy-MM-dd")
+)
+
+//时 分
+fun Long.DateFormatHM() = TimeUtils.millis2String(
+    this,
+    SimpleDateFormat("HH:mm")
+)
+
+fun getNowDataFormatYMD()=TimeUtils.getNowMills().DateFormatYMD()
