@@ -1,6 +1,8 @@
 package com.xueh.comm_core.helper
 
+import android.graphics.Color
 import android.util.Log
+import android.view.Gravity
 import androidx.core.content.FileProvider
 import com.blankj.utilcode.util.*
 import com.xueh.comm_core.helper.coroutine.GlobalCoroutineExceptionHandler
@@ -247,3 +249,14 @@ fun Long.DateFormatHM() = TimeUtils.millis2String(
 )
 
 fun getNowDataFormatYMD()=TimeUtils.getNowMills().DateFormatYMD()
+
+
+
+
+fun showToast(context: String, setDurationIsLong: Boolean = false) {
+    ThreadUtils.runOnUiThread {
+        ToastUtils.make().setBgColor(Color.parseColor("#CC000000")).setTextColor(Color.WHITE)
+            .setGravity(Gravity.CENTER, 0,0).setTextSize(16)
+            .setDurationIsLong(setDurationIsLong).show(context)
+    }
+}
