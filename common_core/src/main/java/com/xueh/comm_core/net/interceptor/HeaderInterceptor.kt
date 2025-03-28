@@ -26,28 +26,20 @@ class HeaderInterceptor : Interceptor {
 
         return chain.proceed(requestBuilder.build())
     }
-    @Synchronized
+
     fun put(key: String, value: String) {
-        if (headers.containsKey(key)){
-            clearKey(key)
-        }
         headers[key] = value
     }
 
-    @Synchronized
-    fun put(headers: HashMap<String, String>) {
+    fun put(headers: Map<String, String>) {
         this.headers.putAll(headers)
     }
 
-    @Synchronized
     fun clearHead() {
         headers.clear()
     }
 
-    @Synchronized
     fun clearKey(key: String) {
-        if (headers.containsKey(key)) {
-            headers.remove(key)
-        }
+        headers.remove(key)
     }
 }
