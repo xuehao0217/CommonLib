@@ -164,7 +164,15 @@ fun LazyListState.onScrollDirection(scrollDirection: (isScrollingUp: Boolean) ->
 
 
 
+//val tabs = remember {
+//    orderedStateMapOf(
+//        ForYou to viewModel.getLatestNews(ForYou),
+//    )
+//}
 
+//tabs.addAt(0,"Lotto", viewModel.getLatestNews("Lotto"))
+
+//tabs.put(it.category_name, viewModel.getLatestNews(it.category_id))
 class OrderedStateMap<K, V> {
     private val stateMap = mutableStateMapOf<K, V>()
     private val orderList = mutableStateListOf<K>()
