@@ -165,6 +165,17 @@ fun LazyListState.onScrollDirection(scrollDirection: (isScrollingUp: Boolean) ->
 
 
 
+
+
+//val tabs = remember {
+//    orderedStateMapOf(
+//        ForYou to viewModel.getLatestNews(ForYou),
+//    )
+//}
+
+//tabs.addAt(0,"Lotto", viewModel.getLatestNews("Lotto"))
+
+//tabs.put(it.category_name, viewModel.getLatestNews(it.category_id))
 class OrderedStateMap<K, V> {
     private val stateMap = mutableStateMapOf<K, V>()
     private val orderList = mutableStateListOf<K>()
@@ -218,6 +229,18 @@ class OrderedStateMap<K, V> {
 
     fun putAll(from: Map<out K, V>) {
         from.forEach { (key, value) -> put(key, value) }
+    }
+
+    // 在指定位置添加键值对的方法
+    fun addAt(index: Int, key: K, value: V) {
+        if (!stateMap.containsKey(key)) {
+            stateMap[key] = value
+            orderList.add(index, key)  // 在指定位置添加键
+        } else {
+            // 如果key已存在，可以选择更新值，或抛出异常
+            stateMap[key] = value
+            // 确保该key在orderList中，如果已经存在，且需要保持原顺序，可以不处理
+        }
     }
 }
 
