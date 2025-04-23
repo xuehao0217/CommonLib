@@ -1,5 +1,7 @@
 package com.xueh.comm_core.helper.compose
 
+import android.app.Activity
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -24,6 +26,18 @@ import com.lt.compose_views.util.rememberMutableStateOf
  * 创建日期: 2022/8/29
  * 备注：
  */
+
+// 为 Context 类型定义的一个扩展函数
+// 主要目的是从当前的 Context 对象中递归地寻找并返回一个 Activity 实例（如果存在的话）。这在 Android 开发中是很有用的，尤其是在需要在某些并非直接与 Activity 相关的代码（如工具类或扩展函数中）中访问 Activity 相关的功能时。
+fun Context.findActivity(): Activity? = when (this) {
+    is Activity -> this
+    is android.content.ContextWrapper -> baseContext.findActivity()
+    else -> null
+}
+
+
+
+
 
 //LifecycleEventEffect(Lifecycle.Event.ON_RESUME){
 
