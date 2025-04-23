@@ -52,6 +52,12 @@ enum class AppThemeColorType {
 }
 
 
+@Composable
+fun isThemeDark():Boolean=AppThemeType.isDark(
+    themeType = appThemeType
+)
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 //https://blog.csdn.net/wsyx768/article/details/138075205
 @Composable
