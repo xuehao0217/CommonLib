@@ -85,21 +85,22 @@ abstract class BaseComposeActivity : ComponentActivity() {
                 onDispose { }
             }
 
+            
+            val statusBarPadding = if (showStatusBars()) Modifier.statusBarsPadding() else Modifier
+
             ComposeMaterialTheme {
                 GrayAppAdapter(isGray = false) {
-                    Column(
-                        Modifier
-                            .fillMaxSize()
-                            .background(MaterialTheme.colorScheme.background)
-                            .navigationBarsPadding()
-                            .then(if (showStatusBars()) Modifier.statusBarsPadding() else Modifier)
-                    ) {
+                    Column(modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background)
+                        .navigationBarsPadding()
+                        .then(statusBarPadding)) {
                         if (showTitleView()) {
                             Column(
-                                Modifier
+                                modifier = Modifier
                                     .fillMaxWidth()
                                     .wrapContentHeight()
-                                    .then(if (showStatusBars()) Modifier.statusBarsPadding() else Modifier)
+                                    .then(statusBarPadding)
                             ) {
                                 getTitleView()
                             }
