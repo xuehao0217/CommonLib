@@ -163,7 +163,7 @@ fun CommonTitleView(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .background(if (isDark)  Color.Black else Color.White )
+            .background(if (isDark)  Color.Black else titleBackgroundColor )
             .height(44.dp)
             .then(modifier)
     ) {
