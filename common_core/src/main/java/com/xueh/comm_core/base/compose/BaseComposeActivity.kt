@@ -159,48 +159,48 @@ fun CommonTitleView(
     backClick: (() -> Unit)? = null,
 ) {
     val isDark = AppThemeType.isDark(themeType = appThemeType)
-    ConstraintLayout(
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .background(titleBackgroundColor)
+            .background(if (isDark)  Color.Black else Color.White )
             .height(44.dp)
             .then(modifier)
     ) {
-        val (iv_close, row_title, surface_right_view) = createRefs()
+        if (showBackIcon) {
+            ImageCompose(
+                id = backIcon,
+                modifier = Modifier
+                    .size(28.dp)
+                    .click {
+                        backClick?.invoke()
+                    },colorFilter = if (isDark) ColorFilter.tint(Color.White) else null
+            )
+        } else {
+            Spacer(modifier = Modifier.size(28.dp))
+        }
+
         Text(
             text = title,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             maxLines = 1,
             color = if (isDark) Color.White else Color.Black,
-            modifier = Modifier.constrainAs(row_title) {
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-            }
+            modifier = Modifier
+                .weight(1f)
+                .wrapContentWidth(Alignment.CenterHorizontally)
         )
-        if (showBackIcon) {
-            ImageCompose(id = backIcon, modifier = Modifier
-                .size(28.dp)
-                .constrainAs(iv_close) {
-                    top.linkTo(row_title.top)
-                    bottom.linkTo(row_title.bottom)
-                    start.linkTo(parent.start, 16.dp)
-                }
-                .click {
-                    backClick?.invoke()
-                })
-        }
-        Box(modifier = Modifier.constrainAs(surface_right_view) {
-            top.linkTo(parent.top)
-            bottom.linkTo(parent.bottom)
-            end.linkTo(parent.end, 16.dp)
-        }) {
+
+        Box(
+            modifier = Modifier
+                .sizeIn(minWidth = 28.dp)
+                .wrapContentWidth(Alignment.End)
+        ) {
             rightContent?.invoke()
         }
     }
 }
+
 
 
 
