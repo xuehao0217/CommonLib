@@ -20,7 +20,11 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavHostController
 import com.lt.compose_views.util.rememberMutableStateOf
-
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
 /**
  * 创 建 人: xueh
  * 创建日期: 2022/8/29
@@ -172,6 +176,23 @@ fun LazyListState.onScrollDirection(scrollDirection: (isScrollingUp: Boolean) ->
 }
 
 
+
+
+
+
+class Ref(var value: Int)
+@Composable
+inline fun LogCompositions(msg: String) {
+
+    val ref = remember {
+        Ref(0) }
+    SideEffect {
+        ref.value++ }
+    Text(text = "$msg 重组次数 ${
+        ref.value}", color = Color.Yellow)
+    Log.d("RecompositionLog", "Compositions: $msg ${
+        ref.value}")
+}
 
 
 
