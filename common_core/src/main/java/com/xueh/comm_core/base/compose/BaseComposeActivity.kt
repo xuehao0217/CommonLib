@@ -11,15 +11,20 @@ import androidx.activity.enableEdgeToEdge
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -29,9 +34,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -70,36 +77,36 @@ abstract class BaseComposeActivity : ComponentActivity() {
             DisposableEffect(isDark, isSystemBarLight) {
                 enableEdgeToEdge(
                     SystemBarStyle.auto(
-                        android.graphics.Color.TRANSPARENT,
-                        android.graphics.Color.TRANSPARENT
+                        android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT
                     ) {
                         //false statusBar图标颜色模式黑色
                         //true  statusBar图标颜色模式白色
                         isDark || isSystemBarLight
                     },
                     SystemBarStyle.auto(
-                        android.graphics.Color.WHITE,
-                        android.graphics.Color.BLACK
+                        android.graphics.Color.WHITE, android.graphics.Color.BLACK
                     ) { isDark || isSystemBarLight },
                 )
                 onDispose { }
             }
 
+            val statusBarPadding = if (showStatusBars()) Modifier.statusBarsPadding() else Modifier
+
             ComposeMaterialTheme {
                 GrayAppAdapter(isGray = false) {
                     Column(
-                        Modifier
+                        modifier = Modifier
                             .fillMaxSize()
                             .background(MaterialTheme.colorScheme.background)
                             .navigationBarsPadding()
-                            .then(if (showStatusBars()) Modifier.statusBarsPadding() else Modifier)
+                            .then(statusBarPadding)
                     ) {
                         if (showTitleView()) {
                             Column(
-                                Modifier
+                                modifier = Modifier
                                     .fillMaxWidth()
                                     .wrapContentHeight()
-                                    .then(if (showStatusBars()) Modifier.statusBarsPadding() else Modifier)
+                                    .then(statusBarPadding)
                             ) {
                                 getTitleView()
                             }
@@ -125,9 +132,7 @@ abstract class BaseComposeActivity : ComponentActivity() {
 
     @Composable
     protected open fun getTitleView() = CommonTitleView(
-        title = setTitle(),
-        showBackIcon = showBackIcon(),
-        backClick = {
+        title = setTitle(), showBackIcon = showBackIcon(), backClick = {
             onBackPressedDispatcher.onBackPressed()
         })
 
@@ -158,44 +163,43 @@ fun CommonTitleView(
     backClick: (() -> Unit)? = null,
 ) {
     val isDark = AppThemeType.isDark(themeType = appThemeType)
-    ConstraintLayout(
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .background(titleBackgroundColor)
+            .background(if (isDark)  Color.Black else titleBackgroundColor )
             .height(44.dp)
             .then(modifier)
     ) {
-        val (iv_close, row_title, surface_right_view) = createRefs()
+        if (showBackIcon) {
+            ImageCompose(
+                id = backIcon,
+                modifier = Modifier
+                    .size(28.dp)
+                    .click {
+                        backClick?.invoke()
+                    },colorFilter = if (isDark) ColorFilter.tint(Color.White) else null
+            )
+        } else {
+            Spacer(modifier = Modifier.size(28.dp))
+        }
+
         Text(
             text = title,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             maxLines = 1,
             color = if (isDark) Color.White else Color.Black,
-            modifier = Modifier.constrainAs(row_title) {
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-            }
+            modifier = Modifier
+                .weight(1f)
+                .wrapContentWidth(Alignment.CenterHorizontally)
         )
-        if (showBackIcon) {
-            ImageCompose(id = backIcon, modifier = Modifier
-                .size(28.dp)
-                .constrainAs(iv_close) {
-                    top.linkTo(row_title.top)
-                    bottom.linkTo(row_title.bottom)
-                    start.linkTo(parent.start, 16.dp)
-                }
-                .click {
-                    backClick?.invoke()
-                })
-        }
-        Box(modifier = Modifier.constrainAs(surface_right_view) {
-            top.linkTo(parent.top)
-            bottom.linkTo(parent.bottom)
-            end.linkTo(parent.end, 16.dp)
-        }) {
+
+        Box(
+            modifier = Modifier
+                .sizeIn(minWidth = 28.dp)
+                .wrapContentWidth(Alignment.End)
+        ) {
             rightContent?.invoke()
         }
     }

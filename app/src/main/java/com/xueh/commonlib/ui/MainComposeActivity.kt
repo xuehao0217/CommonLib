@@ -42,7 +42,7 @@ class MainComposeActivity : BaseComposeActivity() {
         var showRedPoint = mutableStateOf(false)
     }
 
-    override fun showTitleView() = false
+    override fun showTitleView() = true
 
     private var backPressedTime: Long = 0
 
@@ -71,7 +71,12 @@ class MainComposeActivity : BaseComposeActivity() {
         ),
     )
 
+    override fun setTitle()="AAAAAA"
+
     val interceptPos = 2
+    override fun showStatusBars(): Boolean {
+        return super.showStatusBars()
+    }
 
     @Composable
     override fun setComposeContent() {

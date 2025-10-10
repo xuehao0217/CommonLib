@@ -1,8 +1,8 @@
 [versions]
 agp = "8.6.0"
 kotlin = "2.1.20"
-kotlinCoroutinesVersion = "1.10.1"
-composeBom = "2025.04.00"
+kotlinCoroutinesVersion = "1.10.2"
+composeBom = "2025.05.00"
 #--------------基础库相关-----------------
 junit = "4.13.2"
 junitVersion = "1.2.1"
