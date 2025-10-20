@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.lazy.LazyListState
@@ -183,7 +184,6 @@ fun LazyListState.onScrollDirection(scrollDirection: (isScrollingUp: Boolean) ->
 class Ref(var value: Int)
 @Composable
 inline fun LogCompositions(msg: String) {
-
     val ref = remember {
         Ref(0) }
     SideEffect {
