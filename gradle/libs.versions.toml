@@ -147,6 +147,7 @@ refresh-layout = { module = "com.scwang.smart:refresh-layout-kernel", version.re
 xpopup = { module = "com.lxj:xpopup", version.ref = "xpopup" }
 magicIndicator = { module = "com.github.hackware1993:MagicIndicator", version.ref = "magicindicator" }
 
+#------------------------------------------------plugins--------------------------------------------------------------
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
