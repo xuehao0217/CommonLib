@@ -25,11 +25,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "21"
     }
     buildFeatures {
         compose = true
@@ -63,6 +63,7 @@ dependencies {
     api(platform(libs.androidx.compose.bom))
     api(libs.constraintlayout.compose)
     api(libs.androidx.ui)
+    api(libs.androidx.material.icons.extended)
     api(libs.androidx.material3)
     api(libs.androidx.ui.tooling.preview)
     api(libs.androidx.ui.graphics)
@@ -101,7 +102,9 @@ dependencies {
     api(libs.converter.gson)
     api(libs.okhttp3.okhttp)
     api(libs.okhttp3.logging.interceptor)
-    api(libs.logginginterceptor)
+    api(libs.logginginterceptor){
+        exclude(group = "org.jspecify", module = "jspecify")
+    }
     api(libs.cookieJar)
 
     //网络请求查看日志相关
