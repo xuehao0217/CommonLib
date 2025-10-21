@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import com.blankj.utilcode.util.*
 import com.xueh.comm_core.base.mvvm.BaseRequstViewModel
 import com.xueh.comm_core.base.mvvm.BaseViewModel
-import com.xueh.comm_core.helper.getDownloadProgress
-import com.xueh.comm_core.helper.getPart
+import com.xueh.comm_core.helper.listenDownloadProgress
+import com.xueh.comm_core.helper.toMultipartPart
 import com.xueh.comm_core.net.BaseResult
 import com.xueh.comm_core.net.HttpRequest
 import com.xueh.commonlib.api.RestApi
@@ -78,7 +78,7 @@ class HomeViewModel : BaseRequstViewModel<RestApi>() {
     fun uploadFiles(file: File) {
         apiDSL<BaseResult<String>> {
             onRequest {
-                api.uploadFiles(file.getPart())
+                api.uploadFiles(file.toMultipartPart())
             }
             onResponse {
 
@@ -106,7 +106,7 @@ class HomeViewModel : BaseRequstViewModel<RestApi>() {
                 }
             }
             onStart {
-                Url.getDownloadProgress {
+                Url.listenDownloadProgress {
                     progressLiveData.postValue(it)
                 }
             }

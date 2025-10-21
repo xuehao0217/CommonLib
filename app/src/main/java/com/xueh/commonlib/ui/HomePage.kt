@@ -65,9 +65,12 @@ import com.xueh.commonlib.ui.compose.ItemView
 import com.xueh.commonlib.ui.compose.LazyColumnPage
 import com.xueh.commonlib.ui.compose.NavigateParams1View
 import com.xueh.commonlib.ui.compose.NavigateParams2View
+import com.xueh.commonlib.ui.compose.OrderedTabsExample
 import com.xueh.commonlib.ui.compose.PageTwo
 import com.xueh.commonlib.ui.compose.PagerPage
+import com.xueh.commonlib.ui.compose.PreviewOrderedTabsExample
 import com.xueh.commonlib.ui.compose.TabPage
+import com.xueh.commonlib.ui.compose.VisibilityChangedDemo
 import com.xueh.commonlib.ui.compose.google.CustomPullRefreshSample
 import com.xueh.commonlib.ui.compose.google.GoogleSamplePage
 import com.xueh.commonlib.ui.compose.google.PullRefreshIndicatorTransformSample
@@ -84,7 +87,12 @@ class HomePage : NavContent {
             mutableStateOf(false)
         }
         Column {
-            Row(Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.background), horizontalArrangement = Arrangement.SpaceBetween) {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.background),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 val isDarkTheme = AppThemeType.isDark(themeType = appThemeType)
                 IconButton(onClick = {
                     appThemeType = if (isDarkTheme) {
@@ -110,7 +118,7 @@ class HomePage : NavContent {
                     )
                 }
             }
-            Box{
+            Box {
                 NavHost()
                 if (showMenu) {
                     Box(modifier = Modifier.fillMaxWidth()) {
@@ -125,6 +133,30 @@ class HomePage : NavContent {
         }
     }
 
+    val str = listOf(
+        ItemData("Dialog", RouteConfig.DialogPage),
+        ItemData("公用CommonTabPager", RouteConfig.CommonTabPager),
+        ItemData("CarouselExamples", RouteConfig.CarouselExamples),
+        ItemData("ConstraintSet使用", RouteConfig.ConstraintSet),
+        ItemData("scrollableTab使用", RouteConfig.scrollableTabRow),
+        ItemData("路由传参", RouteConfig.Parameter),
+        ItemData("跳转互传参数", RouteConfig.navigate_param_transfer1),
+        ItemData("下拉加载使用", RouteConfig.refreshLoadUse),
+        ItemData("Compose下权限申请", RouteConfig.ComposePermission),
+        ItemData("Compose Placeholder", RouteConfig.Placeholder),
+        ItemData("NavPageWeiget 使用", RouteConfig.NavPageWeiget),
+        ItemData("WebView 使用", RouteConfig.WebView),
+        ItemData("GoogleSample", RouteConfig.GoogleSample),
+        ItemData("ComposeLoadPage", RouteConfig.ComposeTab),
+        ItemData("ComposePager", RouteConfig.ComposePager),
+        ItemData("ComposeViewModel", RouteConfig.ComposeViewModelPage),
+        ItemData("ComposeViewPaging", RouteConfig.ComposeViewPaging),
+        ItemData("VisibilityChanged", RouteConfig.onVisibilityChanged),
+        ItemData("OrderedTabs", RouteConfig.OrderedTabs),
+//                    ItemData("lazyVerticalGrid使用", RouteConfig.lazyVerticalGrid),
+//                    ItemData("LazyColumnPage", RouteConfig.LazyColumnPage),
+//                    ItemData("ScrollableAppBar", RouteConfig.ScrollableAppBar),
+    )
 
     @Composable
     fun NavHost() {
@@ -135,30 +167,6 @@ class HomePage : NavContent {
         ) {
             composable(RouteConfig.ActionList) {
 //                ToastUtils.showShort("${navController.currentBackStackEntry?.destination}")
-
-                val str = listOf(
-                    ItemData("Dialog", RouteConfig.DialogPage),
-                    ItemData("公用CommonTabPager", RouteConfig.CommonTabPager),
-                    ItemData("CarouselExamples", RouteConfig.CarouselExamples),
-                    ItemData("ConstraintSet使用", RouteConfig.ConstraintSet),
-                    ItemData("scrollableTab使用", RouteConfig.scrollableTabRow),
-                    ItemData("路由传参", RouteConfig.Parameter),
-                    ItemData("跳转互传参数", RouteConfig.navigate_param_transfer1),
-                    ItemData("下拉加载使用", RouteConfig.refreshLoadUse),
-                    ItemData("Compose下权限申请", RouteConfig.ComposePermission),
-                    ItemData("Compose Placeholder", RouteConfig.Placeholder),
-                    ItemData("NavPageWeiget 使用", RouteConfig.NavPageWeiget),
-                    ItemData("WebView 使用", RouteConfig.WebView),
-                    ItemData("GoogleSample", RouteConfig.GoogleSample),
-
-                    ItemData("ComposeLoadPage", RouteConfig.ComposeTab),
-                    ItemData("ComposePager", RouteConfig.ComposePager),
-                    ItemData("ComposeViewModel", RouteConfig.ComposeViewModelPage),
-                    ItemData("ComposeViewPaging", RouteConfig.ComposeViewPaging),
-//                    ItemData("lazyVerticalGrid使用", RouteConfig.lazyVerticalGrid),
-//                    ItemData("LazyColumnPage", RouteConfig.LazyColumnPage),
-//                    ItemData("ScrollableAppBar", RouteConfig.ScrollableAppBar),
-                )
                 LazyColumn {
                     itemsIndexed(str) { _, item ->
                         ItemView(item.str, false) {
@@ -262,6 +270,14 @@ class HomePage : NavContent {
 
             composable(RouteConfig.ComposeViewPaging) {
                 ComposePaging()
+            }
+
+            composable(RouteConfig.onVisibilityChanged) {
+                VisibilityChangedDemo()
+            }
+
+            composable(RouteConfig.OrderedTabs) {
+                OrderedTabsExample()
             }
         }
     }

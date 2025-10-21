@@ -64,7 +64,7 @@ fun PermissionPageContent() {
         ItemView(singlePermissionStr) {
             cameraPermissionState.launchPermissionRequest()
         }
-        SpacerH(int = 10)
+        SpacerH(10)
         ItemView(multiplePermissionStr) {
             multiplePermissionState.launchMultiplePermissionRequest()
         }

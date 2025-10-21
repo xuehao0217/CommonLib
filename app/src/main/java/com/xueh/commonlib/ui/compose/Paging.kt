@@ -22,26 +22,19 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
-import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,24 +43,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.paging.LoadState
-import androidx.paging.PagingData
-import androidx.paging.TerminalSeparatorType
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
-import androidx.paging.insertFooterItem
-import androidx.paging.insertHeaderItem
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.base.mvvm.BaseComposeViewModel
-import com.xueh.comm_core.helper.compose.PagerFlow
-import com.xueh.comm_core.helper.compose.PagingDataModifier
 import com.xueh.comm_core.helper.compose.modifier
-import com.xueh.comm_core.helper.compose.onScrollDirection
+import com.xueh.comm_core.helper.compose.onScrollDirectionChanged
 import com.xueh.comm_core.helper.compose.onScrollStopVisibleList
 import com.xueh.comm_core.weight.compose.PagingLazyColumn
 import com.xueh.comm_core.weight.compose.PagingRefreshColumn
@@ -76,7 +60,6 @@ import com.xueh.comm_core.weight.compose.PagingVerticalPager
 import com.xueh.comm_core.weight.compose.SpacerH
 import com.xueh.commonlib.entity.HomeEntity
 import com.xueh.commonlib.ui.compose.ItemView
-import com.xueh.commonlib.ui.compose.RouteConfig
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
 import kotlinx.coroutines.launch
 
@@ -149,7 +132,7 @@ fun ComposePaging() {
 fun CustomRefreshSample() {
     BaseComposeViewModel<ComposeViewModel> {
         val lazyPagingItems = it.getListDatas().collectAsLazyPagingItems()
-        lazyPagingItems.PagingRefreshColumn(headerIndicator = {
+        lazyPagingItems.PagingRefreshColumn(refreshHeader = {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -169,7 +152,7 @@ fun CustomRefreshSample() {
 fun RefreshPagingListSample() {
     BaseComposeViewModel<ComposeViewModel> {
         val lazyPagingItems = it.getListDatas().collectAsLazyPagingItems()
-        lazyPagingItems.PagingRefreshColumn(headerIndicator = {
+        lazyPagingItems.PagingRefreshColumn(refreshHeader = {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -181,8 +164,8 @@ fun RefreshPagingListSample() {
             state.onScrollStopVisibleList {
                 ToastUtils.showShort("onScrollStopVisibleList==${it.toList()}")
             }
-            state.onScrollDirection {
-                LogUtils.iTag("AAA", "onScrollDirection==${it}")
+            state.onScrollDirectionChanged { up->
+                LogUtils.iTag("AAA", "onScrollDirection==${up}")
             }
             lazyPagingItems.PagingLazyColumn(state) {
                 PagingItem(it)
@@ -215,6 +198,7 @@ fun PagingWithHorizontalPager() {
 fun PagingWithVerticalPager() {
     BaseComposeViewModel<ComposeViewModel> {
         val lazyPagingItems = it.getListDatas().collectAsLazyPagingItems()
+        lazyPagingItems.PagingVerticalPager() { }
         lazyPagingItems.PagingVerticalPager {
             PagingItem(it)
         }
@@ -262,7 +246,7 @@ fun PagingWithLazyList() {
                 ) {
                     Text(text = "update", fontSize = 32.sp)
                 }
-                SpacerH(int = 16)
+                SpacerH( 16)
                 Box(
                     modifier = Modifier
                         .background(Color.Red)
@@ -275,7 +259,7 @@ fun PagingWithLazyList() {
                     Text(text = "remove ", fontSize = 32.sp)
                 }
 
-                SpacerH(int = 16)
+                SpacerH( 16)
                 Box(
                     modifier = Modifier
                         .background(Color.Red)
@@ -287,7 +271,7 @@ fun PagingWithLazyList() {
                 ) {
                     Text(text = "removeAddHeader ", fontSize = 32.sp)
                 }
-                SpacerH(int = 16)
+                SpacerH(16)
 
                 Box(
                     modifier = Modifier
@@ -307,7 +291,7 @@ fun PagingWithLazyList() {
                 ) {
                     Text(text = "addHeader ", fontSize = 32.sp)
                 }
-                SpacerH(int = 16)
+                SpacerH(16)
                 Box(
                     modifier = Modifier
                         .background(Color.Red)

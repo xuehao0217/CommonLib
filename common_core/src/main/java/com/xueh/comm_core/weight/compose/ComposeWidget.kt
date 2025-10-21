@@ -1,59 +1,29 @@
 package com.xueh.comm_core.weight.compose
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.ClickableText
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerDefaults
-import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.pager.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.appendInlineContent
+import androidx.compose.foundation.text.*
 import androidx.compose.material.*
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.rotate
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.*
-import androidx.compose.ui.text.Placeholder
-import androidx.compose.ui.text.PlaceholderVerticalAlign
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import coil3.compose.AsyncImage
-import coil3.compose.AsyncImagePainter
 import coil3.compose.SubcomposeAsyncImage
-import coil3.compose.SubcomposeAsyncImageScope
-import coil3.request.ImageRequest
-import coil3.request.crossfade
-import com.xueh.comm_core.helper.isEmpty
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-//////////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------- Text 相关 -------------------------------------------
 
 //SpanText(
 //list = listOf(
@@ -65,154 +35,199 @@ import kotlinx.coroutines.launch
 //SpanTextEntity("《隐私政策》", SpanStyle(color = Color.Blue)) {
 //    ToastUtils.showShort("点击了 隐私政策")
 //},
-//), modifier = Modifier.constrainAs(tv_login_desc) {
-//    start.linkTo(iv_avatar.start)
-//    end.linkTo(iv_avatar.end)
-//    top.linkTo(tv_login_state.bottom)
-//}
+//), modifier = Modifier.padding(16.dp)
 //)
 
+/**
+ * 可点击的富文本
+ * @param list 包含文本、样式和点击事件的列表
+ */
 @Composable
 fun SpanText(list: List<SpanTextEntity>, modifier: Modifier = Modifier) {
-    val spanText = buildAnnotatedString {
-        repeat(list.size) {
-            val item = list[it]
+    val annotatedString = buildAnnotatedString {
+        list.forEach { item ->
             withStyle(item.spanStyle) {
-                pushStringAnnotation(item.text, item.text)
+                pushStringAnnotation(tag = item.text, annotation = item.text)
                 append(item.text)
             }
         }
     }
-    ClickableText(text = spanText, modifier = modifier, onClick = {
-        repeat(list.size) { index ->
-            spanText.getStringAnnotations(tag = list[index].text, start = it, end = it)
-                .firstOrNull()?.let { list[index].click?.invoke() }
+    ClickableText(
+        text = annotatedString,
+        modifier = modifier,
+        onClick = { offset ->
+            list.forEach { item ->
+                annotatedString.getStringAnnotations(item.text, offset, offset)
+                    .firstOrNull()?.let { item.click?.invoke() }
+            }
         }
-    })
+    )
 }
 
 data class SpanTextEntity(
-    var text: String,
-    var spanStyle: SpanStyle,
-    var click: (() -> Unit)? = null,
+    val text: String,
+    val spanStyle: SpanStyle,
+    val click: (() -> Unit)? = null
 )
 
-//////////////////////////////////////////////////////////////////////////////////////
 
-
+/**
+ * 高亮文本
+ */
 @Composable
-fun SpacerW(int: Int) {
-    Spacer(Modifier.width(int.dp))
-}
-
-
-@Composable
-fun SpacerH(int: Int) {
-    Spacer(Modifier.height(int.dp))
-}
-
-@Composable
-fun SpacerWidth(int: Dp) {
-    Spacer(Modifier.width(int))
-}
-
-
-@Composable
-fun SpacerHeight(int: Dp) {
-    Spacer(Modifier.height(int))
-}
-
-
-//转圈loading
-@Composable
-fun AnimLoading(@DrawableRes id: Int, size: Int) {
-    Box(contentAlignment = Alignment.Center) {
-        val infiniteTransition = rememberInfiniteTransition(label = "")
-        val rotation by infiniteTransition.animateFloat(
-            initialValue = 0f, targetValue = 360f, animationSpec = infiniteRepeatable(
-                animation = tween(
-                    durationMillis = 3000,
-                    easing = LinearEasing,
-                ),
-            ), label = ""
-        )
-        val imageBitmap = ImageBitmap.imageResource(id = id)
-        Canvas(
-            modifier = Modifier.size(size.dp)
-        ) {
-            rotate(rotation) {
-                drawImage(imageBitmap)
-            }
+fun HighlightText(
+    text: String,
+    highlight: String,
+    highlightColor: Color,
+    modifier: Modifier = Modifier,
+    textColor: Color = Color.Unspecified,
+    style: TextStyle = LocalTextStyle.current
+) {
+    val annotatedString = buildAnnotatedString {
+        append(text)
+        val start = text.indexOf(highlight)
+        if (start >= 0) {
+            addStyle(SpanStyle(color = highlightColor), start, start + highlight.length)
         }
     }
+    Text(text = annotatedString, modifier = modifier, style = style, color = textColor)
 }
 
+/**
+ * 带内嵌标记的文本
+ */
+@Composable
+fun SplicingText(
+    str: String,
+    modifier: Modifier = Modifier,
+    style: TextStyle = LocalTextStyle.current
+) {
+    val annotatedString = buildAnnotatedString {
+        appendInlineContent("Splicing")
+        append(str)
+    }
+    val inlineContent = mapOf(
+        "Splicing" to InlineTextContent(
+            Placeholder(43.sp, 18.sp, PlaceholderVerticalAlign.TextCenter)
+        ) {
+            BoxText(
+                text = "Splicing",
+                textColor = Color.White,
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier
+                    .width(35.dp)
+                    .height(18.dp)
+                    .background(Color(0xFFFE3714), RoundedCornerShape(3.dp))
+            )
+            Spacer(Modifier.width(8.dp))
+        }
+    )
+    Text(
+        text = annotatedString,
+        inlineContent = inlineContent,
+        maxLines = 2,
+        overflow = TextOverflow.Ellipsis,
+        style = style,
+        modifier = modifier
+    )
+}
 
+//------------------------------------------- Spacer 相关 -------------------------------------------
+
+@Composable fun SpacerW(dp: Int) = Spacer(Modifier.width(dp.dp))
+@Composable fun SpacerH(dp: Int) = Spacer(Modifier.height(dp.dp))
+@Composable fun SpacerWidth(width: Dp) = Spacer(Modifier.width(width))
+@Composable fun SpacerHeight(height: Dp) = Spacer(Modifier.height(height))
+
+//------------------------------------------- BoxText 相关 -------------------------------------------
+
+/**
+ * 居中文本 Box
+ */
 @Composable
 fun BoxText(
     text: String,
     textColor: Color = Color.Unspecified,
     fontSize: TextUnit = TextUnit.Unspecified,
-    modifier: Modifier = Modifier,
     fontWeight: FontWeight? = null,
+    modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
-        androidx.compose.material3.Text(
-            text = text, color = textColor, fontSize = fontSize, fontWeight = fontWeight
-        )
+        Text(text, color = textColor, fontSize = fontSize, fontWeight = fontWeight)
     }
 }
 
-
+/**
+ * 居中文本 Box 支持 TextStyle
+ */
 @Composable
 fun BoxText(
     text: String,
-    style: TextStyle = androidx.compose.material3.LocalTextStyle.current,
-    modifier: Modifier = Modifier,
+    style: TextStyle = LocalTextStyle.current,
+    modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
-        androidx.compose.material3.Text(
-            text = text, style = style
-        )
+        Text(text, style = style)
     }
 }
 
+//------------------------------------------- Loading 相关 -------------------------------------------
 
-//阴影垂直
+/**
+ * 转圈 Loading 动画
+ */
 @Composable
-fun ShadowVerticalView(height: Int = 50, modifier: Modifier = Modifier) {
-    val colorList = arrayListOf(Color(0x00F5F7F8), Color(0xFFF5F7F8))
+fun AnimLoading(@DrawableRes id: Int, size: Int) {
+    val infiniteTransition = rememberInfiniteTransition()
+    val rotation by infiniteTransition.animateFloat(
+        0f, 360f,
+        animationSpec = infiniteRepeatable(tween(3000, easing = LinearEasing))
+    )
+    val imageBitmap = ImageBitmap.imageResource(id = id)
+    Canvas(Modifier.size(size.dp)) {
+        rotate(rotation) { drawImage(imageBitmap) }
+    }
+}
+
+//------------------------------------------- 阴影 -------------------------------------------
+
+/**
+ * 垂直渐变阴影
+ */
+@Composable
+fun ShadowVerticalView(  colors: List<Color>,height: Int = 50, modifier: Modifier = Modifier) {
+    val brush = Brush.verticalGradient(colors)
     Box(modifier = modifier) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(height.dp)
-                .background(
-                    brush = Brush.verticalGradient(colorList),
-                )
-        )
+        Box(Modifier.fillMaxWidth().height(height.dp).background(brush))
     }
 }
 
+//------------------------------------------- TabPage 相关 -------------------------------------------
 
-//公用带滑动Tab页面
+/**
+ * 通用滑动 Tab 页面
+ */
 @Composable
-fun CommonTabPage(beyondViewportPageCount: Int = PagerDefaults.BeyondViewportPageCount, tabsName: List<String>, pageContent: @Composable (page: Int) -> Unit) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        val pagerState = rememberPagerState(pageCount = {
-            tabsName.size
-        })
-        MyTabRow(modifier = Modifier
-            .wrapContentHeight()
-            .fillMaxWidth()
-            .padding(bottom = 16.dp, top = 12.dp),
+fun CommonTabPage(
+    tabsName: List<String>,
+    beyondViewportPageCount: Int = PagerDefaults.BeyondViewportPageCount,
+    pageContent: @Composable (page: Int) -> Unit
+) {
+    Column(Modifier.fillMaxSize()) {
+        val pagerState = rememberPagerState(pageCount = { tabsName.size })
+        val scope = rememberCoroutineScope()
+
+        MyTabRow(
+            modifier = Modifier
+                .wrapContentHeight()
+                .fillMaxWidth()
+                .padding(top = 12.dp, bottom = 16.dp),
             selectedTabIndex = pagerState.currentPage,
-            indicator = { tabPositions ->
-                PagerTabIndicator(tabPositions = tabPositions, pagerState = pagerState)
-            },
+            indicator = { tabPositions -> PagerTabIndicator(tabPositions, pagerState) },
             backgroundColor = Color.Transparent,
-            divider = {}) {
-            val scope: CoroutineScope = rememberCoroutineScope()
+            divider = {}
+        ) {
             tabsName.forEachIndexed { index, title ->
                 PagerTab(pagerState = pagerState,
                     index = index,
@@ -229,58 +244,24 @@ fun CommonTabPage(beyondViewportPageCount: Int = PagerDefaults.BeyondViewportPag
             }
         }
 
-        HorizontalPager(state = pagerState, Modifier.weight(1f),beyondViewportPageCount=beyondViewportPageCount) { page ->
-            if (page == pagerState.currentPage) {
-//                pageContent(page, page == pagerState.currentPage)
-                pageContent(page)
-            }
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.weight(1f),
+            beyondViewportPageCount = beyondViewportPageCount
+        ) { page ->
+            if (page == pagerState.currentPage) pageContent(page)
         }
     }
 }
 
-
-/*
-var textFieldEnabled by remember {
-    mutableStateOf(true)
-}
-var input by remember {
-    mutableStateOf("")
-}
-
-MyTextField(
-text = input,
-delClick = {
-    input = ""
-},
-onValueChange = {
-    input = it
-},
-keyboardOptions = KeyboardOptions(
-keyboardType = KeyboardType.Text,
-  imeAction = ImeAction.Search,//键盘右下角
-),
-maxLength = 7,
-textFieldPadding = 0,
-textFieldEnabled = textFieldEnabled,
-delIconId = R.mipmap.ic_search_close,
-delIconSize = 12.dp,
-keyboardActions = KeyboardActions(
-                        onSearch = {
-
-                        },
-                    ),
-delIconEndDP = 12, modifier = Modifier
-.height(32.dp)
-.weight(1f)
-)
-*/
+//------------------------------------------- TextField 相关 -------------------------------------------
 
 @Composable
 fun MyTextField(
     text: String = "",
-    style: TextStyle = androidx.compose.material3.LocalTextStyle.current,
+    style: TextStyle = LocalTextStyle.current,
     hintText: String = "",
-    hintStyle: TextStyle = androidx.compose.material3.LocalTextStyle.current,
+    hintStyle: TextStyle = LocalTextStyle.current,
     @DrawableRes delIconId: Int,
     delIconEndDP: Dp = 8.dp,
     delIconSize: Dp = 8.dp,
@@ -291,125 +272,35 @@ fun MyTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     delClick: () -> Unit,
-    onValueChange: (String) -> Unit,
+    onValueChange: (String) -> Unit
 ) {
-    var showDel by remember {
-        mutableStateOf(text.isNotEmpty())
-    }
-    Box(
-        modifier = modifier, contentAlignment = Alignment.CenterEnd
-    ) {
+    var showDel by remember { mutableStateOf(text.isNotEmpty()) }
+    Box(modifier, contentAlignment = Alignment.CenterEnd) {
         BasicTextField(
             value = text,
             textStyle = style,
             onValueChange = {
-                if (it.length <= maxLength) {
-                    onValueChange.invoke(it)
-                }
+                if (it.length <= maxLength) onValueChange(it)
                 showDel = it.isNotEmpty()
             },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = textFieldPadding),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = textFieldPadding),
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions,
             maxLines = 1,
-            decorationBox = { innerTextField ->
-                Box(
-                    contentAlignment = Alignment.CenterStart
-                ) {
-                    if (text.isEmpty()) {
-                        Text(text = hintText, style=hintStyle)
-                    }
-                    innerTextField()
+            decorationBox = { inner ->
+                Box(contentAlignment = Alignment.CenterStart) {
+                    if (text.isEmpty()) Text(hintText, style = hintStyle)
+                    inner()
                 }
             },
-            enabled = textFieldEnabled,
+            enabled = textFieldEnabled
         )
+
         if (showDel) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                ImageCompose(id = delIconId, modifier = Modifier
-                    .size(delIconSize)
-                    .click {
-                        delClick.invoke()
-                    })
-                SpacerWidth(int = delIconEndDP)
+                ImageCompose(delIconId, Modifier.size(delIconSize).click { delClick() })
+                SpacerWidth(delIconEndDP)
             }
         }
     }
-}
-
-
-@Composable
-fun HighlightText(
-    text: String,
-    textColor: Color = Color.Unspecified,
-    highlight: String,
-    highlightColor: Color = Color.Unspecified,
-    modifier: Modifier,
-    style: TextStyle = androidx.compose.material3.LocalTextStyle.current
-) {
-    val annotatedString = buildAnnotatedString {
-        withStyle(style = androidx.compose.material3.LocalTextStyle.current.toSpanStyle()) {
-            append(text)
-        }
-        val startIndexOfHighlight = text.indexOf(highlight)
-        if (startIndexOfHighlight >= 0) {
-            addStyle(
-                style = SpanStyle(color = highlightColor),
-                start = startIndexOfHighlight,
-                end = startIndexOfHighlight + highlight.length
-            )
-        }
-    }
-    androidx.compose.material3.Text(
-        text = annotatedString,
-        modifier = modifier,
-        color = textColor,
-        style = style
-    )
-}
-
-
-@Preview
-@Composable
-fun SplicingText(
-    str: String = "",
-    modifier: Modifier = Modifier,
-    style: TextStyle = androidx.compose.material3.LocalTextStyle.current
-) {
-    val annotatedString = buildAnnotatedString {
-        appendInlineContent(id = "Splicing")
-        append(str)
-    }
-    val inlineContentMap = mapOf(
-        "Splicing" to InlineTextContent(
-            Placeholder(43.sp, 18.sp, PlaceholderVerticalAlign.TextCenter)
-        ) {
-            Row {
-                BoxText(
-                    text = "Splicing",
-                    textColor = Color(0xFFFFFFFF),
-                    fontSize = 10.sp,
-                    fontWeight = FontWeight(500),
-                    modifier = Modifier
-                        .width(35.dp)
-                        .height(18.dp)
-                        .background(
-                            color = Color(0xFFFE3714),
-                            shape = RoundedCornerShape(size = 3.dp)
-                        )
-                )
-                SpacerW(int = 8)
-            }
-        },
-    )
-    androidx.compose.material3.Text(
-        annotatedString,
-        inlineContent = inlineContentMap,
-        maxLines = 2,
-        overflow = TextOverflow.Ellipsis,
-        style = style,
-        modifier = modifier,
-    )
 }

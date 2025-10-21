@@ -1,5 +1,7 @@
 package com.xueh.commonlib
 
+import androidx.compose.runtime.Composer
+import androidx.compose.runtime.ExperimentalComposeRuntimeApi
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.PathUtils
 import com.blankj.utilcode.util.Utils
@@ -19,11 +21,13 @@ import me.jessyan.progressmanager.ProgressManager
  * 备注：
  */
 class MyApplication : BaseApplication() {
+    @OptIn(ExperimentalComposeRuntimeApi::class)
     override fun init() {
         initLog()
         initNet()
         MMKVUtil.init(this)
         AgentWebConfig.clearDiskCache(Utils.getApp())
+        Composer.setDiagnosticStackTraceEnabled(BuildConfig.DEBUG)
     }
 
     private fun initNet() {

@@ -4,20 +4,32 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,6 +47,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.PagingData
@@ -46,6 +59,7 @@ import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.lt.compose_views.util.rememberMutableStateOf
+import com.xueh.comm_core.helper.compose.orderedStateMapOf
 import com.xueh.comm_core.weight.compose.BoxWrapper
 import com.xueh.comm_core.weight.compose.MyScrollableTabRow
 import com.xueh.comm_core.weight.compose.PagerTab
@@ -162,18 +176,19 @@ fun NewsTab(
     modifier: Modifier,
     selectColor: Color,
     unSelectColor: Color,
-    tabClick: (String) -> Unit
+    tabClick: (String) -> Unit,
 ) {
     Row(
         modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        SpacerW(int = 16)
-        MyScrollableTabRow(modifier = Modifier
-            .wrapContentHeight()
-            .weight(1f)
-            .background(Color.Transparent)
-            .padding(bottom = 11.dp, top = 11.dp),
+        SpacerW(16)
+        MyScrollableTabRow(
+            modifier = Modifier
+                .wrapContentHeight()
+                .weight(1f)
+                .background(Color.Transparent)
+                .padding(bottom = 11.dp, top = 11.dp),
             selectedTabIndex = pagerState.currentPage,
             edgePadding = 0.dp,
             indicator = { tabPositions ->
@@ -187,7 +202,8 @@ fun NewsTab(
             backgroundColor = Color.Transparent,
             divider = {}) {
             ids.forEachIndexed { index, title ->
-                PagerTab(pagerState = pagerState,
+                PagerTab(
+                    pagerState = pagerState,
                     index = index,
                     pageCount = ids.size,
                     text = title,
@@ -219,7 +235,7 @@ fun NewsTab(
 fun HomeList(
     id: String,
     lazyPagingItemsState: LazyPagingItems<HomeEntity.Data>,
-    block: (String, Float) -> Unit
+    block: (String, Float) -> Unit,
 ) {
     val lazyListState = rememberLazyListState()
 
@@ -263,4 +279,74 @@ fun HomeList(
             }
         }
     }
+}
+
+
+@Composable
+fun OrderedTabsExample() {
+    // 使用 remember 保持状态
+    val tabs = remember {
+        orderedStateMapOf(
+            "Tabs DEF" to "Tabs ID DEF"
+        )
+    }
+
+    (0..3).forEach {
+        tabs.put("Tabs${it}", "Tabs ID ${it}")
+    }
+
+    Column(modifier = Modifier.padding(16.dp)) {
+        // 动态 Tab 行
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            // 按顺序显示 tab
+            for (key in tabs.orderedKeys) {
+                val value = tabs[key]
+                TabItem(title = key) {
+                    // 点击删除
+                    tabs.remove(key)
+                }
+            }
+
+            // 添加新 tab 按钮示例
+            Button(onClick = {
+                tabs.addAt(0, "Add Tabs", "Add Tab ID")
+            }) {
+                Text("Add Tabs")
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // 内容展示
+        for ((key, value) in tabs.orderedEntries()) {
+            Text(text = "$key -> $value")
+        }
+    }
+}
+
+@Composable
+fun TabItem(title: String, onRemove: () -> Unit) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .background(Color.LightGray, RoundedCornerShape(8.dp))
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+    ) {
+        Text(text = title)
+        Spacer(modifier = Modifier.width(4.dp))
+        IconButton(onClick = onRemove) {
+            Icon(Icons.Default.Close, contentDescription = "Remove")
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewOrderedTabsExample() {
+    OrderedTabsExample()
 }

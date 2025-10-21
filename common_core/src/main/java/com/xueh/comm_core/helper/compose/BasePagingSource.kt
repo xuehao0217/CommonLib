@@ -1,21 +1,5 @@
-/*
- * Copyright (C) 2017 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 package com.xueh.comm_core.helper.compose
-
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.*
@@ -65,7 +49,7 @@ abstract class BasePagingSource<T : Any> : PagingSource<Int, T>() {
 
 fun <T : Any> ViewModel.pager(
     pagingConfig: ((PagingConfig) -> Unit) = { },
-    getDatas: suspend (page: Int) -> List<T>
+    getDatas: suspend (page: Int) -> List<T>,
 ) = Pager(PagingConfig(pageSize = 20).apply {
     pagingConfig.invoke(this)
 }) {
@@ -169,7 +153,7 @@ class PagingDataModifier<T : Any> internal constructor(
     fun removeAddHeader(id: Any) {
         if (_addHeaderFlow.value.isEmpty()) {
             remove(id)
-        }else{
+        } else {
             _addHeaderFlow.update { currentList ->
                 currentList.filter { getID(it) != id } // 过滤出ID不等于传入的id的项
             }
@@ -193,7 +177,7 @@ class PagingDataModifier<T : Any> internal constructor(
     fun removeAddFooter(id: String) {
         if (_addFooterFlow.value.isEmpty()) {
             remove(id)
-        }else {
+        } else {
             _addFooterFlow.update { currentList ->
                 currentList.filter { getID(it) != id } // 过滤出ID不等于传入的id的项
             }

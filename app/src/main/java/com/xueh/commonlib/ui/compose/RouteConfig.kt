@@ -42,6 +42,12 @@ object RouteConfig {
 
     const val ComposeViewPaging="ComposeViewPaging"
 
+    const val onVisibilityChanged="onVisibilityChanged"
+
+    const val onFirstVisible="onFirstVisible"
+
+    const val OrderedTabs="OrderedTabs"
+
     const val name="name"
     const val age="age"
 }

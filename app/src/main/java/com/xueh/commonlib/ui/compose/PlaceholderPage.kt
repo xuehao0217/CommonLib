@@ -35,7 +35,7 @@ fun PlaceholderPage() {
             delay(5000)
             visible=false
         }
-        SpacerH(int = 15)
+        SpacerH( 15)
 
         Text(
             text = "Content to display after content has loaded",
@@ -44,7 +44,7 @@ fun PlaceholderPage() {
                 .placeholder(visible = visible)
         )
 
-        SpacerH(int = 15)
+        SpacerH(15)
 
         Text(
             text = "fade  Content to display after content has loadedfade  Content to display after content has loadedfade  Content to display after content has loadedfade  Content to display after content has loaded",
@@ -55,7 +55,7 @@ fun PlaceholderPage() {
                     highlight = PlaceholderHighlight.fade(),
                 )
         )
-        SpacerH(int = 15)
+        SpacerH(15)
 
         Text(
             text = "shimmer  Content to display after content has loaded",
@@ -66,7 +66,7 @@ fun PlaceholderPage() {
                     highlight = PlaceholderHighlight.shimmer(MaterialTheme.colorScheme.primary),
                 )
         )
-        SpacerH(int = 15)
+        SpacerH( 15)
 
         Image(
             painter = painterResource(id = R.drawable.ic_launcher), contentDescription = "",
