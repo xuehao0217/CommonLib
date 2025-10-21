@@ -10,107 +10,80 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
 import com.blankj.utilcode.util.LogUtils
 import com.xueh.comm_core.R
-import com.xueh.comm_core.base.compose.theme.AppBaseTheme
 import com.xueh.comm_core.base.compose.theme.AppThemeType
 import com.xueh.comm_core.base.compose.theme.ComposeMaterialTheme
 import com.xueh.comm_core.base.compose.theme.GrayAppAdapter
 import com.xueh.comm_core.base.compose.theme.appThemeType
 import com.xueh.comm_core.weight.compose.ImageCompose
 import com.xueh.comm_core.weight.compose.click
-import com.xueh.comm_core.weight.xml.ViewLoading
 
-//ComponentActivity
-//AppCompatActivity  可以解决弹窗问题
+/**
+ * Base Compose Activity
+ * 1. 自动锁定竖屏
+ * 2. 支持状态栏颜色自适应
+ * 3. 可选择显示标题栏
+ * 4. 支持灰度模式适配
+ */
 abstract class BaseComposeActivity : ComponentActivity() {
-    //statusBar图标颜色模式
-    //true是白色  false是黑色
+
+    /** 状态栏图标颜色模式，true 白色图标，false 黑色图标 */
     var isSystemBarLight by mutableStateOf(false)
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        // 锁定竖屏
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
         super.onCreate(savedInstanceState)
+
+        // 支持边缘到边缘
         enableEdgeToEdge()
 
-        onBackPressedDispatcher.addCallback {
-            finish()
-        }
+        // 默认返回事件处理
+        onBackPressedDispatcher.addCallback { finish() }
 
         setContent {
-            // statusBar图标颜色模式
-            val isDark = AppThemeType.isDark(
-                themeType = appThemeType
-            )
-            DisposableEffect(isDark, isSystemBarLight) {
-                enableEdgeToEdge(
-                    SystemBarStyle.auto(
-                        android.graphics.Color.TRANSPARENT,
-                        android.graphics.Color.TRANSPARENT
-                    ) {
-                        //false statusBar图标颜色模式黑色
-                        //true  statusBar图标颜色模式白色
-                        isDark || isSystemBarLight
-                    },
-                    SystemBarStyle.auto(
-                        android.graphics.Color.WHITE,
-                        android.graphics.Color.BLACK
-                    ) { isDark || isSystemBarLight },
-                )
-                onDispose { }
+            val isDark = AppThemeType.isDark(themeType = appThemeType)
+
+            // 设置状态栏样式，只在组合内容首次加载或状态变化时调用
+            LaunchedEffect(isDark, isSystemBarLight) {
+                setSystemBarsStyle(isDark)
             }
 
-            
-            val statusBarPadding = if (showStatusBars()) Modifier.statusBarsPadding() else Modifier
+            // Compose内容Modifier
+            val contentModifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .navigationBarsPadding()
+                .then(if (showStatusBars()) Modifier.statusBarsPadding() else Modifier)
 
             ComposeMaterialTheme {
                 GrayAppAdapter(isGray = false) {
-                    Column(modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.background)
-                        .navigationBarsPadding()
-                        .then(statusBarPadding)) {
+                    Column(modifier = contentModifier) {
                         if (showTitleView()) {
                             Column(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .wrapContentHeight()
-                                    .then(statusBarPadding)
+                                    .then(if (showStatusBars()) Modifier.statusBarsPadding() else Modifier)
                             ) {
                                 getTitleView()
                             }
                         }
+                        // 页面实际内容由子类实现
                         setComposeContent()
                     }
                 }
@@ -118,42 +91,63 @@ abstract class BaseComposeActivity : ComponentActivity() {
         }
     }
 
+    /**
+     * 设置状态栏样式
+     */
+    private fun setSystemBarsStyle(isDark: Boolean) {
+        enableEdgeToEdge(
+            SystemBarStyle.auto(android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT) {
+                isDark || isSystemBarLight
+            },
+            SystemBarStyle.auto(android.graphics.Color.WHITE, android.graphics.Color.BLACK) {
+                isDark || isSystemBarLight
+            }
+        )
+    }
+
+    /** 子类必须实现Compose页面内容 */
     @Composable
     abstract fun setComposeContent()
 
+    /** 是否显示标题栏，默认显示 */
     protected open fun showTitleView() = true
 
+    /** 页面标题，默认空 */
     protected open fun setTitle() = ""
 
+    /** 是否显示返回按钮，默认显示 */
     protected open fun showBackIcon() = true
 
-
+    /** 是否显示状态栏padding，默认显示 */
     protected open fun showStatusBars() = true
 
+    /** 标题栏View，可自定义 */
     @Composable
     protected open fun getTitleView() = CommonTitleView(
         title = setTitle(),
         showBackIcon = showBackIcon(),
-        backClick = {
-            onBackPressedDispatcher.onBackPressed()
-        })
+        backClick = { onBackPressedDispatcher.onBackPressed() }
+    )
 
+    /**
+     * 保持字体缩放固定为1.0
+     * 避免系统字体放大影响UI布局
+     */
     override fun getResources(): Resources {
         val resources = super.getResources()
         val configuration = resources.configuration
         if (configuration.fontScale != 1.0f) {
-            LogUtils.e(configuration.fontScale)
+            LogUtils.e("Reset fontScale to 1.0: ${configuration.fontScale}")
             configuration.fontScale = 1.0f
-            // 但是这个函数被标记为过期了
-            //resources.updateConfiguration(configuration, resources.displayMetrics)
-            // 那么我们直接这么来
             return createConfigurationContext(configuration).resources
         }
         return resources
     }
 }
 
-
+/**
+ * 公共标题栏
+ */
 @Composable
 fun CommonTitleView(
     title: String,
@@ -163,56 +157,44 @@ fun CommonTitleView(
     showBackIcon: Boolean = true,
     rightContent: (@Composable () -> Unit)? = null,
     backClick: (() -> Unit)? = null,
+    backIconSize: Dp = 28.dp,
+    titleTextStyle: androidx.compose.ui.text.TextStyle = androidx.compose.material3.LocalTextStyle.current.copy(
+        fontSize = 20.sp,
+        fontWeight = FontWeight.Bold
+    )
 ) {
     val isDark = AppThemeType.isDark(themeType = appThemeType)
+    val textColor = if (isDark) Color.White else Color.Black
+    val backgroundColor = if (isDark) Color.Black else titleBackgroundColor
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .background(if (isDark)  Color.Black else titleBackgroundColor )
+            .background(backgroundColor)
             .height(44.dp)
-            .then(modifier)
     ) {
+        // 左侧返回按钮
         if (showBackIcon) {
             ImageCompose(
                 id = backIcon,
-                modifier = Modifier
-                    .size(28.dp)
-                    .click {
-                        backClick?.invoke()
-                    },colorFilter = if (isDark) ColorFilter.tint(Color.White) else null
+                modifier = Modifier.size(backIconSize).click { backClick?.invoke() },
+                colorFilter = if (isDark) ColorFilter.tint(Color.White) else null
             )
-        } else {
-            Spacer(modifier = Modifier.size(28.dp))
-        }
+        } else Spacer(modifier = Modifier.width(backIconSize))
 
+        // 标题文本
         Text(
             text = title,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
+            color = textColor,
+            style = titleTextStyle,
             maxLines = 1,
-            color = if (isDark) Color.White else Color.Black,
-            modifier = Modifier
-                .weight(1f)
-                .wrapContentWidth(Alignment.CenterHorizontally)
+            modifier = Modifier.weight(1f).wrapContentWidth(Alignment.CenterHorizontally)
         )
 
-        Box(
-            modifier = Modifier
-                .sizeIn(minWidth = 28.dp)
-                .wrapContentWidth(Alignment.End)
-        ) {
+        // 右侧内容
+        Box(modifier = Modifier.width(backIconSize)) {
             rightContent?.invoke()
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
