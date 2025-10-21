@@ -17,7 +17,6 @@ abstract class AbsViewModel : ViewModel() {
     open val apiException: MutableLiveData<Throwable> = MutableLiveData()
     open val apiLoading: MutableLiveData<Boolean> = MutableLiveData()
 
-
     open var apiLoadingState = mutableStateOf(false)
     open var apiExceptionState = mutableStateOf(Throwable())
 
@@ -31,8 +30,6 @@ abstract class AbsViewModel : ViewModel() {
         jobs[key]?.cancel()
         viewModelScope.launchSafety {
             block.invoke(this)
-        }.apply {
-            jobs.put(key, this)
-        }
+        }.apply { jobs[key] = this }
     }
 }

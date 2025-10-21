@@ -10,136 +10,87 @@ import com.xueh.comm_core.net.BaseResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 
-/**
- * 创 建 人: xueh
- * 创建日期: 2020/4/21 11:48
- * 备注：
- */
 open class RequestViewModel : AbsViewModel() {
-    private fun <Response> dslApi(apiDSL: ViewModelDsl<Response>.() -> Unit) =
-        ViewModelDsl<Response>().apply {
-            onRequest {
-                ViewModelDsl<Response>().apply(apiDSL).request()
-            }
-            onResponse {
-                ViewModelDsl<Response>().apply(apiDSL).response?.invoke(it)
-            }
 
-            onResponseSuspend {
-                ViewModelDsl<Response>().apply(apiDSL).responseSuspend?.invoke(it)
-            }
+    // ------------------- DSL 调用 -------------------
 
-            onStart {
-                ViewModelDsl<Response>().apply(apiDSL).start?.invoke() ?: onApiStart()
-            }
-            onError { error ->
-                ViewModelDsl<Response>().apply(apiDSL).error?.invoke(error) ?: onApiError(error)
-            }
-            onFinally {
-                ViewModelDsl<Response>().apply(apiDSL).finally?.invoke()?: onApiFinally()
-            }
-        }
+    protected fun <T> apiDSL(block: ViewModelDsl<T>.() -> Unit) =
+        runIfNetworkAvailable { ViewModelDsl<T>().apply(block).launch(this) }
 
-    protected open fun onApiStart() {
-        apiLoading.value = true
-        apiLoadingState.value = true
-    }
+    protected fun <T> apiFlowDSL(block: ViewModelDsl<T>.() -> Unit) =
+        runIfNetworkAvailable { ViewModelDsl<T>().apply(block).launchFlow(this) }
 
-    protected open fun onApiError(e: Exception) {
-        onApiFinally()
+    protected fun <T> apiDslResult(block: ViewModelDsl<T>.() -> Unit) =
+        runIfNetworkAvailable { ViewModelDsl<T>().apply(block).launchBaseResult(this) }
 
-        apiException.value = e
-        apiExceptionState.value = e
-    }
+    // ------------------- Flow 简化请求 -------------------
 
-    protected open fun onApiFinally() {
-        apiLoading.value = false
-        apiLoadingState.value = false
-    }
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //DSL
-    protected fun <Response> apiDSL(apiDSL: ViewModelDsl<Response>.() -> Unit) {
-        dslApi(apiDSL).launch(this)
-    }
-
-    protected fun <Response> apiFlowDSL(apiDSL: ViewModelDsl<Response>.() -> Unit) {
-        dslApi(apiDSL).launchFlow(this)
-    }
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    apiFlow( request = {
-//        api.bannerList3()
-//    },start = {
-//        apiLoading.value=true
-//    }, finally = {
-//        apiLoading.value=false
-//    }){
-//        stateFlowDada.emit(it)
-//    }
-    fun <T> apiFlow(
+    protected fun <T> apiFlow(
         request: suspend () -> BaseResult<T>,
         start: (() -> Unit)? = null,
         error: ((Throwable) -> Unit)? = null,
         finally: (() -> Unit)? = null,
         result: suspend (T) -> Unit,
-    ) {
-        if (!NetworkUtils.isConnected()) {
-            ToastUtils.showShort("网络异常，请检查网络设置")
-            error?.invoke(Exception("网络异常，请检查网络设置"))
-            return
-        }
+    ) = runIfNetworkAvailable {
         viewModelScope.launchSafety {
-            flow {
-                emit(request())
-            }.flowOn(Dispatchers.IO).onStart {
-                start?.invoke() ?: onApiStart()
-            }.collect {
-                if (it.isSuccess()) {
-                    result.invoke(it.data)
-                } else {
-                    error?.invoke(Exception(it.errorMsg)) ?: onApiError(Exception(it.errorMsg))
-                    Log.e("HTTP", "apiFlow---> Error---> errorCode=${it.errorCode} errorMsg=${it.errorMsg}")
+            flow { emit(request()) }
+                .flowOn(Dispatchers.IO)
+                .onStart { start?.invoke() ?: apiLoading(true) }
+                .catch { throwable ->
+                    val ex = Exception(throwable)
+                    error?.invoke(ex) ?: apiError(ex)
                 }
-            }
-        }.onCatch {
-            error?.invoke(Exception(it.message)) ?: onApiError(Exception(it.message))
-            Log.e("HTTP", "apiFlow---> Error---> ${it.message}")
-        }.onComplete {
-            finally?.invoke() ?: onApiFinally()
+                .onCompletion { finally?.invoke() ?: apiFinally() }
+                .collect { baseResult ->
+                    if (baseResult.isSuccess()) {
+                        result(baseResult.data)
+                    } else {
+                        val ex = Exception(baseResult.errorMsg)
+                        error?.invoke(ex) ?: apiError(ex)
+                        Log.e(
+                            "HTTP",
+                            "apiFlow ErrorCode=${baseResult.errorCode} Msg=${baseResult.errorMsg}"
+                        )
+                    }
+                }
         }
     }
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    // ------------------- 通用状态逻辑 -------------------
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //DSL包装 解析了BaseResult
-    protected fun <Response> apiDslResult(
-        apiDSL: ViewModelDsl<Response>.() -> Unit,
+    open fun apiLoading(value: Boolean) {
+        apiLoading.value = value
+        apiLoadingState.value = value
+    }
+
+    open fun apiError(
+        e: Throwable,
+        showToast: Boolean = true,
+        log: Boolean = true
     ) {
-        apiDSL<BaseResult<Response>> {
-            onStart {
-                ViewModelDsl<Response>().apply(apiDSL).start?.invoke()?:onApiStart()
-            }
-            onRequest {
-                ViewModelDsl<Response>().apply(apiDSL).requestBaseResult()
-            }
-            onResponse {
-                if (it.isSuccess()) {
-                    ViewModelDsl<Response>().apply(apiDSL).response?.invoke(it.data)
-                } else {
-                    ViewModelDsl<Response>().apply(apiDSL).error?.invoke(Exception(it.errorMsg))?:onApiError(Exception(it.errorMsg))
-                    Log.e("HTTP", "apiDslResult---> Error---> errorCode=${it.errorCode} errorMsg=${it.errorMsg}")
-                }
-            }
-            onFinally {
-                ViewModelDsl<Response>().apply(apiDSL).finally?.invoke()?:onApiFinally()
-            }
+        val ex = e as? Exception ?: Exception(e)
+        apiException.value = ex
+        apiExceptionState.value = ex
+
+        if (log) Log.e("API_ERROR", ex.message ?: "未知错误", ex)
+        if (showToast) ToastUtils.showShort(ex.message ?: "网络异常")
+
+        apiFinally()
+    }
+
+    open fun apiFinally() {
+        apiLoading.value = false
+        apiLoadingState.value = false
+    }
+
+    // ------------------- 工具方法 -------------------
+
+    /** 统一网络检查入口，避免多处重复逻辑 */
+    private inline fun runIfNetworkAvailable(block: () -> Unit) {
+        if (NetworkUtils.isConnected()) {
+            block()
+        } else {
+            apiError(Exception("网络异常，请检查网络连接"))
         }
     }
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
-
-

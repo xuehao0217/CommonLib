@@ -38,19 +38,12 @@ class HomeViewModel : BaseRequstViewModel<RestApi>() {
             onResponse {
                 banner.postValue(it)
             }
+            onError {
+                apiError(it,showToast = false)
+            }
         }
 
-//        apiFlowDSL<List<BannerVO>> {
-//            onRequest {
-//                api.bannerList3().data
-//            }
-//            onResponse {
-//                banner.postValue(it)
-//            }
-//        }
-
-//
-//        apiDSL<List<BannerVO>> {
+//        apiDSL {
 //            onRequest {
 //                api.bannerList3().data
 //            }
@@ -62,6 +55,16 @@ class HomeViewModel : BaseRequstViewModel<RestApi>() {
 
 
     fun loadFlow() {
+//        apiFlowDSL {
+//            onRequest {
+//                api.bannerList3().data
+//            }
+//            onResponse {
+//                banner.postValue(it)
+//            }
+//        }
+
+
         apiFlow(request = {
             api.bannerList3()
         }, start = {
@@ -76,7 +79,7 @@ class HomeViewModel : BaseRequstViewModel<RestApi>() {
 
     //上传头像
     fun uploadFiles(file: File) {
-        apiDSL<BaseResult<String>> {
+        apiDSL {
             onRequest {
                 api.uploadFiles(file.toMultipartPart())
             }
@@ -91,15 +94,15 @@ class HomeViewModel : BaseRequstViewModel<RestApi>() {
     }
 
     fun downloadFile() {
-        apiDSL<Response<ResponseBody>> {
+        apiDSL {
             onRequest {
                 api.downloadFile(Url)
             }
             onResponse {
-                var file = File(PathUtils.getExternalAppCachePath(), "news.apk")
-                var isSuccess = FileIOUtils.writeFileFromIS(
+                val file = File(PathUtils.getExternalAppCachePath(), "news.apk")
+                val isSuccess = FileIOUtils.writeFileFromIS(
                     file,
-                    it?.body()?.byteStream(),
+                    it.body()?.byteStream(),
                 )
                 if (isSuccess) {
                     ToastUtils.showShort("下载完成：${file.absoluteFile}")
