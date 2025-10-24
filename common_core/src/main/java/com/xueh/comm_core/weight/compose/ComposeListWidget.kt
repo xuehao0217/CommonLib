@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
  */
 @Composable
 fun CommonLazyColumn(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.fillMaxSize(),
     state: LazyListState = rememberLazyListState(),
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
     contentPadding: PaddingValues = PaddingValues(horizontal = 15.dp),
@@ -26,8 +26,7 @@ fun CommonLazyColumn(
     content: LazyListScope.() -> Unit,
 ) {
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = modifier,
         state = state,
         verticalArrangement = verticalArrangement,
         contentPadding = contentPadding,
