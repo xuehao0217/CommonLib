@@ -63,6 +63,7 @@ dependencies {
     api(platform(libs.androidx.compose.bom))
     api(libs.constraintlayout.compose)
     api(libs.androidx.ui)
+    api(libs.androidx.compose.foundation)
     api(libs.androidx.material.icons.extended)
     api(libs.androidx.material3)
     api(libs.androidx.ui.tooling.preview)

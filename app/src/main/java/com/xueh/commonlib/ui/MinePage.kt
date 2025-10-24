@@ -27,28 +27,28 @@ import com.xueh.comm_core.weight.compose.click
 import com.xueh.commonlib.ui.compose.ItemView
 import com.xueh.commonlib.ui.xml.MainActivity
 
-class MinePage : NavContent {
-    override val route: String = "MinePage"
-
-    @Composable
-    override fun Content(scope: ComposePagerScope) {
-        Column(Modifier.statusBarsPadding()) {
-            ItemView("XML 页面") {
-                ActivityUtils.startActivity(MainActivity::class.java)
-            }
-            ItemView("是否拦截第三个Tab ${MainComposeActivity.interceptTab}") {
-                MainComposeActivity.interceptTab = !MainComposeActivity.interceptTab
-            }
-            ItemView("是否显示小红点 ${MainComposeActivity.showRedPoint.value}") {
-                MainComposeActivity.showRedPoint.value = !MainComposeActivity.showRedPoint.value
-            }
-            ItemView("AgentComposeWeb") {
-                AgentComposeWebActivity.start("https://www.bilibili.com?hideTitle=1&showShare=1", "百度")
+@Composable
+fun MinePage() {
+    Column(Modifier.statusBarsPadding()) {
+        ItemView("XML 页面") {
+            ActivityUtils.startActivity(MainActivity::class.java)
+        }
+        ItemView("是否拦截第三个Tab ${MainComposeActivity.interceptTab}") {
+            MainComposeActivity.interceptTab = !MainComposeActivity.interceptTab
+        }
+        ItemView("是否显示小红点 ${MainComposeActivity.showRedPoint.value}") {
+            MainComposeActivity.showRedPoint.value = !MainComposeActivity.showRedPoint.value
+        }
+        ItemView("AgentComposeWeb") {
+            AgentComposeWebActivity.start(
+                "https://www.bilibili.com?hideTitle=1&showShare=1",
+                "百度"
+            )
 //                AgentComposeWebActivity.start("https://www.baidu.com?showShare=1", "百度")
-            }
         }
     }
 }
+
 
 @Composable
 fun ItemBox(string: String, clickEvent: () -> Unit) {
@@ -76,31 +76,27 @@ fun ItemBox(string: String, clickEvent: () -> Unit) {
 }
 
 
-class TabPage3 : NavContent {
-    override val route: String = "TabPage3"
-
-    @Composable
-    override fun Content(scope: ComposePagerScope) {
-        Column(Modifier.statusBarsPadding()) {
-            ItemView("修改Theme Dark") {
-                appThemeType = AppThemeType.Dark
-            }
-            ItemView("修改Theme Light") {
-                appThemeType = AppThemeType.Light
-            }
-            ItemView("修改Theme FOLLOW_SYSTEM") {
-                appThemeType = AppThemeType.FOLLOW_SYSTEM
-            }
-            AppBaseTheme {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp)
-                        .background(AppBaseTheme.colors.theme)
-                        .click {
-                            ActivityUtils.startActivity(TestComposeActivity::class.java)
-                        })
-            }
+@Composable
+fun TabPage3() {
+    Column(Modifier.statusBarsPadding()) {
+        ItemView("修改Theme Dark") {
+            appThemeType = AppThemeType.Dark
+        }
+        ItemView("修改Theme Light") {
+            appThemeType = AppThemeType.Light
+        }
+        ItemView("修改Theme FOLLOW_SYSTEM") {
+            appThemeType = AppThemeType.FOLLOW_SYSTEM
+        }
+        AppBaseTheme {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
+                    .background(AppBaseTheme.colors.theme)
+                    .click {
+                        ActivityUtils.startActivity(TestComposeActivity::class.java)
+                    })
         }
     }
 }

@@ -86,25 +86,35 @@ fun RefreshLoadUse() {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(Color.Red)
-                    )
+                            .background(Color.Red),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("Error")
+                    }
                 })
             }, pagingAppendStateContent = {
                 homeDatas.PagingStateAppend(stateError = {
-                    Box(modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp)
-                        .background(Color.Red)
-                        .click {
-                            homeDatas.retry()
-                        })
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(50.dp)
+                            .background(Color.Red)
+                            .click {
+                                homeDatas.retry()
+                            }, contentAlignment = Alignment.Center
+                    ) {
+                        Text("Error")
+                    }
                 }, stateNoMore = {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(50.dp)
-                            .background(Color.Green)
-                    )
+                            .background(Color.Green),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("NoMore")
+                    }
                 })
             }) {
                 Box(

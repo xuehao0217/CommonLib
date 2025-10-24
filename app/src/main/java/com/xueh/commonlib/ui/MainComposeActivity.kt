@@ -1,35 +1,22 @@
 package com.xueh.commonlib.ui
 
 import androidx.activity.OnBackPressedCallback
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.sp
 import com.blankj.utilcode.util.AppUtils
-import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ToastUtils
-import com.lt.compose_views.nav.PagerNav
-import com.lt.compose_views.nav.PagerNavState
-import com.lt.compose_views.util.rememberMutableStateOf
 import com.xueh.comm_core.base.compose.BaseComposeActivity
-import com.xueh.comm_core.weight.compose.BoxWrapper
-import com.xueh.comm_core.weight.compose.Nav
+import com.xueh.comm_core.weight.compose.BottomNavPager
 import com.xueh.comm_core.weight.compose.NavData
-import com.xueh.comm_core.weight.compose.NavPage
 import com.xueh.commonlib.R
-import com.xueh.commonlib.ui.compose.NavPage1
-import com.xueh.commonlib.ui.compose.NavPage2
-import com.xueh.commonlib.ui.compose.NavPage3
+import kotlinx.coroutines.delay
 
 /**
  * 创 建 人: xueh
@@ -42,52 +29,61 @@ class MainComposeActivity : BaseComposeActivity() {
         var showRedPoint = mutableStateOf(false)
     }
 
-    override fun showTitleView() = true
+    override fun showTitleView() = false
 
     private var backPressedTime: Long = 0
 
-    val pages = mutableListOf(
-        HomePage(),
-        MinePage(),
-        TabPage3(),
-    )
-
-    val navList = mutableListOf(
-        NavData(
-            selectIcon = R.mipmap.ic_home_select,
-            unSelectIcon = R.mipmap.ic_home_normal,
-            text = "首页",
-        ),
-        NavData(
-            selectIcon = R.mipmap.ic_my_select,
-            unSelectIcon = R.mipmap.ic_my_normal,
-            text = "我的",
-            showRed = showRedPoint
-        ),
-        NavData(
-            selectIcon = R.mipmap.ic_my_select,
-            unSelectIcon = R.mipmap.ic_my_normal,
-            text = "拦截"
-        ),
-    )
-
-    override fun setTitle()="AAAAAA"
-
-    val interceptPos = 2
-    override fun showStatusBars(): Boolean {
-        return super.showStatusBars()
-    }
-
     @Composable
     override fun setComposeContent() {
-        NavPage(pages = pages, navList = navList, interceptClick = {
-            ToastUtils.showShort("interceptClick")
-            if (interceptTab) {
-                interceptPos
-            } else {
-                -1
+        // 页面列表
+        val pages = listOf<@Composable () -> Unit>(
+            { HomePage() },
+            { MinePage() },
+            { TabPage3() }
+        )
+
+        // 导航列表
+        val navItems = remember {
+            mutableStateListOf(
+                NavData(
+                    selectIcon = R.mipmap.ic_home_select,
+                    unSelectIcon = R.mipmap.ic_home_normal,
+                    text = "首页",
+                ),
+                NavData(
+                    selectIcon = R.mipmap.ic_my_select,
+                    unSelectIcon = R.mipmap.ic_my_normal,
+                    text = "我的",
+                    showRed = showRedPoint
+                ),
+                NavData(
+                    selectIcon = R.mipmap.ic_my_select,
+                    unSelectIcon = R.mipmap.ic_my_normal,
+                    text = "拦截"
+                ),
+            )
+        }
+
+        // 模拟红点显示
+        LaunchedEffect(Unit) {
+            delay(10000)
+            navItems[1].showRed.value = true
+        }
+
+        BottomNavPager(
+            pages = pages,
+            navItems = navItems,
+            selectTextColor = Color.Red,
+            unSelectTextColor = Color.Gray,
+            fontSize = 12.sp,
+            interceptClick = { index ->
+                if (interceptTab && index == 2) {
+                    true
+                } else {
+                    false
+                }
             }
-        })
+        )
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {

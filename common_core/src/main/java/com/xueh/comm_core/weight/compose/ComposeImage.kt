@@ -23,8 +23,6 @@ import coil3.request.crossfade
 import coil3.svg.SvgDecoder
 
 
-
-
 //加载图片
 // https://coil-kt.github.io/coil/compose/
 // https://github.com/coil-kt/coil/blob/main/README-zh.md
@@ -117,7 +115,6 @@ fun ImageCompose(
 )
 
 
-
 @Composable
 fun rememberSvgPainter(
     model: Any?,
@@ -140,7 +137,6 @@ fun rememberSvgPainter(
         filterQuality = filterQuality
     )
 }
-
 
 
 @Composable
@@ -167,7 +163,6 @@ fun rememberAssetsPainter(
 }
 
 
-
 //https://www.wilinz.com/?p=430
 @Composable
 fun ImageSVGCompose(
@@ -177,7 +172,7 @@ fun ImageSVGCompose(
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Crop,
 ) = Image(
-    painter = rememberAssetsPainter( "drawable/${assetsName}.svg"),
+    painter = rememberAssetsPainter("drawable/${assetsName}.svg"),
     contentDescription = "ImageComposeContentDescription",
     modifier = modifier,
     contentScale = contentScale,

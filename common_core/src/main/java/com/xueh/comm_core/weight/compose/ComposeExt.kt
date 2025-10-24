@@ -1,98 +1,105 @@
 package com.xueh.comm_core.weight.compose
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Indication
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.drawscope.ContentDrawScope
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.unit.dp
 import com.blankj.utilcode.util.ImageUtils
+import kotlinx.coroutines.flow.collectLatest
 
 /**
  * 创 建 人: xueh
  * 创建日期: 2022/8/26
- * 备注：
+ * 备注：Compose 点击扩展 & 防抖 & 背景绘制优化
  */
 
-//val MyLocalIndication = staticCompositionLocalOf<Indication> {
-//    DefaultDebugIndication
-//}
-
-////替换系统水波纹
-//object DefaultDebugIndication : Indication {
-//
-//    private class DefaultDebugIndicationInstance(
-//        private val isPressed: State<Boolean>,
-//        private val isHovered: State<Boolean>,
-//        private val isFocused: State<Boolean>,
-//    ) : IndicationInstance {
-//        override fun ContentDrawScope.drawIndication() {
-//            drawContent()
-//            if (isPressed.value) {
-//                drawRoundRect(color = Color.Black.copy(alpha = 0.3f), size = size, cornerRadius = CornerRadius(5f))
-//            } else if (isHovered.value || isFocused.value) {
-//                drawRect(color = Color.Black.copy(alpha = 0.1f), size = size)
-//            }
-//        }
-//    }
-//
-//    @Composable
-//    override fun rememberUpdatedInstance(interactionSource: InteractionSource): IndicationInstance {
-//        val isPressed = interactionSource.collectIsPressedAsState()
-//        val isHovered = interactionSource.collectIsHoveredAsState()
-//        val isFocused = interactionSource.collectIsFocusedAsState()
-//        return remember(interactionSource) {
-//            DefaultDebugIndicationInstance(isPressed, isHovered, isFocused)
-//        }
-//    }
-//}
-//
-////带水波纹的点击
-//@Composable
-//fun Modifier.clickState(click: () -> Unit) = clickable(
-//    indication = MyLocalIndication.current,
-//    interactionSource = remember {
-//        MutableInteractionSource()
-//    }) {
-//    click.invoke()
-//}
-
-//不带水波纹的点击
-@Composable
-fun Modifier.click(click: () -> Unit) = clickable(
-    indication = null,
-    interactionSource = remember {
-        MutableInteractionSource()
-    }) {
-    click.invoke()
+// ---------------------------
+// 无水波纹点击
+// ---------------------------
+fun Modifier.click(onClick: () -> Unit): Modifier = composed {
+    clickable(
+        indication = null,
+        interactionSource = remember { MutableInteractionSource() }
+    ) {
+        onClick()
+    }
 }
 
-//防抖
-@Composable
-fun Modifier.clickPreventFast(millis: Long = 800, onClick: () -> Unit): Modifier {
-    var timeStamp by remember {
-        mutableStateOf(0L)
-    }
+// ---------------------------
+// 防抖点击
+// ---------------------------
+fun Modifier.clickDebounce(
+    millis: Long = 800,
+    onClick: () -> Unit,
+): Modifier = composed {
+    var lastClickTime by remember { mutableStateOf(0L) }
+    val currentOnClick by rememberUpdatedState(onClick)
 
-    return click {
-        if (System.currentTimeMillis() - timeStamp > millis) {
-            onClick()
-            timeStamp = System.currentTimeMillis()
+    click {
+        val now = System.currentTimeMillis()
+        if (now - lastClickTime > millis) {
+            currentOnClick()
+            lastClickTime = now
         }
     }
 }
 
-//设背景
-@Composable
-fun Modifier.setBackground(@DrawableRes backIcon: Int) = drawBehind {
-    drawImage(
-        ImageUtils
-            .getBitmap(backIcon)
-            .asImageBitmap(),
-    )
+// ---------------------------
+// 背景图片
+// ---------------------------
+fun Modifier.setBackground(@DrawableRes backIcon: Int): Modifier = composed {
+    // 缓存 Bitmap 避免每次重新加载
+    val bitmap = remember(backIcon) {
+        ImageUtils.getBitmap(backIcon).asImageBitmap()
+    }
+    drawBehind {
+        drawImage(bitmap)
+    }
+}
+
+
+// ---------------------------
+// 自定义点击高亮扩展，不依赖已弃用 IndicationInstance
+// ---------------------------
+fun Modifier.customRippleClickable(
+    rippleColor: Color = Color.Blue.copy(alpha = 0.3f),
+    cornerRadius: Float = 8f,
+    onClick: () -> Unit,
+): Modifier = composed {
+    val interactionSource = remember { MutableInteractionSource() }
+    var pressed by remember { mutableStateOf(false) }
+
+    // 监听按下状态
+    LaunchedEffect(interactionSource) {
+        interactionSource.interactions.collectLatest { interaction ->
+            pressed = when (interaction) {
+                is PressInteraction.Press -> true
+                is PressInteraction.Release, is PressInteraction.Cancel -> false
+                else -> false
+            }
+        }
+    }
+
+    this
+        .background(
+            color = if (pressed) rippleColor else Color.Transparent,
+            shape = RoundedCornerShape(cornerRadius.dp)
+        )
+        .clickable(
+            interactionSource = interactionSource,
+            indication = null,
+            onClick = onClick
+        )
 }
