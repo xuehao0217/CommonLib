@@ -45,12 +45,11 @@ abstract class BaseComposeActivity : ComponentActivity() {
     var isSystemBarLight by mutableStateOf(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // 支持边缘到边缘
+        enableEdgeToEdge()
         // 锁定竖屏
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
         super.onCreate(savedInstanceState)
-
-        // 支持边缘到边缘
-        enableEdgeToEdge()
 
         // 默认返回事件处理
         onBackPressedDispatcher.addCallback { finish() }
