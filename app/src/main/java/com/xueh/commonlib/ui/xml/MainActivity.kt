@@ -8,6 +8,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.base.xml.DActivity
 import com.xueh.commonlib.R
 import com.xueh.commonlib.databinding.ActivityMainBinding
+import androidx.core.graphics.toColorInt
 
 class MainActivity : DActivity<ActivityMainBinding>() {
 
@@ -29,13 +30,13 @@ class MainActivity : DActivity<ActivityMainBinding>() {
             .selectIconItems(selectIcon)
             .fragmentList(fragments.toList())
             .fragmentManager(supportFragmentManager)
-            .normalTextColor(Color.parseColor("#666666"))   //Tab未选中时字体颜色
-            .selectTextColor(Color.parseColor("#ff0000"))
+            .normalTextColor("#666666".toColorInt())   //Tab未选中时字体颜色
+            .selectTextColor("#ff0000".toColorInt())
             .iconSize(20f)     //Tab图标大小
             .tabTextSize(10)   //Tab文字大小
             .tabTextTop(2)     //Tab文字距Tab图标的距离
 //            .lineHeight(10)         //分割线高度  默认1px
-            .lineColor(Color.parseColor("#ff0000"))
+            .lineColor("#ff0000".toColorInt())
             .canScroll(false)
             .build()
     }
