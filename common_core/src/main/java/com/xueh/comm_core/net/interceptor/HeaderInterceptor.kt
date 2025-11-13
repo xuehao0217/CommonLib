@@ -5,41 +5,49 @@ import okhttp3.Response
 import java.util.concurrent.ConcurrentHashMap
 
 /**
- * 创 建 人: xueh
- * 创建日期: 2020/4/23 15:11
- * 备注：
+ * 全局请求头拦截器
+ * - 支持动态添加、删除请求头
+ * - 默认添加 Content-Type / Accept
  */
 class HeaderInterceptor : Interceptor {
 
-    var headers = ConcurrentHashMap<String, String>()
+    private val headers = ConcurrentHashMap<String, String>()
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val originalRequest = chain.request()
-        val requestBuilder = originalRequest.newBuilder()
+        val original = chain.request()
+        val requestBuilder = original.newBuilder()
             .header("Content-Type", "application/json")
             .header("Accept", "application/json")
-            .method(originalRequest.method, originalRequest.body)
+            .method(original.method, original.body)
 
-        headers.forEach { (t, u) ->
-            requestBuilder.addHeader(t, u)
+        // 添加自定义 header
+        headers.forEach { (key, value) ->
+            requestBuilder.header(key, value)
         }
 
         return chain.proceed(requestBuilder.build())
     }
 
+    /** 添加或更新单个 header */
     fun put(key: String, value: String) {
         headers[key] = value
     }
 
+    /** 批量添加 header */
     fun put(headers: Map<String, String>) {
         this.headers.putAll(headers)
     }
 
-    fun clearHead() {
+    /** 移除指定 header */
+    fun remove(key: String) {
+        headers.remove(key)
+    }
+
+    /** 清空所有自定义 header */
+    fun clear() {
         headers.clear()
     }
 
-    fun clearKey(key: String) {
-        headers.remove(key)
-    }
+    /** 获取当前所有 header（只读） */
+    fun all(): Map<String, String> = headers.toMap()
 }

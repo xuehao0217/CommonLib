@@ -68,8 +68,8 @@ object HttpRequest {
 
     fun putHeader(headers: Map<String, String>) = headerInterceptor.put(headers)
     fun putHeader(key: String, value: String) = headerInterceptor.put(key, value)
-    fun removeHeader(key: String) = headerInterceptor.clearKey(key)
-    fun clearHeaders() = headerInterceptor.clearHead()
+    fun removeHeader(key: String) = headerInterceptor.remove(key)
+    fun clearHeaders() = headerInterceptor.clear()
     fun clearCache() = retrofitCache.clear()
 
     // =============================================================================================
