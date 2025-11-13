@@ -60,10 +60,19 @@ fun File.getUri(): Uri =
         this
     )
 
-//*************************************************** 下载进度 ***************************************************
-
+//***************************************************监听进度 ***************************************************
+//下载
 fun String.listenDownloadProgress(onProgress: (ProgressInfo) -> Unit) {
     ProgressManager.getInstance().addResponseListener(this, object : ProgressListener {
+        override fun onProgress(progressInfo: ProgressInfo) = onProgress(progressInfo)
+        override fun onError(id: Long, e: Exception?) {
+            Log.e("ProgressManager", "Error: $e")
+        }
+    })
+}
+//上传
+fun String.listenPostProgress(onProgress: (ProgressInfo) -> Unit) {
+    ProgressManager.getInstance().addRequestListener(this, object : ProgressListener {
         override fun onProgress(progressInfo: ProgressInfo) = onProgress(progressInfo)
         override fun onError(id: Long, e: Exception?) {
             Log.e("ProgressManager", "Error: $e")
