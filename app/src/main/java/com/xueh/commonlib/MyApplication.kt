@@ -44,7 +44,7 @@ class MyApplication : BaseApplication() {
 //                }
 //            }
         }
-        HttpRequest.putHead("name","xh")
+        HttpRequest.putHeader("name","xh")
     }
 
     private fun initLog() {

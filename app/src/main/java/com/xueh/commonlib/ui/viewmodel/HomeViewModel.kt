@@ -90,31 +90,49 @@ class HomeViewModel : BaseRequstViewModel<RestApi>() {
     }
 
     companion object {
-        const val Url = "http://3g.163.com/links/4636"
+        const val Url = "https://media.w3.org/2010/05/sintel/trailer.mp4"
+
     }
 
-    fun downloadFile() {
+    fun downloadFile(url: String=Url) {
         apiDSL {
-            onRequest {
-                api.downloadFile(Url)
-            }
-            onResponse {
-                val file = File(PathUtils.getExternalAppCachePath(), "news.apk")
-                val isSuccess = FileIOUtils.writeFileFromIS(
-                    file,
-                    it.body()?.byteStream(),
-                )
-                if (isSuccess) {
-                    ToastUtils.showShort("下载完成：${file.absoluteFile}")
-                }
-            }
             onStart {
-                Url.listenDownloadProgress {
+                url.listenDownloadProgress {
                     progressLiveData.postValue(it)
+                    val percent = it.percent
+                    val speed = "${it.speed / 1024} KB/s"
+                    LogUtils.d("downloadFile","下载进度: $percent%, 速度: $speed")
                 }
             }
-
+            onRequest {
+                api.downloadFile(url)
+            }
+            onResponse { response ->
+                val body = response.body()
+                if (body == null) {
+                    ToastUtils.showShort("下载失败：空文件")
+                    return@onResponse
+                }
+                // 尝试从 Content-Disposition 中解析文件名
+                val contentDisposition = response.headers()["Content-Disposition"]
+                val fileName = contentDisposition
+                    ?.let { Regex("filename=\"?([^\";]+)\"?").find(it)?.groupValues?.get(1) }
+                    ?: url.substringAfterLast("/").substringBefore("?")
+                LogUtils.d("downloadFile","fileName=${fileName}")
+                // 文件保存路径
+                val file = File(PathUtils.getExternalAppCachePath(), fileName)
+                val isSuccess = FileIOUtils.writeFileFromIS(file, body.byteStream())
+                if (isSuccess) {
+                    ToastUtils.showShort("下载完成：${file.absolutePath}")
+                } else {
+                    ToastUtils.showShort("下载失败")
+                }
+            }
+            onError {
+                apiError(it)
+            }
         }
     }
+
 
 }

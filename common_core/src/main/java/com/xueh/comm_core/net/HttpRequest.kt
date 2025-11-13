@@ -6,75 +6,110 @@ import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.chuckerteam.chucker.api.RetentionManager
 import com.safframework.http.interceptor.AndroidLoggingInterceptor
 import com.xueh.comm_core.BuildConfig
-import com.xueh.comm_core.net.helper.XTrustManager
 import com.xueh.comm_core.net.interceptor.HeaderInterceptor
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.security.SecureRandom
-import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLContext
 
-/***************************************************************************************************
-https://github.com/RunFeifei/Run
- ****************************************************************************************************/
+/**
+ * 全局 Http 请求管理器
+ *
+ * 特性：
+ * - 自动缓存 BaseUrl 对应的 Retrofit 实例
+ * - 动态添加请求头
+ * - 支持 DSL 扩展 OkHttp/Retrofit
+ * - Debug 环境自动启用 Chucker + 日志打印
+ */
 object HttpRequest {
-    private val serviceMap = mutableMapOf<String, Retrofit>()
-    lateinit var baseUrl: String
-    fun init(url: String, requestDSL: (RequestDsl.() -> Unit)? = null) {
-        this.baseUrl = url
-        this.requestDSL = requestDSL
+
+    /** 缓存域名对应的 Retrofit 实例 */
+    private val retrofitCache = ConcurrentHashMap<String, Retrofit>()
+
+    /** 默认 BaseUrl */
+    private var baseUrl: String = ""
+
+    /** 外部可自定义 OkHttp / Retrofit 构建逻辑 */
+    private var dslConfig: (RequestDsl.() -> Unit)? = null
+
+    // =============================================================================================
+    // 初始化入口
+    // =============================================================================================
+
+    fun init(url: String, config: (RequestDsl.() -> Unit)? = null) {
+        baseUrl = url
+        dslConfig = config
     }
 
-    //************************************************************************************************
+    // =============================================================================================
+    // Retrofit Service 创建
+    // =============================================================================================
 
-    fun <T> getService(serviceClass: Class<T>) = getCustomService(baseUrl, serviceClass)
+    /** 获取默认 BaseUrl 的 API Service */
+    fun <T> getService(service: Class<T>): T = getServiceByDomain(baseUrl, service)
 
-    fun <T> getCustomService(domain: String, serviceClass: Class<T>): T {
-        var retrofit = serviceMap[domain]
-        if (retrofit == null) {
-            retrofit = getRetrofit(domain)
-            //只缓存最常用的
-            if (baseUrl == domain) {
-                serviceMap[domain] = retrofit
-            }
+    /** 按指定域名创建 API Service（支持多域名） */
+    fun <T> getServiceByDomain(domain: String, service: Class<T>): T {
+        val retrofit = retrofitCache[domain] ?: createRetrofit(domain).also {
+            if (domain == baseUrl) retrofitCache[domain] = it
         }
-        return retrofit.create(serviceClass)
+        return retrofit.create(service)
     }
 
-    //***************************************公用参数*****************************************
+    // =============================================================================================
+    // Header 管理
+    // =============================================================================================
 
-    private var headers = HeaderInterceptor()
+    private val headerInterceptor by lazy { HeaderInterceptor() }
 
-    fun putHead(header: HashMap<String, String>) {
-        headers.put(header)
+    fun putHeader(headers: Map<String, String>) = headerInterceptor.put(headers)
+    fun putHeader(key: String, value: String) = headerInterceptor.put(key, value)
+    fun removeHeader(key: String) = headerInterceptor.clearKey(key)
+    fun clearHeaders() = headerInterceptor.clearHead()
+    fun clearCache() = retrofitCache.clear()
+
+    // =============================================================================================
+    // OkHttp 构建
+    // =============================================================================================
+
+    private const val TIMEOUT = 60L
+
+    private fun createOkHttpClient(): OkHttpClient.Builder {
+        return OkHttpClient.Builder()
+            .cache(Cache(Utils.getApp().cacheDir, 10L * 1024 * 1024))
+            .addInterceptor(headerInterceptor)
+            .connectTimeout(TIMEOUT, TimeUnit.SECONDS)
+            .readTimeout(TIMEOUT, TimeUnit.SECONDS)
+            .writeTimeout(TIMEOUT, TimeUnit.SECONDS)
+            .apply {
+                if (BuildConfig.DEBUG) {
+                    enableDebugFeatures()
+                }
+            }
     }
 
-    fun putHead(key: String, v: String) {
-        clearService()
-        headers.put(key, v)
+    /** Debug 环境下启用：日志 + Chucker */
+    private fun OkHttpClient.Builder.enableDebugFeatures() {
+        addNetworkInterceptor(
+            AndroidLoggingInterceptor.build(
+                isDebug = true,
+                hideVerticalLine = true,
+                requestTag = "HTTP",
+                responseTag = "HTTP"
+            )
+        )
+        addInterceptor(createChuckerInterceptor())
     }
 
-    fun clean(key: String) {
-        headers.clearKey(key)
-    }
-
-    fun clearHead() = headers.clearHead()
-    fun clearService() = serviceMap.clear()
-
-    //****************************************公用参数********************************************
-
-
-    //***************************************ChuckerInterceptor*****************************************
-    var chuckerInterceptor = ChuckerInterceptor.Builder(Utils.getApp())
+    private fun createChuckerInterceptor() = ChuckerInterceptor.Builder(Utils.getApp())
         .collector(
             ChuckerCollector(
                 context = Utils.getApp(),
-                // Toggles visibility of the notification
                 showNotification = true,
-                // Allows to customize the retention period of collected data
                 retentionPeriod = RetentionManager.Period.ONE_HOUR
             )
         )
@@ -83,73 +118,39 @@ object HttpRequest {
         .alwaysReadResponseBody(true)
         .build()
 
-    //***************************************OkHttp*****************************************
-    private const val TIME_CONNECT = 60L
-    private fun getOkHttp(): OkHttpClient.Builder {
-        val builder: OkHttpClient.Builder = OkHttpClient.Builder()
-        if (BuildConfig.DEBUG) {
-            try {
-                val sslContext = SSLContext.getInstance("SSL")
-                sslContext.init(
-                    null,
-                    arrayOf(XTrustManager()),
-                    SecureRandom()
-                )
-                val sslSocketFactory = sslContext.socketFactory
-                builder.sslSocketFactory(sslSocketFactory, XTrustManager())
-                builder.hostnameVerifier { hostname, session ->
-                    true
-                }
-                builder.addNetworkInterceptor(
-                    AndroidLoggingInterceptor.build(
-                        isDebug = BuildConfig.DEBUG,
-                        hideVerticalLine = true,
-                        requestTag = "HTTP",
-                        responseTag = "HTTP"
-                    )
-                )
-            } catch (e: Exception) {
-                throw RuntimeException(e)
-            }
-        }
-        return builder
-            .cache(Cache(Utils.getApp().cacheDir, 10 * 1024 * 1024L))
-            .addInterceptor(headers)
-            .addInterceptor(chuckerInterceptor)
-            .connectTimeout(TIME_CONNECT, TimeUnit.SECONDS)
-            .readTimeout(TIME_CONNECT, TimeUnit.SECONDS)
-            .writeTimeout(TIME_CONNECT, TimeUnit.SECONDS)
-    }
+    // =============================================================================================
+    // Retrofit 构建
+    // =============================================================================================
 
-    //**********************************************************************************************
+    private fun createRetrofit(url: String): Retrofit {
+        val dsl = dslConfig?.let { RequestDsl().apply(it) }
 
-
-    //******************************** 动态配置OkHttp Retrofit **************************************
-    private var requestDSL: (RequestDsl.() -> Unit)? = null
-    private fun getRetrofit(base_url: String): Retrofit {
-        val dsl = if (requestDSL != null) RequestDsl().apply(requestDSL!!) else null
-        val finalOkHttpBuilder = dsl?.buidOkHttp?.invoke(getOkHttp()) ?: getOkHttp()
+        val okHttpBuilder = dsl?.okHttpBuilder?.invoke(createOkHttpClient()) ?: createOkHttpClient()
         val retrofitBuilder = Retrofit.Builder()
-            .baseUrl(base_url)
+            .baseUrl(url)
             .addConverterFactory(GsonConverterFactory.create())
-            .client(finalOkHttpBuilder.build())
-        val finalRetrofitBuilder = dsl?.buidRetrofit?.invoke(retrofitBuilder) ?: retrofitBuilder
-        return finalRetrofitBuilder.build()
+            .client(okHttpBuilder.build())
+
+        return dsl?.retrofitBuilder?.invoke(retrofitBuilder)?.build() ?: retrofitBuilder.build()
     }
-    //************************************************************************************************
 }
 
+// =============================================================================================
+// DSL 扩展
+// =============================================================================================
 
+/**
+ * 支持自定义 Retrofit / OkHttp 构建的 DSL
+ */
 class RequestDsl {
-    internal var buidOkHttp: ((OkHttpClient.Builder) -> OkHttpClient.Builder)? = null
+    internal var okHttpBuilder: ((OkHttpClient.Builder) -> OkHttpClient.Builder)? = null
+    internal var retrofitBuilder: ((Retrofit.Builder) -> Retrofit.Builder)? = null
 
-    internal var buidRetrofit: ((Retrofit.Builder) -> Retrofit.Builder)? = null
-
-    infix fun okHttp(builder: ((OkHttpClient.Builder) -> OkHttpClient.Builder)?) {
-        this.buidOkHttp = builder
+    infix fun okHttp(block: ((OkHttpClient.Builder) -> OkHttpClient.Builder)?) {
+        okHttpBuilder = block
     }
 
-    infix fun retrofit(builder: ((Retrofit.Builder) -> Retrofit.Builder)?) {
-        this.buidRetrofit = builder
+    infix fun retrofit(block: ((Retrofit.Builder) -> Retrofit.Builder)?) {
+        retrofitBuilder = block
     }
 }

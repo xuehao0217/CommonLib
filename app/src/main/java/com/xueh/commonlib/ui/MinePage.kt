@@ -23,6 +23,7 @@ import com.xueh.comm_core.base.compose.theme.AppBaseTheme
 import com.xueh.comm_core.base.compose.theme.AppThemeType
 import com.xueh.comm_core.base.compose.theme.appThemeType
 import com.xueh.comm_core.web.AgentComposeWebActivity
+import com.xueh.comm_core.weight.compose.MyTextField
 import com.xueh.comm_core.weight.compose.click
 import com.xueh.commonlib.ui.compose.ItemView
 import com.xueh.commonlib.ui.xml.MainActivity
@@ -88,6 +89,8 @@ fun TabPage3() {
         ItemView("修改Theme FOLLOW_SYSTEM") {
             appThemeType = AppThemeType.FOLLOW_SYSTEM
         }
+
+
         AppBaseTheme {
             Box(
                 modifier = Modifier
