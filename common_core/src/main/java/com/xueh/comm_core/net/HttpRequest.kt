@@ -87,6 +87,7 @@ object HttpRequest {
             .writeTimeout(TIMEOUT, TimeUnit.SECONDS)
             .apply {
                 if (BuildConfig.DEBUG) {
+                    trustAllSsl()
                     enableDebugFeatures()
                 }
             }
@@ -103,6 +104,23 @@ object HttpRequest {
             )
         )
         addInterceptor(createChuckerInterceptor())
+    }
+
+    /** Debug 模式下信任所有 SSL 证书（用于自签名或测试环境） */
+    private fun OkHttpClient.Builder.trustAllSsl() {
+        try {
+            val sslContext = SSLContext.getInstance("SSL")
+            val trustManager = object : javax.net.ssl.X509TrustManager {
+                override fun checkClientTrusted(chain: Array<java.security.cert.X509Certificate>?, authType: String?) {}
+                override fun checkServerTrusted(chain: Array<java.security.cert.X509Certificate>?, authType: String?) {}
+                override fun getAcceptedIssuers(): Array<java.security.cert.X509Certificate> = arrayOf()
+            }
+            sslContext.init(null, arrayOf(trustManager), SecureRandom())
+            sslSocketFactory(sslContext.socketFactory, trustManager)
+            hostnameVerifier { _, _ -> true }
+        } catch (e: Exception) {
+            throw RuntimeException("SSL init failed", e)
+        }
     }
 
     private fun createChuckerInterceptor() = ChuckerInterceptor.Builder(Utils.getApp())
