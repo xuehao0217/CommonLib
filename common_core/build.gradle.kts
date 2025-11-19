@@ -113,7 +113,9 @@ dependencies {
     debugApi (libs.squareup.leakcanary)
     api (libs.interval)
     api(libs.gson)
-    api(libs.utilcodex)
+    api(libs.utilcodex){
+        exclude(group = "org.jetbrains.kotlin", module = "kotlin-android-extensions-runtime")
+    }
     api(libs.progressmanager)
     api(libs.eventbus)
     api(libs.xxPermissions)
