@@ -5,13 +5,11 @@ import androidx.compose.runtime.ExperimentalComposeRuntimeApi
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.PathUtils
 import com.blankj.utilcode.util.Utils
-import com.chuckerteam.chucker.api.ChuckerCollector
-import com.chuckerteam.chucker.api.ChuckerInterceptor
-import com.chuckerteam.chucker.api.RetentionManager
 import com.just.agentweb.AgentWebConfig
 import com.xueh.comm_core.base.BaseApplication
 import com.xueh.comm_core.net.HttpRequest
 import com.xueh.comm_core.utils.MMKVUtil
+import io.nerdythings.okhttp.profiler.OkHttpProfilerInterceptor
 import me.jessyan.progressmanager.ProgressManager
 
 
@@ -34,8 +32,8 @@ class MyApplication : BaseApplication() {
         HttpRequest.init("https://www.wanandroid.com/"){
             okHttp {
                 it.apply {
-                    ProgressManager.getInstance().with(this)
-                        .build()
+                    ProgressManager.getInstance().with(this).build()
+                    addInterceptor(OkHttpProfilerInterceptor())
                 }
             }
 //            retrofit {
