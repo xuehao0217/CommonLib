@@ -62,11 +62,10 @@ fun isThemeDark():Boolean=AppThemeType.isDark(
 //https://blog.csdn.net/wsyx768/article/details/138075205
 @Composable
 fun ComposeMaterialTheme(
-    appThemeState: AppThemeType = appThemeType,
     appColorType: AppThemeColorType = appThemeColorType,
     content: @Composable () -> Unit,
 ) {
-    val isDarkTheme = AppThemeType.isDark(themeType = appThemeState)
+    val isDarkTheme = isThemeDark()
     val context = LocalContext.current
     val colors = when (appColorType) {
         AppThemeColorType.GREEN -> if (isDarkTheme) DarkGreenColorPalette else LightGreenColorPalette
