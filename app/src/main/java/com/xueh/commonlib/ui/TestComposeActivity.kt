@@ -24,4 +24,12 @@ class TestComposeActivity:BaseComposeActivity() {
     }
 
     override fun setTitle()="TestComposeActivity"
+
+    override fun showStatusBars(): Boolean {
+        return true
+    }
+
+    override fun showTitleView(): Boolean {
+        return false
+    }
 }
