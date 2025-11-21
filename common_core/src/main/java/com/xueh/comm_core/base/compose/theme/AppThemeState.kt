@@ -92,8 +92,8 @@ fun ComposeMaterialTheme(
 
 @Stable
 @Composable
-fun AppBaseTheme(themeType: AppThemeType = appThemeType, content: @Composable () -> Unit) {
-    val colors = if (AppThemeType.isDark(themeType = themeType)) darkThemeColors else lightThemeColors
+fun AppBaseTheme(content: @Composable () -> Unit) {
+    val colors = if(isThemeDark())darkThemeColors else lightThemeColors
     CompositionLocalProvider(
         LocalCustomColors provides colors,
         LocalTextStyles provides AppBaseTheme.textStyle
