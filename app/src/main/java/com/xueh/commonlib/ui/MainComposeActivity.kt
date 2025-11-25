@@ -15,6 +15,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.base.compose.BaseComposeActivity
 import com.xueh.comm_core.weight.compose.BottomNavPager
 import com.xueh.comm_core.weight.compose.NavData
+import com.xueh.comm_core.weight.compose.NavThemeColors
 import com.xueh.commonlib.R
 import kotlinx.coroutines.delay
 
@@ -73,9 +74,15 @@ class MainComposeActivity : BaseComposeActivity() {
         BottomNavPager(
             pages = pages,
             navItems = navItems,
-            selectTextColor = Color.Red,
-            unSelectTextColor = Color.Gray,
             fontSize = 12.sp,
+            themeColors = NavThemeColors(
+                lightBackground = Color.White,
+                darkBackground = Color.Black,
+                lightUnSelectedTextColor = Color(0xFF757575),
+                darkUnSelectedTextColor = Color(0xFFAAAAAA),
+                lightSelectedTextColor = Color(0xFF1E88E5),
+                darkSelectedTextColor = Color(0xFF1E88E5)
+            ),
             interceptClick = { index ->
                 if (interceptTab && index == 2) {
                     true
