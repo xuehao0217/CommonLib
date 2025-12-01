@@ -95,13 +95,13 @@ fun AppBaseTheme(content: @Composable () -> Unit) {
     val colors = if(isThemeDark())darkThemeColors else lightThemeColors
     CompositionLocalProvider(
         LocalCustomColors provides colors,
-        LocalTextStyles provides AppBaseTheme.textStyle
+        LocalTextStyles provides AppTheme.textStyle
     ) {
         MaterialTheme(content = content)
     }
 }
 
-object AppBaseTheme {
+object AppTheme {
     val colors: AppThemeColors
         @Composable
         get() = LocalCustomColors.current
