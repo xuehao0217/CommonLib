@@ -20,6 +20,7 @@ import com.blankj.utilcode.util.ActivityUtils
 import com.lt.compose_views.compose_pager.ComposePagerScope
 import com.lt.compose_views.nav.NavContent
 import com.xueh.comm_core.base.compose.theme.AppBaseTheme
+import com.xueh.comm_core.base.compose.theme.AppTheme
 import com.xueh.comm_core.base.compose.theme.AppThemeType
 import com.xueh.comm_core.base.compose.theme.appThemeType
 import com.xueh.comm_core.web.AgentComposeWebActivity
@@ -56,13 +57,13 @@ fun ItemBox(string: String, clickEvent: () -> Unit) {
     Box(
         modifier = Modifier
             .clip(CircleShape)
-            .background(AppBaseTheme.colors.background)
+            .background(AppTheme.colors.background)
             .clickable(onClick = clickEvent)
             .fillMaxWidth()
             .height(50.dp)
             .border(
                 1.5.dp,
-                AppBaseTheme.colors.theme,
+                AppTheme.colors.theme,
                 shape = CircleShape
             ),
 
@@ -70,7 +71,7 @@ fun ItemBox(string: String, clickEvent: () -> Unit) {
     ) {
         Text(
             text = string,
-            color = AppBaseTheme.colors.title,
+            color = AppTheme.colors.title,
             textAlign = TextAlign.Center,
         )
     }
@@ -96,7 +97,7 @@ fun TabPage3() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(100.dp)
-                    .background(AppBaseTheme.colors.theme)
+                    .background(AppTheme.colors.theme)
                     .click {
                         ActivityUtils.startActivity(TestComposeActivity::class.java)
                     })
