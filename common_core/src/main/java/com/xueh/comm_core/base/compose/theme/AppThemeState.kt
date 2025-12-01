@@ -19,7 +19,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.blankj.utilcode.util.Utils
-
+/////////////////////////AppThemeType（亮暗色模式）////////////////////////////////////
 var appThemeType by mutableStateOf(AppThemeType.Light)
 enum class AppThemeType {
     FOLLOW_SYSTEM, Light, Dark;
@@ -44,21 +44,13 @@ enum class AppThemeType {
     }
 }
 
-
+////////////////////////主题颜色类型（绿/紫/橘/蓝/壁纸动态色）////////////////////////////////////
 var appThemeColorType by mutableStateOf(AppThemeColorType.GREEN)
 
 enum class AppThemeColorType {
     PURPLE, GREEN, ORANGE, BLUE, WALLPAPER
 }
 
-
-@Composable
-fun isThemeDark():Boolean=AppThemeType.isDark(
-    themeType = appThemeType
-)
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////
 //https://blog.csdn.net/wsyx768/article/details/138075205
 @Composable
 fun ComposeMaterialTheme(
@@ -89,6 +81,14 @@ fun ComposeMaterialTheme(
     )
 }
 
+
+
+@Composable
+fun isThemeDark():Boolean=AppThemeType.isDark(
+    themeType = appThemeType
+)
+
+
 @Stable
 @Composable
 fun AppBaseTheme(content: @Composable () -> Unit) {
@@ -101,6 +101,12 @@ fun AppBaseTheme(content: @Composable () -> Unit) {
     }
 }
 
+
+val LocalTextStyles = staticCompositionLocalOf { defaultTextStyle }
+val LocalCustomColors = staticCompositionLocalOf { lightThemeColors }
+
+
+///方便全局获取样式
 object AppTheme {
     val colors: AppThemeColors
         @Composable
@@ -109,7 +115,3 @@ object AppTheme {
         @Composable
         get() = LocalTextStyles.current
 }
-
-val LocalTextStyles = staticCompositionLocalOf { defaultTextStyle }
-val LocalCustomColors = staticCompositionLocalOf { lightThemeColors }
-
