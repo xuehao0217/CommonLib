@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.blankj.utilcode.util.Utils
 /////////////////////////AppThemeType（亮暗色模式）////////////////////////////////////
 var appThemeType by mutableStateOf(AppThemeType.Light)
+
 enum class AppThemeType {
     FOLLOW_SYSTEM, Light, Dark;
     companion object {
@@ -43,6 +44,11 @@ enum class AppThemeType {
         }
     }
 }
+
+@Composable
+fun isThemeDark():Boolean=AppThemeType.isDark(
+    themeType = appThemeType
+)
 
 ////////////////////////主题颜色类型（绿/紫/橘/蓝/壁纸动态色）////////////////////////////////////
 var appThemeColorType by mutableStateOf(AppThemeColorType.GREEN)
@@ -80,13 +86,6 @@ fun ComposeMaterialTheme(
         content = content
     )
 }
-
-
-
-@Composable
-fun isThemeDark():Boolean=AppThemeType.isDark(
-    themeType = appThemeType
-)
 
 
 @Stable
