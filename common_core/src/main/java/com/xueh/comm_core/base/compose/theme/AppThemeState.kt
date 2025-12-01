@@ -65,22 +65,21 @@ fun ComposeMaterialTheme(
 ) {
     val isDarkTheme = isThemeDark()
     val context = LocalContext.current
+
     val colors = when (appColorType) {
         AppThemeColorType.GREEN -> if (isDarkTheme) DarkGreenColorPalette else LightGreenColorPalette
         AppThemeColorType.PURPLE -> if (isDarkTheme) DarkPurpleColorPalette else LightPurpleColorPalette
         AppThemeColorType.ORANGE -> if (isDarkTheme) DarkOrangeColorPalette else LightOrangeColorPalette
         AppThemeColorType.BLUE -> if (isDarkTheme) DarkBlueColorPalette else LightBlueColorPalette
-        AppThemeColorType.WALLPAPER -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-            if (isDarkTheme)
-                dynamicDarkColorScheme(context)
+
+        AppThemeColorType.WALLPAPER ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                if (isDarkTheme) dynamicDarkColorScheme(context)
+                else dynamicLightColorScheme(context)
             else
-                dynamicLightColorScheme(context)
-        else
-            if (isDarkTheme)
-                DarkGreenColorPalette
-            else
-                LightGreenColorPalette
+                if (isDarkTheme) DarkGreenColorPalette else LightGreenColorPalette
     }
+
     MaterialTheme(
         colorScheme = colors,
         content = content
