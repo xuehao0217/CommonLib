@@ -106,6 +106,7 @@ dependencies {
     api(libs.okhttp3.logging.interceptor)
     api(libs.logginginterceptor)
     api(libs.cookieJar)
+    implementation(libs.androidx.photopicker)
 
     //网络请求查看日志相关
     debugApi(libs.chucker)

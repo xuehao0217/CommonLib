@@ -61,6 +61,7 @@ easynavigationVersion = "2.0.5"
 xpopup = "2.1.16"
 brvah = "3.0.7"
 foundation = "1.9.5"
+photopicker = "1.0.0-alpha01"
 
 [libraries]
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
@@ -150,6 +151,7 @@ refresh-header = { module = "com.scwang.smart:refresh-header-classics", version.
 refresh-layout = { module = "com.scwang.smart:refresh-layout-kernel", version.ref = "refreshLayout" }
 xpopup = { module = "com.lxj:xpopup", version.ref = "xpopup" }
 magicIndicator = { module = "com.github.hackware1993:MagicIndicator", version.ref = "magicindicator" }
+androidx-photopicker = { group = "androidx.photopicker", name = "photopicker", version.ref = "photopicker" }
 
 #------------------------------------------------plugins--------------------------------------------------------------
 
