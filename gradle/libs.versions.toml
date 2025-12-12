@@ -37,6 +37,7 @@ any_pop_dialog_compose = "1.0.4"
 composeviews = "1.9.0.4"
 composeWebviewVersion = "0.33.6"
 refresh = "1.4.2"
+photopickerCompose = "1.0.0-alpha01"
 #--------------网络相关-----------------
 retrofit = "3.0.0"
 okhttpVersion = "5.3.2"
@@ -99,6 +100,7 @@ androidx-compose-foundation = { group = "androidx.compose.foundation", name = "f
 androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 compose-animation= { module = "androidx.compose.animation:animation",name = "animation" }
 compose-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata", name="runtime-livedata" }
+androidx-photopicker-compose = { module = "androidx.photopicker:photopicker-compose", version.ref = "photopickerCompose" }
 
 constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose-android", version.ref = "constraintLayoutCompose" }
 compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "navigationComposeVersion" }

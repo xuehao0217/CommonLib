@@ -93,6 +93,7 @@ dependencies {
     api (libs.refresh.indicator)
 
     api(libs.accompanist.placeholder)
+    api(libs.androidx.photopicker.compose)
     //----------------Kotlin相关--------------------------
     api(libs.kotlin.stdlib)
     api(libs.kotlinx.coroutines.core)
