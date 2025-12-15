@@ -93,7 +93,7 @@ dependencies {
     api (libs.refresh.indicator)
 
     api(libs.accompanist.placeholder)
-    api(libs.androidx.photopicker.compose)
+//    api(libs.androidx.photopicker.compose)
     //----------------Kotlin相关--------------------------
     api(libs.kotlin.stdlib)
     api(libs.kotlinx.coroutines.core)
@@ -106,7 +106,6 @@ dependencies {
     api(libs.okhttp3.logging.interceptor)
     api(libs.logginginterceptor)
     api(libs.cookieJar)
-    implementation(libs.androidx.photopicker)
 
     //网络请求查看日志相关
     debugApi(libs.chucker)
