@@ -1,8 +1,8 @@
 [versions]
 agp = "8.13.1"
-kotlin = "2.2.21"
+kotlin = "2.3.0"
 kotlinCoroutinesVersion = "1.10.2"
-composeBom = "2025.12.00"
+composeBom = "2025.12.01"
 #--------------基础库相关-----------------
 junit = "4.13.2"
 junitVersion = "1.3.0"
@@ -18,12 +18,12 @@ utilcodex = "1.31.1"
 agentweb = "v5.1.1-androidx"
 xxpermissions = "28.0"
 glideVersion = "5.0.5"
-landscapistGlide = "2.6.1"
+landscapistGlide = "2.6.2"
 logger = "2.2.0"
 mmkv = "2.3.0"
 #--------------KTX相关-----------------
 coreKtx = "1.17.0"
-activityKtx = "1.12.1"
+activityKtx = "1.12.2"
 fragmentKtx = "1.8.9"
 lifecycleKtx = "2.10.0"
 #--------------Compose相关-----------------
