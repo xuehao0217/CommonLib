@@ -116,7 +116,6 @@ dependencies {
 
 //    api(libs.converter.gson)
 //    api(libs.cookieJar)
-
     //---------------工具类的库--------------------------
     debugApi (libs.squareup.leakcanary)
     api (libs.interval)
@@ -128,6 +127,7 @@ dependencies {
     api(libs.logger)
     api(libs.mmkv)
     api(libs.agentweb)
+    api(libs.lottie.compose)
     //--------------XML相关一些库--------------------------
     api(libs.material)
     api(libs.recyclerview)

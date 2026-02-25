@@ -21,6 +21,7 @@ glideVersion = "5.0.5"
 landscapistGlide = "2.9.5"
 logger = "2.2.0"
 mmkv = "2.3.0"
+lottie = "6.7.1"
 #--------------KTX相关-----------------
 coreKtx = "1.17.0"
 activityKtx = "1.12.4"
@@ -92,6 +93,9 @@ coil-compose-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version
 github-glide = { module = "com.github.bumptech.glide:glide", version.ref = "glideVersion" }
 coil3-coil-svg = { module = "io.coil-kt.coil3:coil-svg", version.ref = "coilCompose" }
 landscapist-glide = { module = "com.github.skydoves:landscapist-glide", version.ref = "landscapistGlide" }
+
+lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
+
 #-----------------------------------------------Compose相关-------------------------------------------------------------
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityKtx" }
