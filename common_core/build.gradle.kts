@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.compose.compiler)
+
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -100,25 +102,28 @@ dependencies {
     api(libs.kotlinx.coroutines.android)
 
     //----------------网络请求相关--------------------------
-    api(libs.retrofit)
-    api(libs.converter.gson)
     api(libs.okhttp3.okhttp)
+    api(libs.retrofit)
     api(libs.okhttp3.logging.interceptor)
     api(libs.logginginterceptor)
-    api(libs.cookieJar)
+
+    api(libs.retrofit.converter.kotlinx.serialization)
+    api(libs.kotlinx.serialization.json)
 
     //网络请求查看日志相关
     debugApi(libs.chucker)
     releaseApi(libs.chucker.no.op)
+
+//    api(libs.converter.gson)
+//    api(libs.cookieJar)
+
     //---------------工具类的库--------------------------
     debugApi (libs.squareup.leakcanary)
     api (libs.interval)
-    api(libs.gson)
     api(libs.utilcodex){
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-android-extensions-runtime")
     }
     api(libs.progressmanager)
-    api(libs.eventbus)
     api(libs.xxPermissions)
     api(libs.logger)
     api(libs.mmkv)
@@ -132,13 +137,13 @@ dependencies {
     api(libs.androidx.viewpager2)
     api(libs.github.brvah)
     api(libs.easyNavigation)
+    api(libs.eventbus)
+//    api(libs.gson)
 //    //捕获崩溃信息
 //    debugApi(libs.spiderman) {
 //        exclude(group = "androidx.appcompat")
 //    }
 //    api(libs.refresh.layout)
 //    api(libs.refresh.header)
-//    api(libs.magicIndicator)
-//    api(libs.xpopup)
 }
 

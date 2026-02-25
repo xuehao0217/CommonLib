@@ -8,13 +8,12 @@ import com.safframework.http.interceptor.AndroidLoggingInterceptor
 import com.xueh.comm_core.BuildConfig
 import com.xueh.comm_core.net.interceptor.HeaderInterceptor
 import okhttp3.Cache
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.security.SecureRandom
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
-import javax.net.ssl.SSLContext
 
 /**
  * 全局 Http 请求管理器
@@ -87,7 +86,6 @@ object HttpRequest {
             .writeTimeout(TIMEOUT, TimeUnit.SECONDS)
             .apply {
                 if (BuildConfig.DEBUG) {
-                    trustAllSsl()
                     enableDebugFeatures()
                 }
             }
@@ -106,23 +104,6 @@ object HttpRequest {
         addInterceptor(createChuckerInterceptor())
     }
 
-    /** Debug 模式下信任所有 SSL 证书（用于自签名或测试环境） */
-    private fun OkHttpClient.Builder.trustAllSsl() {
-        try {
-            val sslContext = SSLContext.getInstance("SSL")
-            val trustManager = object : javax.net.ssl.X509TrustManager {
-                override fun checkClientTrusted(chain: Array<java.security.cert.X509Certificate>?, authType: String?) {}
-                override fun checkServerTrusted(chain: Array<java.security.cert.X509Certificate>?, authType: String?) {}
-                override fun getAcceptedIssuers(): Array<java.security.cert.X509Certificate> = arrayOf()
-            }
-            sslContext.init(null, arrayOf(trustManager), SecureRandom())
-            sslSocketFactory(sslContext.socketFactory, trustManager)
-            hostnameVerifier { _, _ -> true }
-        } catch (e: Exception) {
-            throw RuntimeException("SSL init failed", e)
-        }
-    }
-
     private fun createChuckerInterceptor() = ChuckerInterceptor.Builder(Utils.getApp())
         .collector(
             ChuckerCollector(
@@ -139,14 +120,16 @@ object HttpRequest {
     // =============================================================================================
     // Retrofit 构建
     // =============================================================================================
-
     private fun createRetrofit(url: String): Retrofit {
         val dsl = dslConfig?.let { RequestDsl().apply(it) }
 
         val okHttpBuilder = dsl?.okHttpBuilder?.invoke(createOkHttpClient()) ?: createOkHttpClient()
         val retrofitBuilder = Retrofit.Builder()
             .baseUrl(url)
-            .addConverterFactory(GsonConverterFactory.create())
+//            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(JsonManager.default.asConverterFactory(
+                "application/json".toMediaType()
+            ))
             .client(okHttpBuilder.build())
 
         return dsl?.retrofitBuilder?.invoke(retrofitBuilder)?.build() ?: retrofitBuilder.build()
