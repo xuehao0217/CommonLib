@@ -100,6 +100,5 @@ android {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
     implementation(project(":common_core"))
-    debugImplementation("io.nerdythings:okhttp-profiler:1.1.1")
 }
 
