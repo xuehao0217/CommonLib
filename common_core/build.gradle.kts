@@ -128,6 +128,9 @@ dependencies {
     api(libs.mmkv)
     api(libs.agentweb)
     api(libs.lottie.compose)
+
+    api(libs.okhttp.profiler)
+
     //--------------XML相关一些库--------------------------
     api(libs.material)
     api(libs.recyclerview)

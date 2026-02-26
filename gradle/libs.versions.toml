@@ -22,6 +22,7 @@ landscapistGlide = "2.9.5"
 logger = "2.2.0"
 mmkv = "2.3.0"
 lottie = "6.7.1"
+okhttpProfiler = "1.1.1"
 #--------------KTX相关-----------------
 coreKtx = "1.17.0"
 activityKtx = "1.12.4"
@@ -131,6 +132,9 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 retrofit-converter-kotlinx-serialization = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit" }
+
+okhttp-profiler = { module = "io.nerdythings:okhttp-profiler", version.ref = "okhttpProfiler" }
+
 
 chucker-no-op = { module = "com.github.chuckerteam.chucker:library-no-op", version.ref = "chucker" }
 chucker = { module = "com.github.chuckerteam.chucker:library", version.ref = "chucker" }
