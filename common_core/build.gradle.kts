@@ -61,6 +61,7 @@ dependencies {
     api(libs.androidx.lifecycle.runtime.ktx)
     api(libs.androidx.lifecycle.livedata.ktx)
     api(libs.androidx.lifecycle.viewmodel.ktx)//by viewModels()
+    api(libs.androidx.lifecycle.process)
     //----------------Compose相关--------------------------
     api(platform(libs.androidx.compose.bom))
     api(libs.constraintlayout.compose)
