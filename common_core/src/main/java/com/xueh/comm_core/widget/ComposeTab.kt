@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * 自定义 **TabRow** / 可滚动 Tab / 指示器偏移（含 [tabIndicatorOffsetMy] 等），与 Material3 源码协议一致，可与 [HorizontalPager]、[PagerTabIndicator] 组合。
+ */
 package com.xueh.comm_core.widget
 
 import androidx.compose.animation.core.AnimationSpec

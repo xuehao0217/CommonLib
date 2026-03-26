@@ -1,13 +1,17 @@
 package com.xueh.comm_core.net
 
-
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonBuilder
 
+/**
+ * Kotlin Serialization 的共享 [Json] 实例与扩展工具。
+ *
+ * **流程**：[HttpRequest] 构建 Retrofit 时使用 [default] 作为 JSON Converter；业务可用 [String.fromJson]、[toJson] 做局部序列化。
+ */
 object JsonManager {
 
     /**
-     * 默认全局 Json 实例
+     * 默认全局 Json 实例（宽松解析、忽略未知键等，见 [createDefault]）。
      */
     val default: Json by lazy {
         createDefault()

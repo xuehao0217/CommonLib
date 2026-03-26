@@ -5,6 +5,9 @@ import android.os.Parcelable
 import com.blankj.utilcode.util.GsonUtils
 import com.tencent.mmkv.MMKV
 
+/**
+ * MMKV 键值存取封装：[set]/[get] 按运行时类型分发 encode/decode；支持 [Parcelable] 与 JSON 回退（见实现）。
+ */
 object MMKVUtil {
     private val mmkv by lazy {
         MMKV.defaultMMKV()

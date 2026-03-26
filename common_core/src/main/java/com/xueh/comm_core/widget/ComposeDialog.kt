@@ -1,5 +1,8 @@
 /**
  * 弹窗相关组件：[BottomSheetDialog]、[CustomDialog]、[BaseAnyPopDialog]、[BaseComposeDialog]、[ComposeLoadingDialog]。
+ *
+ * **ComposeLoadingDialog 流程**：ViewModel 将 [androidx.compose.runtime.MutableState] 置 true → 全屏 [Dialog] + [CircularProgressIndicator]；
+ * 请求结束在 [com.xueh.comm_core.net.coroutinedsl.RequestViewModel.apiFinally] 等处置 false（参见 [com.xueh.comm_core.base.mvvm.BaseComposeViewModel]）。
  */
 package com.xueh.comm_core.widget
 

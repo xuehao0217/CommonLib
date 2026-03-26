@@ -1,3 +1,9 @@
+/**
+ * 基于 **Accompanist Web** 的 Compose 内嵌网页。
+ *
+ * **流程**：`rememberWebViewState(url)` → 顶部 [LinearProgressIndicator] 反映 [LoadingState] → [WebView] + 自定义 [AccompanistWebViewClient]。
+ * 注意：类型名 `AccompanistWebViewClient` 来自三方库，与是否使用旧版 Accompanist 其他组件无关。
+ */
 package com.xueh.comm_core.web
 
 import android.graphics.Bitmap

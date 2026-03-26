@@ -1,4 +1,7 @@
-
+/**
+ * Paging3 封装：[BasePagingSource] 页码递增加载；[pager] 在 [ViewModel] 上快速构建 `Flow<PagingData<T>>`；
+ * [PagingDataModifier] 在流上叠加删除/更新/头尾插入；[PagerFlow] 通用工厂。
+ */
 package com.xueh.comm_core.helper.compose
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

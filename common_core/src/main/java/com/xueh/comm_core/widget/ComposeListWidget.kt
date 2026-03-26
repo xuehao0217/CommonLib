@@ -1,3 +1,6 @@
+/**
+ * 列表封装：[CommonLazyColumn]、[CommonLazyColumnData] 等，统一间距、内边距与可选头尾插槽。
+ */
 package com.xueh.comm_core.widget
 
 import androidx.compose.foundation.layout.Arrangement

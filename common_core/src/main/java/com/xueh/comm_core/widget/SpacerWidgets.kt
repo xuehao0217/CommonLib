@@ -1,3 +1,4 @@
+/** 固定宽高 [Spacer] 便捷方法（dp 或 [Dp]）。 */
 package com.xueh.comm_core.widget
 
 import androidx.compose.foundation.layout.Spacer

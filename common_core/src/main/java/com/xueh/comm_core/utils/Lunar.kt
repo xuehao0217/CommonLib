@@ -1,3 +1,6 @@
+/**
+ * 公历转农历与民俗判断（生肖、干支、[isGhostFestival] 等），供 [com.xueh.comm_core.base.compose.theme.GrayAppAdapter] 等调用。
+ */
 package com.xueh.comm_core.utils
 
 import java.text.ParseException

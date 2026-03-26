@@ -1,3 +1,6 @@
+/**
+ * Coil [ImageLoader] 单例（Application 级缓存）与 [rememberCommCoreImageLoader]；含 SVG 解码组件。
+ */
 package com.xueh.comm_core.widget
 
 import android.content.Context

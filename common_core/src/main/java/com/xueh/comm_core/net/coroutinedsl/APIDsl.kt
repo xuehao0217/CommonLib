@@ -14,7 +14,14 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
-// ------------------- DSL 核心类 -------------------
+/**
+ * ViewModel 内 **链式网络 DSL**：通过 `onRequest` / `onRequestBaseResult` 等配置请求与回调，由 [RequestViewModel] 的 `apiDSL` 等触发。
+ *
+ * **三种 launch 差异**：
+ * - [launch]：`onRequest` 返回原始 [Response]，成功则 `onResponse` / `onResponseSuspend`。
+ * - [launchBaseResult]：`onRequestBaseResult` 返回 [BaseResult]，仅 `isSuccess` 时回调 data。
+ * - [launchFlow]：将 `onRequest` 结果放入 Flow，在 Flow 上 `onStart`/`catch`/`onCompletion`。
+ */
 class ViewModelDsl<Response> {
 
     internal var request: (suspend () -> Response)? = null

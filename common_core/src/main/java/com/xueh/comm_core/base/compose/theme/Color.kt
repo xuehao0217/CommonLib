@@ -1,3 +1,6 @@
+/**
+ * Material 主题用 **色值常量**（绿/蓝/紫/橘等），供 `Theme.kt` 中各套 `ColorPalette` 与业务色引用。
+ */
 package com.xueh.comm_core.base.compose.theme
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color

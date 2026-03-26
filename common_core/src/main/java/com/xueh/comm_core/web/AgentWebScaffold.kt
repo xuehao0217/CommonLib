@@ -43,7 +43,10 @@ import com.xueh.comm_core.widget.ImageCompose
 import com.xueh.comm_core.widget.clickNoRipple
 
 /**
- * AgentWeb 全屏内容，供单 Activity 内嵌或与 [AgentComposeWebActivity] 复用。
+ * **AgentWeb** 全屏内容：标题栏、分享、URL 查询参数（如 `hideTitle`）、与系统栏适配；供单 Activity 内嵌或与 [AgentComposeWebActivity] 复用。
+ *
+ * **生命周期流程**：[AndroidView] 创建 AgentWeb → [DisposableEffect] 绑定 [Lifecycle] `ON_PAUSE`/`ON_RESUME` → `onDispose` 时 [AgentWeb.webLifeCycle.onDestroy]。
+ * [BackHandler]：优先 `agentWeb.back()`，否则 [onClose]。
  */
 @Composable
 fun AgentWebScaffold(

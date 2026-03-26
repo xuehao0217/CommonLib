@@ -12,24 +12,16 @@ import kotlinx.coroutines.runBlocking
 import java.io.IOException
 
 /**
+ * Preferences DataStore 封装：在 [init] 后使用 [getData]/[putData]（异步 Flow / suspend）或 [getSyncData]/[putSyncData]（同步阻塞）。
  *
- * 异步获取数据
- * [getData] [readBooleanFlow] [readFloatFlow] [readIntFlow] [readLongFlow] [readStringFlow]
- * 同步获取数据
- * [getSyncData] [readBooleanData] [readFloatData] [readIntData] [readLongData] [readStringData]
+ * **流程**：`Application` 中 [init] 绑定 [dataStore] → 读写键值；错误在 Flow 上 `catch`（如 IOException）。
  *
- * 异步写入数据
- * [putData] [saveBooleanData] [saveFloatData] [saveIntData] [saveLongData] [saveStringData]
- * 同步写入数据
- * [putSyncData] [saveSyncBooleanData] [saveSyncFloatData] [saveSyncIntData] [saveSyncLongData] [saveSyncStringData]
- *
- * 异步清除数据
- * [clear]
- * 同步清除数据
- * [clearSync]
- *
- * 描述：DataStore 工具类
- *
+ * ### API 索引
+ * - 异步读：[getData]、[readBooleanFlow]、[readFloatFlow]、[readIntFlow]、[readLongFlow]、[readStringFlow]
+ * - 同步读：[getSyncData]、[readBooleanData]、[readFloatData]、[readIntData]、[readLongData]、[readStringData]
+ * - 异步写：[putData]、[saveBooleanData]、…
+ * - 同步写：[putSyncData]、[saveSyncBooleanData]、…
+ * - 清除：[clear] / [clearSync]
  */
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "AndroidDataStore")

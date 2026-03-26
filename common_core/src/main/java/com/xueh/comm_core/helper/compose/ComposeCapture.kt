@@ -16,11 +16,6 @@ import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.viewinterop.AndroidView
-/**
- * 创 建 人: xueh
- * 创建日期: 2023/6/26
- * 备注：https://www.jianshu.com/p/6355f99d6808
- */
 
 /**
  * 截图触发状态。

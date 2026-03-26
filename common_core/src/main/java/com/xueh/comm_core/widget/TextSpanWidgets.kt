@@ -1,3 +1,4 @@
+/** 富文本与可点击片段：[buildAnnotatedString]、[LinkAnnotation]、行内占位等组合件。 */
 package com.xueh.comm_core.widget
 
 import androidx.compose.foundation.background

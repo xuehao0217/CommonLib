@@ -30,9 +30,11 @@ fun isNeedGray(): Boolean {
 }
 
 /**
- * 适配黑白化应用
+ * 在内容之上按需叠加 **饱和度为 0** 的全屏层（[BlendMode.Saturation]），实现整页灰阶。
  *
- * @param isGray 是否置灰 true：置灰  false：正常颜色
+ * **流程**：[Surface] 铺底 → 绘制子 [content] → 若 [isGray] 为 true 则 [Canvas] 盖一层白字混合，全局去色。
+ *
+ * @param isGray 是否置灰；默认 [isNeedGray]（公祭日/清明/中元等）。
  */
 @Composable
 fun GrayAppAdapter(isGray: Boolean = isNeedGray(), content: @Composable () -> Unit) {

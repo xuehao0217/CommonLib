@@ -1,3 +1,6 @@
+/**
+ * 与 [androidx.compose.foundation.pager.PagerState] 联动的 **Tab 指示条**（Canvas 绘制），需配合 [MyTabPosition] 列表使用。
+ */
 package com.xueh.comm_core.widget
 
 import androidx.compose.foundation.Canvas

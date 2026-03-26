@@ -16,11 +16,8 @@ import androidx.core.content.FileProvider
 import com.blankj.utilcode.util.Utils
 import java.io.File
 
-
 /**
- * 创 建 人: xueh
- * 创建日期: 2023/9/13
- * 备注：
+ * 拍照 **ActivityResultContract**：[createIntent] 使用 `MediaStore.ACTION_IMAGE_CAPTURE` 并指定 `EXTRA_OUTPUT` 为 Android Q+ MediaStore 或 [FileProvider] Uri。
  */
 class TakeCameraUri : ActivityResultContract<Any?, Uri?>() {
     //拍照返回的uri

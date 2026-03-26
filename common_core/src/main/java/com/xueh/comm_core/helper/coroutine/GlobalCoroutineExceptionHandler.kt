@@ -8,9 +8,8 @@ import java.io.StringWriter
 import kotlin.coroutines.CoroutineContext
 
 /**
- * 创 建 人: xueh
- * 创建日期: 2021/12/7 16:31
- * 备注：
+ * 全局 [CoroutineExceptionHandler]：打印堆栈、Toast 简要信息，并写入 LogUtils（见 [getStackTrace]）。
+ * 通常在根协程或 `CoroutineScope` 的 `coroutineContext` 中 `plus` 本实例使用。
  */
 class GlobalCoroutineExceptionHandler : CoroutineExceptionHandler {
     override val key: CoroutineContext.Key<*> = CoroutineExceptionHandler

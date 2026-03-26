@@ -1,3 +1,6 @@
+/**
+ * 分页列表与下拉刷新封装：在 [LazyPagingItems] 上组合 [pullToRefresh]、竖直 [VerticalPager] 等，减少页面样板代码。
+ */
 package com.xueh.comm_core.widget
 
 import androidx.compose.animation.AnimatedVisibility

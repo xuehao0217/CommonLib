@@ -8,11 +8,10 @@ import com.xueh.comm_core.helper.launchSafety
 import kotlinx.coroutines.*
 
 /**
- * 创 建 人: xueh
- * 创建日期: 2019/12/30 15:24
- * 备注：
+ * ViewModel 基类：提供 **按 key 互斥** 的协程启动与 LiveData/State 形式的加载、异常通道。
+ *
+ * [launchCancelLast]：**同一 key** 再次调用会先 `cancel` 上一次 Job，再启动新协程，适合搜索、切换 Tab 等场景。
  */
-//abstract class AbsViewModel :AndroidViewModel(Utils.getApp())
 abstract class AbsViewModel : ViewModel() {
     open val apiException: MutableLiveData<Throwable> = MutableLiveData()
     open val apiLoading: MutableLiveData<Boolean> = MutableLiveData()
@@ -24,8 +23,9 @@ abstract class AbsViewModel : ViewModel() {
 
     protected var jobs = hashMapOf<String, Job>()
 
-    //开启协程 如果有上一个任务 则取消
-    //key 协程的 key
+    /**
+     * 使用 [key] 标识协程；新任务启动前取消同 key 的旧 [Job]，并在 [viewModelScope] 内 [launchSafety] 执行 [block]。
+     */
     fun launchCancelLast(key: String, block: suspend CoroutineScope.() -> Unit) = run {
         jobs[key]?.cancel()
         viewModelScope.launchSafety {

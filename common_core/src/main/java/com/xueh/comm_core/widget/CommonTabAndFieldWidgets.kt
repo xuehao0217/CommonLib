@@ -1,3 +1,4 @@
+/** Tab+输入等复合 UI：如带 [HorizontalPager] 的 Tab 区与 [BasicTextField] 封装（见文件内具体组件）。 */
 package com.xueh.comm_core.widget
 
 import androidx.annotation.DrawableRes

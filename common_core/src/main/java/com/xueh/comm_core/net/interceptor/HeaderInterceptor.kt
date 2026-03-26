@@ -5,9 +5,9 @@ import okhttp3.Response
 import java.util.concurrent.ConcurrentHashMap
 
 /**
- * 全局请求头拦截器
- * - 支持动态添加、删除请求头
- * - 默认添加 Content-Type / Accept
+ * 全局请求头拦截器：在 [intercept] 中为每个请求合并默认 `Content-Type`/`Accept` 与 [put] 写入的动态头。
+ *
+ * **流程**：`HttpRequest` 构建 OkHttp 时注册本拦截器 → 业务通过 [HttpRequest.putHeader] 更新 [headers] → 后续请求自动携带。
  */
 class HeaderInterceptor : Interceptor {
 

@@ -1,3 +1,7 @@
+/**
+ * Compose 侧辅助：[Context.findActivity]、[CheckPermission]（Activity Result 单权限）、
+ * Lazy 列表滚动停止/方向监听、[LogCompositions]、[OrderedStateMap] 等。
+ */
 package com.xueh.comm_core.helper.compose
 
 import android.app.Activity
@@ -21,15 +25,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
-
-/**
- * 创 建 人: xueh
- * 创建日期: 2022/8/29
- * 备注：
- */
-//LifecycleEventEffect(Lifecycle.Event.ON_RESUME){
-
-//}
 
 // =========================
 // Context 拓展
@@ -196,6 +191,9 @@ fun LogCompositions(
 
 //tabs.put(it.category_name, viewModel.getLatestNews(it.category_id))
 
+/**
+ * 在 [androidx.compose.runtime.mutableStateMapOf] 之上维护 **插入顺序**，适合 Tab 与动态栏目等需稳定遍历序的场景。
+ */
 class OrderedStateMap<K, V> {
     private val stateMap = mutableStateMapOf<K, V>()
     private val orderList = mutableStateListOf<K>()

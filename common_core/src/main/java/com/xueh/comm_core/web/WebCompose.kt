@@ -1,3 +1,11 @@
+/**
+ * 使用 **AndroidView** 嵌入系统 [WebView] 的页面与组件。
+ *
+ * **流程**：[CustomWebView] 设置 [WebViewClient] / [WebChromeClient] → 进度回调驱动顶部进度条 → [BackHandler] 处理返回栈；
+ * 非 http(s) 链接触发外部 [Intent]。[WebTitle] 为双栏透明/实底标题栏，随滚动 [alpha] 过渡。
+ *
+ * 参考：[gist 示例](https://gist.github.com/TheMelody/6ec3fcba6d57f544465651acc480ff39)
+ */
 package com.xueh.comm_core.web
 
 import android.content.Intent
@@ -36,7 +44,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.ColorFilter
 
-//https://gist.github.com/TheMelody/6ec3fcba6d57f544465651acc480ff39
 @Preview
 @Composable
 fun WebViewPage(

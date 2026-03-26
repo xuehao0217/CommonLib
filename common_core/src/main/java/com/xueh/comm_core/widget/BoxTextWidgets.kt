@@ -1,3 +1,4 @@
+/** 居中展示文案的轻量 [Box] + [Text] 组合。 */
 package com.xueh.comm_core.widget
 
 import androidx.compose.foundation.layout.Box

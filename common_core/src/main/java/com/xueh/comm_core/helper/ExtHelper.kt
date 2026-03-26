@@ -1,3 +1,7 @@
+/**
+ * 通用扩展与工具：空值组合校验、文件与 [MultipartBody]、[ProgressManager] 监听、Boolean 链式 [yes]/[otherwise]、
+ * [Flow.collectIn]、[launchIO]、时间格式化、[showToast] 等。
+ */
 package com.xueh.comm_core.helper
 
 import android.graphics.Color

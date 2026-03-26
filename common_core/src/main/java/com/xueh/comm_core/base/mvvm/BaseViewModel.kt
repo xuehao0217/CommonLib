@@ -14,11 +14,8 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onStart
 
-
 /**
- * 创 建 人: xueh
- * 创建日期: 2019/12/30 11:56
- * 备注：
+ * 在 [RequestViewModel] 之上封装 **Loading 显隐**：同时更新 [apiLoading]（LiveData）与 [apiLoadingState]（Compose State）。
  */
 abstract class BaseViewModel : RequestViewModel() {
     fun showLoading() {

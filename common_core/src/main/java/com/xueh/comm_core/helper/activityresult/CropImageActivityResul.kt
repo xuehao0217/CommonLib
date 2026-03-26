@@ -13,11 +13,10 @@ import androidx.activity.result.contract.ActivityResultContract
 import java.io.File
 
 /**
- * 创 建 人: xueh
- * 创建日期: 2021/6/18 15:12
- * 备注：https://blog.csdn.net/nsacer/article/details/120156954
+ * 系统裁剪 **ActivityResultContract**：[createIntent] 组装 `com.android.camera.action.CROP`，输出写入 MediaStore 或缓存文件 [Uri]。
+ *
+ * 流程见：[CSDN 说明](https://blog.csdn.net/nsacer/article/details/120156954)
  */
-
 class CropImageActivityResul : ActivityResultContract<CropImageResult, Uri>() {
     var outUri: Uri? = null
 

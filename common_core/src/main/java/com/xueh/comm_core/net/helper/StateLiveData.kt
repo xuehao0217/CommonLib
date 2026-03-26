@@ -3,9 +3,8 @@ package com.xueh.comm_core.net.helper
 import androidx.lifecycle.MutableLiveData
 
 /**
- * 创 建 人: xueh
- * 创建日期: 2019/12/31 11:42
- * 备注：
+ * 带 **状态机** 的 [MutableLiveData]：除数据本身外，通过 [state] 投递 [State.Idle] / [State.Loading] / [State.Success] / [State.Error]，
+ * 便于 XML 或单向数据流区分首屏、加载中与错误。
  */
 class StateLiveData<T> : MutableLiveData<T>() {
 

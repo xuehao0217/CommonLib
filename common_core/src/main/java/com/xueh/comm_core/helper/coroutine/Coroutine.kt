@@ -1,24 +1,16 @@
+/**
+ * 协程安全封装：[launchSafety] 返回 [SafetyCoroutine]，可链式注册 `onCatch` / `onSuccess` / `onCancell` / `onComplete`。
+ *
+ * **执行顺序**：正常结束 → [SafetyCoroutine.onCompleted] → `onSuccess` 与 `onComplete`；取消 → `onCancell` 与 `onComplete(null)`；
+ * 非 [kotlinx.coroutines.CancellationException] 的异常 → `onCatch`。
+ *
+ * 参考：[juejin 实践说明](https://juejin.cn/post/7052269576851030030#heading-2)
+ */
 package com.xueh.comm_core.helper
 
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
-
-/**
- * 创 建 人: xueh
- * 创建日期: 2022/8/23
- * 备注：
- */
-// https://juejin.cn/post/7052269576851030030#heading-2
-
-// 自己的launch扩展
-//lifecycleScope.launchSafety {
-//    // 这里能执行完的代码，一定是成功的
-//}.onCatch {
-//    // 想来几个就来几个，不想处理就一个都不写
-//}.onComplete {
-//不管成功失败onCatch这个onComplete都会走
-//}
 
 @OptIn(ExperimentalCoroutinesApi::class)
 fun <Result> CoroutineScope.launchSafety(

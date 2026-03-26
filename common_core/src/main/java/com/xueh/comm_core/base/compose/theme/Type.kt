@@ -1,3 +1,6 @@
+/**
+ * 自定义排版：[AppThemeTextStyle]、[defaultTextStyle]、[LocalTextStyles]；供 [AppBaseTheme] 与 [AppTheme.textStyle] 使用。
+ */
 package com.xueh.comm_core.base.compose.theme
 
 import androidx.compose.runtime.Immutable

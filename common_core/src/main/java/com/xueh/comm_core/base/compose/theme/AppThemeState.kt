@@ -1,3 +1,7 @@
+/**
+ * 主题 **状态与入口**：[appThemeType]、[appThemeColorType]、[ComposeMaterialTheme]、[AppBaseTheme]、[AppTheme]；
+ * 与 `Color.kt` / `Type.kt` 中的调色板、文本样式配合使用。
+ */
 package com.xueh.comm_core.base.compose.theme
 
 import android.os.Build

@@ -16,13 +16,16 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
 
 /**
- * 全局 Http 请求管理器
+ * 全局 **Retrofit / OkHttp** 入口。
  *
- * 特性：
- * - 自动缓存 BaseUrl 对应的 Retrofit 实例
- * - 动态添加请求头
- * - 支持 DSL 扩展 OkHttp/Retrofit
- * - Debug 环境自动启用 Chucker + 日志打印
+ * **初始化流程**：`HttpRequest.init(baseUrl) { ... }` 保存默认域名与可选 [RequestDsl]；随后 `getService(Api::class.java)`。
+ *
+ * **请求构建流程**：
+ * 1. [createRetrofit]：合并默认 OkHttp（缓存、[HeaderInterceptor]、超时、Debug 拦截器）与 DSL 自定义。
+ * 2. Retrofit 使用 [JsonManager.default] 作为 Converter。
+ * 3. 与默认 [baseUrl] 相同的实例会写入 [retrofitCache]；[getServiceByDomain] 可为其它域名各建实例。
+ *
+ * **请求头**：[putHeader] / [removeHeader] 作用于共享的 [headerInterceptor]，对所有客户端生效。
  */
 object HttpRequest {
 

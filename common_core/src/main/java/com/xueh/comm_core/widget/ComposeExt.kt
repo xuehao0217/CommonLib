@@ -1,3 +1,6 @@
+/**
+ * Modifier 扩展：[clickNoRipple]、[clickDebounce]、[setBackground]（位图背景）、[customRippleClickable]（按压高亮）。
+ */
 package com.xueh.comm_core.widget
 
 import androidx.annotation.DrawableRes

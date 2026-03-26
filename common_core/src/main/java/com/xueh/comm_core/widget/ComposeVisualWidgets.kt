@@ -1,3 +1,4 @@
+/** 视觉类小组件：旋转加载动画、渐变条等装饰性 Composable。 */
 package com.xueh.comm_core.widget
 
 import androidx.annotation.DrawableRes

@@ -1,3 +1,6 @@
+/**
+ * 图片组件：Coil3 [AsyncImage]/[SubcomposeAsyncImage] 封装（[ImageLoadAsyncImage]、[ImageCompose] 等），默认 [rememberCommCoreImageLoader]。
+ */
 package com.xueh.comm_core.widget
 
 import androidx.annotation.DrawableRes

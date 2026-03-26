@@ -1,3 +1,6 @@
+/**
+ * 底部导航与横向分页：[NavData]、[BottomNavPager]；点击 Tab 与 [HorizontalPager] 页码双向同步，支持红点 [NavData.showRed]。
+ */
 package com.xueh.comm_core.widget
 
 import androidx.compose.foundation.Canvas

@@ -1,3 +1,6 @@
+/**
+ * Paging 组合件辅助：[LazyPagingItems] 的刷新/追加加载态 UI（[PagingStateRefresh]、[PagingAppendState] 等）与默认空错载视图。
+ */
 package com.xueh.comm_core.widget
 
 import androidx.compose.foundation.clickable
