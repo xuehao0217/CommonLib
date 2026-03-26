@@ -1,47 +1,44 @@
 package com.xueh.commonlib.ui.compose.google
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
-import com.xueh.commonlib.ui.HomePage
-import com.xueh.commonlib.ui.ItemData
-import com.xueh.commonlib.ui.compose.ItemView
-import com.xueh.commonlib.ui.compose.RouteConfig
+import androidx.navigation3.runtime.NavKey
+import com.xueh.commonlib.navigation.DemoCustomPullRefreshSample
+import com.xueh.commonlib.navigation.DemoPullRefreshIndicatorTransform
+import com.xueh.commonlib.navigation.DemoPullRefreshSample
+import com.xueh.commonlib.ui.compose.DemoListRow
 
-
-@Preview
 @Composable
-fun GoogleSamplePage(controller: NavHostController) {
-    val str = listOf(
-        ItemData("PullRefreshSample", RouteConfig.PullRefreshSample),
-        ItemData("CustomPullRefreshSample", RouteConfig.CustomPullRefreshSample),
-        ItemData(
-            "PullRefreshIndicatorTransformSample",
-            RouteConfig.PullRefreshIndicatorTransformSample
-        ),
-    )
-    Column{
-        str.forEach {
-            ItemView(item = it.str) {
-                controller.navigate(it.router)
-            }
+fun GoogleSamplePage(onNavigate: (NavKey) -> Unit) {
+    Column(Modifier.padding(top = 8.dp)) {
+        Text(
+            text = "Google 官方示例",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
+                .padding(bottom = 4.dp),
+        )
+        DemoListRow(title = "PullRefreshSample") {
+            onNavigate(DemoPullRefreshSample)
+        }
+        DemoListRow(title = "CustomPullRefreshSample") {
+            onNavigate(DemoCustomPullRefreshSample)
+        }
+        DemoListRow(title = "PullRefreshIndicatorTransformSample") {
+            onNavigate(DemoPullRefreshIndicatorTransform)
         }
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+private fun GoogleSamplePagePreview() {
+    GoogleSamplePage(onNavigate = {})
+}

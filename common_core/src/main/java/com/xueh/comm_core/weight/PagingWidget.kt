@@ -1,4 +1,4 @@
-package com.xueh.comm_core.weight.compose
+package com.xueh.comm_core.weight
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
@@ -18,10 +18,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridItemScope
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridItemScope
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -143,7 +145,7 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalGrid(
     pagingAppendStateContent: @Composable () -> Unit = { PagingStateAppend() },
     pagingRefreshStateContent: @Composable () -> Unit = { PagingStateRefresh() },
     onScrollStopVisibleList: ((List<T>) -> Unit)? = null,
-    itemContent: @Composable androidx.compose.foundation.lazy.grid.LazyGridItemScope.(T) -> Unit,
+    itemContent: @Composable LazyGridItemScope.(T) -> Unit,
 ) {
     ObserveVisibleItemsOnScrollStop(onStop = onScrollStopVisibleList) { callback ->
         state.onScrollStopVisibleList(callback)
@@ -190,7 +192,7 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalStaggeredGrid(
     pagingAppendStateContent: @Composable () -> Unit = { PagingStateAppend() },
     pagingRefreshStateContent: @Composable () -> Unit = { PagingStateRefresh() },
     onScrollStopVisibleList: ((List<T>) -> Unit)? = null,
-    itemContent: @Composable androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridItemScope.(T) -> Unit,
+    itemContent: @Composable LazyStaggeredGridItemScope.(T) -> Unit,
 ) {
     ObserveVisibleItemsOnScrollStop(onStop = onScrollStopVisibleList) { callback ->
         state.onScrollStopVisibleList(callback)

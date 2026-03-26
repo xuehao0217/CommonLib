@@ -18,7 +18,7 @@ import com.google.accompanist.placeholder.material.fade
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.shimmer
 import com.lt.compose_views.util.rememberMutableStateOf
-import com.xueh.comm_core.weight.compose.SpacerH
+import com.xueh.comm_core.weight.SpacerH
 import com.xueh.commonlib.R
 import kotlinx.coroutines.delay
 

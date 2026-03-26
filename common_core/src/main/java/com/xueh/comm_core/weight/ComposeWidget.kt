@@ -1,10 +1,9 @@
-package com.xueh.comm_core.weight.compose
+package com.xueh.comm_core.weight
 
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.pager.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.*
@@ -18,9 +17,6 @@ import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.*
-import coil3.compose.AsyncImage
-import coil3.compose.SubcomposeAsyncImage
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 //------------------------------------------- Text 相关 -------------------------------------------

@@ -82,18 +82,20 @@ enum class AppThemeColorType {
  * 3. WALLPAPER 在 Android 12+ 使用 dynamicColorScheme 从壁纸取色，否则回退为绿色
  * 4. 将选中的 ColorScheme 注入 MaterialTheme
  *
- * @param appColorType 主题色类型，默认使用全局 [appThemeColorType]
+ * @param appColorType 若为 null 则使用全局 [appThemeColorType]。必须在函数体内读取全局状态，
+ * 否则仅写在默认参数里时，Compose 可能无法订阅 [appThemeColorType] 变化，导致调色板切换不生效。
  * @param content 主题作用域内的可组合内容
  */
 @Composable
 fun ComposeMaterialTheme(
-    appColorType: AppThemeColorType = appThemeColorType,
+    appColorType: AppThemeColorType? = null,
     content: @Composable () -> Unit,
 ) {
+    val resolvedColorType = appColorType ?: appThemeColorType
     val isDarkTheme = isThemeDark()
     val context = LocalContext.current
 
-    val colors = when (appColorType) {
+    val colors = when (resolvedColorType) {
         AppThemeColorType.GREEN -> if (isDarkTheme) DarkGreenColorPalette else LightGreenColorPalette
         AppThemeColorType.PURPLE -> if (isDarkTheme) DarkPurpleColorPalette else LightPurpleColorPalette
         AppThemeColorType.ORANGE -> if (isDarkTheme) DarkOrangeColorPalette else LightOrangeColorPalette

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
@@ -19,10 +20,10 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.xueh.comm_core.weight.compose.BottomSheetDialog
-import com.xueh.comm_core.weight.compose.BoxText
-import com.xueh.comm_core.weight.compose.CustomDialog
-import com.xueh.comm_core.weight.compose.click
+import com.xueh.comm_core.weight.BottomSheetDialog
+import com.xueh.comm_core.weight.BoxText
+import com.xueh.comm_core.weight.CustomDialog
+import com.xueh.comm_core.weight.click
 
 /**
  * 创 建 人: xueh
@@ -50,7 +51,7 @@ fun DialogPage() {
             modifier = Modifier
                 .size(180.dp, 44.dp)
                 .clip(RoundedCornerShape(22.dp))
-                .background(androidx.compose.material3.MaterialTheme.colorScheme.primary)
+                .background(MaterialTheme.colorScheme.primary)
                 .click {
                     alertDialog.value = true
                 })
@@ -60,7 +61,7 @@ fun DialogPage() {
             modifier = Modifier
                 .size(180.dp, 44.dp)
                 .clip(RoundedCornerShape(22.dp))
-                .background(androidx.compose.material3.MaterialTheme.colorScheme.primary)
+                .background(MaterialTheme.colorScheme.primary)
                 .click {
                     fullScreenDialog.value = true
                 })
@@ -70,7 +71,7 @@ fun DialogPage() {
             modifier = Modifier
                 .size(180.dp, 44.dp)
                 .clip(RoundedCornerShape(22.dp))
-                .background(androidx.compose.material3.MaterialTheme.colorScheme.primary)
+                .background(MaterialTheme.colorScheme.primary)
                 .click {
                     bottomSheetDialog = true
                 })
@@ -80,7 +81,7 @@ fun DialogPage() {
             modifier = Modifier
                 .size(180.dp, 44.dp)
                 .clip(RoundedCornerShape(22.dp))
-                .background(androidx.compose.material3.MaterialTheme.colorScheme.primary)
+                .background(MaterialTheme.colorScheme.primary)
                 .click {
                     customDialog = true
                 })
@@ -90,7 +91,7 @@ fun DialogPage() {
             modifier = Modifier
                 .size(180.dp, 44.dp)
                 .clip(RoundedCornerShape(22.dp))
-                .background(androidx.compose.material3.MaterialTheme.colorScheme.primary)
+                .background(MaterialTheme.colorScheme.primary)
                 .click {
                     showBottomSheet = true
                 })
@@ -131,7 +132,7 @@ fun DialogPage() {
             .fillMaxWidth()
             .height(300.dp)
             .clip(RoundedCornerShape(18.dp))
-            .background(androidx.compose.material3.MaterialTheme.colorScheme.primary)) {
+            .background(MaterialTheme.colorScheme.primary)) {
 
         }
     }

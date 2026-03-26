@@ -13,9 +13,9 @@ import androidx.compose.ui.unit.sp
 import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.base.compose.BaseComposeActivity
-import com.xueh.comm_core.weight.compose.BottomNavPager
-import com.xueh.comm_core.weight.compose.NavData
-import com.xueh.comm_core.weight.compose.NavThemeColors
+import com.xueh.comm_core.weight.BottomNavPager
+import com.xueh.comm_core.weight.NavData
+import com.xueh.comm_core.weight.NavThemeColors
 import com.xueh.commonlib.R
 import kotlinx.coroutines.delay
 
@@ -76,12 +76,12 @@ class MainComposeActivity : BaseComposeActivity() {
             navItems = navItems,
             fontSize = 12.sp,
             themeColors = NavThemeColors(
-                lightBackground = Color.White,
-                darkBackground = Color.Black,
-                lightUnSelectedTextColor = Color(0xFF757575),
-                darkUnSelectedTextColor = Color(0xFFAAAAAA),
-                lightSelectedTextColor = Color(0xFF1E88E5),
-                darkSelectedTextColor = Color(0xFF1E88E5)
+                lightBackground = Color(0xFFF7F7F9),
+                darkBackground = Color(0xFF1C1B1F),
+                lightUnSelectedTextColor = Color(0xFF5F6368),
+                darkUnSelectedTextColor = Color(0xFFC4C7C5),
+                lightSelectedTextColor = Color(0xFF0B57D0),
+                darkSelectedTextColor = Color(0xFFA8C7FA),
             ),
             interceptClick = { index ->
                 if (interceptTab && index == 2) {
@@ -98,7 +98,7 @@ class MainComposeActivity : BaseComposeActivity() {
                     AppUtils.exitApp()
                 } else {
                     backPressedTime = System.currentTimeMillis()
-                    ToastUtils.showShort("Press again to exit the app")
+                    ToastUtils.showShort("再按一次退出应用")
                 }
             }
         })

@@ -1,7 +1,6 @@
 package com.xueh.comm_core.base.compose
 
 import android.content.pm.ActivityInfo
-import android.content.res.Resources
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
@@ -10,31 +9,26 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.blankj.utilcode.util.LogUtils
 import com.xueh.comm_core.R
 import com.xueh.comm_core.base.compose.theme.AppThemeType
 import com.xueh.comm_core.base.compose.theme.ComposeMaterialTheme
 import com.xueh.comm_core.base.compose.theme.GrayAppAdapter
 import com.xueh.comm_core.base.compose.theme.appThemeType
-import com.xueh.comm_core.weight.compose.ImageCompose
-import com.xueh.comm_core.weight.compose.click
+import com.xueh.comm_core.weight.ImageCompose
+import com.xueh.comm_core.weight.click
 
 /**
  * 优化版 BaseComposeActivity

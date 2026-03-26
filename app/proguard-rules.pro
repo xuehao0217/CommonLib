@@ -21,9 +21,7 @@
 #-renamesourcefileattribute SourceFile
 #-------------------------------------------定制化区域----------------------------------------------
 
-#---------------------------------ViewBinding---------------------------------
-# 保持ViewModel和ViewBinding不混淆，否则无法反射自动创建
--keep class * implements androidx.viewbinding.ViewBinding { *; }
+# app 模块为纯 Compose，无 ViewBinding；library 若使用由各自 consumer rules 处理
 -keep class * extends androidx.lifecycle.ViewModel { *; }
 
 #-------------------------------------------------------------------------

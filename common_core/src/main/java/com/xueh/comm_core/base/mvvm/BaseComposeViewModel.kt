@@ -6,7 +6,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
-import com.xueh.comm_core.weight.compose.ComposeLoadingDialog
+import com.xueh.comm_core.weight.ComposeLoadingDialog
 import kotlinx.coroutines.flow.filterNotNull
 
 /**

@@ -1,7 +1,6 @@
-package com.xueh.comm_core.weight.compose
+package com.xueh.comm_core.weight
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme

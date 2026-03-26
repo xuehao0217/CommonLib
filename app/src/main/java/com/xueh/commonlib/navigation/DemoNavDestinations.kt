@@ -1,0 +1,86 @@
+package com.xueh.commonlib.navigation
+
+import androidx.navigation3.runtime.NavKey
+import kotlinx.serialization.Serializable
+
+/** Navigation 3 演示目的地：均为可序列化的 [NavKey]。 */
+@Serializable
+data object DemoActionList : NavKey
+
+@Serializable
+data class DemoProfileRoute(val name: String, val age: Int = 18) : NavKey
+
+@Serializable
+data object DemoRefreshLoad : NavKey
+
+@Serializable
+data object DemoConstraintSet : NavKey
+
+@Serializable
+data object DemoScrollableTabRow : NavKey
+
+@Serializable
+data object DemoLazyVerticalGrid : NavKey
+
+@Serializable
+data object DemoLazyColumnPage : NavKey
+
+@Serializable
+data object DemoScrollableAppBar : NavKey
+
+@Serializable
+data object DemoNavigateParam1 : NavKey
+
+@Serializable
+data object DemoNavigateParam2 : NavKey
+
+@Serializable
+data object DemoDialog : NavKey
+
+@Serializable
+data object DemoCommonTabPager : NavKey
+
+@Serializable
+data object DemoCarousel : NavKey
+
+@Serializable
+data object DemoComposePermission : NavKey
+
+@Serializable
+data object DemoPlaceholder : NavKey
+
+@Serializable
+data object DemoWebView : NavKey
+
+@Serializable
+data object DemoAccompanistWeb : NavKey
+
+@Serializable
+data object DemoGoogleSample : NavKey
+
+@Serializable
+data object DemoPullRefreshSample : NavKey
+
+@Serializable
+data object DemoCustomPullRefreshSample : NavKey
+
+@Serializable
+data object DemoPullRefreshIndicatorTransform : NavKey
+
+@Serializable
+data object DemoComposeTab : NavKey
+
+@Serializable
+data object DemoComposePager : NavKey
+
+@Serializable
+data object DemoComposeViewModel : NavKey
+
+@Serializable
+data object DemoComposePaging : NavKey
+
+@Serializable
+data object DemoVisibilityChanged : NavKey
+
+@Serializable
+data object DemoOrderedTabs : NavKey

@@ -1,9 +1,5 @@
 package com.xueh.commonlib.ui.compose
 
-import android.util.Log
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animate
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -14,10 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -26,23 +20,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemKey
 import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ConvertUtils
 import com.lt.compose_views.util.rememberMutableStateOf
 import com.xueh.comm_core.base.mvvm.BaseComposeViewModel
-import com.xueh.comm_core.weight.compose.PagingLazyColumn
-import com.xueh.comm_core.weight.compose.PagingRefresh
-import com.xueh.comm_core.weight.compose.PagingStateAppend
-import com.xueh.comm_core.weight.compose.PagingStateRefresh
-import com.xueh.comm_core.weight.compose.click
+import com.xueh.comm_core.weight.PagingLazyColumn
+import com.xueh.comm_core.weight.PagingRefresh
+import com.xueh.comm_core.weight.PagingStateAppend
+import com.xueh.comm_core.weight.PagingStateRefresh
+import com.xueh.comm_core.weight.click
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
 
 /**

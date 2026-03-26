@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.xueh.comm_core.weight.compose
+package com.xueh.comm_core.weight
 
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -55,7 +56,7 @@ import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastForEachIndexed
 import androidx.compose.ui.util.fastMap
 import androidx.compose.ui.util.fastMaxBy
-import com.xueh.comm_core.weight.compose.TabRowDefaults.tabIndicatorOffsetMy
+import com.xueh.comm_core.weight.TabRowDefaults.tabIndicatorOffsetMy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -141,7 +142,7 @@ fun MyTabRow(
     indicator: @Composable @UiComposable
         (tabPositions: List<MyTabPosition>) -> Unit = @Composable { tabPositions ->
         TabRowDefaults.Indicator(
-            Modifier.tabIndicatorOffsetMy(tabPositions[selectedTabIndex])
+            Modifier.Companion.tabIndicatorOffsetMy(tabPositions[selectedTabIndex])
         )
     },
     divider: @Composable @UiComposable () -> Unit =
@@ -374,7 +375,7 @@ object TabRowDefaults {
         thickness: Dp = DividerThickness,
         color: Color = LocalContentColor.current.copy(alpha = DividerOpacity)
     ) {
-        androidx.compose.material3.HorizontalDivider(modifier = modifier, thickness = thickness, color = color)
+        HorizontalDivider(modifier = modifier, thickness = thickness, color = color)
     }
 
     /**

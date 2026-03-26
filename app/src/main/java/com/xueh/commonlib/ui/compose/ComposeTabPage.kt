@@ -1,7 +1,6 @@
 package com.xueh.commonlib.ui.compose
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
@@ -56,18 +55,16 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ConvertUtils
-import com.blankj.utilcode.util.LogUtils
-import com.blankj.utilcode.util.ToastUtils
 import com.lt.compose_views.util.rememberMutableStateOf
 import com.xueh.comm_core.helper.compose.orderedStateMapOf
-import com.xueh.comm_core.weight.compose.BoxWrapper
-import com.xueh.comm_core.weight.compose.MyScrollableTabRow
-import com.xueh.comm_core.weight.compose.PagerTab
-import com.xueh.comm_core.weight.compose.PagerTabIndicator
-import com.xueh.comm_core.weight.compose.PagingLazyColumn
-import com.xueh.comm_core.weight.compose.PagingRefresh
-import com.xueh.comm_core.weight.compose.SpacerW
-import com.xueh.comm_core.weight.compose.click
+import com.xueh.comm_core.weight.BoxWrapper
+import com.xueh.comm_core.weight.MyScrollableTabRow
+import com.xueh.comm_core.weight.PagerTab
+import com.xueh.comm_core.weight.PagerTabIndicator
+import com.xueh.comm_core.weight.PagingLazyColumn
+import com.xueh.comm_core.weight.PagingRefresh
+import com.xueh.comm_core.weight.SpacerW
+import com.xueh.comm_core.weight.click
 import com.xueh.commonlib.entity.HomeEntity
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
 import kotlinx.coroutines.CoroutineScope

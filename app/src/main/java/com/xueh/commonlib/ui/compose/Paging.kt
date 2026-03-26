@@ -43,9 +43,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.ui.NavDisplay
 import androidx.paging.compose.collectAsLazyPagingItems
+import kotlinx.serialization.Serializable
 import androidx.paging.compose.itemKey
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
@@ -53,78 +56,81 @@ import com.xueh.comm_core.base.mvvm.BaseComposeViewModel
 import com.xueh.comm_core.helper.compose.modifier
 import com.xueh.comm_core.helper.compose.onScrollDirectionChanged
 import com.xueh.comm_core.helper.compose.onScrollStopVisibleList
-import com.xueh.comm_core.weight.compose.PagingLazyColumn
-import com.xueh.comm_core.weight.compose.PagingRefreshColumn
-import com.xueh.comm_core.weight.compose.PagingVerticalGrid
-import com.xueh.comm_core.weight.compose.PagingVerticalPager
-import com.xueh.comm_core.weight.compose.SpacerH
+import com.xueh.comm_core.weight.PagingLazyColumn
+import com.xueh.comm_core.weight.PagingRefreshColumn
+import com.xueh.comm_core.weight.PagingVerticalGrid
+import com.xueh.comm_core.weight.PagingVerticalPager
+import com.xueh.comm_core.weight.SpacerH
 import com.xueh.commonlib.entity.HomeEntity
-import com.xueh.commonlib.ui.compose.ItemView
+import com.xueh.commonlib.ui.compose.DemoListRow
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
 import kotlinx.coroutines.launch
 
+@Serializable
+private sealed interface PagingSampleKey : NavKey {
+    @Serializable
+    data object Menu : PagingSampleKey
+
+    @Serializable
+    data object PagingWithHorizontalPager : PagingSampleKey
+
+    @Serializable
+    data object PagingWithVerticalPager : PagingSampleKey
+
+    @Serializable
+    data object PagingWithLazyGrid : PagingSampleKey
+
+    @Serializable
+    data object PagingWithLazyList : PagingSampleKey
+
+    @Serializable
+    data object CustomRefresh : PagingSampleKey
+
+    @Serializable
+    data object RefreshPagingListSample : PagingSampleKey
+}
+
 @Composable
 fun ComposePaging() {
-    val PagingWithHorizontalPager = "PagingWithHorizontalPager"
-    val PagingWithVerticalPager = "PagingWithVerticalPager"
-    val PagingWithLazyGrid = "PagingWithLazyGrid"
-    val PagingWithLazyList = "PagingWithLazyList"
-    val CustomRefresh = "CustomRefresh"
-    val RefreshPagingListSample = "RefreshPagingListSample"
-
-    val PagingList = "PagingList"
-    val navController = rememberNavController()
-    androidx.navigation.compose.NavHost(
-        navController = navController,
-        startDestination = PagingList
-    ) {
-        composable(PagingList) {
-            Column {
-                ItemView(PagingWithHorizontalPager, false) {
-                    navController.navigate(PagingWithHorizontalPager)
-                }
-                ItemView(PagingWithVerticalPager, false) {
-                    navController.navigate(PagingWithVerticalPager)
-                }
-                ItemView(PagingWithLazyGrid, false) {
-                    navController.navigate(PagingWithLazyGrid)
-                }
-                ItemView(PagingWithLazyList, false) {
-                    navController.navigate(PagingWithLazyList)
-                }
-                ItemView(CustomRefresh, false) {
-                    navController.navigate(CustomRefresh)
-                }
-                ItemView(RefreshPagingListSample, false) {
-                    navController.navigate(RefreshPagingListSample)
+    val backStack = rememberNavBackStack(PagingSampleKey.Menu)
+    NavDisplay(
+        backStack = backStack,
+        onBack = {
+            if (backStack.size > 1) {
+                backStack.removeAt(backStack.lastIndex)
+            }
+        },
+        entryProvider = entryProvider {
+            entry<PagingSampleKey.Menu> {
+                Column(Modifier.fillMaxSize()) {
+                    DemoListRow(title = "PagingWithHorizontalPager") {
+                        backStack.add(PagingSampleKey.PagingWithHorizontalPager)
+                    }
+                    DemoListRow(title = "PagingWithVerticalPager") {
+                        backStack.add(PagingSampleKey.PagingWithVerticalPager)
+                    }
+                    DemoListRow(title = "PagingWithLazyGrid") {
+                        backStack.add(PagingSampleKey.PagingWithLazyGrid)
+                    }
+                    DemoListRow(title = "PagingWithLazyList") {
+                        backStack.add(PagingSampleKey.PagingWithLazyList)
+                    }
+                    DemoListRow(title = "CustomRefresh") {
+                        backStack.add(PagingSampleKey.CustomRefresh)
+                    }
+                    DemoListRow(title = "RefreshPagingListSample") {
+                        backStack.add(PagingSampleKey.RefreshPagingListSample)
+                    }
                 }
             }
-        }
-
-        composable(PagingWithLazyList) {
-            PagingWithLazyList()
-        }
-
-        composable(PagingWithLazyGrid) {
-            PagingWithLazyGrid()
-        }
-
-        composable(PagingWithVerticalPager) {
-            PagingWithVerticalPager()
-        }
-
-        composable(PagingWithHorizontalPager) {
-            PagingWithHorizontalPager()
-        }
-
-        composable(CustomRefresh) {
-            CustomRefreshSample()
-        }
-
-        composable(RefreshPagingListSample) {
-            RefreshPagingListSample()
-        }
-    }
+            entry<PagingSampleKey.PagingWithLazyList> { PagingWithLazyList() }
+            entry<PagingSampleKey.PagingWithLazyGrid> { PagingWithLazyGrid() }
+            entry<PagingSampleKey.PagingWithVerticalPager> { PagingWithVerticalPager() }
+            entry<PagingSampleKey.PagingWithHorizontalPager> { PagingWithHorizontalPager() }
+            entry<PagingSampleKey.CustomRefresh> { CustomRefreshSample() }
+            entry<PagingSampleKey.RefreshPagingListSample> { RefreshPagingListSample() }
+        },
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

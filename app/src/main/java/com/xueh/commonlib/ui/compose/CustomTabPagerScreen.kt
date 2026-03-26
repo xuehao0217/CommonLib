@@ -1,6 +1,5 @@
 package com.xueh.commonlib.ui.compose
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
@@ -11,13 +10,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.*
-import com.xueh.comm_core.weight.compose.MyTabRow
-import com.xueh.comm_core.weight.compose.PagerTab
-import com.xueh.comm_core.weight.compose.PagerTabIndicator
-import com.xueh.comm_core.weight.compose.click
+import com.xueh.comm_core.weight.MyTabRow
+import com.xueh.comm_core.weight.PagerTab
+import com.xueh.comm_core.weight.PagerTabIndicator
+import com.xueh.comm_core.weight.click
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import java.lang.Math.*
 
 /**
  * 创 建 人: xueh

@@ -35,7 +35,6 @@ android {
 //    }
     buildFeatures {
         compose = true
-        viewBinding = true
         buildConfig = true
     }
     packaging {
@@ -50,7 +49,6 @@ dependencies {
     //----------------基本库相关--------------------------
     api(libs.androidx.multidex)
     api(libs.junit)
-    api(libs.androidx.appcompat)
     api(libs.androidx.datastore)
     api(libs.androidx.paging.common)
     api(libs.androidx.paging.runtime)
@@ -77,7 +75,6 @@ dependencies {
     api(libs.androidx.activity.compose)
     api(libs.compose.paging)
     api(libs.accompanist.permissions)
-    api(libs.compose.navigation)
     api(libs.compose.lifecycle.runtime)
     api(libs.compose.lifecycle.viewmodel)
     api(libs.compose.runtime.livedata)
@@ -97,6 +94,9 @@ dependencies {
 
     api(libs.accompanist.placeholder)
 //    api(libs.androidx.photopicker.compose)
+
+    api(libs.androidx.navigation3.runtime)
+    api(libs.androidx.navigation3.ui)
     //----------------Kotlin相关--------------------------
     api(libs.kotlin.stdlib)
     api(libs.kotlinx.coroutines.core)
@@ -128,23 +128,5 @@ dependencies {
     api(libs.agentweb)
 
     api(libs.okhttp.profiler)
-
-    //--------------XML相关一些库--------------------------
-    api(libs.material)
-    api(libs.recyclerview)
-    api(libs.github.glide)
-    api(libs.immersionbar)
-    api(libs.androidx.constraintlayout)
-    api(libs.androidx.viewpager2)
-    api(libs.github.brvah)
-    api(libs.easyNavigation)
-    api(libs.eventbus)
-//    api(libs.gson)
-//    //捕获崩溃信息
-//    debugApi(libs.spiderman) {
-//        exclude(group = "androidx.appcompat")
-//    }
-//    api(libs.refresh.layout)
-//    api(libs.refresh.header)
 }
 

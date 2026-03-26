@@ -3,7 +3,6 @@ package com.xueh.comm_core.helper.compose
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
-import android.os.Bundle
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -39,26 +38,6 @@ fun Context.findActivity(): Activity? = when (this) {
     is Activity -> this
     is android.content.ContextWrapper -> baseContext.findActivity()
     else -> null
-}
-
-// =========================
-// NavHostController 拓展
-// =========================
-fun androidx.navigation.NavHostController.goBackRouteWithParams(
-    route: String,
-    autoPop: Boolean = true,
-    callback: (Bundle.() -> Unit)? = null,
-) {
-    getBackStackEntry(route).arguments?.let { callback?.invoke(it) }
-    if (autoPop) popBackStack()
-}
-
-fun androidx.navigation.NavHostController.goBackWithParams(
-    autoPop: Boolean = true,
-    callback: (Bundle.() -> Unit)? = null,
-) {
-    previousBackStackEntry?.arguments?.let { callback?.invoke(it) }
-    if (autoPop) popBackStack()
 }
 
 // =========================

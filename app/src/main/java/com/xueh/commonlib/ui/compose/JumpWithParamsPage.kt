@@ -1,75 +1,105 @@
 package com.xueh.commonlib.ui.compose
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
-import com.xueh.comm_core.helper.compose.goBackRouteWithParams
-import com.xueh.comm_core.helper.compose.goBackWithParams
-import com.xueh.commonlib.ui.compose.RouteConfig.navigate_param_transfer1
-import com.xueh.commonlib.ui.compose.RouteConfig.navigate_param_transfer2
 
 /**
- * 创 建 人: xueh
- * 创建日期: 2022/9/16
- * 备注：
+ * Navigation 3 下通过上层共享 [resultText] / 回调实现返回传参。
  */
 @Composable
-fun NavigateParams1View(controller: NavHostController) {
-    val bundle = controller.currentBackStackEntryAsState().value
-    Column(Modifier
-        .fillMaxSize()
-        .background(Color.Red),
+fun NavigateParams1View(
+    resultText: String,
+    onOpenSecond: () -> Unit,
+) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.35f)),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = "展示下一级页面返回来的数据", style = TextStyle(fontSize = 20.sp))
-        Box(Modifier
-            .padding(horizontal = 14.dp, vertical = 20.dp)
-            .size(120.dp)
-            .background(color = Color.Gray, RoundedCornerShape(10.dp)),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "上一级：展示子页回传结果",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onErrorContainer,
+            modifier = Modifier.padding(horizontal = 24.dp),
+            textAlign = TextAlign.Center,
+        )
+        Box(
+            Modifier
+                .padding(horizontal = 24.dp, vertical = 20.dp)
+                .size(width = 280.dp, height = 100.dp)
+                .background(
+                    color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                    shape = RoundedCornerShape(12.dp),
+                ),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = bundle?.arguments?.getString("data") ?: "未返回数据")
+            Text(
+                text = resultText,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
         }
-        Button(onClick = {
-            controller.navigate(navigate_param_transfer2)
-        }, modifier = Modifier.padding(top = 20.dp)) {
-            Text(text = "点击跳转到下一级页面")
+        Button(
+            onClick = onOpenSecond,
+            modifier = Modifier.padding(top = 8.dp)
+        ) {
+            Text(text = "进入下一页")
         }
-
     }
 }
 
-
-
 @Composable
-fun NavigateParams2View(controller: NavHostController) {
-    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = "展示下一级页面返回来的数据")
-        Button(onClick = {
-            controller.goBackRouteWithParams(navigate_param_transfer1) {
-                putString("data",
-                    "Hello world to you")
-            }
-        },modifier = Modifier.padding(top = 20.dp)) {
-            Text(text = "点击跳转到下一级页面")
+fun NavigateParams2View(
+    onDeliverResult: () -> Unit,
+    onPop: () -> Unit,
+) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f)),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "子页：回传并关闭",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(horizontal = 24.dp),
+            textAlign = TextAlign.Center,
+        )
+        Button(
+            onClick = {
+                onDeliverResult()
+                onPop()
+            },
+            modifier = Modifier.padding(top = 24.dp)
+        ) {
+            Text(text = "回传「Hello world」并返回")
         }
-        Button(onClick = {
-            controller.goBackWithParams {
-                putString("data", "Hello world to you")
-            }
-        },modifier = Modifier.padding(top = 20.dp)) {
-            Text(text = "点击跳转到下一级页面")
+        OutlinedButton(
+            onClick = {
+                onDeliverResult()
+                onPop()
+            },
+            modifier = Modifier.padding(top = 12.dp)
+        ) {
+            Text(text = "同上（Outlined）")
         }
     }
 }

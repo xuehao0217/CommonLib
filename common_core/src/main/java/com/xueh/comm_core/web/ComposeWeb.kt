@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.util.Log
 import android.webkit.WebView
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
@@ -19,7 +20,7 @@ import com.kevinnzou.web.rememberWebViewState
 fun ComposeWebView(url: String) {
     val state = rememberWebViewState(url = url)
     val navigator = rememberWebViewNavigator()
-    Column {
+    Column(Modifier.fillMaxSize()) {
         val loadingState = state.loadingState
         if (loadingState is LoadingState.Loading) {
             LinearProgressIndicator(

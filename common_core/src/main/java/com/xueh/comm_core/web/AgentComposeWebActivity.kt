@@ -31,8 +31,8 @@ import com.just.agentweb.MiddlewareWebChromeBase
 import com.xueh.comm_core.R
 import com.xueh.comm_core.base.compose.BaseComposeActivity
 import com.xueh.comm_core.base.compose.CommonTitleView
-import com.xueh.comm_core.weight.compose.ImageCompose
-import com.xueh.comm_core.weight.compose.click
+import com.xueh.comm_core.weight.ImageCompose
+import com.xueh.comm_core.weight.click
 
 class AgentComposeWebActivity : BaseComposeActivity() {
     companion object {
@@ -59,7 +59,7 @@ class AgentComposeWebActivity : BaseComposeActivity() {
 
     @Composable
     override fun setComposeContent() {
-        val uri = Uri.parse(intent.getStringExtra(WebViewActivity.URL))
+        val uri = Uri.parse(intent.getStringExtra(URL))
         val hideTitle = uri.getQueryParameter("hideTitle") ?: ""
         showShare = (uri.getQueryParameter("showShare") ?: "").isNotEmpty()
 
@@ -146,7 +146,7 @@ class AgentComposeWebActivity : BaseComposeActivity() {
         )
     }
 
-    protected fun getUrl() = intent.getStringExtra(WebViewActivity.URL) ?: ""
+    protected fun getUrl() = intent.getStringExtra(URL) ?: ""
 
     public override fun onPause() {
         agentWeb?.webLifeCycle?.onPause()
