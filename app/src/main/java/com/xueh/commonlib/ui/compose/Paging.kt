@@ -47,6 +47,9 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
+import com.xueh.commonlib.navigation.Nav3VerticalPopTransitionSpec
+import com.xueh.commonlib.navigation.Nav3VerticalPredictivePopTransitionSpec
+import com.xueh.commonlib.navigation.Nav3VerticalPushTransitionSpec
 import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.serialization.Serializable
 import androidx.paging.compose.itemKey
@@ -100,6 +103,9 @@ fun ComposePaging() {
                 backStack.removeAt(backStack.lastIndex)
             }
         },
+        transitionSpec = Nav3VerticalPushTransitionSpec,
+        popTransitionSpec = Nav3VerticalPopTransitionSpec,
+        predictivePopTransitionSpec = Nav3VerticalPredictivePopTransitionSpec,
         entryProvider = entryProvider {
             entry<PagingSampleKey.Menu> {
                 Column(Modifier.fillMaxSize()) {

@@ -18,20 +18,19 @@
         android:theme="@style/AppStyle"
         android:usesCleartextTraffic="true"
         tools:replace="android:theme">
-        <activity android:name=".ui.MainComposeActivity" />
-        <activity android:name=".ui.TestComposeActivity" />
+        <!-- 演示 App 单 Activity：合并闪屏与主导航，不再合并库内 AgentComposeWebActivity -->
         <activity
-            android:name=".ui.SplashActivity"
+            android:name=".ui.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/AppSplash">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.xueh.comm_core.web.AgentComposeWebActivity"
+            tools:node="remove" />
     </application>
-
 </manifest>

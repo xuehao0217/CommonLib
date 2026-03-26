@@ -15,12 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.blankj.utilcode.util.ActivityUtils
 import com.xueh.comm_core.base.compose.theme.AppBaseTheme
 import com.xueh.comm_core.base.compose.theme.AppTheme
 import com.xueh.comm_core.base.compose.theme.AppThemeType
 import com.xueh.comm_core.base.compose.theme.appThemeType
-import com.xueh.comm_core.web.AgentComposeWebActivity
 import com.xueh.comm_core.weight.click
 import com.xueh.commonlib.ui.compose.DemoListRow
 
@@ -29,6 +27,7 @@ import com.xueh.commonlib.ui.compose.DemoListRow
  */
 @Composable
 fun MinePage() {
+    val shell = LocalAppShell.current
     Column(
         Modifier
             .statusBarsPadding()
@@ -46,17 +45,17 @@ fun MinePage() {
         )
         SectionLabel("外链")
         DemoListRow(title = "AgentWeb + Compose 标题栏（透明标题/分享）") {
-            AgentComposeWebActivity.start(
+            shell.openAgentWeb(
                 "https://www.bilibili.com?hideTitle=1&showShare=1",
-                "示例页"
+                "示例页",
             )
         }
         SectionLabel("调试")
-        DemoListRow(title = "是否拦截第三个 Tab：${MainComposeActivity.interceptTab}") {
-            MainComposeActivity.interceptTab = !MainComposeActivity.interceptTab
+        DemoListRow(title = "是否拦截第三个 Tab：${MainActivity.interceptTab}") {
+            MainActivity.interceptTab = !MainActivity.interceptTab
         }
-        DemoListRow(title = "「我的」Tab 小红点：${MainComposeActivity.showRedPoint.value}") {
-            MainComposeActivity.showRedPoint.value = !MainComposeActivity.showRedPoint.value
+        DemoListRow(title = "「我的」Tab 小红点：${MainActivity.showRedPoint.value}") {
+            MainActivity.showRedPoint.value = !MainActivity.showRedPoint.value
         }
     }
 }
@@ -71,9 +70,10 @@ private fun SectionLabel(text: String) {
     )
 }
 
-/** 第三个 Tab：主题切换与 TestComposeActivity 入口 */
+/** 第三个 Tab：主题切换与全屏测试页入口 */
 @Composable
 fun TabPage3() {
+    val shell = LocalAppShell.current
     Column(
         Modifier
             .statusBarsPadding()
@@ -97,7 +97,7 @@ fun TabPage3() {
         }
 
         Text(
-            text = "点击下方色块打开 TestComposeActivity",
+            text = "点击下方色块打开全屏测试页（单 Activity 内覆盖层）",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.outline,
             modifier = Modifier
@@ -112,7 +112,7 @@ fun TabPage3() {
                     .height(100.dp)
                     .background(AppTheme.colors.theme)
                     .click {
-                        ActivityUtils.startActivity(TestComposeActivity::class.java)
+                        shell.openTestComposeDemo()
                     }
             )
         }

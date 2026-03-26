@@ -86,6 +86,9 @@ fun DemoNavDisplay(modifier: Modifier = Modifier) {
                 backStack.removeAt(backStack.lastIndex)
             }
         },
+        transitionSpec = Nav3VerticalPushTransitionSpec,
+        popTransitionSpec = Nav3VerticalPopTransitionSpec,
+        predictivePopTransitionSpec = Nav3VerticalPredictivePopTransitionSpec,
         entryProvider = demoEntryProvider(backStack, navigateParamResult),
     )
 }
