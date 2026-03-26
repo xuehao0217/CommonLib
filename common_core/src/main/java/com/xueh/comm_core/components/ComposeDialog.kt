@@ -1,4 +1,7 @@
-package com.xueh.comm_core.weight
+/**
+ * 弹窗相关组件：[BottomSheetDialog]、[CustomDialog]、[BaseAnyPopDialog]、[BaseComposeDialog]、[ComposeLoadingDialog]。
+ */
+package com.xueh.comm_core.components
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility

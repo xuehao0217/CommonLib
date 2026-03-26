@@ -19,7 +19,7 @@ import com.xueh.comm_core.base.compose.theme.AppBaseTheme
 import com.xueh.comm_core.base.compose.theme.AppTheme
 import com.xueh.comm_core.base.compose.theme.AppThemeType
 import com.xueh.comm_core.base.compose.theme.appThemeType
-import com.xueh.comm_core.weight.click
+import com.xueh.comm_core.components.click
 import com.xueh.commonlib.ui.compose.DemoListRow
 
 /**

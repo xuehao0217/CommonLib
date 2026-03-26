@@ -1,4 +1,4 @@
-package com.xueh.comm_core.weight
+package com.xueh.comm_core.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
@@ -17,16 +17,19 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridItemScope
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridItemScope
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.pager.PagerDefaults
 import androidx.compose.foundation.pager.PagerScope
@@ -228,6 +231,8 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalStaggeredGrid(
  * 注意：默认 [state] 的 pageCount 通过 lambda 读取 [itemCount]，能自动感知 Paging 加载。
  * 如果调用方传入自定义 PagerState，需确保其 pageCount 与 LazyPagingItems.itemCount 保持同步，
  * 否则可能出现页数不一致导致的越界或空白页。
+ *
+ * 当 [itemCount] 收缩且当前页超出范围时，会通过 [LaunchedEffect] 将页面校正到最后一页，避免停留在无效页。
  */
 @Composable
 fun <T : Any> LazyPagingItems<T>.PagingVerticalPager(
@@ -238,6 +243,11 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalPager(
     pagingRefreshStateContent: @Composable () -> Unit = { PagingStateRefresh() },
     pageContent: @Composable PagerScope.(T) -> Unit,
 ) {
+    LaunchedEffect(itemCount) {
+        if (itemCount > 0 && state.currentPage >= itemCount) {
+            state.animateScrollToPage(itemCount - 1)
+        }
+    }
     VerticalPager(
         modifier = modifier,
         state = state,
@@ -277,6 +287,7 @@ fun <T : Any> LazyPagingItems<T>.PagingRefresh(
         state = state,
         loadMoreEnabled = false,
         onRefresh = { refresh() },
+        // loadMoreEnabled = false 时不会触发；占位以满足库 API。Paging3 的 append 由列表滚动自动触发。
         onLoadMore = {},
         modifier = modifier,
         headerScrollMode = NestedScrollMode.Translate,

@@ -57,14 +57,13 @@ import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ConvertUtils
 import com.lt.compose_views.util.rememberMutableStateOf
 import com.xueh.comm_core.helper.compose.orderedStateMapOf
-import com.xueh.comm_core.weight.BoxWrapper
-import com.xueh.comm_core.weight.MyScrollableTabRow
-import com.xueh.comm_core.weight.PagerTab
-import com.xueh.comm_core.weight.PagerTabIndicator
-import com.xueh.comm_core.weight.PagingLazyColumn
-import com.xueh.comm_core.weight.PagingRefresh
-import com.xueh.comm_core.weight.SpacerW
-import com.xueh.comm_core.weight.click
+import com.xueh.comm_core.components.MyScrollableTabRow
+import com.xueh.comm_core.components.PagerTab
+import com.xueh.comm_core.components.PagerTabIndicator
+import com.xueh.comm_core.components.PagingLazyColumn
+import com.xueh.comm_core.components.PagingRefresh
+import com.xueh.comm_core.components.SpacerW
+import com.xueh.comm_core.components.click
 import com.xueh.commonlib.entity.HomeEntity
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -136,7 +135,7 @@ fun TabPageList(ids: List<String>, pagingStateList: List<Flow<PagingData<HomeEnt
             }
         }
 
-        BoxWrapper {
+        Box {
             val bgColor by animateColorAsState(
                 targetValue = lerp(Color.Black, Color.White, titleBarAlpha)
             )

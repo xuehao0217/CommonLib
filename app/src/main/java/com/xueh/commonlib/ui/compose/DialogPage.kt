@@ -20,10 +20,10 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.xueh.comm_core.weight.BottomSheetDialog
-import com.xueh.comm_core.weight.BoxText
-import com.xueh.comm_core.weight.CustomDialog
-import com.xueh.comm_core.weight.click
+import com.xueh.comm_core.components.BottomSheetDialog
+import com.xueh.comm_core.components.BoxText
+import com.xueh.comm_core.components.CustomDialog
+import com.xueh.comm_core.components.click
 
 /**
  * 创 建 人: xueh

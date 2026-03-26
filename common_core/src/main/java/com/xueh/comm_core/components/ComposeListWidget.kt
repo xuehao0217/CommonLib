@@ -1,4 +1,4 @@
-package com.xueh.comm_core.weight
+package com.xueh.comm_core.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues

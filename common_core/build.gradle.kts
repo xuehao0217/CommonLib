@@ -92,7 +92,6 @@ dependencies {
     implementation(libs.refresh)
     implementation(libs.refresh.indicator)
 
-    api(libs.accompanist.placeholder)
 //    api(libs.androidx.photopicker.compose)
 
     api(libs.androidx.navigation3.runtime)

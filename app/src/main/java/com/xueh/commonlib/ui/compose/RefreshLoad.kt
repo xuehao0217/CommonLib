@@ -29,11 +29,11 @@ import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ConvertUtils
 import com.lt.compose_views.util.rememberMutableStateOf
 import com.xueh.comm_core.base.mvvm.BaseComposeViewModel
-import com.xueh.comm_core.weight.PagingLazyColumn
-import com.xueh.comm_core.weight.PagingRefresh
-import com.xueh.comm_core.weight.PagingStateAppend
-import com.xueh.comm_core.weight.PagingStateRefresh
-import com.xueh.comm_core.weight.click
+import com.xueh.comm_core.components.PagingLazyColumn
+import com.xueh.comm_core.components.PagingRefresh
+import com.xueh.comm_core.components.PagingStateAppend
+import com.xueh.comm_core.components.PagingStateRefresh
+import com.xueh.comm_core.components.click
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
 
 /**

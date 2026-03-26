@@ -27,8 +27,8 @@ import com.xueh.comm_core.base.compose.theme.AppThemeType
 import com.xueh.comm_core.base.compose.theme.ComposeMaterialTheme
 import com.xueh.comm_core.base.compose.theme.GrayAppAdapter
 import com.xueh.comm_core.base.compose.theme.appThemeType
-import com.xueh.comm_core.weight.ImageCompose
-import com.xueh.comm_core.weight.click
+import com.xueh.comm_core.components.ImageCompose
+import com.xueh.comm_core.components.click
 
 /**
  * 优化版 BaseComposeActivity

@@ -1,4 +1,4 @@
-package com.xueh.comm_core.weight
+package com.xueh.comm_core.components
 
 import android.R
 import androidx.compose.foundation.Image
@@ -18,6 +18,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
+
+/**
+ * Paging3 与 Lazy 列表的刷新/追加/前置状态辅助。
+ *
+ * 状态含义简述：
+ * - **Refresh**：首屏或 `refresh()`；[PagingStateRefresh] 仅在 [LazyPagingItems.itemCount] 为 0 时展示，避免盖住已有列表。
+ * - **Append**：向列表尾部加载下一页；[PagingStateAppend] 需已有数据（[isStateAppend]），并在 `NotLoading.endOfPaginationReached` 时可走「没有更多」分支。
+ * - **Prepend**：向头部加载；[isStatePrepend] 要求已有数据且未在刷新、且 prepend 未结束。
+ */
 
 //-------------------- Refresh --------------------
 

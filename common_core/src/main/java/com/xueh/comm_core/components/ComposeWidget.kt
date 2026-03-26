@@ -1,4 +1,4 @@
-package com.xueh.comm_core.weight
+package com.xueh.comm_core.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.*

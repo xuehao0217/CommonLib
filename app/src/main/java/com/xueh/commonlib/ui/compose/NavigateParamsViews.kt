@@ -19,7 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 /**
- * Navigation 3 下通过上层共享 [resultText] / 回调实现返回传参。
+ * Navigation 3 演示：通过上层共享 [resultText] 与回调实现「子页回传结果」。
  */
 @Composable
 fun NavigateParams1View(

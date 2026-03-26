@@ -20,7 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.blankj.utilcode.util.ToastUtils
-import com.xueh.comm_core.weight.ImageLoadCompose
+import com.xueh.comm_core.components.ImageLoadCompose
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
 import kotlinx.coroutines.launch
 

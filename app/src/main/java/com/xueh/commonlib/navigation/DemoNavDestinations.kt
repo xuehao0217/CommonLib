@@ -47,7 +47,7 @@ data object DemoCarousel : NavKey
 data object DemoComposePermission : NavKey
 
 @Serializable
-data object DemoPlaceholder : NavKey
+data object DemoLifecycleSavedState : NavKey
 
 @Serializable
 data object DemoWebView : NavKey

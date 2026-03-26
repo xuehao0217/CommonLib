@@ -1,5 +1,7 @@
 package com.xueh.commonlib.navigation
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -7,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -24,19 +27,19 @@ import com.xueh.comm_core.web.ComposeWebView
 import com.xueh.comm_core.web.WebViewPage
 import com.xueh.commonlib.ui.compose.BarPage
 import com.xueh.commonlib.ui.compose.CarouselExamples
-import com.xueh.commonlib.ui.compose.CommonTabPage
+import com.xueh.comm_core.components.CommonTabPage
 import com.xueh.commonlib.ui.compose.ComoposeViewModelPage
 import com.xueh.commonlib.ui.compose.ConstraintPage
 import com.xueh.commonlib.ui.compose.DialogPage
 import com.xueh.commonlib.ui.compose.DemoListRow
 import com.xueh.commonlib.ui.compose.LazyColumnPage
+import com.xueh.commonlib.ui.compose.LifecycleSavedStateDemoPage
 import com.xueh.commonlib.ui.compose.NavigateParams1View
 import com.xueh.commonlib.ui.compose.NavigateParams2View
 import com.xueh.commonlib.ui.compose.OrderedTabsExample
 import com.xueh.commonlib.ui.compose.PageTwo
 import com.xueh.commonlib.ui.compose.PagerPage
 import com.xueh.commonlib.ui.compose.PermissionPageContent
-import com.xueh.commonlib.ui.compose.PlaceholderPage
 import com.xueh.commonlib.ui.compose.RefreshLoadUse
 import com.xueh.commonlib.ui.compose.TabPage
 import com.xueh.commonlib.ui.compose.VisibilityChangedDemo
@@ -62,7 +65,7 @@ private val demoMenuLines: List<DemoMenuLine> = listOf(
     DemoMenuLine("跳转互传参数", DemoNavigateParam1),
     DemoMenuLine("下拉加载使用", DemoRefreshLoad),
     DemoMenuLine("Compose 权限申请", DemoComposePermission),
-    DemoMenuLine("Compose Placeholder", DemoPlaceholder),
+    DemoMenuLine("生命周期 + Saveable + Flow", DemoLifecycleSavedState),
     DemoMenuLine("WebView（CustomWebView + 进度条）", DemoWebView),
     DemoMenuLine("Accompanist ComposeWebView", DemoAccompanistWeb),
     DemoMenuLine("Google Sample", DemoGoogleSample),
@@ -121,11 +124,9 @@ private fun demoEntryProvider(
             }
         }
     }
-    entry<DemoRefreshLoad> { RefreshLoadUse() }
     entry<DemoConstraintSet> { ConstraintPage() }
     entry<DemoScrollableTabRow> { scrollableTabRow() }
     entry<DemoLazyVerticalGrid> { lazyVerticalGrid() }
-    entry<DemoLazyColumnPage> { LazyColumnPage() }
     entry<DemoProfileRoute> { key ->
         PageTwo(name = key.name, age = key.age) {
             if (backStack.size > 1) backStack.removeAt(backStack.lastIndex)
@@ -148,10 +149,26 @@ private fun demoEntryProvider(
         )
     }
     entry<DemoDialog> { DialogPage() }
-    entry<DemoCommonTabPager> { CommonTabPage() }
+    entry<DemoCommonTabPager> {
+        CommonTabPage(tabsName = listOf("标签 A", "标签 B")) { index ->
+            if (index == 0) {
+                Box(
+                    Modifier
+                        .fillMaxSize()
+                        .background(Color(0xFFFFF9C4))
+                )
+            } else {
+                Box(
+                    Modifier
+                        .fillMaxSize()
+                        .background(Color(0xFFBBDEFB))
+                )
+            }
+        }
+    }
     entry<DemoCarousel> { CarouselExamples() }
     entry<DemoComposePermission> { PermissionPageContent() }
-    entry<DemoPlaceholder> { PlaceholderPage() }
+    entry<DemoLifecycleSavedState> { LifecycleSavedStateDemoPage() }
     entry<DemoWebView> {
         WebViewPage {
             if (backStack.size > 1) backStack.removeAt(backStack.lastIndex)

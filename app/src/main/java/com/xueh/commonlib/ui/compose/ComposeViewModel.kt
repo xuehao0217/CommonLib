@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 import com.xueh.comm_core.base.mvvm.BaseComposeViewModel
-import com.xueh.comm_core.weight.click
+import com.xueh.comm_core.components.click
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
 
 @Preview
