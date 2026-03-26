@@ -1,8 +1,9 @@
 /**
- * 自定义排版：[AppThemeTextStyle]、[defaultTextStyle]、[LocalTextStyles]；供 [AppBaseTheme] 与 [AppTheme.textStyle] 使用。
+ * 自定义排版：[AppThemeTextStyle]、[defaultTextStyle]、[LocalTextStyles]；由 [ComposeMaterialTheme] 注入，供 [AppTheme.textStyle] 使用。
  */
 package com.xueh.comm_core.base.compose.theme
 
+import androidx.compose.material3.Typography
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.TextStyle
@@ -56,5 +57,15 @@ val defaultTextStyle = AppThemeTextStyle(
         lineHeight = 16.sp,
 
     )
+)
+
+/** 与 [defaultTextStyle] 对齐的 Material3 [Typography]，供 [ComposeMaterialTheme] 使用。 */
+val AppTypography = Typography(
+    titleLarge = defaultTextStyle.titleLarge,
+    titleMedium = defaultTextStyle.titleMedium,
+    titleSmall = defaultTextStyle.titleSmall,
+    bodyLarge = defaultTextStyle.bodyLarge,
+    bodyMedium = defaultTextStyle.bodyMedium,
+    bodySmall = defaultTextStyle.bodySmall,
 )
 

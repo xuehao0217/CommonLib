@@ -1,28 +1,26 @@
 /**
- * 主题 **状态与入口**：[appThemeType]、[appThemeColorType]、[ComposeMaterialTheme]、[AppBaseTheme]、[AppTheme]；
+ * 主题 **状态与入口**：[appThemeType]、[appThemeColorType]、[ComposeMaterialTheme]、[AppTheme]；
  * 与 `Color.kt` / `Type.kt` 中的调色板、文本样式配合使用。
+ *
+ * **[ComposeMaterialTheme]** 为唯一根主题（[BaseComposeActivity] 已使用）：同时提供 Material3 [ColorScheme]（品牌色/动态色）、
+ * [AppTypography]、[Shapes]，以及 [LocalCustomColors] / [LocalTextStyles]（语义色 [AppThemeColors] 与 [defaultTextStyle]）。
+ * 子界面直接使用 [MaterialTheme] 与 [AppTheme]，无需再套一层主题 Composable。
  */
 package com.xueh.comm_core.base.compose.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import com.blankj.utilcode.util.Utils
+
 /** 全局亮暗色模式状态，支持跟随系统、浅色、深色三种模式 */
 var appThemeType by mutableStateOf(AppThemeType.Light)
 
@@ -34,14 +32,22 @@ var appThemeType by mutableStateOf(AppThemeType.Light)
  */
 enum class AppThemeType {
     FOLLOW_SYSTEM, Light, Dark;
+
     companion object {
+        /** 由持久化恢复的 **ordinal** 解析；越界或未知时回退 [Light]。 */
         fun formatTheme(theme: Int? = 1): AppThemeType {
-            entries.forEach {
-                if (it.ordinal == theme) {
-                    return it
-                }
+            val ordinal = (theme ?: Light.ordinal).coerceIn(0, entries.lastIndex)
+            return entries.getOrElse(ordinal) { Light }
+        }
+
+        /**
+         * 优先按 **枚举 name** 解析（与 [AppThemePreferences] 新存储一致）；失败或空串时用 [legacyOrdinal] 走 [formatTheme]（兼容旧版仅存 ordinal）。
+         */
+        fun parsePersisted(storedName: String, legacyOrdinal: Int): AppThemeType {
+            if (storedName.isNotBlank()) {
+                runCatching { valueOf(storedName) }.getOrNull()?.let { return it }
             }
-            return Light
+            return formatTheme(legacyOrdinal)
         }
 
         @Composable
@@ -60,7 +66,7 @@ enum class AppThemeType {
  * @return 若为深色模式或跟随系统且系统为深色则返回 true
  */
 @Composable
-fun isThemeDark():Boolean=AppThemeType.isDark(
+fun isThemeDark(): Boolean = AppThemeType.isDark(
     themeType = appThemeType
 )
 
@@ -76,7 +82,20 @@ var appThemeColorType by mutableStateOf(AppThemeColorType.GREEN)
  * - [WALLPAPER] 壁纸动态色（Android 12+ 从系统壁纸提取）
  */
 enum class AppThemeColorType {
-    PURPLE, GREEN, ORANGE, BLUE, WALLPAPER
+    PURPLE, GREEN, ORANGE, BLUE, WALLPAPER;
+
+    companion object {
+        /**
+         * 优先按 **枚举 name** 解析；失败或空串时用 [legacyOrdinal] 做安全索引（兼容旧版 ordinal）。
+         */
+        fun parsePersisted(storedName: String, legacyOrdinal: Int): AppThemeColorType {
+            if (storedName.isNotBlank()) {
+                runCatching { valueOf(storedName) }.getOrNull()?.let { return it }
+            }
+            val idx = legacyOrdinal.coerceIn(0, entries.lastIndex)
+            return entries.getOrElse(idx) { GREEN }
+        }
+    }
 }
 
 /**
@@ -84,7 +103,8 @@ enum class AppThemeColorType {
  * 1. 根据 [appColorType] 与 [isThemeDark] 确定亮/暗色
  * 2. 绿/紫/橘/蓝使用预定义调色板
  * 3. WALLPAPER 在 Android 12+ 使用 dynamicColorScheme 从壁纸取色，否则回退为绿色
- * 4. 将选中的 ColorScheme 注入 MaterialTheme
+ * 4. 按亮暗提供 [lightThemeColors] 或 [darkThemeColors] 到 [LocalCustomColors]，[defaultTextStyle] 到 [LocalTextStyles]
+ * 5. 将 [ColorScheme]、[AppTypography]、[Shapes] 注入单层 [MaterialTheme]
  *
  * @param appColorType 若为 null 则使用全局 [appThemeColorType]。必须在函数体内读取全局状态，
  * 否则仅写在默认参数里时，Compose 可能无法订阅 [appThemeColorType] 变化，导致调色板切换不生效。
@@ -106,37 +126,25 @@ fun ComposeMaterialTheme(
         AppThemeColorType.BLUE -> if (isDarkTheme) DarkBlueColorPalette else LightBlueColorPalette
 
         AppThemeColorType.WALLPAPER ->
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 if (isDarkTheme) dynamicDarkColorScheme(context)
                 else dynamicLightColorScheme(context)
-            else
+            } else {
                 if (isDarkTheme) DarkGreenColorPalette else LightGreenColorPalette
+            }
     }
 
-    MaterialTheme(
-        colorScheme = colors,
-        content = content
-    )
-}
-
-
-/**
- * 自定义主题系统入口：
- * 1. 根据 [isThemeDark] 选择 [lightThemeColors] 或 [darkThemeColors]
- * 2. 通过 CompositionLocalProvider 注入 LocalCustomColors 与 LocalTextStyles
- * 3. 子组件通过 [AppTheme.colors] / [AppTheme.textStyle] 获取当前主题
- *
- * @param content 主题作用域内的可组合内容
- */
-@Stable
-@Composable
-fun AppBaseTheme(content: @Composable () -> Unit) {
-    val colors = if(isThemeDark())darkThemeColors else lightThemeColors
+    val semanticColors = if (isDarkTheme) darkThemeColors else lightThemeColors
     CompositionLocalProvider(
-        LocalCustomColors provides colors,
-        LocalTextStyles provides AppTheme.textStyle
+        LocalCustomColors provides semanticColors,
+        LocalTextStyles provides defaultTextStyle,
     ) {
-        MaterialTheme(content = content)
+        MaterialTheme(
+            colorScheme = colors,
+            typography = AppTypography,
+            shapes = Shapes,
+            content = content
+        )
     }
 }
 

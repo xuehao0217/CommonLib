@@ -9,7 +9,7 @@ package com.xueh.comm_core
  * ## 分层与职责（按包）
  *
  * - **base**：`BaseApplication` 主进程初始化；`BaseComposeActivity` 沉浸式、设计稿宽度 Density、`Scaffold` 与标题栏。
- * - **base.compose.theme**：`AppThemeType` / `AppThemeColorType`、`ComposeMaterialTheme`、`AppThemePreferences` 与 `PersistAppThemePreferencesEffect`。
+ * - **base.compose.theme**：`AppThemeType` / `AppThemeColorType`、`ComposeMaterialTheme`（唯一根主题：Material3 + `AppTypography`+`Shapes` + `AppTheme` 语义 Local）、`AppThemePreferences`（按枚举 name 持久化，兼容旧 ordinal）与 `PersistAppThemePreferencesEffect`。
  * - **base.mvvm**：`AbsViewModel` → `RequestViewModel` → `BaseViewModel`；`BaseComposeViewModel` 绑定 Loading 与异常；`BaseRequstViewModel` 懒加载 API。
  * - **net**：`HttpRequest`（Retrofit 缓存、Header、Debug 日志/Chucker）、`BaseResult`、`JsonManager`。
  * - **net.coroutinedsl**：`ViewModelDsl` 链式请求；`RequestViewModel` 的 `apiDSL` / `apiFlow` / `apiError` 等统一状态。
@@ -38,8 +38,12 @@ package com.xueh.comm_core
  * ## 主题持久化流程
  *
  * 1. 冷启动：[AppThemePreferences.restore] 从 DataStore 恢复 [com.xueh.comm_core.base.compose.theme.appThemeType] /
- *    [com.xueh.comm_core.base.compose.theme.appThemeColorType]。
- * 2. 运行时：用户切换主题 → 状态变更 → [PersistAppThemePreferencesEffect] 中 **LaunchedEffect** 调用 [AppThemePreferences.persist]。
+ *    [com.xueh.comm_core.base.compose.theme.appThemeColorType]（优先枚举 **name**，否则回退旧键 **ordinal**）。
+ * 2. 运行时：用户切换主题 → 状态变更 → [PersistAppThemePreferencesEffect] 中 **LaunchedEffect** 调用 [AppThemePreferences.persist]（写入 name）。
+ *
+ * ## Compose 主题（单入口）
+ *
+ * **ComposeMaterialTheme**：`BaseComposeActivity` 根节点使用；同时提供 Material3 `ColorScheme`、`AppTypography`、`Shapes`，以及 [com.xueh.comm_core.base.compose.theme.AppTheme] 所需的 `LocalCustomColors` / `LocalTextStyles`（`Color.kt` 中亮暗语义色）。
  *
  * ## 分页（Paging 3）流程
  *

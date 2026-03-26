@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.xueh.comm_core.base.compose.theme.AppBaseTheme
 import com.xueh.comm_core.base.compose.theme.AppTheme
 import com.xueh.comm_core.base.compose.theme.AppThemeType
 import com.xueh.comm_core.base.compose.theme.appThemeType
@@ -104,17 +103,15 @@ fun TabPage3() {
                 .padding(horizontal = 20.dp)
                 .padding(top = 16.dp, bottom = 8.dp),
         )
-        AppBaseTheme {
-            Box(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth()
-                    .height(100.dp)
-                    .background(AppTheme.colors.theme)
-                    .clickNoRipple {
-                        shell.openTestComposeDemo()
-                    }
-            )
-        }
+        Box(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth()
+                .height(100.dp)
+                .background(AppTheme.colors.theme)
+                .clickNoRipple {
+                    shell.openTestComposeDemo()
+                }
+        )
     }
 }
