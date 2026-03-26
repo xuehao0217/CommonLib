@@ -49,7 +49,7 @@ CommonLib/
 │       ├── base/mvvm/        # BaseViewModel、BaseComposeViewModel 等
 │       ├── net/              # 网络与协程 DSL
 │       ├── helper/compose/   # Compose 扩展与工具
-│       └── weight/           # 通用 Compose 组件与 Modifier 扩展（见下文「weight 包」）
+│       └── widget/           # 通用 Compose 组件（列表、分页、导航栏、弹窗、Modifier 扩展等）
 ├── gradle/
 │   └── libs.versions.toml    # 版本与依赖别名
 └── settings.gradle.kts       # include(":app", ":common_core")
@@ -105,22 +105,6 @@ class MyViewModel : BaseViewModel() {
 - **Material 入口**：`ComposeMaterialTheme`（在函数体内读取全局色板状态，保证调色后界面会重组）
 
 灰度蒙层（公祭日等）由 **`GrayAppAdapter`** 控制。
-
----
-
-## 演示与架构流程
-
-- **单 Activity**：`MainActivity` → 闪屏 → `BottomNavPager` → 首页 `HomePage` 内 **Navigation 3**（`DemoNavDisplay`）；全屏 Web / 测试页通过 **`LocalAppShell`** 覆盖层呈现（见 [`AppShell.kt`](app/src/main/java/com/xueh/commonlib/ui/AppShell.kt)）。
-- **生命周期与状态**：common_core 提供 **`collectAsStateWithLifecycleWhileStarted`**（[`ComposeFlowLifecycle.kt`](common_core/src/main/java/com/xueh/comm_core/helper/compose/ComposeFlowLifecycle.kt)）、**`rememberSaveableIntState` / `rememberSaveableStringState`**（[`ComposeSavedState.kt`](common_core/src/main/java/com/xueh/comm_core/helper/compose/ComposeSavedState.kt)）；**`BaseComposeViewModel`** 在 **`STARTED`** 下收集接口异常（[`BaseComposeViewModel.kt`](common_core/src/main/java/com/xueh/comm_core/base/mvvm/BaseComposeViewModel.kt)）。**不使用 Hilt。**
-- 更完整的流程图与文件索引见 **[`docs/COMPOSE_DEMO_FLOW.md`](docs/COMPOSE_DEMO_FLOW.md)**。
-
----
-
-## common_core：`weight` 包说明
-
-- **含义**：包名 **`weight`** 为历史命名（与 *widget* 混用），实际承载 **Compose UI 封装**（[`common_core/.../weight/`](common_core/src/main/java/com/xueh/comm_core/components/)）。包级说明见同目录下 **`package.kt`** 中的 KDoc。
-- **维护提示**：[`ComposeTab.kt`](common_core/src/main/java/com/xueh/comm_core/components/ComposeTab.kt) 为基于 **Android Open Source Project / Material Compose** 的 fork（文件头含许可证与 fork 版本说明）。**升级 Compose BOM 时务必对照该文件**，核对 `TabRow`、indicator、`SubcomposeLayout` 等与官方实现是否漂移。
-- **演进**：若将来迁移包名，建议采用 `Deprecated` + `ReplaceWith` 或 `typealias` 过渡期，避免多 App 同时改 import。
 
 ---
 

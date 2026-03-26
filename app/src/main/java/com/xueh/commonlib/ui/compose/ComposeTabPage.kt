@@ -57,13 +57,13 @@ import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ConvertUtils
 import com.lt.compose_views.util.rememberMutableStateOf
 import com.xueh.comm_core.helper.compose.orderedStateMapOf
-import com.xueh.comm_core.components.MyScrollableTabRow
-import com.xueh.comm_core.components.PagerTab
-import com.xueh.comm_core.components.PagerTabIndicator
-import com.xueh.comm_core.components.PagingLazyColumn
-import com.xueh.comm_core.components.PagingRefresh
-import com.xueh.comm_core.components.SpacerW
-import com.xueh.comm_core.components.click
+import com.xueh.comm_core.widget.MyScrollableTabRow
+import com.xueh.comm_core.widget.PagerTab
+import com.xueh.comm_core.widget.PagerTabIndicator
+import com.xueh.comm_core.widget.PagingLazyColumn
+import com.xueh.comm_core.widget.PagingRefresh
+import com.xueh.comm_core.widget.SpacerW
+import com.xueh.comm_core.widget.clickNoRipple
 import com.xueh.commonlib.entity.HomeEntity
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -210,7 +210,7 @@ fun NewsTab(
                             end = 8.dp
                         )
                         .wrapContentWidth()
-                        .click {
+                        .clickNoRipple {
                             scope.launch {
                                 tabClick(ids[index])
                                 pagerState.animateScrollToPage(index)

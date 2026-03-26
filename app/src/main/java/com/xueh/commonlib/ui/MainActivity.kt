@@ -19,9 +19,9 @@ import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.xueh.comm_core.base.compose.BaseComposeActivity
 import com.xueh.comm_core.web.AgentWebScaffold
-import com.xueh.comm_core.components.BottomNavPager
-import com.xueh.comm_core.components.NavData
-import com.xueh.comm_core.components.NavThemeColors
+import com.xueh.comm_core.widget.BottomNavPager
+import com.xueh.comm_core.widget.NavData
+import com.xueh.comm_core.widget.NavThemeColors
 import com.xueh.commonlib.R
 import kotlinx.coroutines.delay
 
@@ -116,7 +116,8 @@ private fun MainTabShell() {
         { TabPage3() },
     )
 
-    val navItems = remember {
+    val showRed by MainActivity.showRedPoint
+    val navItems = remember(showRed) {
         listOf(
             NavData(
                 selectIcon = R.mipmap.ic_home_select,
@@ -127,7 +128,7 @@ private fun MainTabShell() {
                 selectIcon = R.mipmap.ic_my_select,
                 unSelectIcon = R.mipmap.ic_my_normal,
                 text = "我的",
-                showRed = MainActivity.showRedPoint,
+                showRed = showRed,
             ),
             NavData(
                 selectIcon = R.mipmap.ic_my_select,

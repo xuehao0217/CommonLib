@@ -29,11 +29,11 @@ import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ConvertUtils
 import com.lt.compose_views.util.rememberMutableStateOf
 import com.xueh.comm_core.base.mvvm.BaseComposeViewModel
-import com.xueh.comm_core.components.PagingLazyColumn
-import com.xueh.comm_core.components.PagingRefresh
-import com.xueh.comm_core.components.PagingStateAppend
-import com.xueh.comm_core.components.PagingStateRefresh
-import com.xueh.comm_core.components.click
+import com.xueh.comm_core.widget.PagingLazyColumn
+import com.xueh.comm_core.widget.PagingRefresh
+import com.xueh.comm_core.widget.PagingStateAppend
+import com.xueh.comm_core.widget.PagingStateRefresh
+import com.xueh.comm_core.widget.clickNoRipple
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
 
 /**
@@ -90,7 +90,7 @@ fun RefreshLoadUse() {
                             .fillMaxWidth()
                             .height(50.dp)
                             .background(Color.Red)
-                            .click {
+                            .clickNoRipple {
                                 homeDatas.retry()
                             }, contentAlignment = Alignment.Center
                     ) {

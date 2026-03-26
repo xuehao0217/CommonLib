@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.xueh.comm_core.base.compose.BaseComposeActivity
 import com.xueh.comm_core.helper.compose.findActivity
-import com.xueh.comm_core.components.click
+import com.xueh.comm_core.widget.clickNoRipple
 
 /**
  * 原 TestComposeActivity 的演示 UI，现作为单 Activity 内的全屏层（返回键由 [MainActivity] 统一关闭覆盖层）。
@@ -26,7 +26,7 @@ fun TestComposeDemoScreen() {
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFF1565C0))
-            .click {
+            .clickNoRipple {
                 activity?.let { it.isSystemBarLight = !it.isSystemBarLight }
             },
         contentAlignment = Alignment.Center,

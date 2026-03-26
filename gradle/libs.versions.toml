@@ -32,8 +32,6 @@ lifecycleKtx = "2.10.0"
 #--------------Compose相关-----------------
 coilCompose = "3.4.0"
 constraintLayoutCompose = "1.1.1"
-accompanist = "0.36.0"
-permissions = "0.37.3"
 nav3Core = "1.0.1"
 paging = "3.4.2"
 any_pop_dialog_compose = "1.0.4"
@@ -99,8 +97,6 @@ androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", vers
 constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose-android", version.ref = "constraintLayoutCompose" }
 compose-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleKtx" }
 compose-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleKtx" }
-accompanist-placeholder = { module = "com.google.accompanist:accompanist-placeholder-material", version.ref = "accompanist" }
-accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "permissions" }
 compose-paging = { module = "androidx.paging:paging-compose", version.ref = "paging" }
 refresh = { module = "com.github.jenly1314.UltraSwipeRefresh:refresh", version.ref = "refresh" }
 refresh-indicator = { module = "com.github.jenly1314.UltraSwipeRefresh:refresh-indicator-classic", version.ref = "refresh" }

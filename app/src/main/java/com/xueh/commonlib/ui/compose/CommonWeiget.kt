@@ -2,34 +2,56 @@ package com.xueh.commonlib.ui.compose
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.carousel.HorizontalMultiBrowseCarousel
 import androidx.compose.material3.carousel.HorizontalUncontainedCarousel
 import androidx.compose.material3.carousel.rememberCarouselState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.xueh.comm_core.widget.CommonTabPage
 import com.xueh.commonlib.R
 
 /**
- * Material3 Carousel 演示（与首页「CarouselExamples」菜单对应）。
+ * 创 建 人: xueh
+ * 创建日期: 2023/3/23
+ * 备注：
  */
+
+@Preview
+@Composable
+fun CommonTabPage() {
+    CommonTabPage(tabsName = mutableListOf("AAAAAAA", "BBBBBBB")) { index ->
+        if (index == 0) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Yellow)
+            )
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Blue)
+            )
+        }
+    }
+}
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
+// [START android_compose_carousel_multi_browse_basic]
 @Composable
-private fun CarouselExample_MultiBrowsePreview() {
+fun CarouselExample_MultiBrowse() {
     data class CarouselItem(
         val id: Int,
         @DrawableRes val imageResId: Int,
@@ -71,7 +93,7 @@ private fun CarouselExample_MultiBrowsePreview() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-private fun CarouselExample_UncontainedPreview() {
+fun CarouselExample() {
     data class CarouselItem(
         val id: Int,
         @DrawableRes val imageResId: Int,
@@ -110,10 +132,12 @@ private fun CarouselExample_UncontainedPreview() {
     }
 }
 
+
+@Preview
 @Composable
 fun CarouselExamples() {
     Column {
-        CarouselExample_UncontainedPreview()
-        CarouselExample_MultiBrowsePreview()
+        CarouselExample()
+        CarouselExample_MultiBrowse()
     }
 }

@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 import com.xueh.comm_core.base.mvvm.BaseComposeViewModel
-import com.xueh.comm_core.components.click
+import com.xueh.comm_core.widget.clickNoRipple
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
 
 @Preview
@@ -23,7 +23,7 @@ fun ComoposeViewModelPage() {
             .fillMaxWidth()
             .background(Color.Red)
             .height(50.dp)
-            .click {
+            .clickNoRipple {
                 viewModel.loadDsl()
             })
 

@@ -1,4 +1,4 @@
-package com.xueh.comm_core.components
+package com.xueh.comm_core.widget
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -25,13 +25,13 @@ import kotlinx.coroutines.launch
  * @param selectIcon 选中状态下的图标资源 ID
  * @param unSelectIcon 未选中状态下的图标资源 ID
  * @param text 导航项显示文本
- * @param showRed 是否显示红点角标，用于消息提醒等场景
+ * @param showRed 是否显示红点角标；状态由上层持有并在变更时传入新 [NavData] 或刷新列表。
  */
 data class NavData(
     val selectIcon: Int,
     val unSelectIcon: Int,
     val text: String,
-    val showRed: MutableState<Boolean> = mutableStateOf(false),
+    val showRed: Boolean = false,
 )
 
 /**
@@ -168,7 +168,7 @@ fun NavItem(
                 )
 
                 // 红点
-                if (nav.showRed.value) {
+                if (nav.showRed) {
                     Canvas(
                         modifier = Modifier
                             .size(6.dp)

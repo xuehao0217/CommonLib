@@ -1,4 +1,4 @@
-package com.xueh.comm_core.components
+package com.xueh.comm_core.widget
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,9 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-/**
- * 通用 LazyColumn，支持可选的 head、foot
- */
 @Composable
 fun CommonLazyColumn(
     modifier: Modifier = Modifier.fillMaxSize(),
@@ -31,17 +28,13 @@ fun CommonLazyColumn(
         state = state,
         verticalArrangement = verticalArrangement,
         contentPadding = contentPadding,
-        content = {
-            headContent?.let { item { it() } }
-            content()
-            footContent?.let { item { it() } }
-        }
-    )
+    ) {
+        headContent?.let { item { it() } }
+        content()
+        footContent?.let { item { it() } }
+    }
 }
 
-/**
- * 通用数据列表封装
- */
 @Composable
 fun <T> CommonLazyColumnData(
     data: List<T>,
@@ -60,7 +53,7 @@ fun <T> CommonLazyColumnData(
         verticalArrangement = verticalArrangement,
         contentPadding = contentPadding,
         headContent = headContent,
-        footContent = footContent
+        footContent = footContent,
     ) {
         items(data, key = key) { item ->
             itemContent(item)

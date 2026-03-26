@@ -2,7 +2,7 @@ package com.xueh.comm_core.web
 
 import android.graphics.Bitmap
 import android.util.Log
-import android.webkit.WebView
+import android.webkit.WebView as AndroidSystemWebView
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,16 +29,15 @@ fun ComposeWebView(url: String) {
             )
         }
 
-        // A custom WebViewClient and WebChromeClient can be provided via subclassing
         val webClient = remember {
             object : AccompanistWebViewClient() {
                 override fun onPageStarted(
-                    view: WebView,
+                    view: AndroidSystemWebView,
                     url: String?,
-                    favicon: Bitmap?
+                    favicon: Bitmap?,
                 ) {
                     super.onPageStarted(view, url, favicon)
-                    Log.d("Accompanist WebView", "Page started loading for $url")
+                    Log.d("ComposeWebView", "Page started loading for $url")
                 }
             }
         }

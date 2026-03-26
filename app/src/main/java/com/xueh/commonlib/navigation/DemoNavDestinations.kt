@@ -47,25 +47,10 @@ data object DemoCarousel : NavKey
 data object DemoComposePermission : NavKey
 
 @Serializable
-data object DemoLifecycleSavedState : NavKey
-
-@Serializable
 data object DemoWebView : NavKey
 
 @Serializable
 data object DemoAccompanistWeb : NavKey
-
-@Serializable
-data object DemoGoogleSample : NavKey
-
-@Serializable
-data object DemoPullRefreshSample : NavKey
-
-@Serializable
-data object DemoCustomPullRefreshSample : NavKey
-
-@Serializable
-data object DemoPullRefreshIndicatorTransform : NavKey
 
 @Serializable
 data object DemoComposeTab : NavKey

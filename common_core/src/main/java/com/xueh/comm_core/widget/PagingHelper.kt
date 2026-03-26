@@ -1,80 +1,74 @@
-package com.xueh.comm_core.components
+package com.xueh.comm_core.widget
 
-import android.R
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
-import androidx.compose.foundation.lazy.grid.*
-import androidx.compose.foundation.lazy.staggeredgrid.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.LazyGridItemScope
+import androidx.compose.foundation.lazy.grid.LazyGridScope
+import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridItemSpanScope
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridItemScope
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridScope
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ErrorOutline
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
+import com.xueh.comm_core.R
 
-/**
- * Paging3 与 Lazy 列表的刷新/追加/前置状态辅助。
- *
- * 状态含义简述：
- * - **Refresh**：首屏或 `refresh()`；[PagingStateRefresh] 仅在 [LazyPagingItems.itemCount] 为 0 时展示，避免盖住已有列表。
- * - **Append**：向列表尾部加载下一页；[PagingStateAppend] 需已有数据（[isStateAppend]），并在 `NotLoading.endOfPaginationReached` 时可走「没有更多」分支。
- * - **Prepend**：向头部加载；[isStatePrepend] 要求已有数据且未在刷新、且 prepend 未结束。
- */
+// -------------------- Refresh --------------------
 
-//-------------------- Refresh --------------------
-
-/**
- * 判断当前 LazyPagingItems 是否处于刷新状态
- */
 fun LazyPagingItems<*>.isRefreshing() = loadState.refresh is LoadState.Loading
 
-/**
- * 判断当前 LazyPagingItems 是否刷新失败
- */
 fun LazyPagingItems<*>.isRefreshError() = loadState.refresh is LoadState.Error
 
 /**
- * 根据 [loadState.refresh] 状态展示 UI
- * @param stateLoading 加载中显示内容
- * @param stateError 加载错误显示内容
- * @param stateEmpty 数据为空显示内容
+ * 首屏/刷新区域状态：无数据时根据 [loadState.refresh] 展示。
+ * [initialEmptyContent]：刷新已完成、列表仍为空且非错误时的展示（例如占位文案）。
  */
 @Composable
 fun LazyPagingItems<*>.PagingStateRefresh(
     stateLoading: @Composable () -> Unit = { PagingRefreshLoading() },
     stateError: @Composable (Throwable) -> Unit = { PagingRefreshError(this) },
     stateEmpty: @Composable () -> Unit = { PagingRefreshEmpty() },
+    initialEmptyContent: @Composable () -> Unit = stateEmpty,
 ) {
-    // 仅在没有数据时显示状态页
-    if (itemCount == 0) {
-        when (val refreshState = loadState.refresh) {
-            is LoadState.Loading -> stateLoading()
-            is LoadState.Error -> stateError(refreshState.error)
-            is LoadState.NotLoading -> stateEmpty()
+    if (itemCount != 0) return
+    when (val refreshState = loadState.refresh) {
+        is LoadState.Loading -> stateLoading()
+        is LoadState.Error -> stateError(refreshState.error)
+        is LoadState.NotLoading -> {
+            if (refreshState.endOfPaginationReached) {
+                stateEmpty()
+            } else {
+                initialEmptyContent()
+            }
         }
     }
 }
 
-//-------------------- Append --------------------
+// -------------------- Append --------------------
 
-/**
- * 是否可以显示加载更多状态
- */
 fun LazyPagingItems<*>.isStateAppend() = itemCount > 0
 
-/**
- * 根据 [loadState.append] 状态展示加载更多 UI
- * @param stateLoading 加载中显示
- * @param stateError 加载错误显示
- * @param stateNoMore 没有更多显示
- */
 @Composable
 fun LazyPagingItems<*>.PagingStateAppend(
     stateLoading: @Composable () -> Unit = { PagingAppendLoading() },
@@ -89,19 +83,11 @@ fun LazyPagingItems<*>.PagingStateAppend(
     }
 }
 
-//-------------------- Prepend --------------------
+// -------------------- Prepend --------------------
 
-/**
- * 是否可以显示前置加载状态
- */
 fun LazyPagingItems<*>.isStatePrepend(): Boolean =
     itemCount > 0 && !isRefreshing() && !loadState.prepend.endOfPaginationReached
 
-/**
- * 根据 [loadState.prepend] 状态展示前置加载 UI
- * @param stateLoading 加载中显示
- * @param stateError 加载错误显示
- */
 @Composable
 fun LazyPagingItems<*>.PagingStatePrepend(
     stateLoading: @Composable () -> Unit = { PagingAppendLoading() },
@@ -114,74 +100,62 @@ fun LazyPagingItems<*>.PagingStatePrepend(
     }
 }
 
-//-------------------- LazyListScope / LazyGridScope / LazyStaggeredGridScope Append Item --------------------
+// -------------------- Lazy scopes Append Item --------------------
 
-/**
- * 在 LazyColumn 中添加加载更多 Item
- */
 fun LazyListScope.PagingAppendItem(
     items: LazyPagingItems<*>,
     key: Any? = null,
     contentType: Any? = null,
-    content: @Composable LazyItemScope.() -> Unit = { items.PagingStateAppend() }
+    content: @Composable LazyItemScope.() -> Unit = { items.PagingStateAppend() },
 ) {
     if (items.isStateAppend()) item(key = key ?: "append_item", contentType = contentType, content = content)
 }
 
-/**
- * 在 LazyGrid 中添加加载更多 Item
- */
 fun LazyGridScope.PagingAppendItem(
     items: LazyPagingItems<*>,
     key: Any? = null,
     contentType: Any? = null,
     span: (LazyGridItemSpanScope.() -> GridItemSpan) = { GridItemSpan(maxLineSpan) },
-    content: @Composable LazyGridItemScope.() -> Unit = { items.PagingStateAppend() }
+    content: @Composable LazyGridItemScope.() -> Unit = { items.PagingStateAppend() },
 ) {
     if (items.isStateAppend()) item(key = key ?: "append_item", contentType = contentType, span = span, content = content)
 }
 
-/**
- * 在 LazyStaggeredGrid 中添加加载更多 Item
- */
 fun LazyStaggeredGridScope.PagingAppendItem(
     items: LazyPagingItems<*>,
     key: Any? = null,
     contentType: Any? = null,
     span: StaggeredGridItemSpan = StaggeredGridItemSpan.FullLine,
-    content: @Composable LazyStaggeredGridItemScope.() -> Unit = { items.PagingStateAppend() }
+    content: @Composable LazyStaggeredGridItemScope.() -> Unit = { items.PagingStateAppend() },
 ) {
     if (items.isStateAppend()) item(key = key ?: "append_item", contentType = contentType, span = span, content = content)
 }
 
-//-------------------- Refresh Widgets --------------------
+// -------------------- Default widgets --------------------
 
-/**
- * 刷新失败 UI
- */
 @Composable
 fun PagingRefreshError(item: LazyPagingItems<*>) {
+    val errTitle = stringResource(R.string.comm_core_paging_refresh_error)
+    val retry = stringResource(R.string.comm_core_paging_retry)
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier.align(Alignment.Center),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.stat_notify_error),
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(Color.Red)
+            Icon(
+                imageVector = Icons.Filled.ErrorOutline,
+                contentDescription = errTitle,
+                modifier = Modifier.size(48.dp),
+                tint = MaterialTheme.colorScheme.error,
             )
-            Text(text = "请求出错啦", modifier = Modifier.padding(top = 10.dp))
+            Text(text = errTitle, modifier = Modifier.padding(top = 10.dp))
             Button(onClick = { item.retry() }, modifier = Modifier.padding(top = 10.dp)) {
-                Text(text = "重试")
+                Text(text = retry)
             }
         }
     }
 }
 
-/**
- * 刷新加载中 UI
- */
 @Composable
 fun PagingRefreshLoading() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -189,50 +163,36 @@ fun PagingRefreshLoading() {
     }
 }
 
-/**
- * 刷新空数据 UI
- */
 @Composable
 fun PagingRefreshEmpty() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = "无数据")
+        Text(text = stringResource(R.string.comm_core_paging_empty))
     }
 }
 
-//-------------------- Append Widgets --------------------
-
-/**
- * 加载更多失败 UI
- */
 @Composable
 fun PagingAppendError(item: LazyPagingItems<*>) {
     Text(
-        text = "加载失败",
+        text = stringResource(R.string.comm_core_paging_append_error),
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp)
             .clickable { item.retry() },
-        textAlign = TextAlign.Center
+        textAlign = TextAlign.Center,
     )
 }
 
-/**
- * 没有更多数据 UI
- */
 @Composable
 fun PagingAppendNoMore() {
     Text(
-        text = "没有更多了",
+        text = stringResource(R.string.comm_core_paging_no_more),
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp),
-        textAlign = TextAlign.Center
+        textAlign = TextAlign.Center,
     )
 }
 
-/**
- * 加载更多中 UI
- */
 @Composable
 fun PagingAppendLoading() {
     Box(modifier = Modifier.fillMaxWidth().height(60.dp), contentAlignment = Alignment.Center) {

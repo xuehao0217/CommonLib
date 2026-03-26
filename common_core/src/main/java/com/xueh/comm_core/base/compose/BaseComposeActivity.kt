@@ -25,10 +25,11 @@ import androidx.compose.ui.unit.sp
 import com.xueh.comm_core.R
 import com.xueh.comm_core.base.compose.theme.AppThemeType
 import com.xueh.comm_core.base.compose.theme.ComposeMaterialTheme
+import com.xueh.comm_core.base.compose.theme.PersistAppThemePreferencesEffect
 import com.xueh.comm_core.base.compose.theme.GrayAppAdapter
 import com.xueh.comm_core.base.compose.theme.appThemeType
-import com.xueh.comm_core.components.ImageCompose
-import com.xueh.comm_core.components.click
+import com.xueh.comm_core.widget.ImageCompose
+import com.xueh.comm_core.widget.clickNoRipple
 
 /**
  * 优化版 BaseComposeActivity
@@ -131,6 +132,7 @@ abstract class BaseComposeActivity : ComponentActivity() {
         }
 
         ComposeMaterialTheme {
+            PersistAppThemePreferencesEffect()
             GrayAppAdapter(isGray = false) {
                 val windowInsets = if (immersiveStatusBar() && immersiveNavigationBar()) {
                     WindowInsets(0)
@@ -259,7 +261,7 @@ fun CommonTitleView(
                 id = backIcon,
                 modifier = Modifier
                     .size(backIconSize)
-                    .click { backClick?.invoke() },
+                    .clickNoRipple { backClick?.invoke() },
                 colorFilter = if (isDark) ColorFilter.tint(Color.White) else null
             )
         } else {

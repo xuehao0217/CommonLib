@@ -59,11 +59,11 @@ import com.xueh.comm_core.base.mvvm.BaseComposeViewModel
 import com.xueh.comm_core.helper.compose.modifier
 import com.xueh.comm_core.helper.compose.onScrollDirectionChanged
 import com.xueh.comm_core.helper.compose.onScrollStopVisibleList
-import com.xueh.comm_core.components.PagingLazyColumn
-import com.xueh.comm_core.components.PagingRefreshColumn
-import com.xueh.comm_core.components.PagingVerticalGrid
-import com.xueh.comm_core.components.PagingVerticalPager
-import com.xueh.comm_core.components.SpacerH
+import com.xueh.comm_core.widget.PagingLazyColumn
+import com.xueh.comm_core.widget.PagingRefreshColumn
+import com.xueh.comm_core.widget.PagingVerticalGrid
+import com.xueh.comm_core.widget.PagingVerticalPager
+import com.xueh.comm_core.widget.SpacerH
 import com.xueh.commonlib.entity.HomeEntity
 import com.xueh.commonlib.ui.compose.DemoListRow
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel

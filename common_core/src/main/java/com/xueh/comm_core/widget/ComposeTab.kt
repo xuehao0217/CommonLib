@@ -12,12 +12,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- * ----------------------------------------------------------------------------
- * 本库说明：在 AOSP Material TabRow 基础上 fork，以暴露自定义 [MyTabPosition] 等布局数据；
- * 仅使用 Material3 `TabRow` + 自定义 indicator 无法满足当前指示器与 Tab 宽度对齐需求，故保留此实现。
  */
-package com.xueh.comm_core.components
+package com.xueh.comm_core.widget
 
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -60,7 +56,7 @@ import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastForEachIndexed
 import androidx.compose.ui.util.fastMap
 import androidx.compose.ui.util.fastMaxBy
-import com.xueh.comm_core.components.TabRowDefaults.tabIndicatorOffsetMy
+import com.xueh.comm_core.widget.TabRowDefaults.tabIndicatorOffsetMy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -146,7 +142,7 @@ fun MyTabRow(
     indicator: @Composable @UiComposable
         (tabPositions: List<MyTabPosition>) -> Unit = @Composable { tabPositions ->
         TabRowDefaults.Indicator(
-            Modifier.Companion.tabIndicatorOffsetMy(tabPositions[selectedTabIndex])
+            Modifier.tabIndicatorOffsetMy(tabPositions[selectedTabIndex])
         )
     },
     divider: @Composable @UiComposable () -> Unit =

@@ -39,8 +39,8 @@ import com.just.agentweb.DefaultWebClient
 import com.just.agentweb.MiddlewareWebChromeBase
 import com.xueh.comm_core.R
 import com.xueh.comm_core.base.compose.CommonTitleView
-import com.xueh.comm_core.components.ImageCompose
-import com.xueh.comm_core.components.click
+import com.xueh.comm_core.widget.ImageCompose
+import com.xueh.comm_core.widget.clickNoRipple
 
 /**
  * AgentWeb 全屏内容，供单 Activity 内嵌或与 [AgentComposeWebActivity] 复用。
@@ -217,7 +217,7 @@ private fun AgentWebShareAction(
             id = R.mipmap.ic_share,
             Modifier
                 .size(24.dp)
-                .click {
+                .clickNoRipple {
                     ActivityUtils.getTopActivity()?.startActivity(
                         IntentUtils.getShareTextIntent(shareUrl),
                     )

@@ -1,34 +1,28 @@
-package com.xueh.comm_core.components
+package com.xueh.comm_core.widget
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.graphics.lerp as lerpColor
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.font.lerp
-import androidx.compose.ui.unit.*
+import androidx.compose.ui.text.font.lerp as lerpFontWeight
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.lerp
+import androidx.compose.ui.unit.sp
 import kotlin.math.abs
 
-/**
- * 创 建 人: xueh
- * 创建日期: 2023/3/1
- * 备注：
- */
-/**
- * PagerTap 指示器
- * @param  height   指示器的高度
- * @param  color    指示器的颜色
- */
 @Composable
 fun PagerTabIndicator(
     tabPositions: List<MyTabPosition>,
@@ -57,26 +51,15 @@ fun PagerTabIndicator(
         drawRoundRect(
             color = color,
             topLeft = Offset(
-                indicatorOffset + ((currentTab.width-width).toPx()/ 2),
-                canvasHeight - height.toPx()
+                indicatorOffset + ((currentTab.width - width).toPx() / 2),
+                canvasHeight - height.toPx(),
             ),
             size = Size(width.toPx(), height.toPx()),
-            cornerRadius = CornerRadius(50f)
+            cornerRadius = CornerRadius(50f),
         )
     }
 }
 
-/**
- * 自定义 PagerTab
- * @param index                     对应第几个tab 从0开始
- * @param pageCount                 page的总个数
- * @param selectedContentColor      tab选中时的颜色
- * @param unselectedContentColor    tab没选中时的颜色
- * @param selectedFontSize          tab选中时的文字大小
- * @param unselectedFontSize        tab没选中时的文字大小
- * @param selectedFontWeight        tab选中时的文字比重
- * @param unselectedFontWeight      tab没选中时的文字比重
- */
 @Composable
 fun PagerTab(
     modifier: Modifier = Modifier,
@@ -103,12 +86,12 @@ fun PagerTab(
         }
 
     val fontSize = lerp(unselectedFontSize, selectedFontSize, progress)
-    val fontWeight = lerp(unselectedFontWeight, selectedFontWeight, progress)
-    val color = lerp(unselectedContentColor, selectedContentColor, progress)
+    val fontWeight = lerpFontWeight(unselectedFontWeight, selectedFontWeight, progress)
+    val color = lerpColor(unselectedContentColor, selectedContentColor, progress)
 
     Box(
         modifier = modifier,
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Text(text = text, color = color, fontSize = fontSize, fontWeight = fontWeight)
     }

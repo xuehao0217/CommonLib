@@ -1,7 +1,7 @@
 /**
  * 弹窗相关组件：[BottomSheetDialog]、[CustomDialog]、[BaseAnyPopDialog]、[BaseComposeDialog]、[ComposeLoadingDialog]。
  */
-package com.xueh.comm_core.components
+package com.xueh.comm_core.widget
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
@@ -44,13 +44,6 @@ import com.melody.dialog.any_pop.AnyPopDialogProperties
 import com.melody.dialog.any_pop.DirectionState
 import kotlin.math.roundToInt
 
-/**
- * 通用弹窗遮罩层，带渐入渐出动画。
- *
- * @param visible 是否显示遮罩
- * @param backgroundColor 遮罩背景色
- * @param onClick 点击遮罩回调
- */
 @Composable
 private fun DialogOverlay(
     visible: Boolean,
@@ -60,24 +53,17 @@ private fun DialogOverlay(
     AnimatedVisibility(
         visible = visible,
         enter = fadeIn(animationSpec = tween(durationMillis = 400, easing = LinearEasing)),
-        exit = fadeOut(animationSpec = tween(durationMillis = 400, easing = LinearEasing))
+        exit = fadeOut(animationSpec = tween(durationMillis = 400, easing = LinearEasing)),
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = backgroundColor)
-                .then(if (onClick != null) Modifier.click { onClick() } else Modifier)
+                .then(if (onClick != null) Modifier.clickNoRipple { onClick() } else Modifier),
         )
     }
 }
 
-/**
- * 自定义底部抽屉弹窗，支持拖拽下滑关闭。
- *
- * 创 建 人: xueh
- * 创建日期: 2022/11/3
- * 备注： https://juejin.cn/post/7151792921698631717
- */
 @Composable
 fun BottomSheetDialog(
     modifier: Modifier = Modifier,
@@ -85,7 +71,7 @@ fun BottomSheetDialog(
     cancelable: Boolean = true,
     canceledOnTouchOutside: Boolean = true,
     onDismissRequest: () -> Unit,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     BackHandler(enabled = visible, onBack = {
         if (cancelable) {
@@ -95,13 +81,13 @@ fun BottomSheetDialog(
     Box(modifier = modifier) {
         DialogOverlay(
             visible = visible,
-            onClick = if (canceledOnTouchOutside) onDismissRequest else null
+            onClick = if (canceledOnTouchOutside) onDismissRequest else null,
         )
         InnerDialog(
             visible = visible,
             cancelable = cancelable,
             onDismissRequest = onDismissRequest,
-            content = content
+            content = content,
         )
     }
 }
@@ -111,7 +97,7 @@ private fun BoxScope.InnerDialog(
     visible: Boolean,
     cancelable: Boolean,
     onDismissRequest: () -> Unit,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     var offsetY by remember {
         mutableStateOf(0f)
@@ -120,7 +106,7 @@ private fun BoxScope.InnerDialog(
     var bottomSheetHeight by remember { mutableStateOf(0f) }
     AnimatedVisibility(
         modifier = Modifier
-            .click { }
+            .clickNoRipple { }
             .align(alignment = Alignment.BottomCenter)
             .onGloballyPositioned {
                 bottomSheetHeight = it.size.height.toFloat()
@@ -132,11 +118,10 @@ private fun BoxScope.InnerDialog(
                 state = rememberDraggableState(
                     onDelta = {
                         offsetY = (offsetY + it.toInt()).coerceAtLeast(0f)
-                    }
+                    },
                 ),
                 orientation = Orientation.Vertical,
                 onDragStarted = {
-
                 },
                 onDragStopped = {
                     if (cancelable && offsetY > bottomSheetHeight / 2) {
@@ -144,16 +129,16 @@ private fun BoxScope.InnerDialog(
                     } else {
                         offsetY = 0f
                     }
-                }
+                },
             ),
         visible = visible,
         enter = slideInVertically(
             animationSpec = tween(durationMillis = 400, easing = LinearOutSlowInEasing),
-            initialOffsetY = { 2 * it }
+            initialOffsetY = { 2 * it },
         ),
         exit = slideOutVertically(
             animationSpec = tween(durationMillis = 400, easing = LinearOutSlowInEasing),
-            targetOffsetY = { it }
+            targetOffsetY = { it },
         ),
     ) {
         DisposableEffect(key1 = null) {
@@ -165,10 +150,6 @@ private fun BoxScope.InnerDialog(
     }
 }
 
-
-/**
- * 全屏遮罩弹窗，内容区域可自定义对齐方式。
- */
 @Composable
 fun CustomDialog(
     contentAlignment: Alignment = Alignment.TopStart,
@@ -178,7 +159,7 @@ fun CustomDialog(
     cancelable: Boolean = true,
     canceledOnTouchOutside: Boolean = true,
     onDismissRequest: () -> Unit,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     BackHandler(enabled = visible, onBack = {
         if (cancelable) {
@@ -188,7 +169,7 @@ fun CustomDialog(
     Box(modifier = modifier) {
         DialogOverlay(
             visible = visible,
-            backgroundColor = dialogBackgroundColor
+            backgroundColor = dialogBackgroundColor,
         )
         var offsetY by remember {
             mutableStateOf(0f)
@@ -197,7 +178,7 @@ fun CustomDialog(
         var bottomSheetHeight by remember { mutableStateOf(0f) }
         AnimatedVisibility(
             modifier = Modifier
-                .click { }
+                .clickNoRipple { }
                 .align(alignment = Alignment.BottomCenter)
                 .onGloballyPositioned {
                     bottomSheetHeight = it.size.height.toFloat()
@@ -208,11 +189,11 @@ fun CustomDialog(
             visible = visible,
             enter = slideInVertically(
                 animationSpec = tween(durationMillis = 400, easing = LinearOutSlowInEasing),
-                initialOffsetY = { 2 * it }
+                initialOffsetY = { 2 * it },
             ),
             exit = slideOutVertically(
                 animationSpec = tween(durationMillis = 400, easing = LinearOutSlowInEasing),
-                targetOffsetY = { it }
+                targetOffsetY = { it },
             ),
         ) {
             DisposableEffect(key1 = null) {
@@ -224,23 +205,18 @@ fun CustomDialog(
                 contentAlignment = contentAlignment,
                 modifier = Modifier
                     .fillMaxSize()
-                    .click {
+                    .clickNoRipple {
                         if (canceledOnTouchOutside) {
                             onDismissRequest()
                         }
-                    }) {
+                    },
+            ) {
                 content()
             }
-
         }
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * 基于 AnyPopDialog 的通用弹窗封装，支持指定弹出方向。
- */
 @Composable
 fun BaseAnyPopDialog(
     showDialog: MutableState<Boolean>,
@@ -250,28 +226,24 @@ fun BaseAnyPopDialog(
     if (showDialog.value) {
         val isActiveClose by remember { mutableStateOf(false) }
         AnyPopDialog(
-            modifier = Modifier.fillMaxWidth(), isActiveClose = isActiveClose,
+            modifier = Modifier.fillMaxWidth(),
+            isActiveClose = isActiveClose,
             properties = AnyPopDialogProperties(direction = direction),
             content = {
                 content()
             },
             onDismiss = {
                 showDialog.value = false
-            }
+            },
         )
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * 基于系统 Dialog 的 Compose 弹窗封装。
- */
 @Composable
 fun BaseComposeDialog(
     alertDialog: MutableState<Boolean>,
     properties: DialogProperties = DialogProperties(usePlatformDefaultWidth = false),
-    onDismiss:()->Unit={},
+    onDismiss: () -> Unit = {},
     content: @Composable () -> Unit,
 ) {
     if (alertDialog.value) {
@@ -287,30 +259,24 @@ fun BaseComposeDialog(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * 带 CircularProgressIndicator 的加载中弹窗。
- */
 @Composable
 fun ComposeLoadingDialog(
     alertDialog: MutableState<Boolean>,
     properties: DialogProperties = DialogProperties(usePlatformDefaultWidth = false),
-    onDismiss:()->Unit={},
+    onDismiss: () -> Unit = {},
 ) {
     if (alertDialog.value) {
         BaseComposeDialog(
             alertDialog,
             properties = properties,
-            onDismiss=onDismiss,
+            onDismiss = onDismiss,
         ) {
             Box(modifier = Modifier.fillMaxSize(), Alignment.Center) {
                 CircularProgressIndicator(
                     strokeWidth = 2.5.dp,
-                    modifier = Modifier.size(30.dp)
+                    modifier = Modifier.size(30.dp),
                 )
             }
         }
     }
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////

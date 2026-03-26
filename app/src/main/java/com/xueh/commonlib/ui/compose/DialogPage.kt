@@ -20,10 +20,10 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.xueh.comm_core.components.BottomSheetDialog
-import com.xueh.comm_core.components.BoxText
-import com.xueh.comm_core.components.CustomDialog
-import com.xueh.comm_core.components.click
+import com.xueh.comm_core.widget.BottomSheetDialog
+import com.xueh.comm_core.widget.CustomDialog
+import com.xueh.comm_core.widget.BoxText
+import com.xueh.comm_core.widget.clickNoRipple
 
 /**
  * 创 建 人: xueh
@@ -52,7 +52,7 @@ fun DialogPage() {
                 .size(180.dp, 44.dp)
                 .clip(RoundedCornerShape(22.dp))
                 .background(MaterialTheme.colorScheme.primary)
-                .click {
+                .clickNoRipple {
                     alertDialog.value = true
                 })
         Spacer(modifier = Modifier.height(15.dp))
@@ -62,7 +62,7 @@ fun DialogPage() {
                 .size(180.dp, 44.dp)
                 .clip(RoundedCornerShape(22.dp))
                 .background(MaterialTheme.colorScheme.primary)
-                .click {
+                .clickNoRipple {
                     fullScreenDialog.value = true
                 })
         Spacer(modifier = Modifier.height(15.dp))
@@ -72,7 +72,7 @@ fun DialogPage() {
                 .size(180.dp, 44.dp)
                 .clip(RoundedCornerShape(22.dp))
                 .background(MaterialTheme.colorScheme.primary)
-                .click {
+                .clickNoRipple {
                     bottomSheetDialog = true
                 })
         Spacer(modifier = Modifier.height(15.dp))
@@ -82,7 +82,7 @@ fun DialogPage() {
                 .size(180.dp, 44.dp)
                 .clip(RoundedCornerShape(22.dp))
                 .background(MaterialTheme.colorScheme.primary)
-                .click {
+                .clickNoRipple {
                     customDialog = true
                 })
         Spacer(modifier = Modifier.height(15.dp))
@@ -92,7 +92,7 @@ fun DialogPage() {
                 .size(180.dp, 44.dp)
                 .clip(RoundedCornerShape(22.dp))
                 .background(MaterialTheme.colorScheme.primary)
-                .click {
+                .clickNoRipple {
                     showBottomSheet = true
                 })
     }

@@ -1,4 +1,4 @@
-package com.xueh.comm_core.components
+package com.xueh.comm_core.widget
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
@@ -55,14 +55,6 @@ import com.king.ultraswiperefresh.indicator.classic.ClassicRefreshHeader
 import com.king.ultraswiperefresh.rememberUltraSwipeRefreshState
 import com.xueh.comm_core.helper.compose.onScrollStopVisibleList
 
-// ==========================================
-// 内部公共：滚动停止可见项监听
-// ==========================================
-
-/**
- * 监听滚动停止后的可见项列表，将可见索引映射为实际数据并回调。
- * 三种列表组件（LazyColumn / Grid / StaggeredGrid）共享此逻辑。
- */
 @Composable
 private fun <T : Any> LazyPagingItems<T>.ObserveVisibleItemsOnScrollStop(
     onStop: ((List<T>) -> Unit)?,
@@ -76,18 +68,6 @@ private fun <T : Any> LazyPagingItems<T>.ObserveVisibleItemsOnScrollStop(
     }
 }
 
-// ==========================================
-// LazyColumn
-// ==========================================
-
-/**
- * Paging3 + LazyColumn 封装，支持下拉刷新与加载更多状态展示。
- *
- * 默认自动展示刷新状态页（加载中/错误/空数据）和加载更多状态，
- * 可通过 [pagingRefreshStateContent] / [pagingAppendStateContent] 自定义。
- *
- * @param contentType 用于 Compose 优化 item 复用池，不同类型的 item 不会被错误复用
- */
 @Composable
 fun <T : Any> LazyPagingItems<T>.PagingLazyColumn(
     lazyListState: LazyListState = rememberLazyListState(),
@@ -118,7 +98,7 @@ fun <T : Any> LazyPagingItems<T>.PagingLazyColumn(
         items(
             count = itemCount,
             key = key,
-            contentType = { contentType?.invoke(it) }
+            contentType = { contentType?.invoke(it) },
         ) { index ->
             this@PagingLazyColumn[index]?.let { itemContent(it) }
         }
@@ -127,15 +107,6 @@ fun <T : Any> LazyPagingItems<T>.PagingLazyColumn(
     pagingRefreshStateContent()
 }
 
-// ==========================================
-// LazyVerticalGrid
-// ==========================================
-
-/**
- * Paging3 + LazyVerticalGrid 封装，支持分页网格列表与刷新/加载更多状态。
- *
- * @param contentType 用于 Compose 优化 item 复用池
- */
 @Composable
 fun <T : Any> LazyPagingItems<T>.PagingVerticalGrid(
     modifier: Modifier = Modifier,
@@ -159,12 +130,12 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalGrid(
         columns = GridCells.Fixed(columns),
         state = state,
         contentPadding = contentPadding,
-        horizontalArrangement = horizontalArrangement
+        horizontalArrangement = horizontalArrangement,
     ) {
         items(
             count = itemCount,
             key = key,
-            contentType = { contentType?.invoke(it) }
+            contentType = { contentType?.invoke(it) },
         ) { index ->
             this@PagingVerticalGrid[index]?.let { itemContent(it) }
         }
@@ -173,15 +144,6 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalGrid(
     pagingRefreshStateContent()
 }
 
-// ==========================================
-// LazyVerticalStaggeredGrid
-// ==========================================
-
-/**
- * Paging3 + LazyVerticalStaggeredGrid 封装，支持分页瀑布流布局。
- *
- * @param contentType 用于 Compose 优化 item 复用池
- */
 @Composable
 fun <T : Any> LazyPagingItems<T>.PagingVerticalStaggeredGrid(
     modifier: Modifier = Modifier,
@@ -207,12 +169,12 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalStaggeredGrid(
         state = state,
         contentPadding = contentPadding,
         horizontalArrangement = horizontalArrangement,
-        verticalItemSpacing = verticalItemSpacing
+        verticalItemSpacing = verticalItemSpacing,
     ) {
         items(
             count = itemCount,
             key = key,
-            contentType = { contentType?.invoke(it) }
+            contentType = { contentType?.invoke(it) },
         ) { index ->
             this@PagingVerticalStaggeredGrid[index]?.let { itemContent(it) }
         }
@@ -221,19 +183,6 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalStaggeredGrid(
     pagingRefreshStateContent()
 }
 
-// ==========================================
-// VerticalPager
-// ==========================================
-
-/**
- * Paging3 + VerticalPager 封装，支持分页数据的垂直翻页展示。
- *
- * 注意：默认 [state] 的 pageCount 通过 lambda 读取 [itemCount]，能自动感知 Paging 加载。
- * 如果调用方传入自定义 PagerState，需确保其 pageCount 与 LazyPagingItems.itemCount 保持同步，
- * 否则可能出现页数不一致导致的越界或空白页。
- *
- * 当 [itemCount] 收缩且当前页超出范围时，会通过 [LaunchedEffect] 将页面校正到最后一页，避免停留在无效页。
- */
 @Composable
 fun <T : Any> LazyPagingItems<T>.PagingVerticalPager(
     state: PagerState = rememberPagerState { itemCount },
@@ -252,23 +201,13 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalPager(
         modifier = modifier,
         state = state,
         key = key,
-        beyondViewportPageCount = beyondViewportPageCount
+        beyondViewportPageCount = beyondViewportPageCount,
     ) { index ->
         this@PagingVerticalPager[index]?.let { pageContent(it) }
     }
     pagingRefreshStateContent()
 }
 
-// ==========================================
-// Refresh（UltraSwipeRefresh）
-// ==========================================
-
-/**
- * 基于 UltraSwipeRefresh 的分页刷新组件。
- *
- * 将下拉刷新与 Paging 的 refresh 能力集成，支持自定义刷新头。
- * Paging3 的加载更多由框架自动触发，因此禁用了 UltraSwipeRefresh 的上拉加载功能。
- */
 @Composable
 fun <T : Any> LazyPagingItems<T>.PagingRefresh(
     modifier: Modifier = Modifier,
@@ -287,7 +226,6 @@ fun <T : Any> LazyPagingItems<T>.PagingRefresh(
         state = state,
         loadMoreEnabled = false,
         onRefresh = { refresh() },
-        // loadMoreEnabled = false 时不会触发；占位以满足库 API。Paging3 的 append 由列表滚动自动触发。
         onLoadMore = {},
         modifier = modifier,
         headerScrollMode = NestedScrollMode.Translate,
@@ -295,24 +233,12 @@ fun <T : Any> LazyPagingItems<T>.PagingRefresh(
         headerIndicator = {
             refreshHeader?.invoke(isRefreshing) ?: ClassicRefreshHeader(it)
         },
-        footerIndicator = {}
+        footerIndicator = {},
     ) {
         currentItems.value(this)
     }
 }
 
-// ==========================================
-// Refresh（Material3 PullToRefresh）
-// ==========================================
-
-/**
- * 基于 Material3 PullToRefresh 的分页刷新列布局。
- *
- * 使用 M3 pullToRefresh 实现下拉刷新，与 Paging 的 refresh 联动。
- *
- * @param modifier 外部布局修饰符
- * @param refreshHeader 刷新头部内容，默认展示 CircularProgressIndicator
- */
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun <T : Any> LazyPagingItems<T>.PagingRefreshColumn(
@@ -330,12 +256,12 @@ fun <T : Any> LazyPagingItems<T>.PagingRefreshColumn(
         modifier = modifier
             .fillMaxSize()
             .animateContentSize()
-            .pullToRefresh(state = state, isRefreshing = isRefreshing) { refresh() }
+            .pullToRefresh(state = state, isRefreshing = isRefreshing) { refresh() },
     ) {
         AnimatedVisibility(
             visible = isRefreshing,
             enter = fadeIn() + scaleIn() + expandVertically(),
-            exit = fadeOut() + scaleOut() + shrinkVertically()
+            exit = fadeOut() + scaleOut() + shrinkVertically(),
         ) {
             refreshHeader()
         }
@@ -344,7 +270,7 @@ fun <T : Any> LazyPagingItems<T>.PagingRefreshColumn(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxSize(),
-            contentAlignment = Alignment.TopCenter
+            contentAlignment = Alignment.TopCenter,
         ) {
             onContent(this@PagingRefreshColumn)
         }

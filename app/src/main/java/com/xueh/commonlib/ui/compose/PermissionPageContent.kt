@@ -1,73 +1,64 @@
 package com.xueh.commonlib.ui.compose
 
+import android.Manifest
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
 import com.blankj.utilcode.util.ToastUtils
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionStatus
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import com.google.accompanist.permissions.rememberPermissionState
-import com.lt.compose_views.util.rememberMutableStateOf
-import com.xueh.comm_core.components.SpacerH
+import com.xueh.comm_core.widget.SpacerH
 
 /**
- * 创 建 人: xueh
- * 创建日期: 2023/5/25
- * 备注：
+ * 权限申请演示：使用 [ActivityResultContracts]（官方推荐），不再依赖已停止维护的 Accompanist Permissions。
  */
-@OptIn(ExperimentalPermissionsApi::class)
 @Preview
 @Composable
 fun PermissionPageContent() {
-    val cameraPermissionState = rememberPermissionState(
-        android.Manifest.permission.CAMERA
-    )
+    var singlePermissionStr by remember { mutableStateOf("申请单个权限") }
+    var multiplePermissionStr by remember { mutableStateOf("申请多个权限") }
 
-    val multiplePermissionState = rememberMultiplePermissionsState(
-        listOf(android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    )
-
-    var singlePermissionStr by rememberMutableStateOf{  "申请单个权限"}
-    var multiplePermissionStr by rememberMutableStateOf{"申请多个权限"}
-
-    when (cameraPermissionState.status) {
-        PermissionStatus.Granted -> {//已授权
-            singlePermissionStr="申请单个权限-已授权"
+    val cameraLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+    ) { granted ->
+        if (granted) {
+            singlePermissionStr = "申请单个权限-已授权"
             ToastUtils.showShort("已授权")
-        }
-
-        is PermissionStatus.Denied -> {
-            if ((cameraPermissionState.status as PermissionStatus.Denied).shouldShowRationale) {
-                //如果用户拒绝了该权限但可以显示理由，那么请温和地解释为什么应用程序需要此权限(拒绝权限)
-//                "The camera is important for this app. Please grant the permission."
-                ToastUtils.showShort("拒绝权限")
-                singlePermissionStr="申请单个权限-拒绝"
-            } else {
-                ToastUtils.showShort("用户选择拒绝且不再询问")
-                singlePermissionStr="申请单个权限-拒绝且不再询问"
-                //如果这是用户第一次登陆此功能，或者用户不想再次被要求获得此权限，请说明该权限是必需的(用户选择拒绝且不再询问)
-//                "Camera permission required for this feature to be available. " +
-//                        "Please grant the permission"
-            }
+        } else {
+            singlePermissionStr = "申请单个权限-已拒绝"
+            ToastUtils.showShort("已拒绝相机权限")
         }
     }
 
-    if (multiplePermissionState.allPermissionsGranted) {
-        ToastUtils.showShort("用户全部允许")
-        multiplePermissionStr="申请多个权限-全部允许"
+    val multipleLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions(),
+    ) { result ->
+        val allGranted = result.values.all { it }
+        if (allGranted) {
+            multiplePermissionStr = "申请多个权限-全部允许"
+            ToastUtils.showShort("用户全部允许")
+        } else {
+            multiplePermissionStr = "申请多个权限-未全部允许"
+            ToastUtils.showShort("部分或全部权限未授予")
+        }
     }
 
     Column {
         ItemView(singlePermissionStr) {
-            cameraPermissionState.launchPermissionRequest()
+            cameraLauncher.launch(Manifest.permission.CAMERA)
         }
         SpacerH(10)
         ItemView(multiplePermissionStr) {
-            multiplePermissionState.launchMultiplePermissionRequest()
+            multipleLauncher.launch(
+                arrayOf(
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                ),
+            )
         }
     }
-
 }

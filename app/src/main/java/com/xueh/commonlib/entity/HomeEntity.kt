@@ -1,13 +1,5 @@
 package com.xueh.commonlib.entity
 
-import kotlinx.serialization.Serializable
-
-/**
- * 玩 Android 开放 API 文章列表分页结构（与 [com.xueh.commonlib.api.RestApi.getHome] 响应一致）。
- *
- * 必须带 [Serializable]：全局 Retrofit 使用 [kotlinx.serialization.json.Json] 反序列化（见 [com.xueh.comm_core.net.HttpRequest]）。
- */
-@Serializable
 data class HomeEntity(
     var curPage: Int = 0, // 2
     var datas: List<Data> = listOf(),
@@ -17,7 +9,6 @@ data class HomeEntity(
     var size: Int = 0, // 20
     var total: Int = 0 // 12641
 ) {
-    @Serializable
     data class Data(
         var apkLink: String = "",
         var audit: Int = 0, // 1
@@ -53,7 +44,6 @@ data class HomeEntity(
         var visible: Int = 0, // 1
         var zan: Int = 0 // 0
     ) {
-        @Serializable
         data class Tag(
             var name: String = "", // 项目
             var url: String = "" // /project/list/1?cid=294

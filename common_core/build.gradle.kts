@@ -74,7 +74,6 @@ dependencies {
     api(libs.compose.animation)
     api(libs.androidx.activity.compose)
     api(libs.compose.paging)
-    api(libs.accompanist.permissions)
     api(libs.compose.lifecycle.runtime)
     api(libs.compose.lifecycle.viewmodel)
     api(libs.compose.runtime.livedata)
