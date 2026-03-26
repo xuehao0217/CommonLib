@@ -4,18 +4,12 @@ import android.content.Intent
 import android.net.Uri
 import android.text.TextUtils
 import android.view.KeyEvent
-import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.LinearLayout
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -23,19 +17,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.IntentUtils
-import com.blankj.utilcode.util.Utils
 import com.just.agentweb.AgentWeb
-import com.just.agentweb.AgentWebConfig
 import com.just.agentweb.DefaultWebClient
 import com.just.agentweb.MiddlewareWebChromeBase
 import com.xueh.comm_core.R
@@ -78,13 +68,20 @@ class AgentComposeWebActivity : BaseComposeActivity() {
             BarUtils.setStatusBarLightMode(this, false)
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
                 AgentWeb()
-                WebTitle(titleStr, alpha) {
-                    if (agentWeb?.back() == true) {
-                        agentWeb?.back()
-                    } else {
-                        onBackPressedDispatcher.onBackPressed()
+                WebTitle(
+                    title = titleStr,
+                    alpha = alpha,
+                    rightContent = { isDark ->
+                        TitleRightShare(
+                            colorFilter = if (isDark) ColorFilter.tint(Color.White) else null
+                        )
+                    },
+                    back = {
+                        if (agentWeb?.back() != true) {
+                            onBackPressedDispatcher.onBackPressed()
+                        }
                     }
-                }
+                )
             }
         } else {
             BarUtils.setStatusBarLightMode(this, true)
@@ -95,9 +92,7 @@ class AgentComposeWebActivity : BaseComposeActivity() {
                     TitleRightShare()
                 },
                 backClick = {
-                    if (agentWeb?.back() == true) {
-                        agentWeb?.back()
-                    } else {
+                    if (agentWeb?.back() != true) {
                         onBackPressedDispatcher.onBackPressed()
                     }
                 })
@@ -116,41 +111,38 @@ class AgentComposeWebActivity : BaseComposeActivity() {
     fun AgentWeb(modifier: Modifier = Modifier.fillMaxSize()) {
         AndroidView(
             modifier = modifier,
-            factory = {
-                LinearLayout(it).apply {
+            factory = { context ->
+                LinearLayout(context).apply {
                     layoutParams = ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT
                     )
-                }
-            },
-            update = {
-                agentWeb = AgentWeb.with(this)
-                    .setAgentWebParent(
-                        it,
-                        LinearLayout.LayoutParams(-1, -1)
-                    )
-                    .useDefaultIndicator()
-                    .interceptUnkownUrl()
-                    .setOpenOtherPageWays(DefaultWebClient.OpenOtherPageWays.ASK)
-                    .setSecurityType(AgentWeb.SecurityType.STRICT_CHECK)
-                    .useMiddlewareWebChrome(object : MiddlewareWebChromeBase() {
-                        override fun onReceivedTitle(view: WebView, title: String) {
-                            super.onReceivedTitle(view, title)
-                            if (!TextUtils.isEmpty(title) && titleStr.isEmpty()) {
-                                if (title.length > 10) {
-                                    titleStr = title.substring(0, 10) + "..."
-                                }else{
-                                    titleStr = title
+                }.also { parent ->
+                    agentWeb = AgentWeb.with(this@AgentComposeWebActivity)
+                        .setAgentWebParent(
+                            parent,
+                            LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.MATCH_PARENT
+                            )
+                        )
+                        .useDefaultIndicator()
+                        .interceptUnkownUrl()
+                        .setOpenOtherPageWays(DefaultWebClient.OpenOtherPageWays.ASK)
+                        .setSecurityType(AgentWeb.SecurityType.STRICT_CHECK)
+                        .useMiddlewareWebChrome(object : MiddlewareWebChromeBase() {
+                            override fun onReceivedTitle(view: WebView, title: String) {
+                                super.onReceivedTitle(view, title)
+                                if (!TextUtils.isEmpty(title) && titleStr.isEmpty()) {
+                                    titleStr = truncateWebTitle(title)
                                 }
                             }
-                        }
-                    })
-                    .createAgentWeb()
-                    .ready()
-                    .go(getUrl())
-
-            }
+                        })
+                        .createAgentWeb()
+                        .ready()
+                        .go(getUrl())
+                }
+            },
         )
     }
 
@@ -178,51 +170,6 @@ class AgentComposeWebActivity : BaseComposeActivity() {
     }
 
     var showShare by mutableStateOf(false)
-
-    @Preview
-    @Composable
-    fun WebTitle(title: String = "", alpha: Float = 0f, back: () -> Unit = {}) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .alpha(1f - alpha)
-                    .background(Color.Transparent)
-                    .statusBarsPadding()
-            ) {
-                CommonTitleView(
-                    titleBackgroundColor = Color.Transparent,
-                    title = "",
-                    backIcon = R.mipmap.bar_icon_back_white,
-                    backClick = back, rightContent = {
-                        TitleRightShare(colorFilter = ColorFilter.tint(Color.White))
-                    }
-                )
-            }
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .alpha(alpha - 1f)
-                    .background(Color.White)
-                    .statusBarsPadding()
-            ) {
-                CommonTitleView(
-                    titleBackgroundColor = Color.White,
-                    title = title,
-                    backIcon = R.mipmap.bar_icon_back_black, backClick = back,
-                    rightContent = {
-                        TitleRightShare()
-                    }
-                )
-            }
-        }
-    }
-
 
     @Composable
     fun TitleRightShare(colorFilter: ColorFilter? = null) {

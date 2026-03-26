@@ -11,18 +11,16 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
@@ -32,7 +30,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.Dp
@@ -46,6 +43,35 @@ import com.melody.dialog.any_pop.DirectionState
 import kotlin.math.roundToInt
 
 /**
+ * 通用弹窗遮罩层，带渐入渐出动画。
+ *
+ * @param visible 是否显示遮罩
+ * @param backgroundColor 遮罩背景色
+ * @param onClick 点击遮罩回调
+ */
+@Composable
+private fun DialogOverlay(
+    visible: Boolean,
+    backgroundColor: Color = Color(0x99000000),
+    onClick: (() -> Unit)? = null,
+) {
+    AnimatedVisibility(
+        visible = visible,
+        enter = fadeIn(animationSpec = tween(durationMillis = 400, easing = LinearEasing)),
+        exit = fadeOut(animationSpec = tween(durationMillis = 400, easing = LinearEasing))
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = backgroundColor)
+                .then(if (onClick != null) Modifier.click { onClick() } else Modifier)
+        )
+    }
+}
+
+/**
+ * 自定义底部抽屉弹窗，支持拖拽下滑关闭。
+ *
  * 创 建 人: xueh
  * 创建日期: 2022/11/3
  * 备注： https://juejin.cn/post/7151792921698631717
@@ -65,22 +91,10 @@ fun BottomSheetDialog(
         }
     })
     Box(modifier = modifier) {
-        AnimatedVisibility(
+        DialogOverlay(
             visible = visible,
-            enter = fadeIn(animationSpec = tween(durationMillis = 400, easing = LinearEasing)),
-            exit = fadeOut(animationSpec = tween(durationMillis = 400, easing = LinearEasing))
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = Color(0x99000000))
-                    .clickableNoRipple {
-                        if (canceledOnTouchOutside) {
-                            onDismissRequest()
-                        }
-                    }
-            )
-        }
+            onClick = if (canceledOnTouchOutside) onDismissRequest else null
+        )
         InnerDialog(
             visible = visible,
             cancelable = cancelable,
@@ -104,9 +118,7 @@ private fun BoxScope.InnerDialog(
     var bottomSheetHeight by remember { mutableStateOf(0f) }
     AnimatedVisibility(
         modifier = Modifier
-            .clickableNoRipple {
-
-            }
+            .click { }
             .align(alignment = Alignment.BottomCenter)
             .onGloballyPositioned {
                 bottomSheetHeight = it.size.height.toFloat()
@@ -151,16 +163,10 @@ private fun BoxScope.InnerDialog(
     }
 }
 
-private fun Modifier.clickableNoRipple(onClick: () -> Unit): Modifier =
-    composed {
-        clickable(
-            indication = null,
-            interactionSource = remember { MutableInteractionSource() }) {
-            onClick()
-        }
-    }
 
-
+/**
+ * 全屏遮罩弹窗，内容区域可自定义对齐方式。
+ */
 @Composable
 fun CustomDialog(
     contentAlignment: Alignment = Alignment.TopStart,
@@ -178,17 +184,10 @@ fun CustomDialog(
         }
     })
     Box(modifier = modifier) {
-        AnimatedVisibility(
+        DialogOverlay(
             visible = visible,
-            enter = fadeIn(animationSpec = tween(durationMillis = 400, easing = LinearEasing)),
-            exit = fadeOut(animationSpec = tween(durationMillis = 400, easing = LinearEasing))
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = dialogBackgroundColor)
-            )
-        }
+            backgroundColor = dialogBackgroundColor
+        )
         var offsetY by remember {
             mutableStateOf(0f)
         }
@@ -196,9 +195,7 @@ fun CustomDialog(
         var bottomSheetHeight by remember { mutableStateOf(0f) }
         AnimatedVisibility(
             modifier = Modifier
-                .clickableNoRipple {
-
-                }
+                .click { }
                 .align(alignment = Alignment.BottomCenter)
                 .onGloballyPositioned {
                     bottomSheetHeight = it.size.height.toFloat()
@@ -225,7 +222,7 @@ fun CustomDialog(
                 contentAlignment = contentAlignment,
                 modifier = Modifier
                     .fillMaxSize()
-                    .clickableNoRipple {
+                    .click {
                         if (canceledOnTouchOutside) {
                             onDismissRequest()
                         }
@@ -238,6 +235,10 @@ fun CustomDialog(
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * 基于 AnyPopDialog 的通用弹窗封装，支持指定弹出方向。
+ */
 @Composable
 fun BaseAnyPopDialog(
     showDialog: MutableState<Boolean>,
@@ -261,6 +262,9 @@ fun BaseAnyPopDialog(
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * 基于系统 Dialog 的 Compose 弹窗封装。
+ */
 @Composable
 fun BaseComposeDialog(
     alertDialog: MutableState<Boolean>,
@@ -282,6 +286,10 @@ fun BaseComposeDialog(
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * 带 CircularProgressIndicator 的加载中弹窗。
+ */
 @Composable
 fun ComposeLoadingDialog(
     alertDialog: MutableState<Boolean>,

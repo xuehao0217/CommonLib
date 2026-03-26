@@ -15,12 +15,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,8 +27,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.blankj.utilcode.util.LogUtils
-import com.blankj.utilcode.util.ToastUtils
-import kotlinx.coroutines.launch
+import com.xueh.comm_core.R
+import com.xueh.comm_core.base.compose.CommonTitleView
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.ColorFilter
 
 //https://gist.github.com/TheMelody/6ec3fcba6d57f544465651acc480ff39
 @Preview
@@ -74,7 +79,7 @@ fun WebViewPage(
             }
         )
         LinearProgressIndicator(
-            progress = rememberWebViewProgress * 1.0F / 100F,
+            progress = { rememberWebViewProgress * 1.0F / 100F },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(if (rememberWebViewProgress == 100) 0.dp else 5.dp),
@@ -148,25 +153,85 @@ fun CustomWebView(
         }
     }
     var webView: WebView? = null
-    val coroutineScope = rememberCoroutineScope()
     AndroidView(modifier = modifier, factory = { ctx ->
         WebView(ctx).apply {
             this.webViewClient = webViewClient
             this.webChromeClient = webViewChromeClient
-            //回调webSettings供调用方设置webSettings的相关配置
             initSettings(this.settings)
             webView = this
             loadUrl(url)
         }
     })
     BackHandler {
-        coroutineScope.launch {
-            //自行控制点击了返回按键之后，关闭页面还是返回上一级网页
-            if (webView?.canGoBack() == true) {
-                webView?.goBack()
-            } else {
-                onBack.invoke()
-            }
+        if (webView?.canGoBack() == true) {
+            webView?.goBack()
+        } else {
+            onBack.invoke()
         }
     }
 }
+
+/**
+ * 通用 Web 页标题栏（支持滚动渐变效果）
+ *
+ * 通过 alpha 值控制两层标题栏的显隐切换：
+ * - alpha 接近 0 时，显示透明底 + 白色返回图标
+ * - alpha 接近 1 时，显示白色底 + 黑色返回图标 + 标题文字
+ *
+ * @param title 标题文字
+ * @param alpha 透明度（0~1），通常由页面滚动距离计算得出
+ * @param rightContent 右侧可选内容（如分享按钮）
+ * @param back 返回按钮点击回调
+ */
+@Composable
+fun WebTitle(
+    title: String = "",
+    alpha: Float = 0f,
+    rightContent: (@Composable (isDark: Boolean) -> Unit)? = null,
+    back: () -> Unit = {},
+) {
+    Box(modifier = Modifier.fillMaxWidth()) {
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .alpha(1f - alpha)
+                .background(Color.Transparent)
+                .statusBarsPadding()
+        ) {
+            CommonTitleView(
+                titleBackgroundColor = Color.Transparent,
+                title = "",
+                backIcon = R.mipmap.bar_icon_back_white,
+                backClick = back,
+                rightContent = { rightContent?.invoke(true) }
+            )
+        }
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .alpha(alpha)
+                .background(Color.White)
+                .statusBarsPadding()
+        ) {
+            CommonTitleView(
+                titleBackgroundColor = Color.White,
+                title = title,
+                backIcon = R.mipmap.bar_icon_back_black,
+                backClick = back,
+                rightContent = { rightContent?.invoke(false) }
+            )
+        }
+    }
+}
+
+/**
+ * 处理 WebView 接收到的标题，超过 [maxLength] 时截断并添加省略号。
+ *
+ * @param title 原始标题
+ * @param maxLength 最大显示长度，默认 10
+ * @return 处理后的标题
+ */
+fun truncateWebTitle(title: String, maxLength: Int = 10): String =
+    if (title.length > maxLength) title.substring(0, maxLength) + "..." else title

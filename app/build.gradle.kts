@@ -13,14 +13,14 @@ plugins {
 
 android {
     namespace = "com.xueh.commonlib"
-    compileSdk = rootProject.extra["compileSdk"] as Int
+    compileSdk = libs.versions.compileSdk.get().toInt()
     defaultConfig {
-        applicationId = rootProject.extra["applicationId"] as String
-        minSdk =rootProject.extra["minSdk"] as Int
-        targetSdk = rootProject.extra["targetSdk"] as Int
+        applicationId = libs.versions.applicationId.get()
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
 
-        versionCode =rootProject.extra["versionCode"] as Int
-        versionName = rootProject.extra["versionName"] as String
+        versionCode = libs.versions.versionCode.get().toInt()
+        versionName = libs.versions.versionName.get()
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -78,13 +78,13 @@ android {
 //                val versionName = config.versionName
 //                val formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd.HH.mm")
 //                val createTime = LocalDateTime.now().format(formatter)
-//                this.outputFileName = "${rootProject.extra["appName"]}_${this.name}_${versionName}_$createTime.apk"
+//                this.outputFileName = "${libs.versions.appName.get()}_${this.name}_${versionName}_$createTime.apk"
 //            }
 //        }
 //    }
 
     defaultConfig {
-        setProperty("archivesBaseName", "${rootProject.extra["appName"]}-v${versionName}-${SimpleDateFormat("yyyy.MMdd.HH.mm.ss").format(Date())}")
+        setProperty("archivesBaseName", "${libs.versions.appName.get()}-v${versionName}-${SimpleDateFormat("yyyy.MMdd.HH.mm.ss").format(Date())}")
     }
 
 

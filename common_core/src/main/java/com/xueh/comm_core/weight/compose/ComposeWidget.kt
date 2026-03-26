@@ -8,7 +8,7 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.pager.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
@@ -25,42 +25,38 @@ import kotlinx.coroutines.launch
 
 //------------------------------------------- Text 相关 -------------------------------------------
 
-//SpanText(
-//list = listOf(
-//SpanTextEntity("登录即同意", SpanStyle(color = Color.Black)),
-//SpanTextEntity("《用户协议》", SpanStyle(color = Color.Blue)) {
-//    ToastUtils.showShort("点击了 用户协议")
-//},
-//SpanTextEntity("和", SpanStyle(color = Color.Black)),
-//SpanTextEntity("《隐私政策》", SpanStyle(color = Color.Blue)) {
-//    ToastUtils.showShort("点击了 隐私政策")
-//},
-//), modifier = Modifier.padding(16.dp)
-//)
-
 /**
  * 可点击的富文本
+ *
+ * 使用 LinkAnnotation 替代已弃用的 ClickableText，
+ * 通过 buildAnnotatedString + withLink 实现每段文本的独立点击事件。
+ *
  * @param list 包含文本、样式和点击事件的列表
  */
 @Composable
 fun SpanText(list: List<SpanTextEntity>, modifier: Modifier = Modifier) {
     val annotatedString = buildAnnotatedString {
         list.forEach { item ->
-            withStyle(item.spanStyle) {
-                pushStringAnnotation(tag = item.text, annotation = item.text)
-                append(item.text)
+            if (item.click != null) {
+                val link = LinkAnnotation.Clickable(
+                    tag = item.text,
+                    linkInteractionListener = { item.click.invoke() }
+                )
+                withLink(link) {
+                    withStyle(item.spanStyle) {
+                        append(item.text)
+                    }
+                }
+            } else {
+                withStyle(item.spanStyle) {
+                    append(item.text)
+                }
             }
         }
     }
-    ClickableText(
+    Text(
         text = annotatedString,
         modifier = modifier,
-        onClick = { offset ->
-            list.forEach { item ->
-                annotatedString.getStringAnnotations(item.text, offset, offset)
-                    .firstOrNull()?.let { item.click?.invoke() }
-            }
-        }
     )
 }
 
@@ -93,32 +89,52 @@ fun HighlightText(
     Text(text = annotatedString, modifier = modifier, style = style, color = textColor)
 }
 
+private const val SPLICING_INLINE_KEY = "splicing_tag"
+
 /**
- * 带内嵌标记的文本
+ * 带内嵌标签的文本
+ *
+ * @param str 主体文本
+ * @param tagText 标签文字
+ * @param tagColor 标签背景色
+ * @param tagTextColor 标签文字颜色
+ * @param tagCornerRadius 标签圆角
+ * @param tagWidth 标签宽度
+ * @param tagHeight 标签高度
+ * @param placeholderWidth InlineContent 占位宽度（需 >= tagWidth + 间距）
+ * @param placeholderHeight InlineContent 占位高度
  */
 @Composable
 fun SplicingText(
     str: String,
     modifier: Modifier = Modifier,
+    tagText: String = "Splicing",
+    tagColor: Color = Color(0xFFFE3714),
+    tagTextColor: Color = Color.White,
+    tagCornerRadius: Dp = 3.dp,
+    tagWidth: Dp = 35.dp,
+    tagHeight: Dp = 18.dp,
+    placeholderWidth: TextUnit = 43.sp,
+    placeholderHeight: TextUnit = 18.sp,
     style: TextStyle = LocalTextStyle.current
 ) {
     val annotatedString = buildAnnotatedString {
-        appendInlineContent("Splicing")
+        appendInlineContent(SPLICING_INLINE_KEY)
         append(str)
     }
     val inlineContent = mapOf(
-        "Splicing" to InlineTextContent(
-            Placeholder(43.sp, 18.sp, PlaceholderVerticalAlign.TextCenter)
+        SPLICING_INLINE_KEY to InlineTextContent(
+            Placeholder(placeholderWidth, placeholderHeight, PlaceholderVerticalAlign.TextCenter)
         ) {
             BoxText(
-                text = "Splicing",
-                textColor = Color.White,
+                text = tagText,
+                textColor = tagTextColor,
                 fontSize = 10.sp,
                 fontWeight = FontWeight.Medium,
                 modifier = Modifier
-                    .width(35.dp)
-                    .height(18.dp)
-                    .background(Color(0xFFFE3714), RoundedCornerShape(3.dp))
+                    .width(tagWidth)
+                    .height(tagHeight)
+                    .background(tagColor, RoundedCornerShape(tagCornerRadius))
             )
             Spacer(Modifier.width(8.dp))
         }
@@ -135,9 +151,16 @@ fun SplicingText(
 
 //------------------------------------------- Spacer 相关 -------------------------------------------
 
+/** 宽度间距，接受 Int 类型参数（单位 dp） */
 @Composable fun SpacerW(dp: Int) = Spacer(Modifier.width(dp.dp))
+
+/** 高度间距，接受 Int 类型参数（单位 dp） */
 @Composable fun SpacerH(dp: Int) = Spacer(Modifier.height(dp.dp))
+
+/** 宽度间距，接受 Dp 类型参数 */
 @Composable fun SpacerWidth(width: Dp) = Spacer(Modifier.width(width))
+
+/** 高度间距，接受 Dp 类型参数 */
 @Composable fun SpacerHeight(height: Dp) = Spacer(Modifier.height(height))
 
 //------------------------------------------- BoxText 相关 -------------------------------------------
@@ -249,7 +272,7 @@ fun CommonTabPage(
             modifier = Modifier.weight(1f),
             beyondViewportPageCount = beyondViewportPageCount
         ) { page ->
-            if (page == pagerState.currentPage) pageContent(page)
+            pageContent(page)
         }
     }
 }

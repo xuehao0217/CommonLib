@@ -4,17 +4,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.*
 import com.blankj.utilcode.util.LogUtils
-import com.blankj.utilcode.util.NetworkUtils
-import com.blankj.utilcode.util.ToastUtils
-import com.xueh.comm_core.helper.isNotEmpty
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 
 
+/**
+ * Paging3 分页数据源基类，封装页码逻辑与异常处理。
+ *
+ * 子类只需实现 [getDataList] 返回指定页的数据即可。
+ */
 abstract class BasePagingSource<T : Any> : PagingSource<Int, T>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, T> {
@@ -47,6 +48,9 @@ abstract class BasePagingSource<T : Any> : PagingSource<Int, T>() {
 //    }
 //}.flow.cachedIn(viewModelScope)
 
+/**
+ * ViewModel 扩展，快速创建基于 [BasePagingSource] 的 Paging Flow。
+ */
 fun <T : Any> ViewModel.pager(
     pagingConfig: ((PagingConfig) -> Unit) = { },
     getDatas: suspend (page: Int) -> List<T>,
@@ -56,13 +60,7 @@ fun <T : Any> ViewModel.pager(
     object : BasePagingSource<T>() {
         override suspend fun getDataList(page: Int) = getDatas.invoke(page)
     }
-}.flow.filter {
-    NetworkUtils.isConnected().also {
-        if (!it) {
-            ToastUtils.showShort("网络异常，请检查网络设置")
-        }
-    }
-}.cachedIn(viewModelScope)
+}.flow.cachedIn(viewModelScope)
 
 
 //https://juejin.cn/post/7416848881407180838
@@ -80,6 +78,15 @@ fun <T : Any> Flow<PagingData<T>>.modifier(
     )
 }
 
+/**
+ * PagingData 流修饰器，支持删除、更新、头尾插入。
+ *
+ * 数据流处理顺序：
+ * 1. 原始 [PagingData] 流
+ * 2. 与 _removeFlow 合并，过滤掉需删除的项
+ * 3. 与 _updateFlow 合并，替换对应项
+ * 4. 与 _addHeaderFlow / _addFooterFlow 合并，插入头尾项
+ */
 class PagingDataModifier<T : Any> internal constructor(
     flow: Flow<PagingData<T>>,
     private val onEach: PagingDataModifier<T>.(PagingData<T>) -> Unit,
@@ -212,6 +219,9 @@ class PagingDataModifier<T : Any> internal constructor(
 }
 
 
+/**
+ * 创建 Paging Flow 的便捷函数，可配置分页参数。
+ */
 fun <Key : Any, Value : Any> PagerFlow(
     pageSize: Int = 20,
     prefetchDistance: Int = pageSize,

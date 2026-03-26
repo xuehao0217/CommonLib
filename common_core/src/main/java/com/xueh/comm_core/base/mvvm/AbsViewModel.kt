@@ -18,7 +18,7 @@ abstract class AbsViewModel : ViewModel() {
     open val apiLoading: MutableLiveData<Boolean> = MutableLiveData()
 
     open var apiLoadingState = mutableStateOf(false)
-    open var apiExceptionState = mutableStateOf(Throwable())
+    open var apiExceptionState = mutableStateOf<Throwable?>(null)
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

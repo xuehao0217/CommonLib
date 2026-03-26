@@ -195,8 +195,6 @@ fun NewsTab(
                 PagerTabIndicator(
                     tabPositions = tabPositions,
                     pagerState = pagerState,
-                    with = 32.dp,
-                    height = 3.dp
                 )
             },
             backgroundColor = Color.Transparent,

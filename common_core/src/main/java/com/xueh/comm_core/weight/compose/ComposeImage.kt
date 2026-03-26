@@ -23,9 +23,14 @@ import coil3.request.crossfade
 import coil3.svg.SvgDecoder
 
 
-//加载图片
-// https://coil-kt.github.io/coil/compose/
-// https://github.com/coil-kt/coil/blob/main/README-zh.md
+/**
+ * 基于 Coil AsyncImage 的网络图片加载组件，支持占位图、错误图及加载回调
+ * @param url 图片地址
+ * @param placeholder 加载中占位图
+ * @param error 加载失败时显示的图片
+ * @param onSuccess 加载成功回调
+ * @param onError 加载失败回调
+ */
 @Composable
 fun ImageLoadAsyncImage(
     url: String, modifier: Modifier = Modifier, placeholder: Painter? = null,
@@ -42,7 +47,16 @@ fun ImageLoadAsyncImage(
     onSuccess = onSuccess //加载成功
 )
 
-
+/**
+ * 基于 Coil SubcomposeAsyncImage 的网络图片组件，支持按加载/成功/失败状态自定义子内容
+ * @param url 图片地址
+ * @param loading 加载中时显示的可组合内容
+ * @param success 加载成功时显示的可组合内容
+ * @param error 加载失败时显示的可组合内容
+ * @param onLoading 加载中回调
+ * @param onSuccess 加载成功回调
+ * @param onError 加载失败回调
+ */
 @Composable
 fun ImageLoadCompose(
     url: String,
@@ -98,6 +112,13 @@ fun ImageLoadCompose(
 //    )
 //}
 
+/**
+ * 本地 drawable 资源图片组件，使用 painterResource 加载
+ * @param id drawable 资源 ID
+ * @param colorFilter 颜色滤镜，可用于着色
+ * @param alignment 对齐方式
+ * @param contentScale 缩放模式
+ */
 @Composable
 fun ImageCompose(
     @DrawableRes id: Int,
@@ -114,7 +135,15 @@ fun ImageCompose(
     alignment = alignment
 )
 
-
+/**
+ * 创建支持 SVG 的 AsyncImagePainter，用于加载 SVG 等矢量图
+ * @param model 图片模型（URL、Uri 等）
+ * @param imageLoader 带 SvgDecoder 的 ImageLoader
+ * @param transform 状态转换
+ * @param onState 状态回调
+ * @param contentScale 缩放模式
+ * @param filterQuality 过滤质量
+ */
 @Composable
 fun rememberSvgPainter(
     model: Any?,
@@ -138,7 +167,15 @@ fun rememberSvgPainter(
     )
 }
 
-
+/**
+ * 从 assets 目录加载图片的 Painter，支持 SVG
+ * @param path assets 下的相对路径（如 "drawable/xxx.svg"）
+ * @param imageLoader 带 SvgDecoder 的 ImageLoader
+ * @param transform 状态转换
+ * @param onState 状态回调
+ * @param contentScale 缩放模式
+ * @param filterQuality 过滤质量
+ */
 @Composable
 fun rememberAssetsPainter(
     path: String,
@@ -163,7 +200,13 @@ fun rememberAssetsPainter(
 }
 
 
-//https://www.wilinz.com/?p=430
+/**
+ * 从 assets/drawable 加载 SVG 图片的可组合组件
+ * @param assetsName 资源名（不含扩展名），实际路径为 drawable/${assetsName}.svg
+ * @param colorFilter 颜色滤镜
+ * @param alignment 对齐方式
+ * @param contentScale 缩放模式
+ */
 @Composable
 fun ImageSVGCompose(
     assetsName: String,

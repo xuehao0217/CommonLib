@@ -8,9 +8,9 @@ plugins {
 
 android {
     namespace = "com.xueh.comm_core"
-    compileSdk = rootProject.extra["compileSdk"] as Int
+    compileSdk = libs.versions.compileSdk.get().toInt()
     defaultConfig {
-        minSdk =rootProject.extra["minSdk"] as Int
+        minSdk = libs.versions.minSdk.get().toInt()
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -63,6 +63,7 @@ dependencies {
     api(libs.androidx.lifecycle.viewmodel.ktx)//by viewModels()
     api(libs.androidx.lifecycle.process)
     //----------------Compose相关--------------------------
+    // 核心 Compose 库（需要暴露给 app 模块）
     api(platform(libs.androidx.compose.bom))
     api(libs.constraintlayout.compose)
     api(libs.androidx.ui)
@@ -72,7 +73,7 @@ dependencies {
     api(libs.androidx.ui.tooling.preview)
     api(libs.androidx.ui.graphics)
     api(libs.androidx.ui.tooling)
-    api( libs.compose.animation)
+    api(libs.compose.animation)
     api(libs.androidx.activity.compose)
     api(libs.compose.paging)
     api(libs.accompanist.permissions)
@@ -82,18 +83,17 @@ dependencies {
     api(libs.compose.runtime.livedata)
     api(libs.composeViews)
 
+    // 图片加载（Coil，app 模块也需要使用）
     api(libs.coil)
     api(libs.coil.compose)
     api(libs.coil.compose.okhttp)
     api(libs.coil3.coil.svg)
 
-    api(libs.any.pop.dialog.compose)    //https://github.com/TheMelody/AnyPopDialog-Compose
-    api (libs.landscapist.glide)
-
-    api(libs.compose.webview)
-
-    api (libs.refresh)
-    api (libs.refresh.indicator)
+    // 仅 common_core 内部使用的 Compose 库
+    implementation(libs.any.pop.dialog.compose)    //https://github.com/TheMelody/AnyPopDialog-Compose
+    implementation(libs.compose.webview)
+    implementation(libs.refresh)
+    implementation(libs.refresh.indicator)
 
     api(libs.accompanist.placeholder)
 //    api(libs.androidx.photopicker.compose)
@@ -115,8 +115,6 @@ dependencies {
     debugApi(libs.chucker)
     releaseApi(libs.chucker.no.op)
 
-//    api(libs.converter.gson)
-//    api(libs.cookieJar)
     //---------------工具类的库--------------------------
     debugApi (libs.squareup.leakcanary)
     api (libs.interval)
@@ -128,7 +126,6 @@ dependencies {
     api(libs.logger)
     api(libs.mmkv)
     api(libs.agentweb)
-    api(libs.lottie.compose)
 
     api(libs.okhttp.profiler)
 

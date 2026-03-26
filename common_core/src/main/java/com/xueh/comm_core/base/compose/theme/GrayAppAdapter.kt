@@ -2,8 +2,8 @@ package com.xueh.comm_core.base.compose.theme
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
@@ -24,8 +24,6 @@ fun isNeedGray(): Boolean {
     return if (month == 12 && day == 13) {
         true
     } else {
-        // 由于清明节不确定，4月4、5、6日都有可能，所以这里都算
-        // 中元节比较确定，就是每年的七月十五，所以也置灰
         month == 4 && day == 4 || month == 4 && day == 5 || month == 4 && day == 6
                 || Lunar(calendar).isGhostFestival()
     }
@@ -38,10 +36,9 @@ fun isNeedGray(): Boolean {
  */
 @Composable
 fun GrayAppAdapter(isGray: Boolean = isNeedGray(), content: @Composable () -> Unit) {
-    Surface(color = MaterialTheme.colors.background) {
+    Surface(color = MaterialTheme.colorScheme.background) {
         content()
         if (isGray) {
-            // 黑白化
             Canvas(modifier = Modifier.fillMaxSize()) {
                 drawRect(
                     color = Color.White,

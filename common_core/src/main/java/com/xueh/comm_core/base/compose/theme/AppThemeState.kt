@@ -19,9 +19,15 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.blankj.utilcode.util.Utils
-/////////////////////////AppThemeType（亮暗色模式）////////////////////////////////////
+/** 全局亮暗色模式状态，支持跟随系统、浅色、深色三种模式 */
 var appThemeType by mutableStateOf(AppThemeType.Light)
 
+/**
+ * 应用主题类型枚举：亮暗色模式
+ * - [FOLLOW_SYSTEM] 跟随系统
+ * - [Light] 浅色模式
+ * - [Dark] 深色模式
+ */
 enum class AppThemeType {
     FOLLOW_SYSTEM, Light, Dark;
     companion object {
@@ -45,19 +51,40 @@ enum class AppThemeType {
     }
 }
 
+/**
+ * 判断当前是否为深色主题
+ * @return 若为深色模式或跟随系统且系统为深色则返回 true
+ */
 @Composable
 fun isThemeDark():Boolean=AppThemeType.isDark(
     themeType = appThemeType
 )
 
-////////////////////////主题颜色类型（绿/紫/橘/蓝/壁纸动态色）////////////////////////////////////
+/** 全局主题色类型状态：绿/紫/橘/蓝/壁纸动态色 */
 var appThemeColorType by mutableStateOf(AppThemeColorType.GREEN)
 
+/**
+ * 应用主题色类型枚举
+ * - [PURPLE] 紫色
+ * - [GREEN] 绿色
+ * - [ORANGE] 橘色
+ * - [BLUE] 蓝色
+ * - [WALLPAPER] 壁纸动态色（Android 12+ 从系统壁纸提取）
+ */
 enum class AppThemeColorType {
     PURPLE, GREEN, ORANGE, BLUE, WALLPAPER
 }
 
-//https://blog.csdn.net/wsyx768/article/details/138075205
+/**
+ * Material3 主题选择流程：
+ * 1. 根据 [appColorType] 与 [isThemeDark] 确定亮/暗色
+ * 2. 绿/紫/橘/蓝使用预定义调色板
+ * 3. WALLPAPER 在 Android 12+ 使用 dynamicColorScheme 从壁纸取色，否则回退为绿色
+ * 4. 将选中的 ColorScheme 注入 MaterialTheme
+ *
+ * @param appColorType 主题色类型，默认使用全局 [appThemeColorType]
+ * @param content 主题作用域内的可组合内容
+ */
 @Composable
 fun ComposeMaterialTheme(
     appColorType: AppThemeColorType = appThemeColorType,
@@ -87,6 +114,14 @@ fun ComposeMaterialTheme(
 }
 
 
+/**
+ * 自定义主题系统入口：
+ * 1. 根据 [isThemeDark] 选择 [lightThemeColors] 或 [darkThemeColors]
+ * 2. 通过 CompositionLocalProvider 注入 LocalCustomColors 与 LocalTextStyles
+ * 3. 子组件通过 [AppTheme.colors] / [AppTheme.textStyle] 获取当前主题
+ *
+ * @param content 主题作用域内的可组合内容
+ */
 @Stable
 @Composable
 fun AppBaseTheme(content: @Composable () -> Unit) {
@@ -104,7 +139,11 @@ val LocalTextStyles = staticCompositionLocalOf { defaultTextStyle }
 val LocalCustomColors = staticCompositionLocalOf { lightThemeColors }
 
 
-///方便全局获取样式
+/**
+ * 全局主题访问对象，用于在任意可组合函数中获取当前主题色与文本样式
+ * - [colors] 当前主题色（主题色、背景、标题、正文、分割线）
+ * - [textStyle] 当前文本样式（标题/正文大中小）
+ */
 object AppTheme {
     val colors: AppThemeColors
         @Composable

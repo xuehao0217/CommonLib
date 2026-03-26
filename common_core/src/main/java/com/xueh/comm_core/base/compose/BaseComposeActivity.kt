@@ -105,7 +105,7 @@ abstract class BaseComposeActivity : ComponentActivity() {
             //
             // 方案（今日头条方案）：
             //   将 density 重新计算为 screenWidthPx / designWidthDp，
-            //   使所有设备的逻辑宽度统一为设计稿宽度（393dp），
+            //   使所有设备的逻辑宽度统一为设计稿宽度（402dp），
             //   dp 不再代表固定物理尺寸，而是代表「占屏幕宽度的固定比例」。
             //
             // 流程：

@@ -17,18 +17,6 @@ buildscript{
     }
 }
 
-
-ext {
-    set("compileSdk", 36)
-    set("minSdk", 23)
-    set("applicationId", "com.xueh.commonlib")
-    set("appName", "commonlib")
-    set("targetSdk", 36)
-    set("versionCode", 1)
-    set("versionName", "1.0.0")
-}
-
-
 //allprojects {
 //    apply<com.github.benmanes.gradle.versions.VersionsPlugin>()
 //

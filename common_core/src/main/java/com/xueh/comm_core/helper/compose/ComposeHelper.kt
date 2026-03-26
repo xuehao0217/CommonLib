@@ -64,22 +64,36 @@ fun androidx.navigation.NavHostController.goBackWithParams(
 // =========================
 // 权限检查 Composable
 // =========================
+/**
+ * 请求单个权限并在授予后回调
+ *
+ * 流程：
+ *   1. 检查是否已授权 -> 是：通过 LaunchedEffect 触发回调（避免 recomposition 重复执行）
+ *   2. 未授权 -> 通过 LaunchedEffect 发起权限请求
+ *   3. 用户同意 -> ActivityResult 回调中触发 onPermissionGranted
+ *
+ * @param permission 需要请求的权限（如 Manifest.permission.CAMERA）
+ * @param onPermissionGranted 权限授予后的回调
+ */
 @Composable
 fun CheckPermission(permission: String, onPermissionGranted: () -> Unit) {
     val context = LocalContext.current
+    val currentCallback by rememberUpdatedState(onPermissionGranted)
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-            if (granted) onPermissionGranted()
+            if (granted) currentCallback()
         }
 
-    if (ContextCompat.checkSelfPermission(
-            context,
-            permission
-        ) == PackageManager.PERMISSION_GRANTED
-    ) {
-        onPermissionGranted()
-    } else {
-        launcher.launch(permission)
+    val isGranted = ContextCompat.checkSelfPermission(
+        context, permission
+    ) == PackageManager.PERMISSION_GRANTED
+
+    LaunchedEffect(permission) {
+        if (isGranted) {
+            currentCallback()
+        } else {
+            launcher.launch(permission)
+        }
     }
 }
 

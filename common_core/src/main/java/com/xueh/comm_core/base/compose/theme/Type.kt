@@ -7,6 +7,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
+/**
+ * 应用文本样式数据类
+ * 包含标题大/中/小与正文大/中/小共 6 种预定义样式
+ */
 @Immutable
 data class AppThemeTextStyle(
     val titleLarge: TextStyle,
@@ -17,6 +21,7 @@ data class AppThemeTextStyle(
     val bodySmall: TextStyle,
 )
 
+/** 默认文本样式配置，用于 [LocalTextStyles] 与 [AppTheme.textStyle] */
 val defaultTextStyle = AppThemeTextStyle(
     titleLarge = TextStyle(
         fontWeight = FontWeight.Bold,

@@ -20,6 +20,15 @@ import com.xueh.comm_core.base.compose.theme.isThemeDark
 import kotlinx.coroutines.launch
 
 // ---------------------- 数据模型 ----------------------
+
+/**
+ * 底部导航项数据模型。
+ *
+ * @param selectIcon 选中状态下的图标资源 ID
+ * @param unSelectIcon 未选中状态下的图标资源 ID
+ * @param text 导航项显示文本
+ * @param showRed 是否显示红点角标，用于消息提醒等场景
+ */
 data class NavData(
     val selectIcon: Int,
     val unSelectIcon: Int,
@@ -27,6 +36,16 @@ data class NavData(
     val showRed: MutableState<Boolean> = mutableStateOf(false),
 )
 
+/**
+ * 底部导航栏主题配色，支持日夜间模式。
+ *
+ * @param lightBackground 浅色模式背景色
+ * @param darkBackground 深色模式背景色
+ * @param lightUnSelectedTextColor 浅色模式未选中文本颜色
+ * @param darkUnSelectedTextColor 深色模式未选中文本颜色
+ * @param lightSelectedTextColor 浅色模式选中文本颜色
+ * @param darkSelectedTextColor 深色模式选中文本颜色
+ */
 data class NavThemeColors(
     val lightBackground: Color = Color(0xFFFFFFFF),           // 白色背景
     val darkBackground: Color = Color(0xFF121212),            // Material Dark背景
@@ -40,6 +59,20 @@ data class NavThemeColors(
 
 
 // ---------------------- BottomNavPager ----------------------
+
+/**
+ * 底部导航 + 横向分页布局组合。
+ *
+ * 导航流程：
+ * 1. [HorizontalPager] 承载各页面内容
+ * 2. 底部 Row 渲染导航项
+ * 3. 点击 Tab 时调用 [animateScrollToPage] 切换页面
+ * 4. [interceptClick] 可拦截点击，返回 true 时阻止导航切换
+ *
+ * @param pages 各页面对应的 Composable 内容
+ * @param navItems 导航项数据列表
+ * @param interceptClick 点击拦截回调，返回 true 时阻止导航
+ */
 @Composable
 fun BottomNavPager(
     pages: List<@Composable () -> Unit>,
@@ -105,6 +138,14 @@ fun BottomNavPager(
 }
 
 // ---------------------- 单个 NavItem ----------------------
+
+/**
+ * 单个底部导航项，展示图标、文本及可选红点角标。
+ *
+ * @param navData 导航项数据
+ * @param selected 是否处于选中状态
+ * @param content 自定义内容插槽，默认展示图标+文本+红点
+ */
 @Composable
 fun NavItem(
     navData: NavData,

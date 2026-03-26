@@ -4,19 +4,21 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.primarySurface
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.lerp
 import androidx.compose.ui.unit.*
+import kotlin.math.abs
 
 /**
  * 创 建 人: xueh
@@ -31,9 +33,9 @@ import androidx.compose.ui.unit.*
 @Composable
 fun PagerTabIndicator(
     tabPositions: List<MyTabPosition>,
-    pagerState: androidx.compose.foundation.pager.PagerState,
-    color: Color = MaterialTheme.colors.primarySurface,
-    with: Dp = 40.dp,
+    pagerState: PagerState,
+    color: Color = MaterialTheme.colorScheme.primary,
+    width: Dp = 40.dp,
     height: Dp = 4.dp,
 ) {
     Canvas(modifier = Modifier.fillMaxSize()) {
@@ -56,10 +58,10 @@ fun PagerTabIndicator(
         drawRoundRect(
             color = color,
             topLeft = Offset(
-                indicatorOffset + ((currentTab.width-with).toPx()/ 2),
+                indicatorOffset + ((currentTab.width-width).toPx()/ 2),
                 canvasHeight - height.toPx()
             ),
-            size = Size(with.toPx(), height.toPx()),
+            size = Size(width.toPx(), height.toPx()),
             cornerRadius = CornerRadius(50f)
         )
     }
@@ -79,31 +81,30 @@ fun PagerTabIndicator(
 @Composable
 fun PagerTab(
     modifier: Modifier = Modifier,
-    pagerState: androidx.compose.foundation.pager.PagerState,
+    pagerState: PagerState,
     index: Int,
     pageCount: Int,
     text: String,
-    selectedContentColor: Color = MaterialTheme.colors.primary,
-    unselectedContentColor: Color = MaterialTheme.colors.onSurface,
+    selectedContentColor: Color = MaterialTheme.colorScheme.primary,
+    unselectedContentColor: Color = MaterialTheme.colorScheme.onSurface,
     selectedFontSize: TextUnit = 18.sp,
     unselectedFontSize: TextUnit = 15.sp,
     selectedFontWeight: FontWeight = FontWeight.Bold,
     unselectedFontWeight: FontWeight = FontWeight.Normal,
 ) {
-    val previousIndex = Math.max(index - 1, 0)
-    val nextIndex = Math.min(index + 1, pageCount - 1)
+    val previousIndex = maxOf(index - 1, 0)
+    val nextIndex = minOf(index + 1, pageCount - 1)
     val currentIndexPlusOffset = pagerState.currentPage + pagerState.currentPageOffsetFraction
 
     val progress =
         if (currentIndexPlusOffset >= previousIndex && currentIndexPlusOffset <= nextIndex) {
-            1f - Math.abs(index - currentIndexPlusOffset)
+            1f - abs(index - currentIndexPlusOffset)
         } else {
             0f
         }
 
     val fontSize = lerp(unselectedFontSize, selectedFontSize, progress)
-    val fontWeight =
-        androidx.compose.ui.text.font.lerp(unselectedFontWeight, selectedFontWeight, progress)
+    val fontWeight = lerp(unselectedFontWeight, selectedFontWeight, progress)
     val color = lerp(unselectedContentColor, selectedContentColor, progress)
 
     Box(

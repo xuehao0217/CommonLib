@@ -25,9 +25,10 @@ import kotlinx.coroutines.flow.collectLatest
  * 备注：Compose 点击扩展 & 防抖 & 背景绘制优化
  */
 
-// ---------------------------
-// 无水波纹点击
-// ---------------------------
+/**
+ * 无点击波纹的点击修饰符，适用于需要静默点击反馈的场景
+ * @param onClick 点击回调
+ */
 fun Modifier.click(onClick: () -> Unit): Modifier = composed {
     clickable(
         indication = null,
@@ -37,9 +38,11 @@ fun Modifier.click(onClick: () -> Unit): Modifier = composed {
     }
 }
 
-// ---------------------------
-// 防抖点击
-// ---------------------------
+/**
+ * 防抖点击修饰符，在指定时间间隔内重复点击仅触发一次
+ * @param millis 防抖间隔（毫秒），默认 800ms
+ * @param onClick 点击回调
+ */
 fun Modifier.clickDebounce(
     millis: Long = 800,
     onClick: () -> Unit,
@@ -56,9 +59,10 @@ fun Modifier.clickDebounce(
     }
 }
 
-// ---------------------------
-// 背景图片
-// ---------------------------
+/**
+ * 使用 drawable 资源作为背景的修饰符，内部会缓存 Bitmap 避免重复加载
+ * @param backIcon drawable 资源 ID
+ */
 fun Modifier.setBackground(@DrawableRes backIcon: Int): Modifier = composed {
     // 缓存 Bitmap 避免每次重新加载
     val bitmap = remember(backIcon) {
@@ -70,9 +74,13 @@ fun Modifier.setBackground(@DrawableRes backIcon: Int): Modifier = composed {
 }
 
 
-// ---------------------------
-// 自定义点击高亮扩展，不依赖已弃用 IndicationInstance
-// ---------------------------
+/**
+ * 自定义点击高亮修饰符，按下时显示指定颜色的背景高亮
+ * 通过监听 PressInteraction 实现，不依赖已弃用的 IndicationInstance
+ * @param rippleColor 按下时的高亮颜色
+ * @param cornerRadius 圆角半径（dp）
+ * @param onClick 点击回调
+ */
 fun Modifier.customRippleClickable(
     rippleColor: Color = Color.Blue.copy(alpha = 0.3f),
     cornerRadius: Float = 8f,

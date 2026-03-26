@@ -1,4 +1,13 @@
 [versions]
+# 根工程 Android SDK 与应用元数据（由根 build.gradle.kts 写入 ext，供 app / common_core 使用）
+compileSdk = "36"
+minSdk = "23"
+targetSdk = "36"
+applicationId = "com.xueh.commonlib"
+appName = "commonlib"
+versionCode = "1"
+versionName = "1.0.0"
+
 agp = "8.13.1"
 kotlin = "2.3.10"
 kotlinCoroutinesVersion = "1.10.2"

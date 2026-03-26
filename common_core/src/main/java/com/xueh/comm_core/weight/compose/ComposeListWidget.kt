@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 /**
- * 通用 LazyColumn，支持 head、foot
+ * 通用 LazyColumn，支持可选的 head、foot
  */
 @Composable
 fun CommonLazyColumn(
@@ -22,8 +22,8 @@ fun CommonLazyColumn(
     state: LazyListState = rememberLazyListState(),
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
     contentPadding: PaddingValues = PaddingValues(horizontal = 15.dp),
-    headContent: @Composable () -> Unit = {},
-    footContent: @Composable () -> Unit = {},
+    headContent: (@Composable () -> Unit)? = null,
+    footContent: (@Composable () -> Unit)? = null,
     content: LazyListScope.() -> Unit,
 ) {
     LazyColumn(
@@ -32,9 +32,9 @@ fun CommonLazyColumn(
         verticalArrangement = verticalArrangement,
         contentPadding = contentPadding,
         content = {
-            if (headContent != {}) item { headContent() }
+            headContent?.let { item { it() } }
             content()
-            if (footContent != {}) item { footContent() }
+            footContent?.let { item { it() } }
         }
     )
 }
@@ -50,8 +50,8 @@ fun <T> CommonLazyColumnData(
     key: ((item: T) -> Any)? = null,
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(15.dp),
     contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp),
-    headContent: @Composable () -> Unit = {},
-    footContent: @Composable () -> Unit = {},
+    headContent: (@Composable () -> Unit)? = null,
+    footContent: (@Composable () -> Unit)? = null,
     itemContent: @Composable LazyItemScope.(item: T) -> Unit,
 ) {
     CommonLazyColumn(

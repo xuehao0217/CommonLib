@@ -1,3 +1,9 @@
+/**
+ * Material3 主题调色板定义
+ *
+ * 本文件包含 4 种主题色（绿/紫/蓝/橘）× 2 种模式（亮/暗）共 8 套 ColorScheme，
+ * 供 [ComposeMaterialTheme] 根据 [AppThemeColorType] 与亮暗模式选择使用。
+ */
 package com.xueh.comm_core.base.compose.theme
 
 import androidx.compose.material3.darkColorScheme
@@ -78,7 +84,7 @@ val DarkOrangeColorPalette = darkColorScheme(
     error = Color.Red,
 )
 
-// Light pallets
+// Light palettes
 val LightGreenColorPalette = lightColorScheme(
     primary = green500,
     primaryContainer = green200,
@@ -91,7 +97,7 @@ val LightGreenColorPalette = lightColorScheme(
     surfaceVariant = Color.White,
     onPrimary = Color.White,
     onSecondary = Color.Black,
-    onBackground = Color.White,
+    onBackground = Color.Black,
     onSurface = Color.Black,
     onSurfaceVariant = Color.Black
 )

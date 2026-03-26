@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.FrameLayout
-import androidx.compose.material.Surface
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -21,6 +21,12 @@ import androidx.compose.ui.viewinterop.AndroidView
  * 创建日期: 2023/6/26
  * 备注：https://www.jianshu.com/p/6355f99d6808
  */
+
+/**
+ * 截图触发状态。
+ *
+ * @param capture 为 true 时触发截图流程
+ */
 data class CaptureState(
     val capture: Boolean = false
 )
@@ -33,6 +39,9 @@ private fun MutableState<CaptureState>.captureComplete() {
     this.value = this.value.copy(capture = false)
 }
 
+/**
+ * 创建并记住截图控制器，用于触发 [ComposeCapture] 的截图流程。
+ */
 @Composable
 fun rememberCaptureController(): MutableState<CaptureState> {
     return remember {
@@ -40,6 +49,14 @@ fun rememberCaptureController(): MutableState<CaptureState> {
     }
 }
 
+/**
+ * Compose 内容截图组件。
+ *
+ * 截图流程：
+ * 1. 正常状态：在 Surface 中渲染内容，通过 onGloballyPositioned 记录边界
+ * 2. 触发截图：capture 为 true 时切换到 AndroidView + ComposeView
+ * 3. 监听首帧绘制，生成 Bitmap，回调 onSaveBitmap，再切回 Compose
+ */
 @Composable
 fun ComposeCapture(
     captureController: MutableState<CaptureState> = rememberCaptureController(),
