@@ -15,6 +15,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        // 随 AAR 下发：app 开启 minify 时自动合并，无需在 app 重复抄写第三方与 common_core 网络栈规则
+        consumerProguardFiles("proguard-rules.pro")
     }
 
     buildTypes {
