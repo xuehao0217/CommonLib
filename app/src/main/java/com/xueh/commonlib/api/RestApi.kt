@@ -11,9 +11,8 @@ import retrofit2.http.*
 
 
 /**
- * 创 建 人: xueh
- * 创建日期: 2019/12/27 15:29
- * 备注：
+ * 玩 Android 等接口；响应体为 [BaseResult]，由 Retrofit `converter-kotlinx-serialization` + [com.xueh.comm_core.net.JsonManager] 反序列化。
+ * 若后端 `data` 结构不稳定，可另建接口用 [kotlinx.serialization.json.JsonElement]（参见 [BestieApiService]）+ [com.xueh.comm_core.net.decodeSuccessData]。
  */
 interface RestApi {
 
@@ -33,6 +32,6 @@ interface RestApi {
 
 
     @GET("article/list/{page}/json")
-    suspend fun getHome(@Path("page") int: Int): BaseResult<HomeEntity>
+    suspend fun getHome(@Path("page") page: Int): BaseResult<HomeEntity>
 
 }

@@ -25,7 +25,6 @@ class MyApplication : BaseApplication() {
         initNet()
         MMKVUtil.init(this)
         AgentWebConfig.clearDiskCache(Utils.getApp())
-        Composer.setDiagnosticStackTraceEnabled(BuildConfig.DEBUG)
     }
 
     private fun initNet() {
@@ -36,11 +35,6 @@ class MyApplication : BaseApplication() {
                     addInterceptor(OkHttpProfilerInterceptor())
                 }
             }
-//            retrofit {
-//                it.apply {
-//                        addConverterFactory(GsonConverterFactory.create(GsonFactory.getSingletonGson()))
-//                }
-//            }
         }
         HttpRequest.putHeader("name","xh")
     }

@@ -129,10 +129,9 @@ object HttpRequest {
         val okHttpBuilder = dsl?.okHttpBuilder?.invoke(createOkHttpClient()) ?: createOkHttpClient()
         val retrofitBuilder = Retrofit.Builder()
             .baseUrl(url)
-//            .addConverterFactory(GsonConverterFactory.create())
-            .addConverterFactory(JsonManager.default.asConverterFactory(
-                "application/json".toMediaType()
-            ))
+            .addConverterFactory(
+                JsonManager.default.asConverterFactory("application/json".toMediaType()),
+            )
             .client(okHttpBuilder.build())
 
         return dsl?.retrofitBuilder?.invoke(retrofitBuilder)?.build() ?: retrofitBuilder.build()

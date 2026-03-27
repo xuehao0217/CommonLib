@@ -6,9 +6,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 /**
- * 创 建 人: xueh
- * 创建日期: 2019/12/27 15:30
- * 备注：
+ * 轮播图项；JSON 键与 Kotlin 属性名一致（驼峰）。
  */
 @Serializable
 data class BannerVO(
@@ -19,8 +17,8 @@ data class BannerVO(
     val order: Int,
     val title: String,
     val type: Int,
-    val url: String
+    val url: String,
 ) {
     @Transient
-    val isSelect = mutableStateOf(false)
+    val isSelect: MutableState<Boolean> = mutableStateOf(false)
 }
