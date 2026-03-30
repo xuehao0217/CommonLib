@@ -1,11 +1,8 @@
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.Date
 
 plugins {
     alias(libs.plugins.androidApplication)
-    alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.parcelize)
     alias(libs.plugins.kotlin.serialization)
@@ -64,6 +61,10 @@ android {
         buildConfig = true
     }
 
+    base {
+        archivesName = "${libs.versions.appName.get()}-v${libs.versions.versionName.get()}-${SimpleDateFormat("yyyy.MMdd.HH.mm.ss").format(Date())}"
+    }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -82,11 +83,6 @@ android {
 //        }
 //    }
 
-    defaultConfig {
-        setProperty("archivesBaseName", "${libs.versions.appName.get()}-v${versionName}-${SimpleDateFormat("yyyy.MMdd.HH.mm.ss").format(Date())}")
-    }
-
-
     packaging {
         resources {
             pickFirsts += setOf(
@@ -97,7 +93,7 @@ android {
 }
 
 dependencies {
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
     implementation(project(":common_core"))
+    testImplementation(libs.junit)
 }
 

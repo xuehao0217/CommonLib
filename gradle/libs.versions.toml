@@ -7,7 +7,7 @@ appName = "commonlib"
 versionCode = "1"
 versionName = "1.0.0"
 
-agp = "8.13.1"
+agp = "9.1.0"
 kotlin = "2.3.10"
 kotlinCoroutinesVersion = "1.10.2"
 composeBom = "2026.03.01"
@@ -133,7 +133,6 @@ mmkv = { module = "com.tencent:mmkv", version.ref = "mmkv" }
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
-jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerialization"}

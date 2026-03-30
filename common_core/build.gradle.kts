@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.compose.compiler)
 
     alias(libs.plugins.kotlin.serialization)
@@ -47,10 +46,9 @@ android {
 }
 
 dependencies {
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
     //----------------基本库相关--------------------------
     api(libs.androidx.multidex)
-    api(libs.junit)
+    testImplementation(libs.junit)
     api(libs.androidx.datastore)
     api(libs.androidx.paging.common)
     api(libs.androidx.paging.runtime)
