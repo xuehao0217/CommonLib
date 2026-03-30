@@ -1,9 +1,10 @@
 package com.xueh.comm_core.base.compose.theme
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
@@ -32,13 +33,17 @@ fun isNeedGray(): Boolean {
 /**
  * 在内容之上按需叠加 **饱和度为 0** 的全屏层（[BlendMode.Saturation]），实现整页灰阶。
  *
- * **流程**：[Surface] 铺底 → 绘制子 [content] → 若 [isGray] 为 true 则 [Canvas] 盖一层白字混合，全局去色。
+ * **流程**：全屏 [Box] 铺主题背景（不用 [androidx.compose.material3.Surface]，避免其默认处理 window insets 导致顶沉浸式失效）→ 绘制子 [content] → 若 [isGray] 为 true 则 [Canvas] 盖一层白字混合，全局去色。
  *
  * @param isGray 是否置灰；默认 [isNeedGray]（公祭日/清明/中元等）。
  */
 @Composable
 fun GrayAppAdapter(isGray: Boolean = isNeedGray(), content: @Composable () -> Unit) {
-    Surface(color = MaterialTheme.colorScheme.background) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
         content()
         if (isGray) {
             Canvas(modifier = Modifier.fillMaxSize()) {

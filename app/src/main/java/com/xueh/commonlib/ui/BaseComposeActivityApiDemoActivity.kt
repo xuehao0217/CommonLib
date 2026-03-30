@@ -50,13 +50,10 @@ import com.xueh.comm_core.base.compose.LocalBaseComposeActivity
 class BaseComposeActivityApiDemoActivity : BaseComposeActivity() {
 
     private var demoImmersiveStatus by mutableStateOf(false)
-    private var demoImmersiveNav by mutableStateOf(false)
     private var demoMergeIme by mutableStateOf(true)
     private var demoGray by mutableStateOf(false)
     private var demoDesignWidth by mutableFloatStateOf(402f)
-    private var demoUseScaffold by mutableStateOf(true)
     private var demoShowTitle by mutableStateOf(true)
-    private var demoShowStatusBars by mutableStateOf(true)
     private var demoShowBack by mutableStateOf(true)
     private var demoTitle by mutableStateOf("BaseCompose API")
     private var securePending by mutableStateOf(false)
@@ -77,13 +74,10 @@ class BaseComposeActivityApiDemoActivity : BaseComposeActivity() {
 
     private fun restoreDemoState(b: Bundle) {
         demoImmersiveStatus = b.getBoolean(KEY_IMM_STATUS, false)
-        demoImmersiveNav = b.getBoolean(KEY_IMM_NAV, false)
         demoMergeIme = b.getBoolean(KEY_MERGE_IME, true)
         demoGray = b.getBoolean(KEY_GRAY, false)
         demoDesignWidth = b.getFloat(KEY_DESIGN_W, 402f)
-        demoUseScaffold = b.getBoolean(KEY_USE_SCAFFOLD, true)
         demoShowTitle = b.getBoolean(KEY_SHOW_TITLE, true)
-        demoShowStatusBars = b.getBoolean(KEY_SHOW_STATUS_PAD, true)
         demoShowBack = b.getBoolean(KEY_SHOW_BACK, true)
         demoTitle = b.getString(KEY_TITLE_STR, demoTitle) ?: demoTitle
         securePending = b.getBoolean(KEY_SECURE, false)
@@ -92,13 +86,10 @@ class BaseComposeActivityApiDemoActivity : BaseComposeActivity() {
 
     private fun saveDemoState(outState: Bundle) {
         outState.putBoolean(KEY_IMM_STATUS, demoImmersiveStatus)
-        outState.putBoolean(KEY_IMM_NAV, demoImmersiveNav)
         outState.putBoolean(KEY_MERGE_IME, demoMergeIme)
         outState.putBoolean(KEY_GRAY, demoGray)
         outState.putFloat(KEY_DESIGN_W, demoDesignWidth)
-        outState.putBoolean(KEY_USE_SCAFFOLD, demoUseScaffold)
         outState.putBoolean(KEY_SHOW_TITLE, demoShowTitle)
-        outState.putBoolean(KEY_SHOW_STATUS_PAD, demoShowStatusBars)
         outState.putBoolean(KEY_SHOW_BACK, demoShowBack)
         outState.putString(KEY_TITLE_STR, demoTitle)
         outState.putBoolean(KEY_SECURE, securePending)
@@ -107,21 +98,15 @@ class BaseComposeActivityApiDemoActivity : BaseComposeActivity() {
 
     override fun immersiveStatusBar(): Boolean = demoImmersiveStatus
 
-    override fun immersiveNavigationBar(): Boolean = demoImmersiveNav
-
     override fun mergeImeIntoContentWindowInsets(): Boolean = demoMergeIme
 
     override fun isAppGrayMode(): Boolean = demoGray
 
     override fun designWidthDp(): Float = demoDesignWidth
 
-    override fun useActivityScaffold(): Boolean = demoUseScaffold
-
     override fun isSecureWindow(): Boolean = securePending
 
     override fun showTitleView(): Boolean = demoShowTitle
-
-    override fun showStatusBars(): Boolean = demoShowStatusBars
 
     override fun showBackIcon(): Boolean = demoShowBack
 
@@ -136,21 +121,29 @@ class BaseComposeActivityApiDemoActivity : BaseComposeActivity() {
             activity.finish()
         }
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surface)
-                .then(
-                    if (demoImmersiveStatus) {
-                        Modifier.statusBarsPadding()
-                    } else {
-                        Modifier
-                    }
+        Box(modifier = Modifier.fillMaxSize()) {
+            if (demoImmersiveStatus) {
+                Box(
+                    modifier = Modifier
+                        .matchParentSize()
+                        .background(Color(0x33E53935)),
                 )
-                .padding(horizontal = 16.dp)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.surface)
+                    .then(
+                        if (demoImmersiveStatus) {
+                            Modifier.statusBarsPadding()
+                        } else {
+                            Modifier
+                        }
+                    )
+                    .padding(horizontal = 16.dp)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
             Spacer(Modifier.height(8.dp))
             Text(
                 text = "BaseComposeActivity API 实验室",
@@ -169,25 +162,16 @@ class BaseComposeActivityApiDemoActivity : BaseComposeActivity() {
 
             HorizontalDivider(Modifier.padding(vertical = 4.dp))
 
-            SectionLabel("沉浸式 / Insets（对照 KDoc 表格）")
-            ToggleRow("immersiveStatusBar（内容可画进状态栏）", demoImmersiveStatus) {
+            SectionLabel("沉浸式 / Insets")
+            ToggleRow("immersiveStatusBar（内容可画进状态栏，底部始终与导航栏隔离）", demoImmersiveStatus) {
                 demoImmersiveStatus = it
             }
-            ToggleRow("immersiveNavigationBar（内容可画进导航栏）", demoImmersiveNav) {
-                demoImmersiveNav = it
-            }
-            ToggleRow("mergeImeIntoContentWindowInsets（Scaffold 并入键盘）", demoMergeIme) {
+            ToggleRow("mergeImeIntoContentWindowInsets（根布局并入键盘）", demoMergeIme) {
                 demoMergeIme = it
-            }
-            ToggleRow("useActivityScaffold（关=无顶栏外壳+windowInsetsPadding）", demoUseScaffold) {
-                demoUseScaffold = it
             }
 
             SectionLabel("标题栏 API")
             ToggleRow("showTitleView", demoShowTitle) { demoShowTitle = it }
-            ToggleRow("showStatusBars（标题行 statusBarsPadding）", demoShowStatusBars) {
-                demoShowStatusBars = it
-            }
             ToggleRow("showBackIcon", demoShowBack) { demoShowBack = it }
 
             OutlinedButton(
@@ -269,12 +253,13 @@ class BaseComposeActivityApiDemoActivity : BaseComposeActivity() {
                     .background(Color(0xFFE53935)),
             )
             Text(
-                text = "顶部红条在「immersiveStatusBar=true」且已加 statusBarsPadding 时应在状态栏下；用于观察 insets。",
+                text = "顶沉浸式开时：浅红层铺满含状态栏（证明基类未顶开）；本列表示例仍加 statusBarsPadding 便于阅读。关顶沉浸式则整页在状态栏下起算。",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
 
             Spacer(Modifier.height(24.dp))
+            }
         }
     }
 
@@ -346,13 +331,10 @@ class BaseComposeActivityApiDemoActivity : BaseComposeActivity() {
         private const val EXTRA_SECURE = "demo_secure"
 
         private const val KEY_IMM_STATUS = "demo_imm_status"
-        private const val KEY_IMM_NAV = "demo_imm_nav"
         private const val KEY_MERGE_IME = "demo_merge_ime"
         private const val KEY_GRAY = "demo_gray"
         private const val KEY_DESIGN_W = "demo_design_w"
-        private const val KEY_USE_SCAFFOLD = "demo_use_scaffold"
         private const val KEY_SHOW_TITLE = "demo_show_title"
-        private const val KEY_SHOW_STATUS_PAD = "demo_show_status_pad"
         private const val KEY_SHOW_BACK = "demo_show_back"
         private const val KEY_TITLE_STR = "demo_title_str"
         private const val KEY_SECURE = "demo_secure"

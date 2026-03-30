@@ -10,7 +10,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -30,6 +29,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 import com.xueh.comm_core.R
 import com.xueh.comm_core.base.compose.theme.AppThemeType
 import com.xueh.comm_core.base.compose.theme.ComposeMaterialTheme
@@ -51,22 +51,21 @@ val LocalBaseComposeActivity: ProvidableCompositionLocal<BaseComposeActivity?> =
  *
  * **特性**
  * - [requestedScreenOrientation] 默认竖屏锁定，平板等可重写。
- * - 沉浸式：透明系统栏；[immersiveStatusBar] / [immersiveNavigationBar] 控制 [Scaffold] 是否消费对应 insets。
+ * - 边到边：透明系统栏；[onCreate] 与组合内均调用 [androidx.core.view.WindowCompat.setDecorFitsSystemWindows]（false），避免 [Theme.MaterialComponents] 等在 [super.onCreate] 后又把内容区贴系统栏。根容器用 [Modifier.navigationBarsPadding]（顶沉浸式）或 [Modifier.systemBarsPadding]（非顶沉浸式），再按需 [Modifier.imePadding]，不用 [WindowInsets.only] 与 IME 的 union，减少顶距异常。[GrayAppAdapter] 用全屏 [Box] 铺底而非 [Surface]。仅 [immersiveStatusBar] 控制是否施加状态栏方向 padding。[showTitleView] 与 [immersiveStatusBar] **相互独立**：标题叠在 [setComposeContent] 之上。
  * - 设计稿宽度等比缩放（今日头条方案）；`Density` 的 fontScale 固定 1.0；基准宽度见 [designWidthDp]。
- * - [mergeImeIntoContentWindowInsets] 为 true 时，内容区并入 IME，减轻键盘遮挡；重度表单仍建议在页面内 `verticalScroll` + `imePadding`。
+ * - [mergeImeIntoContentWindowInsets] 为 true 时在根链上追加 [Modifier.imePadding]；重度表单仍建议在页面内 `verticalScroll` + `imePadding`。
  * - [isSecureWindow] 可开启防截屏（支付/证件等）。
  *
  * **状态栏相关 API 对照（易混）**
  *
  * | API | 作用 |
  * |-----|------|
- * | [showStatusBars] | 仅作用在默认标题栏：是否为标题行加 [statusBarsPadding]（与刘海下标题位置有关）。 |
- * | [immersiveStatusBar] | [Scaffold] 的 [androidx.compose.foundation.layout.WindowInsets] 是否包含状态栏：为 true 时内容可画到状态栏后，需页面自管 `statusBarsPadding`。 |
- * | [immersiveNavigationBar] | 同上，针对导航栏区域。 |
+ * | [showTitleView] | 是否在内容区顶部叠放默认标题栏；与 [immersiveStatusBar] 无关。 |
+ * | [immersiveStatusBar] | 是否让根容器 padding 含状态栏 insets；为 true 时主体可画到状态栏后；标题栏不再单独加 `statusBarsPadding`，顶沉浸式且需要标题避栏时在 [getTitleView] 中自管。 |
  *
  * **系统返回键**：[onCreate] 内会注册默认 `OnBackPressedCallback`（未消费时 [finish]）。后通过 [androidx.activity.OnBackPressedDispatcher.addCallback] 注册的回调会先执行；子类若在组合内注册自定义返回（如 [androidx.compose.runtime.DisposableEffect]），请勿依赖注册顺序以外的行为，并自行处理是否调用 [androidx.activity.OnBackPressedDispatcher.onBackPressed]。
  *
- * **刘海 / 横屏**：部分「只保留一侧系统栏 inset」的组合下，横屏刘海安全区可能仍需在具体页面补充 `displayCutout` / `safeDrawing`，见各沉浸式 API 说明。
+ * **刘海 / 横屏**：顶沉浸式时横屏刘海安全区可能仍需在具体页面补充 `displayCutout` / `safeDrawing`。
  *
  * 屏幕适配：`scaledDensity = screenWidthPx / designWidthDp()`，使逻辑宽度对齐设计稿宽度，1dp 占屏宽固定比例。
  */
@@ -91,8 +90,6 @@ abstract class BaseComposeActivity : ComponentActivity() {
                 WindowManager.LayoutParams.FLAG_SECURE
             )
         }
-
-        window.decorView.setBackgroundColor(android.graphics.Color.BLACK)
 
         // 默认兜底：无子回调消费时结束 Activity。后注册的回调先执行，见类 KDoc。
         onBackPressedDispatcher.addCallback {
@@ -145,47 +142,45 @@ abstract class BaseComposeActivity : ComponentActivity() {
                 updateSystemBarsStyle(isDark)
             }
 
+            val activity = this@BaseComposeActivity
+            DisposableEffect(Unit) {
+                WindowCompat.setDecorFitsSystemWindows(activity.window, false)
+                onDispose { }
+            }
+
             ComposeMaterialTheme {
                 PersistAppThemePreferencesEffect()
                 GrayAppAdapter(isGray = isAppGrayMode()) {
-                    val systemBarInsets = when {
-                        immersiveStatusBar() && immersiveNavigationBar() -> WindowInsets(0)
-                        immersiveStatusBar() -> WindowInsets.navigationBars
-                        immersiveNavigationBar() -> WindowInsets.statusBars
-                        else -> WindowInsets.systemBars
-                    }
-                    val windowInsets =
-                        if (mergeImeIntoContentWindowInsets()) {
-                            systemBarInsets.union(WindowInsets.ime)
+                    // 顶沉浸式：navigationBarsPadding 不施加状态栏顶距，与 showTitleView 无关；非顶沉浸式：systemBarsPadding。
+                    // imePadding 单独链式追加，避免与 WindowInsets.union 组合后在部分机型上顶距异常。
+                    val barModifier =
+                        if (immersiveStatusBar()) {
+                            Modifier.navigationBarsPadding()
                         } else {
-                            systemBarInsets
+                            Modifier.systemBarsPadding()
                         }
-
-                    if (useActivityScaffold()) {
-                        Scaffold(
-                            topBar = {
-                                if (showTitleView()) {
-                                    getTitleView()
+                    val rootModifier =
+                        Modifier
+                            .fillMaxSize()
+                            .then(barModifier)
+                            .let { base ->
+                                if (mergeImeIntoContentWindowInsets()) {
+                                    base.then(Modifier.imePadding())
+                                } else {
+                                    base
                                 }
-                            },
-                            containerColor = Color.Transparent,
-                            contentWindowInsets = windowInsets,
-                        ) { innerPadding ->
+                            }
+
+                    Box(modifier = rootModifier) {
+                        setComposeContent()
+                        if (showTitleView()) {
                             Box(
                                 modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(innerPadding)
+                                    .align(Alignment.TopStart)
+                                    .fillMaxWidth()
                             ) {
-                                setComposeContent()
+                                getTitleView()
                             }
-                        }
-                    } else {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .windowInsetsPadding(windowInsets)
-                        ) {
-                            setComposeContent()
                         }
                     }
                 }
@@ -219,13 +214,7 @@ abstract class BaseComposeActivity : ComponentActivity() {
     abstract fun setComposeContent()
 
     /**
-     * 是否使用本类内置 [Scaffold]（顶栏 + [contentWindowInsets]）。
-     * 为 false 时仅 [ComposeMaterialTheme] + 带 [windowInsetsPadding] 的容器，避免与页面内第二层 [Scaffold] 叠床架屋；标题与顶栏需自行实现。
-     */
-    protected open fun useActivityScaffold(): Boolean = true
-
-    /**
-     * 是否在 [contentWindowInsets] 中并入 [WindowInsets.ime]。
+     * 是否在根 [Modifier] 链上追加 [Modifier.imePadding]（与 navigation/systemBarsPadding 链式组合）。
      * 全屏游戏/视频等可返回 false，避免键盘顶起全屏层。
      */
     protected open fun mergeImeIntoContentWindowInsets(): Boolean = true
@@ -245,7 +234,7 @@ abstract class BaseComposeActivity : ComponentActivity() {
     /** 为 true 时对窗口加 [WindowManager.LayoutParams.FLAG_SECURE]（防截屏/录屏，系统仍可能策略限制）。 */
     protected open fun isSecureWindow(): Boolean = false
 
-    /** 是否显示标题栏，默认显示（子类可重写） */
+    /** 是否在内容区顶部叠放标题栏；与 [immersiveStatusBar] 无关。 */
     protected open fun showTitleView() = true
 
     /** 页面标题（子类可重写） */
@@ -254,31 +243,18 @@ abstract class BaseComposeActivity : ComponentActivity() {
     /** 是否显示返回图标（子类可重写） */
     protected open fun showBackIcon() = true
 
-    /** 是否在布局中保留状态栏 padding（默认 true） */
-    protected open fun showStatusBars() = true
-
-    /** 内容是否延伸到状态栏后面（沉浸式），默认 false。为 true 时页面自行处理 statusBarsPadding */
+    /** 内容是否延伸到状态栏后面（沉浸式），默认 false。为 true 时页面自行处理 statusBarsPadding；底部导航栏区域始终与内容隔离。 */
     protected open fun immersiveStatusBar() = false
 
-    /** 内容是否延伸到导航栏后面（沉浸式），默认 false。为 true 时页面自行处理 navigationBarsPadding */
-    protected open fun immersiveNavigationBar() = false
-
-    /** 标题栏视图：子类可重写以自定义 */
+    /** 标题栏视图：子类可重写；叠在 [setComposeContent] 之上。默认不在标题行加 statusBarsPadding，顶距仅由根上 navigation/systemBarsPadding 统一控制。 */
     @Composable
     protected open fun getTitleView() = CommonTitleView(
         title = setTitle(),
         showBackIcon = showBackIcon(),
-        modifier = Modifier.safeBarPadding(showStatusBars()),
         backClick = { onBackPressedDispatcher.onBackPressed() }
     )
 
 }
-
-/**
- * 扩展：根据是否要显示状态栏 padding 来安全添加 statusBarsPadding
- */
-fun Modifier.safeBarPadding(showStatus: Boolean): Modifier =
-    if (showStatus) this.statusBarsPadding() else this
 
 /**
  * 通用标题栏（可直接使用或在子类中 override）
