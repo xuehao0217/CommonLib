@@ -22,14 +22,12 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.paging.compose.samples.ComposePaging
 import com.xueh.comm_core.web.ComposeWebView
 import com.xueh.comm_core.web.WebViewPage
-import com.xueh.commonlib.ui.compose.BarPage
 import com.xueh.commonlib.ui.compose.CarouselExamples
 import com.xueh.commonlib.ui.compose.CommonTabPage
 import com.xueh.commonlib.ui.compose.ComoposeViewModelPage
 import com.xueh.commonlib.ui.compose.ConstraintPage
 import com.xueh.commonlib.ui.compose.DialogPage
 import com.xueh.commonlib.ui.compose.DemoListRow
-import com.xueh.commonlib.ui.compose.LazyColumnPage
 import com.xueh.commonlib.ui.compose.NavigateParams1View
 import com.xueh.commonlib.ui.compose.NavigateParams2View
 import com.xueh.commonlib.ui.compose.OrderedTabsExample
@@ -39,9 +37,7 @@ import com.xueh.commonlib.ui.compose.PermissionPageContent
 import com.xueh.commonlib.ui.compose.RefreshLoadUse
 import com.xueh.commonlib.ui.compose.TabPage
 import com.xueh.commonlib.ui.compose.VisibilityChangedDemo
-import com.xueh.commonlib.ui.compose.lazyVerticalGrid
 import com.xueh.commonlib.ui.BaseComposeActivityApiDemoRoute
-import com.xueh.commonlib.ui.compose.scrollableTabRow
 
 private data class DemoMenuLine(val title: String, val key: NavKey)
 
@@ -50,10 +46,6 @@ private val demoMenuLines: List<DemoMenuLine> = listOf(
     DemoMenuLine("公用 CommonTabPager", DemoCommonTabPager),
     DemoMenuLine("CarouselExamples", DemoCarousel),
     DemoMenuLine("ConstraintSet 使用", DemoConstraintSet),
-    DemoMenuLine("scrollableTab 使用", DemoScrollableTabRow),
-    DemoMenuLine("LazyVerticalGrid", DemoLazyVerticalGrid),
-    DemoMenuLine("LazyColumn 列表示例", DemoLazyColumnPage),
-    DemoMenuLine("ScrollableAppBar", DemoScrollableAppBar),
     DemoMenuLine("路由传参", DemoProfileRoute(name = "Kevin", age = 18)),
     DemoMenuLine("跳转互传参数", DemoNavigateParam1),
     DemoMenuLine("下拉加载使用", DemoRefreshLoad),
@@ -118,15 +110,11 @@ private fun demoEntryProvider(
     }
     entry<DemoRefreshLoad> { RefreshLoadUse() }
     entry<DemoConstraintSet> { ConstraintPage() }
-    entry<DemoScrollableTabRow> { scrollableTabRow() }
-    entry<DemoLazyVerticalGrid> { lazyVerticalGrid() }
-    entry<DemoLazyColumnPage> { LazyColumnPage() }
     entry<DemoProfileRoute> { key ->
         PageTwo(name = key.name, age = key.age) {
             if (backStack.size > 1) backStack.removeAt(backStack.lastIndex)
         }
     }
-    entry<DemoScrollableAppBar> { BarPage() }
     entry<DemoNavigateParam1> {
         val result by navigateParamResult
         NavigateParams1View(

@@ -17,18 +17,6 @@ data object DemoRefreshLoad : NavKey
 data object DemoConstraintSet : NavKey
 
 @Serializable
-data object DemoScrollableTabRow : NavKey
-
-@Serializable
-data object DemoLazyVerticalGrid : NavKey
-
-@Serializable
-data object DemoLazyColumnPage : NavKey
-
-@Serializable
-data object DemoScrollableAppBar : NavKey
-
-@Serializable
 data object DemoNavigateParam1 : NavKey
 
 @Serializable
