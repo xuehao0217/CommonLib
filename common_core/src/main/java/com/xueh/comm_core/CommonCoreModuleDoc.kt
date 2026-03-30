@@ -8,7 +8,7 @@ package com.xueh.comm_core
  *
  * ## 分层与职责（按包）
  *
- * - **base**：`BaseApplication` 主进程初始化；`BaseComposeActivity` 沉浸式、设计稿宽度 Density、可选 `Scaffold`、`LocalBaseComposeActivity`、可重写钩子（灰度、IME、方向、`FLAG_SECURE` 等）。
+ * - **base**：`BaseApplication` 主进程初始化；`BaseComposeActivity` 根 `Box` + 系统栏/IME insets、设计稿宽度 Density、`LocalBaseComposeActivity`、可重写钩子（灰度、`contentDrawsUnderStatusBar`、`useRootImePadding`、方向、`FLAG_SECURE` 等）。
  * - **base.compose.theme**：`AppThemeType` / `AppThemeColorType`、`ComposeMaterialTheme`（唯一根主题：Material3 + `AppTypography`+`Shapes` + `AppTheme` 语义 Local）、`AppThemePreferences`（按枚举 name 持久化，兼容旧 ordinal）与 `PersistAppThemePreferencesEffect`。
  * - **base.mvvm**：`AbsViewModel` → `RequestViewModel` → `BaseViewModel`；`BaseComposeViewModel` 绑定 Loading 与异常；`BaseRequstViewModel` 懒加载 API。
  * - **net**：`HttpRequest`（Retrofit 缓存、Header、Debug 日志/Chucker）、`BaseResult`、`JsonManager`。

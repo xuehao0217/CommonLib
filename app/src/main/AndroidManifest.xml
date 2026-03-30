@@ -23,6 +23,7 @@
             android:name=".ui.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
+            android:windowSoftInputMode="adjustNothing"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,7 +34,8 @@
             android:name=".ui.BaseComposeActivityApiDemoActivity"
             android:exported="false"
             android:label="BaseCompose API 实验室"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name="com.xueh.comm_core.web.AgentComposeWebActivity"
             tools:node="remove" />

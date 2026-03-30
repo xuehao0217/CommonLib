@@ -51,21 +51,21 @@ val LocalBaseComposeActivity: ProvidableCompositionLocal<BaseComposeActivity?> =
  *
  * **特性**
  * - [requestedScreenOrientation] 默认竖屏锁定，平板等可重写。
- * - 边到边：透明系统栏；[onCreate] 与组合内均调用 [androidx.core.view.WindowCompat.setDecorFitsSystemWindows]（false），避免 [Theme.MaterialComponents] 等在 [super.onCreate] 后又把内容区贴系统栏。根容器用 [Modifier.navigationBarsPadding]（顶沉浸式）或 [Modifier.systemBarsPadding]（非顶沉浸式），再按需 [Modifier.imePadding]，不用 [WindowInsets.only] 与 IME 的 union，减少顶距异常。[GrayAppAdapter] 用全屏 [Box] 铺底而非 [Surface]。仅 [immersiveStatusBar] 控制是否施加状态栏方向 padding。[showTitleView] 与 [immersiveStatusBar] **相互独立**：标题叠在 [setComposeContent] 之上。
+ * - 边到边：透明系统栏；组合内 [DisposableEffect] 调用 [androidx.core.view.WindowCompat.setDecorFitsSystemWindows]（false），避免 [Theme.MaterialComponents] 等在 [super.onCreate] 后又把内容区贴系统栏。根容器用 [Modifier.navigationBarsPadding]（[contentDrawsUnderStatusBar] 为 true）或 [Modifier.systemBarsPadding]（为 false），再按需 [Modifier.imePadding]，不用 [WindowInsets.only] 与 IME 的 union，减少顶距异常。[GrayAppAdapter] 用全屏 [Box] 铺底而非 [Surface]。仅 [contentDrawsUnderStatusBar] 控制是否施加状态栏方向 padding。[showTitleView] 与 [contentDrawsUnderStatusBar] **相互独立**：标题叠在 [setComposeContent] 之上。
  * - 设计稿宽度等比缩放（今日头条方案）；`Density` 的 fontScale 固定 1.0；基准宽度见 [designWidthDp]。
- * - [mergeImeIntoContentWindowInsets] 为 true 时在根链上追加 [Modifier.imePadding]；重度表单仍建议在页面内 `verticalScroll` + `imePadding`。
+ * - [useRootImePadding] 为 true 时在根链上追加 [Modifier.imePadding]：软键盘弹出时为 IME 高度让出根布局底部内边距，**整块内容（含贴底控件）整体上移**；为 false 时不让根避让，常配合全屏页。若 Activity 使用 `adjustResize`，系统也会改窗口高度，对比不如 `adjustNothing` 明显；列表内输入仍可依赖 `verticalScroll` + 局部 `imePadding`。
  * - [isSecureWindow] 可开启防截屏（支付/证件等）。
  *
  * **状态栏相关 API 对照（易混）**
  *
  * | API | 作用 |
  * |-----|------|
- * | [showTitleView] | 是否在内容区顶部叠放默认标题栏；与 [immersiveStatusBar] 无关。 |
- * | [immersiveStatusBar] | 是否让根容器 padding 含状态栏 insets；为 true 时主体可画到状态栏后；标题栏不再单独加 `statusBarsPadding`，顶沉浸式且需要标题避栏时在 [getTitleView] 中自管。 |
+ * | [showTitleView] | 是否在内容区顶部叠放默认标题栏；与 [contentDrawsUnderStatusBar] 无关。 |
+ * | [contentDrawsUnderStatusBar] | 为 true 时根仅用 navigationBarsPadding，主体可画到状态栏后；为 false 时根用 systemBarsPadding。标题栏不再单独加 `statusBarsPadding`，需要标题避栏时在 [getTitleView] 中自管。 |
  *
  * **系统返回键**：[onCreate] 内会注册默认 `OnBackPressedCallback`（未消费时 [finish]）。后通过 [androidx.activity.OnBackPressedDispatcher.addCallback] 注册的回调会先执行；子类若在组合内注册自定义返回（如 [androidx.compose.runtime.DisposableEffect]），请勿依赖注册顺序以外的行为，并自行处理是否调用 [androidx.activity.OnBackPressedDispatcher.onBackPressed]。
  *
- * **刘海 / 横屏**：顶沉浸式时横屏刘海安全区可能仍需在具体页面补充 `displayCutout` / `safeDrawing`。
+ * **刘海 / 横屏**：[contentDrawsUnderStatusBar] 为 true 时横屏刘海安全区可能仍需在具体页面补充 `displayCutout` / `safeDrawing`。
  *
  * 屏幕适配：`scaledDensity = screenWidthPx / designWidthDp()`，使逻辑宽度对齐设计稿宽度，1dp 占屏宽固定比例。
  */
@@ -151,10 +151,10 @@ abstract class BaseComposeActivity : ComponentActivity() {
             ComposeMaterialTheme {
                 PersistAppThemePreferencesEffect()
                 GrayAppAdapter(isGray = isAppGrayMode()) {
-                    // 顶沉浸式：navigationBarsPadding 不施加状态栏顶距，与 showTitleView 无关；非顶沉浸式：systemBarsPadding。
-                    // imePadding 单独链式追加，避免与 WindowInsets.union 组合后在部分机型上顶距异常。
+                    // contentDrawsUnderStatusBar：navigationBarsPadding 不施加状态栏顶距，与 showTitleView 无关；否则 systemBarsPadding。
+                    // useRootImePadding：单独链式 imePadding，避免与 WindowInsets.union 组合后在部分机型上顶距异常。
                     val barModifier =
-                        if (immersiveStatusBar()) {
+                        if (contentDrawsUnderStatusBar()) {
                             Modifier.navigationBarsPadding()
                         } else {
                             Modifier.systemBarsPadding()
@@ -164,7 +164,7 @@ abstract class BaseComposeActivity : ComponentActivity() {
                             .fillMaxSize()
                             .then(barModifier)
                             .let { base ->
-                                if (mergeImeIntoContentWindowInsets()) {
+                                if (useRootImePadding()) {
                                     base.then(Modifier.imePadding())
                                 } else {
                                     base
@@ -215,9 +215,10 @@ abstract class BaseComposeActivity : ComponentActivity() {
 
     /**
      * 是否在根 [Modifier] 链上追加 [Modifier.imePadding]（与 navigation/systemBarsPadding 链式组合）。
+     * 为 true 时键盘占用的高度会从根布局底部「扣掉」，子树整体上移；为 false 时键盘易盖住贴底内容（除非窗口 `adjustResize` 或子级自行 imePadding）。
      * 全屏游戏/视频等可返回 false，避免键盘顶起全屏层。
      */
-    protected open fun mergeImeIntoContentWindowInsets(): Boolean = true
+    protected open fun useRootImePadding(): Boolean = true
 
     /** 全局灰度 UI（如活动志哀）；与 [GrayAppAdapter] 一致。 */
     protected open fun isAppGrayMode(): Boolean = false
@@ -234,7 +235,7 @@ abstract class BaseComposeActivity : ComponentActivity() {
     /** 为 true 时对窗口加 [WindowManager.LayoutParams.FLAG_SECURE]（防截屏/录屏，系统仍可能策略限制）。 */
     protected open fun isSecureWindow(): Boolean = false
 
-    /** 是否在内容区顶部叠放标题栏；与 [immersiveStatusBar] 无关。 */
+    /** 是否在内容区顶部叠放标题栏；与 [contentDrawsUnderStatusBar] 无关。 */
     protected open fun showTitleView() = true
 
     /** 页面标题（子类可重写） */
@@ -243,8 +244,8 @@ abstract class BaseComposeActivity : ComponentActivity() {
     /** 是否显示返回图标（子类可重写） */
     protected open fun showBackIcon() = true
 
-    /** 内容是否延伸到状态栏后面（沉浸式），默认 false。为 true 时页面自行处理 statusBarsPadding；底部导航栏区域始终与内容隔离。 */
-    protected open fun immersiveStatusBar() = false
+    /** 为 true 时根不消费状态栏 insets（[Modifier.navigationBarsPadding]），主体可画到状态栏后；为 false 时用 [Modifier.systemBarsPadding]。底部导航栏区域始终与内容隔离。 */
+    protected open fun contentDrawsUnderStatusBar() = false
 
     /** 标题栏视图：子类可重写；叠在 [setComposeContent] 之上。默认不在标题行加 statusBarsPadding，顶距仅由根上 navigation/systemBarsPadding 统一控制。 */
     @Composable

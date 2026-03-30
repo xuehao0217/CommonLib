@@ -8,7 +8,6 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -34,7 +32,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -49,8 +46,8 @@ import com.xueh.comm_core.base.compose.LocalBaseComposeActivity
  */
 class BaseComposeActivityApiDemoActivity : BaseComposeActivity() {
 
-    private var demoImmersiveStatus by mutableStateOf(false)
-    private var demoMergeIme by mutableStateOf(true)
+    private var demoContentDrawsUnderStatusBar by mutableStateOf(false)
+    private var demoRootImePadding by mutableStateOf(true)
     private var demoGray by mutableStateOf(false)
     private var demoDesignWidth by mutableFloatStateOf(402f)
     private var demoShowTitle by mutableStateOf(true)
@@ -73,8 +70,8 @@ class BaseComposeActivityApiDemoActivity : BaseComposeActivity() {
     }
 
     private fun restoreDemoState(b: Bundle) {
-        demoImmersiveStatus = b.getBoolean(KEY_IMM_STATUS, false)
-        demoMergeIme = b.getBoolean(KEY_MERGE_IME, true)
+        demoContentDrawsUnderStatusBar = b.getBoolean(KEY_IMM_STATUS, false)
+        demoRootImePadding = b.getBoolean(KEY_MERGE_IME, true)
         demoGray = b.getBoolean(KEY_GRAY, false)
         demoDesignWidth = b.getFloat(KEY_DESIGN_W, 402f)
         demoShowTitle = b.getBoolean(KEY_SHOW_TITLE, true)
@@ -85,8 +82,8 @@ class BaseComposeActivityApiDemoActivity : BaseComposeActivity() {
     }
 
     private fun saveDemoState(outState: Bundle) {
-        outState.putBoolean(KEY_IMM_STATUS, demoImmersiveStatus)
-        outState.putBoolean(KEY_MERGE_IME, demoMergeIme)
+        outState.putBoolean(KEY_IMM_STATUS, demoContentDrawsUnderStatusBar)
+        outState.putBoolean(KEY_MERGE_IME, demoRootImePadding)
         outState.putBoolean(KEY_GRAY, demoGray)
         outState.putFloat(KEY_DESIGN_W, demoDesignWidth)
         outState.putBoolean(KEY_SHOW_TITLE, demoShowTitle)
@@ -96,9 +93,9 @@ class BaseComposeActivityApiDemoActivity : BaseComposeActivity() {
         outState.putBoolean(KEY_SYS_BAR_LIGHT, isSystemBarLight)
     }
 
-    override fun immersiveStatusBar(): Boolean = demoImmersiveStatus
+    override fun contentDrawsUnderStatusBar(): Boolean = demoContentDrawsUnderStatusBar
 
-    override fun mergeImeIntoContentWindowInsets(): Boolean = demoMergeIme
+    override fun useRootImePadding(): Boolean = demoRootImePadding
 
     override fun isAppGrayMode(): Boolean = demoGray
 
@@ -121,145 +118,139 @@ class BaseComposeActivityApiDemoActivity : BaseComposeActivity() {
             activity.finish()
         }
 
-        Box(modifier = Modifier.fillMaxSize()) {
-            if (demoImmersiveStatus) {
-                Box(
-                    modifier = Modifier
-                        .matchParentSize()
-                        .background(Color(0x33E53935)),
-                )
-            }
+        var imeDemoText by rememberSaveable { mutableStateOf("") }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.surface)
-                    .then(
-                        if (demoImmersiveStatus) {
-                            Modifier.statusBarsPadding()
-                        } else {
-                            Modifier
-                        }
-                    )
-                    .padding(horizontal = 16.dp)
+                    .weight(1f)
+                    .fillMaxWidth()
                     .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-            Spacer(Modifier.height(8.dp))
-            Text(
-                text = "BaseComposeActivity API 实验室",
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-            Text(
-                text = "以下按钮修改基类 open 方法对应行为；防截屏等需 recreate 的项会保留其它开关（已写入 savedInstanceState）。",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = "BaseComposeActivity API 实验室",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+                Text(
+                    text = "以下按钮修改基类 open 方法对应行为；防截屏等需 recreate 的项会保留其它开关（已写入 savedInstanceState）。",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+
+                HorizontalDivider(Modifier.padding(vertical = 4.dp))
+
+                StatusBlock(activity, fromLocal)
+
+                HorizontalDivider(Modifier.padding(vertical = 4.dp))
+
+                SectionLabel("边到边 / Insets")
+                ToggleRow(
+                    "contentDrawsUnderStatusBar（内容可画进状态栏，底部与导航栏隔离）",
+                    demoContentDrawsUnderStatusBar
+                ) {
+                    demoContentDrawsUnderStatusBar = it
+                }
+                ToggleRow("useRootImePadding（根链 imePadding）", demoRootImePadding) {
+                    demoRootImePadding = it
+                }
+                Text(
+                    text = "本页已设 windowSoftInputMode=adjustNothing，避免系统改窗口高度掩盖对比。关 useRootImePadding 时点下面贴底输入框，键盘易挡住；开时整页（含贴底框）上移。",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+
+                SectionLabel("标题栏 API")
+                ToggleRow("showTitleView", demoShowTitle) { demoShowTitle = it }
+                ToggleRow("showBackIcon", demoShowBack) { demoShowBack = it }
+
+                OutlinedButton(
+                    onClick = {
+                        demoTitle =
+                            if (demoTitle == "BaseCompose API") "长标题测试 · 截断一行" else "BaseCompose API"
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text("切换 setTitle() 文案")
+                }
+
+                SectionLabel("主题 / 灰度 / 设计稿宽度")
+                ToggleRow("isAppGrayMode（GrayAppAdapter）", demoGray) { demoGray = it }
+                ToggleRow("isSystemBarLight（浅色栏图标）", isSystemBarLight) {
+                    isSystemBarLight = it
+                }
+
+                Text(
+                    text = "designWidthDp = ${demoDesignWidth.toInt()}（影响全屏 dp 缩放）",
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                RowOfButtons(
+                    labels = listOf("360", "402", "480"),
+                    onSelected = { w ->
+                        demoDesignWidth = w.toFloat()
+                    },
+                )
+
+                SectionLabel("屏幕方向（Activity.requestedOrientation）")
+                Text(
+                    text = "与 requestedScreenOrientation() 初值独立，此处直接改窗口方向便于目测。",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                RowOfButtons(
+                    labels = listOf("竖屏", "横屏", "跟随传感器"),
+                    onSelected = { label ->
+                        activity.requestedOrientation = when (label) {
+                            "横屏" -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                            "跟随传感器" -> ActivityInfo.SCREEN_ORIENTATION_SENSOR
+                            else -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                        }
+                    },
+                )
+
+                SectionLabel("防截屏（isSecureWindow，触发 recreate）")
+                Text(
+                    text = "当前 secure = $securePending。切换后将 recreate。",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                Button(
+                    onClick = {
+                        securePending = !securePending
+                        activity.recreate()
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(if (securePending) "关闭 FLAG_SECURE（recreate）" else "开启 FLAG_SECURE（recreate）")
+                }
+
+                Spacer(Modifier.height(24.dp))
+            }
 
             HorizontalDivider(Modifier.padding(vertical = 4.dp))
-
-            StatusBlock(activity, fromLocal)
-
-            HorizontalDivider(Modifier.padding(vertical = 4.dp))
-
-            SectionLabel("沉浸式 / Insets")
-            ToggleRow("immersiveStatusBar（内容可画进状态栏，底部始终与导航栏隔离）", demoImmersiveStatus) {
-                demoImmersiveStatus = it
-            }
-            ToggleRow("mergeImeIntoContentWindowInsets（根布局并入键盘）", demoMergeIme) {
-                demoMergeIme = it
-            }
-
-            SectionLabel("标题栏 API")
-            ToggleRow("showTitleView", demoShowTitle) { demoShowTitle = it }
-            ToggleRow("showBackIcon", demoShowBack) { demoShowBack = it }
-
-            OutlinedButton(
-                onClick = {
-                    demoTitle = if (demoTitle == "BaseCompose API") "长标题测试 · 截断一行" else "BaseCompose API"
-                },
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Text("切换 setTitle() 文案")
-            }
-
-            SectionLabel("主题 / 灰度 / 设计稿宽度")
-            ToggleRow("isAppGrayMode（GrayAppAdapter）", demoGray) { demoGray = it }
-            ToggleRow("isSystemBarLight（浅色栏图标）", isSystemBarLight) {
-                isSystemBarLight = it
-            }
-
+            SectionLabel("键盘 / IME（贴底输入框）")
             Text(
-                text = "designWidthDp = ${demoDesignWidth.toInt()}（影响全屏 dp 缩放）",
-                style = MaterialTheme.typography.bodyMedium,
-            )
-            RowOfButtons(
-                labels = listOf("360", "402", "480"),
-                onSelected = { w ->
-                    demoDesignWidth = w.toFloat()
-                },
-            )
-
-            SectionLabel("屏幕方向（Activity.requestedOrientation）")
-            Text(
-                text = "与 requestedScreenOrientation() 初值独立，此处直接改窗口方向便于目测。",
+                text = "先关键盘，再切换 useRootImePadding 开/关，然后点输入框对比：关=框易被键盘盖住；开=根 imePadding 把整块内容上移。",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            RowOfButtons(
-                labels = listOf("竖屏", "横屏", "跟随传感器"),
-                onSelected = { label ->
-                    activity.requestedOrientation = when (label) {
-                        "横屏" -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                        "跟随传感器" -> ActivityInfo.SCREEN_ORIENTATION_SENSOR
-                        else -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                    }
-                },
-            )
-
-            SectionLabel("防截屏（isSecureWindow，触发 recreate）")
-            Text(
-                text = "当前 secure = $securePending。切换后将 recreate。",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            Button(
-                onClick = {
-                    securePending = !securePending
-                    activity.recreate()
-                },
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Text(if (securePending) "关闭 FLAG_SECURE（recreate）" else "开启 FLAG_SECURE（recreate）")
-            }
-
-            SectionLabel("键盘 / IME（配合 mergeIme 开关）")
-            var imeText by rememberSaveable { mutableStateOf("") }
             OutlinedTextField(
-                value = imeText,
-                onValueChange = { imeText = it },
+                value = imeDemoText,
+                onValueChange = { imeDemoText = it },
                 modifier = Modifier.fillMaxWidth(),
-                label = { Text("点击输入以弹出键盘") },
+                label = { Text("贴底输入框（勿依赖滚动）") },
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
                 ),
             )
-
-            SectionLabel("视觉提示")
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(8.dp)
-                    .background(Color(0xFFE53935)),
-            )
-            Text(
-                text = "顶沉浸式开时：浅红层铺满含状态栏（证明基类未顶开）；本列表示例仍加 statusBarsPadding 便于阅读。关顶沉浸式则整页在状态栏下起算。",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-
-            Spacer(Modifier.height(24.dp))
-            }
+            Spacer(Modifier.height(8.dp))
         }
     }
 
@@ -281,7 +272,11 @@ class BaseComposeActivityApiDemoActivity : BaseComposeActivity() {
     @Composable
     private fun SectionLabel(text: String) {
         Spacer(Modifier.height(8.dp))
-        Text(text, style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary)
+        Text(
+            text,
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.primary
+        )
     }
 
     @Composable
