@@ -14,7 +14,7 @@ package com.xueh.comm_core
  * - **net**：`HttpRequest`（Retrofit 缓存、Header、Debug 日志/Chucker）、`BaseResult`、`JsonManager`。
  * - **net.coroutinedsl**：`ViewModelDsl` 链式请求；`RequestViewModel` 的 `apiDSL` / `apiFlow` / `apiError` 等统一状态。
  * - **helper**：`launchSafety`；`helper.compose` 下分页、权限、截图、`OrderedStateMap` 等。
- * - **web**：**[com.xueh.comm_core.web.AgentWebScaffold]**（内嵌或 [AgentComposeWebActivity] 全屏打开）。
+ * - **web**：**[com.xueh.comm_core.web.AgentWebScaffold]**（AgentWeb）；**[com.xueh.comm_core.web.ParkComposeWebViewScaffold]**（[parkwoocheol/compose-webview](https://github.com/parkwoocheol/compose-webview)）；[AgentComposeWebActivity] 全屏打开。
  * - **utils**：`DataStoreUtils`、`MMKVUtil`、`Lunar` 等。
  * - **widget**：图片、弹窗、底部导航、Tab、分页占位与 `Modifier` 扩展。
  *
@@ -54,7 +54,8 @@ package com.xueh.comm_core
  *
  * ## Web
  *
- * 统一使用 **AgentWeb**：[com.xueh.comm_core.web.AgentWebScaffold] 负责进度指示、返回栈、标题栏与生命周期（`ON_PAUSE` / `ON_RESUME` / `onDestroy`）。
+ * - **AgentWeb**：[com.xueh.comm_core.web.AgentWebScaffold] 负责进度指示、返回栈、标题栏与生命周期（`ON_PAUSE` / `ON_RESUME` / `onDestroy`）。
+ * - **Compose 内嵌 WebView（parkwoocheol）**：依赖 `io.github.parkwoocheol:compose-webview-android`；业务侧优先用 [com.xueh.comm_core.web.ParkComposeWebViewScaffold]，需要 JSBridge / 多平台时再直接使用 `com.parkwoocheol.composewebview` API。
  *
  * 以下占位符仅用于将本说明挂在单一符号上，避免空文件；请勿在业务中引用。
  */

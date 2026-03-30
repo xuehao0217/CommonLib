@@ -30,6 +30,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import androidx.paging.compose.samples.ComposePaging
 import com.xueh.comm_core.web.AgentWebScaffold
+import com.xueh.comm_core.web.ParkComposeWebViewScaffold
 import com.xueh.commonlib.ui.BaseComposeActivityApiDemoRoute
 import com.xueh.commonlib.ui.compose.CarouselExamples
 import com.xueh.commonlib.ui.compose.CommonTabPage
@@ -59,6 +60,7 @@ private val demoMenuEntries: List<Pair<String, NavKey>> = listOf(
     "下拉加载使用" to DemoRefreshLoad,
     "Compose 权限申请" to DemoComposePermission,
     "AgentWeb（内嵌）" to DemoAgentWeb,
+    "Park Compose WebView" to DemoParkComposeWeb,
     "ComposeTab 分页加载" to DemoComposeTab,
     "Compose Paging" to DemoComposePaging,
     "VisibilityChanged" to DemoVisibilityChanged,
@@ -98,6 +100,7 @@ private class DemoNavHostContext(
             is DemoCarousel -> CarouselExamples()
             is DemoComposePermission -> PermissionPageContent()
             is DemoAgentWeb -> DemoAgentWebPanel(onClose = { pop() })
+            is DemoParkComposeWeb -> DemoParkComposeWebPanel()
             is DemoComposeTab -> TabPage()
             is DemoComposePaging -> ComposePaging()
             is DemoVisibilityChanged -> VisibilityChangedDemo()
@@ -164,6 +167,46 @@ private fun DemoAgentWebPanel(onClose: () -> Unit) {
     }
 }
 
+/**
+ * [parkwoocheol/compose-webview](https://github.com/parkwoocheol/compose-webview)：
+ * 使用 [ParkComposeWebViewScaffold]（common_core 封装）+ 可编辑 URL。
+ */
+@Composable
+private fun DemoParkComposeWebPanel() {
+    var draftUrl by rememberSaveable { mutableStateOf("https://m.baidu.com") }
+    var loadedUrl by rememberSaveable { mutableStateOf("https://m.baidu.com") }
+    Column(Modifier.fillMaxSize()) {
+        Text(
+            text = "需联网。此为 Jetpack Compose 用 WebView 库（与 AgentWeb 不同栈），封装见 common_core [ParkComposeWebViewScaffold]。",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+        )
+        OutlinedTextField(
+            value = draftUrl,
+            onValueChange = { draftUrl = it },
+            label = { Text("URL") },
+            singleLine = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+        )
+        OutlinedButton(
+            onClick = { loadedUrl = draftUrl.trim() },
+            modifier = Modifier.padding(16.dp),
+        ) {
+            Text("加载此地址")
+        }
+        Box(
+            Modifier
+                .weight(1f)
+                .fillMaxWidth(),
+        ) {
+            ParkComposeWebViewScaffold(url = loadedUrl)
+        }
+    }
+}
+
 @Composable
 fun DemoNavDisplay(modifier: Modifier = Modifier) {
     val backStack = rememberNavBackStack(DemoActionList)
@@ -222,6 +265,7 @@ private fun demoEntryProvider(
     entry<DemoCarousel> { ctx.RouteContent(DemoCarousel) }
     entry<DemoComposePermission> { ctx.RouteContent(DemoComposePermission) }
     entry<DemoAgentWeb> { ctx.RouteContent(DemoAgentWeb) }
+    entry<DemoParkComposeWeb> { ctx.RouteContent(DemoParkComposeWeb) }
     entry<DemoComposeTab> { ctx.RouteContent(DemoComposeTab) }
     entry<DemoComposePaging> { ctx.RouteContent(DemoComposePaging) }
     entry<DemoVisibilityChanged> { ctx.RouteContent(DemoVisibilityChanged) }

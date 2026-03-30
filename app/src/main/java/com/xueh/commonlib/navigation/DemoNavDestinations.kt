@@ -38,6 +38,9 @@ data object DemoComposePermission : NavKey
 data object DemoAgentWeb : NavKey
 
 @Serializable
+data object DemoParkComposeWeb : NavKey
+
+@Serializable
 data object DemoComposeTab : NavKey
 
 @Serializable
