@@ -35,19 +35,10 @@ data object DemoCarousel : NavKey
 data object DemoComposePermission : NavKey
 
 @Serializable
-data object DemoWebView : NavKey
-
-@Serializable
-data object DemoAccompanistWeb : NavKey
+data object DemoAgentWeb : NavKey
 
 @Serializable
 data object DemoComposeTab : NavKey
-
-@Serializable
-data object DemoComposePager : NavKey
-
-@Serializable
-data object DemoComposeViewModel : NavKey
 
 @Serializable
 data object DemoComposePaging : NavKey

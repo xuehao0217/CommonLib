@@ -1,5 +1,6 @@
 package com.xueh.commonlib.navigation
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +13,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
@@ -26,8 +29,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import androidx.paging.compose.samples.ComposePaging
-import com.xueh.comm_core.web.ComposeWebView
-import com.xueh.comm_core.web.WebViewPage
+import com.xueh.comm_core.web.AgentWebScaffold
 import com.xueh.commonlib.ui.BaseComposeActivityApiDemoRoute
 import com.xueh.commonlib.ui.compose.CarouselExamples
 import com.xueh.commonlib.ui.compose.CommonTabPage
@@ -56,10 +58,8 @@ private val demoMenuEntries: List<Pair<String, NavKey>> = listOf(
     "跳转互传参数" to DemoNavigateParam1,
     "下拉加载使用" to DemoRefreshLoad,
     "Compose 权限申请" to DemoComposePermission,
-    "WebView（CustomWebView + 进度条）" to DemoWebView,
-    "Compose WebView" to DemoAccompanistWeb,
+    "AgentWeb（内嵌）" to DemoAgentWeb,
     "ComposeTab 分页加载" to DemoComposeTab,
-    "ComposePager" to DemoComposePager,
     "Compose Paging" to DemoComposePaging,
     "VisibilityChanged" to DemoVisibilityChanged,
     "OrderedTabs" to DemoOrderedTabs,
@@ -97,13 +97,8 @@ private class DemoNavHostContext(
             is DemoCommonTabPager -> CommonTabPage()
             is DemoCarousel -> CarouselExamples()
             is DemoComposePermission -> PermissionPageContent()
-            is DemoWebView ->
-                WebViewPage {
-                    pop()
-                }
-            is DemoAccompanistWeb -> AccompanistWebDemoPanel()
+            is DemoAgentWeb -> DemoAgentWebPanel(onClose = { pop() })
             is DemoComposeTab -> TabPage()
-            is DemoComposePager -> PagerPage()
             is DemoComposePaging -> ComposePaging()
             is DemoVisibilityChanged -> VisibilityChangedDemo()
             is DemoOrderedTabs -> OrderedTabsExample()
@@ -117,14 +112,22 @@ private class DemoNavHostContext(
     }
 }
 
-/** Accompanist Web：可改 URL + 联网提示，降低外网/证书导致「Demo 坏了」的误判。 */
+/** Nav3 内嵌 [AgentWebScaffold]：可改 URL，与 MainActivity 覆盖层 Web 共用同一套实现。 */
 @Composable
-private fun AccompanistWebDemoPanel() {
+private fun DemoAgentWebPanel(onClose: () -> Unit) {
+    val activity = LocalContext.current as? ComponentActivity
     var draftUrl by rememberSaveable { mutableStateOf("https://m.baidu.com") }
     var loadedUrl by rememberSaveable { mutableStateOf("https://m.baidu.com") }
+    if (activity == null) {
+        Text(
+            text = "需要 ComponentActivity 环境",
+            modifier = Modifier.padding(24.dp),
+        )
+        return
+    }
     Column(Modifier.fillMaxSize()) {
         Text(
-            text = "需联网访问；若失败请更换 URL、检查代理/证书或稍后重试。",
+            text = "需联网；修改 URL 后点「加载」切换页面。支持查询参数 hideTitle、showShare（与全屏 AgentWeb 一致）。",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -139,7 +142,7 @@ private fun AccompanistWebDemoPanel() {
                 .padding(horizontal = 16.dp),
         )
         OutlinedButton(
-            onClick = { loadedUrl = draftUrl },
+            onClick = { loadedUrl = draftUrl.trim() },
             modifier = Modifier.padding(16.dp),
         ) {
             Text("加载此地址")
@@ -149,7 +152,14 @@ private fun AccompanistWebDemoPanel() {
                 .weight(1f)
                 .fillMaxWidth(),
         ) {
-            ComposeWebView(url = loadedUrl)
+            key(loadedUrl) {
+                AgentWebScaffold(
+                    activity = activity,
+                    url = loadedUrl,
+                    initialTitle = "",
+                    onClose = onClose,
+                )
+            }
         }
     }
 }
@@ -211,10 +221,8 @@ private fun demoEntryProvider(
     entry<DemoCommonTabPager> { ctx.RouteContent(DemoCommonTabPager) }
     entry<DemoCarousel> { ctx.RouteContent(DemoCarousel) }
     entry<DemoComposePermission> { ctx.RouteContent(DemoComposePermission) }
-    entry<DemoWebView> { ctx.RouteContent(DemoWebView) }
-    entry<DemoAccompanistWeb> { ctx.RouteContent(DemoAccompanistWeb) }
+    entry<DemoAgentWeb> { ctx.RouteContent(DemoAgentWeb) }
     entry<DemoComposeTab> { ctx.RouteContent(DemoComposeTab) }
-    entry<DemoComposePager> { ctx.RouteContent(DemoComposePager) }
     entry<DemoComposePaging> { ctx.RouteContent(DemoComposePaging) }
     entry<DemoVisibilityChanged> { ctx.RouteContent(DemoVisibilityChanged) }
     entry<DemoOrderedTabs> { ctx.RouteContent(DemoOrderedTabs) }

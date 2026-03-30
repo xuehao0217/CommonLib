@@ -7,11 +7,14 @@ import android.webkit.WebView
 import android.widget.LinearLayout
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -23,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -229,3 +233,52 @@ private fun AgentWebShareAction(
         )
     }
 }
+
+/**
+ * 全屏透明/实底双栏标题（随滚动 [alpha] 过渡），仅配合 [AgentWebScaffold] 的 `hideTitle` 模式使用。
+ */
+@Composable
+private fun WebTitle(
+    title: String = "",
+    alpha: Float = 0f,
+    rightContent: (@Composable (isDark: Boolean) -> Unit)? = null,
+    back: () -> Unit = {},
+) {
+    Box(modifier = Modifier.fillMaxWidth()) {
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .alpha(1f - alpha)
+                .background(Color.Transparent)
+                .statusBarsPadding(),
+        ) {
+            CommonTitleView(
+                titleBackgroundColor = Color.Transparent,
+                title = "",
+                backIcon = R.mipmap.bar_icon_back_white,
+                backClick = back,
+                rightContent = { rightContent?.invoke(true) },
+            )
+        }
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .alpha(alpha)
+                .background(Color.White)
+                .statusBarsPadding(),
+        ) {
+            CommonTitleView(
+                titleBackgroundColor = Color.White,
+                title = title,
+                backIcon = R.mipmap.bar_icon_back_black,
+                backClick = back,
+                rightContent = { rightContent?.invoke(false) },
+            )
+        }
+    }
+}
+
+private fun truncateWebTitle(title: String, maxLength: Int = 10): String =
+    if (title.length > maxLength) title.substring(0, maxLength) + "..." else title

@@ -14,7 +14,7 @@ package com.xueh.comm_core
  * - **net**：`HttpRequest`（Retrofit 缓存、Header、Debug 日志/Chucker）、`BaseResult`、`JsonManager`。
  * - **net.coroutinedsl**：`ViewModelDsl` 链式请求；`RequestViewModel` 的 `apiDSL` / `apiFlow` / `apiError` 等统一状态。
  * - **helper**：`launchSafety`；`helper.compose` 下分页、权限、截图、`OrderedStateMap` 等。
- * - **web**：`ComposeWebView`（Accompanist）；`WebCompose` 内 `CustomWebView`；`AgentWebScaffold` / `AgentComposeWebActivity`。
+ * - **web**：**[com.xueh.comm_core.web.AgentWebScaffold]**（内嵌或 [AgentComposeWebActivity] 全屏打开）。
  * - **utils**：`DataStoreUtils`、`MMKVUtil`、`Lunar` 等。
  * - **widget**：图片、弹窗、底部导航、Tab、分页占位与 `Modifier` 扩展。
  *
@@ -52,10 +52,9 @@ package com.xueh.comm_core
  * 3. UI 层使用 [com.xueh.comm_core.widget] 中 `PagingState*`、`LazyPagingItems` 扩展展示刷新/加载/空态/错误。
  * 4. 需在列表外做删除/替换/头尾插入时，可用 **[PagingDataModifier]**（[com.xueh.comm_core.helper.compose.BasePagingSource] 同文件）。
  *
- * ## Web 两条线
+ * ## Web
  *
- * - **Compose + Accompanist**：**[ComposeWebView]**，`rememberWebViewState` + 进度条 + [AccompanistWebViewClient]（类型名来自三方库）。
- * - **AndroidView**：**[WebCompose.WebViewPage]** / **[CustomWebView]**；**[AgentWebScaffold]** 封装 AgentWeb 生命周期与返回栈。
+ * 统一使用 **AgentWeb**：[com.xueh.comm_core.web.AgentWebScaffold] 负责进度指示、返回栈、标题栏与生命周期（`ON_PAUSE` / `ON_RESUME` / `onDestroy`）。
  *
  * 以下占位符仅用于将本说明挂在单一符号上，避免空文件；请勿在业务中引用。
  */

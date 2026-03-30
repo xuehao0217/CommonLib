@@ -88,7 +88,6 @@ dependencies {
 
     // 仅 common_core 内部使用的 Compose 库
     implementation(libs.any.pop.dialog.compose)    //https://github.com/TheMelody/AnyPopDialog-Compose
-    implementation(libs.compose.webview)
     implementation(libs.refresh)
     implementation(libs.refresh.indicator)
 
