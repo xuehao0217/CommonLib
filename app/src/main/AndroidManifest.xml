@@ -30,6 +30,11 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.BaseComposeActivityApiDemoActivity"
+            android:exported="false"
+            android:label="BaseCompose API 实验室"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity
             android:name="com.xueh.comm_core.web.AgentComposeWebActivity"
             tools:node="remove" />
     </application>

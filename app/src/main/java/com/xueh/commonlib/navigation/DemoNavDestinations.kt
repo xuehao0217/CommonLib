@@ -69,3 +69,6 @@ data object DemoVisibilityChanged : NavKey
 
 @Serializable
 data object DemoOrderedTabs : NavKey
+
+@Serializable
+data object DemoBaseComposeActivityApi : NavKey

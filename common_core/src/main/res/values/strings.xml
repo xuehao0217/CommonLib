@@ -6,4 +6,5 @@
     <string name="comm_core_paging_empty">无数据</string>
     <string name="comm_core_paging_append_error">加载失败</string>
     <string name="comm_core_paging_no_more">没有更多了</string>
+    <string name="comm_core_title_back">返回</string>
 </resources>

@@ -40,6 +40,7 @@ import com.xueh.commonlib.ui.compose.RefreshLoadUse
 import com.xueh.commonlib.ui.compose.TabPage
 import com.xueh.commonlib.ui.compose.VisibilityChangedDemo
 import com.xueh.commonlib.ui.compose.lazyVerticalGrid
+import com.xueh.commonlib.ui.BaseComposeActivityApiDemoRoute
 import com.xueh.commonlib.ui.compose.scrollableTabRow
 
 private data class DemoMenuLine(val title: String, val key: NavKey)
@@ -65,6 +66,7 @@ private val demoMenuLines: List<DemoMenuLine> = listOf(
     DemoMenuLine("Compose Paging", DemoComposePaging),
     DemoMenuLine("VisibilityChanged", DemoVisibilityChanged),
     DemoMenuLine("OrderedTabs", DemoOrderedTabs),
+    DemoMenuLine("BaseComposeActivity API 实验室", DemoBaseComposeActivityApi),
 )
 
 @Composable
@@ -160,4 +162,5 @@ private fun demoEntryProvider(
     entry<DemoComposePaging> { ComposePaging() }
     entry<DemoVisibilityChanged> { VisibilityChangedDemo() }
     entry<DemoOrderedTabs> { OrderedTabsExample() }
+    entry<DemoBaseComposeActivityApi> { BaseComposeActivityApiDemoRoute() }
 }

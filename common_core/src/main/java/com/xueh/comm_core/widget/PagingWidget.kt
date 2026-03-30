@@ -1,5 +1,8 @@
 /**
  * 分页列表与下拉刷新封装：在 [LazyPagingItems] 上组合 [pullToRefresh]、竖直 [VerticalPager] 等，减少页面样板代码。
+ *
+ * **布局约定**：[PagingLazyColumn]、[PagingVerticalGrid]、[PagingVerticalStaggeredGrid] 在组合树中与 [pagingRefreshStateContent] 为**兄弟**节点（无内置 `Box` 叠放）。
+ * 若父级为纵向 `Column`，刷新占位会画在列表**下方**；需要「全屏空/错态盖在列表上」时，请在外层自行使用 `Box(Modifier.fillMaxSize())` 等包裹，或给列表加 `Modifier.weight(1f)` 等约束。
  */
 package com.xueh.comm_core.widget
 
@@ -59,18 +62,47 @@ import com.king.ultraswiperefresh.rememberUltraSwipeRefreshState
 import com.xueh.comm_core.helper.compose.onScrollStopVisibleList
 
 @Composable
+private fun <T : Any> DefaultPagingAppendStateContent(items: LazyPagingItems<T>) {
+    items.PagingStateAppend()
+}
+
+@Composable
+private fun <T : Any> DefaultPagingRefreshStateContent(items: LazyPagingItems<T>) {
+    items.PagingStateRefresh()
+}
+
+/**
+ * 将 [LazyListState] / Grid 返回的 **整条 Lazy 子项下标** 映射为分页项：仅统计落在
+ * `[pagingStartLazyIndex, pagingStartLazyIndex + itemCount)` 内的可见格，与 [CommonLazyColumn] 可选 head、
+ * [PagingAppendItem]、foot 之后的真实顺序一致（分页 cell 在 LazyColumn 中为连续一段）。
+ */
+@Composable
 private fun <T : Any> LazyPagingItems<T>.ObserveVisibleItemsOnScrollStop(
     onStop: ((List<T>) -> Unit)?,
+    pagingStartLazyIndex: Int = 0,
     observeBlock: @Composable (onIndexes: (List<Int>) -> Unit) -> Unit,
 ) {
     if (onStop == null) return
-    observeBlock { visibleIndexes ->
-        itemSnapshotList.items
-            .filterIndexed { index, _ -> index in visibleIndexes }
-            .let { onStop(it) }
+    observeBlock { visibleLazyIndexes ->
+        val visible = visibleLazyIndexes.toSet()
+        val out = buildList {
+            for (pagingIdx in 0 until itemCount) {
+                val lazyIdx = pagingStartLazyIndex + pagingIdx
+                if (lazyIdx !in visible) continue
+                this@ObserveVisibleItemsOnScrollStop[pagingIdx]?.let { add(it) }
+            }
+        }
+        onStop(out)
     }
 }
 
+/**
+ * 纵向分页列表（[CommonLazyColumn]：可选 [headContent]、分页区、[PagingAppendItem]、可选 [footContent]）。
+ *
+ * [onScrollStopVisibleList]：滚动停止时回调**当前可见**的非空分页项；已按 [headContent] 对 Lazy 下标做偏移，与 append/foot 无冲突。
+ *
+ * [pagingRefreshStateContent] 与列表为兄弟组合，见文件头「布局约定」。
+ */
 @Composable
 fun <T : Any> LazyPagingItems<T>.PagingLazyColumn(
     lazyListState: LazyListState = rememberLazyListState(),
@@ -81,12 +113,18 @@ fun <T : Any> LazyPagingItems<T>.PagingLazyColumn(
     contentType: ((index: Int) -> Any?)? = null,
     headContent: (@Composable () -> Unit)? = null,
     footContent: (@Composable () -> Unit)? = null,
-    pagingAppendStateContent: @Composable () -> Unit = { PagingStateAppend() },
-    pagingRefreshStateContent: @Composable () -> Unit = { PagingStateRefresh() },
+    pagingAppendStateContent: (@Composable () -> Unit)? = null,
+    pagingRefreshStateContent: (@Composable () -> Unit)? = null,
     onScrollStopVisibleList: ((List<T>) -> Unit)? = null,
     itemContent: @Composable LazyItemScope.(T) -> Unit,
 ) {
-    ObserveVisibleItemsOnScrollStop(onStop = onScrollStopVisibleList) { callback ->
+    val pagingStartLazyIndex = if (headContent != null) 1 else 0
+    val appendContent = pagingAppendStateContent
+    val refreshContent = pagingRefreshStateContent
+    ObserveVisibleItemsOnScrollStop(
+        onStop = onScrollStopVisibleList,
+        pagingStartLazyIndex = pagingStartLazyIndex,
+    ) { callback ->
         lazyListState.onScrollStopVisibleList(callback)
     }
 
@@ -105,11 +143,20 @@ fun <T : Any> LazyPagingItems<T>.PagingLazyColumn(
         ) { index ->
             this@PagingLazyColumn[index]?.let { itemContent(it) }
         }
-        PagingAppendItem(this@PagingLazyColumn) { pagingAppendStateContent() }
+        PagingAppendItem(this@PagingLazyColumn) {
+            if (appendContent != null) appendContent()
+            else DefaultPagingAppendStateContent(this@PagingLazyColumn)
+        }
     }
-    pagingRefreshStateContent()
+    if (refreshContent != null) refreshContent()
+    else DefaultPagingRefreshStateContent(this)
 }
 
+/**
+ * 分页网格；Lazy 子项顺序为分页 cell 后接 [PagingAppendItem]（无 head），[onScrollStopVisibleList] 使用默认 `pagingStartLazyIndex = 0`。
+ *
+ * [pagingRefreshStateContent] 与网格为兄弟组合，见文件头「布局约定」。
+ */
 @Composable
 fun <T : Any> LazyPagingItems<T>.PagingVerticalGrid(
     modifier: Modifier = Modifier,
@@ -119,11 +166,13 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalGrid(
     horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(7.dp),
     key: ((index: Int) -> Any)? = null,
     contentType: ((index: Int) -> Any?)? = null,
-    pagingAppendStateContent: @Composable () -> Unit = { PagingStateAppend() },
-    pagingRefreshStateContent: @Composable () -> Unit = { PagingStateRefresh() },
+    pagingAppendStateContent: (@Composable () -> Unit)? = null,
+    pagingRefreshStateContent: (@Composable () -> Unit)? = null,
     onScrollStopVisibleList: ((List<T>) -> Unit)? = null,
     itemContent: @Composable LazyGridItemScope.(T) -> Unit,
 ) {
+    val appendContent = pagingAppendStateContent
+    val refreshContent = pagingRefreshStateContent
     ObserveVisibleItemsOnScrollStop(onStop = onScrollStopVisibleList) { callback ->
         state.onScrollStopVisibleList(callback)
     }
@@ -142,11 +191,20 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalGrid(
         ) { index ->
             this@PagingVerticalGrid[index]?.let { itemContent(it) }
         }
-        PagingAppendItem(this@PagingVerticalGrid) { pagingAppendStateContent() }
+        PagingAppendItem(this@PagingVerticalGrid) {
+            if (appendContent != null) appendContent()
+            else DefaultPagingAppendStateContent(this@PagingVerticalGrid)
+        }
     }
-    pagingRefreshStateContent()
+    if (refreshContent != null) refreshContent()
+    else DefaultPagingRefreshStateContent(this)
 }
 
+/**
+ * 分页瀑布流网格；子项顺序同 [PagingVerticalGrid]。
+ *
+ * [pagingRefreshStateContent] 与网格为兄弟组合，见文件头「布局约定」。
+ */
 @Composable
 fun <T : Any> LazyPagingItems<T>.PagingVerticalStaggeredGrid(
     modifier: Modifier = Modifier,
@@ -157,11 +215,13 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalStaggeredGrid(
     verticalItemSpacing: Dp = 0.dp,
     key: ((index: Int) -> Any)? = null,
     contentType: ((index: Int) -> Any?)? = null,
-    pagingAppendStateContent: @Composable () -> Unit = { PagingStateAppend() },
-    pagingRefreshStateContent: @Composable () -> Unit = { PagingStateRefresh() },
+    pagingAppendStateContent: (@Composable () -> Unit)? = null,
+    pagingRefreshStateContent: (@Composable () -> Unit)? = null,
     onScrollStopVisibleList: ((List<T>) -> Unit)? = null,
     itemContent: @Composable LazyStaggeredGridItemScope.(T) -> Unit,
 ) {
+    val appendContent = pagingAppendStateContent
+    val refreshContent = pagingRefreshStateContent
     ObserveVisibleItemsOnScrollStop(onStop = onScrollStopVisibleList) { callback ->
         state.onScrollStopVisibleList(callback)
     }
@@ -181,9 +241,13 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalStaggeredGrid(
         ) { index ->
             this@PagingVerticalStaggeredGrid[index]?.let { itemContent(it) }
         }
-        PagingAppendItem(this@PagingVerticalStaggeredGrid) { pagingAppendStateContent() }
+        PagingAppendItem(this@PagingVerticalStaggeredGrid) {
+            if (appendContent != null) appendContent()
+            else DefaultPagingAppendStateContent(this@PagingVerticalStaggeredGrid)
+        }
     }
-    pagingRefreshStateContent()
+    if (refreshContent != null) refreshContent()
+    else DefaultPagingRefreshStateContent(this)
 }
 
 @Composable
@@ -192,9 +256,10 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalPager(
     modifier: Modifier = Modifier,
     key: ((index: Int) -> Any)? = null,
     beyondViewportPageCount: Int = PagerDefaults.BeyondViewportPageCount,
-    pagingRefreshStateContent: @Composable () -> Unit = { PagingStateRefresh() },
+    pagingRefreshStateContent: (@Composable () -> Unit)? = null,
     pageContent: @Composable PagerScope.(T) -> Unit,
 ) {
+    val refreshContent = pagingRefreshStateContent
     LaunchedEffect(itemCount) {
         if (itemCount > 0 && state.currentPage >= itemCount) {
             state.animateScrollToPage(itemCount - 1)
@@ -208,7 +273,8 @@ fun <T : Any> LazyPagingItems<T>.PagingVerticalPager(
     ) { index ->
         this@PagingVerticalPager[index]?.let { pageContent(it) }
     }
-    pagingRefreshStateContent()
+    if (refreshContent != null) refreshContent()
+    else DefaultPagingRefreshStateContent(this)
 }
 
 @Composable

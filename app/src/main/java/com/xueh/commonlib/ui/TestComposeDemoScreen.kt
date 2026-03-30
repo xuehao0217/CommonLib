@@ -9,9 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import com.xueh.comm_core.base.compose.BaseComposeActivity
-import com.xueh.comm_core.helper.compose.findActivity
+import com.xueh.comm_core.base.compose.LocalBaseComposeActivity
 import com.xueh.comm_core.widget.clickNoRipple
 
 /**
@@ -21,7 +19,7 @@ import com.xueh.comm_core.widget.clickNoRipple
 fun TestComposeDemoScreen() {
     val shell = LocalAppShell.current
     BackHandler { shell.dismissOverlay() }
-    val activity = LocalContext.current.findActivity() as? BaseComposeActivity
+    val activity = LocalBaseComposeActivity.current
     Box(
         modifier = Modifier
             .fillMaxSize()

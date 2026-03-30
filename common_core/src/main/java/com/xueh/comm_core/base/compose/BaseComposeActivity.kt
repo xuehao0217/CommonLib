@@ -2,6 +2,7 @@ package com.xueh.comm_core.base.compose
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.addCallback
@@ -16,7 +17,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
@@ -32,44 +40,37 @@ import com.xueh.comm_core.widget.ImageCompose
 import com.xueh.comm_core.widget.clickNoRipple
 
 /**
- * 优化版 BaseComposeActivity
+ * 当前组合下的 [BaseComposeActivity]（若不在其树内则为 null）。
+ * 用于减少 `LocalContext.current.findActivity()` 样板；勿用于生命周期关键路径。
+ */
+val LocalBaseComposeActivity: ProvidableCompositionLocal<BaseComposeActivity?> =
+    staticCompositionLocalOf { null }
+
+/**
+ * 带边到边、设计稿宽度 Density、[ComposeMaterialTheme] 与可选默认标题栏的 Compose Activity 基类。
  *
- * 特性：
- * - 锁定竖屏（可按需修改）
- * - 完全沉浸式：状态栏和导航栏透明，内容绘制到系统栏后面
- * - 子类通过 immersiveStatusBar() 控制内容是否延伸到状态栏后面
- * - 子类通过 immersiveNavigationBar() 控制内容是否延伸到导航栏后面
- * - 基于设计稿宽度的 Density 等比缩放（今日头条适配方案）
- * - fontScale 固定为 1.0，屏蔽系统字体缩放
+ * **特性**
+ * - [requestedScreenOrientation] 默认竖屏锁定，平板等可重写。
+ * - 沉浸式：透明系统栏；[immersiveStatusBar] / [immersiveNavigationBar] 控制 [Scaffold] 是否消费对应 insets。
+ * - 设计稿宽度等比缩放（今日头条方案）；`Density` 的 fontScale 固定 1.0；基准宽度见 [designWidthDp]。
+ * - [mergeImeIntoContentWindowInsets] 为 true 时，内容区并入 IME，减轻键盘遮挡；重度表单仍建议在页面内 `verticalScroll` + `imePadding`。
+ * - [isSecureWindow] 可开启防截屏（支付/证件等）。
  *
- * 屏幕适配原理：
- * ┌─────────────────────────────────────────────────────────┐
- * │ 设计稿基准宽度 = 402dp（对齐 iPhone 16 Pro 的 402pt）     │
- * │                                                         │
- * │ 核心公式：scaledDensity = screenWidthPx / 402            │
- * │                                                         │
- * │ 效果：所有设备的逻辑宽度统一为 402dp，                     │
- * │       1dp 始终占屏幕宽度的 1/402，                        │
- * │       UI 元素在不同分辨率设备上保持一致的屏幕占比。         │
- * │                                                         │
- * │ 示例：                                                   │
- * │   Redmi K70  (1440px) → density = 1440/402 = 3.582      │
- * │   iQOO Neo5  (1080px) → density = 1080/402 = 2.687      │
- * │   两台设备上 47.dp 的日历格子占屏幕宽度比例完全一致        │
- * └─────────────────────────────────────────────────────────┘
+ * **状态栏相关 API 对照（易混）**
+ *
+ * | API | 作用 |
+ * |-----|------|
+ * | [showStatusBars] | 仅作用在默认标题栏：是否为标题行加 [statusBarsPadding]（与刘海下标题位置有关）。 |
+ * | [immersiveStatusBar] | [Scaffold] 的 [androidx.compose.foundation.layout.WindowInsets] 是否包含状态栏：为 true 时内容可画到状态栏后，需页面自管 `statusBarsPadding`。 |
+ * | [immersiveNavigationBar] | 同上，针对导航栏区域。 |
+ *
+ * **系统返回键**：[onCreate] 内会注册默认 `OnBackPressedCallback`（未消费时 [finish]）。后通过 [androidx.activity.OnBackPressedDispatcher.addCallback] 注册的回调会先执行；子类若在组合内注册自定义返回（如 [androidx.compose.runtime.DisposableEffect]），请勿依赖注册顺序以外的行为，并自行处理是否调用 [androidx.activity.OnBackPressedDispatcher.onBackPressed]。
+ *
+ * **刘海 / 横屏**：部分「只保留一侧系统栏 inset」的组合下，横屏刘海安全区可能仍需在具体页面补充 `displayCutout` / `safeDrawing`，见各沉浸式 API 说明。
+ *
+ * 屏幕适配：`scaledDensity = screenWidthPx / designWidthDp()`，使逻辑宽度对齐设计稿宽度，1dp 占屏宽固定比例。
  */
 abstract class BaseComposeActivity : ComponentActivity() {
-
-    companion object {
-        /**
-         * 设计稿基准宽度（dp），对齐 iOS 设计稿。
-         *
-         * iPhone 16 Pro 屏幕宽度为 402pt，iOS 的 1pt ≈ Android 的 1dp，
-         * 因此以 402 作为基准，使 Android 端所有设备的逻辑宽度统一为 402dp，
-         * 保证 UI 元素在不同分辨率设备上与 iOS 设计稿保持一致的屏幕占比。
-         */
-        private const val DESIGN_WIDTH_DP = 402f
-    }
 
     /** 状态栏图标颜色模式，true=白色图标（用于深色背景），false=黑色图标 */
     var isSystemBarLight by mutableStateOf(false)
@@ -80,12 +81,20 @@ abstract class BaseComposeActivity : ComponentActivity() {
             navigationBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
         )
 
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
+        requestedOrientation = requestedScreenOrientation()
 
         super.onCreate(savedInstanceState)
 
+        if (isSecureWindow()) {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE
+            )
+        }
+
         window.decorView.setBackgroundColor(android.graphics.Color.BLACK)
 
+        // 默认兜底：无子回调消费时结束 Activity。后注册的回调先执行，见类 KDoc。
         onBackPressedDispatcher.addCallback {
             finish()
         }
@@ -105,12 +114,16 @@ abstract class BaseComposeActivity : ComponentActivity() {
             //
             // 流程：
             //   1. 获取屏幕物理像素宽度 screenWidthPx
-            //   2. 计算 scaledDensity = screenWidthPx / DESIGN_WIDTH_DP
+            //   2. 计算 scaledDensity = screenWidthPx / designWidthDp()
             //   3. 通过 CompositionLocalProvider 覆盖 LocalDensity
             //   4. 所有 Compose 组件中的 dp/sp 值自动按新 density 转换为 px
             //
-            val screenWidthPx = resources.displayMetrics.widthPixels.toFloat()
-            val scaledDensity = screenWidthPx / DESIGN_WIDTH_DP
+            // 依赖 LocalConfiguration，分屏/折叠/旋转后宽度变化会触发重组，避免仍用旧 widthPixels。
+            val configuration = LocalConfiguration.current
+            val screenWidthPx = remember(configuration.screenWidthDp, configuration.screenHeightDp) {
+                resources.displayMetrics.widthPixels.toFloat()
+            }
+            val scaledDensity = screenWidthPx / this@BaseComposeActivity.designWidthDp()
 
             CompositionLocalProvider(
                 LocalDensity provides Density(
@@ -125,40 +138,55 @@ abstract class BaseComposeActivity : ComponentActivity() {
 
     @Composable
     private fun BaseComposeContent() {
-        val isDark = AppThemeType.isDark(themeType = appThemeType)
+        CompositionLocalProvider(LocalBaseComposeActivity provides this) {
+            val isDark = AppThemeType.isDark(themeType = appThemeType)
 
-        LaunchedEffect(isDark, isSystemBarLight) {
-            updateSystemBarsStyle(isDark)
-        }
+            LaunchedEffect(isDark, isSystemBarLight) {
+                updateSystemBarsStyle(isDark)
+            }
 
-        ComposeMaterialTheme {
-            PersistAppThemePreferencesEffect()
-            GrayAppAdapter(isGray = false) {
-                val windowInsets = if (immersiveStatusBar() && immersiveNavigationBar()) {
-                    WindowInsets(0)
-                } else if (immersiveStatusBar()) {
-                    WindowInsets.navigationBars
-                } else if (immersiveNavigationBar()) {
-                    WindowInsets.statusBars
-                } else {
-                    WindowInsets.systemBars
-                }
-
-                Scaffold(
-                    topBar = {
-                        if (showTitleView()) {
-                            getTitleView()
+            ComposeMaterialTheme {
+                PersistAppThemePreferencesEffect()
+                GrayAppAdapter(isGray = isAppGrayMode()) {
+                    val systemBarInsets = when {
+                        immersiveStatusBar() && immersiveNavigationBar() -> WindowInsets(0)
+                        immersiveStatusBar() -> WindowInsets.navigationBars
+                        immersiveNavigationBar() -> WindowInsets.statusBars
+                        else -> WindowInsets.systemBars
+                    }
+                    val windowInsets =
+                        if (mergeImeIntoContentWindowInsets()) {
+                            systemBarInsets.union(WindowInsets.ime)
+                        } else {
+                            systemBarInsets
                         }
-                    },
-                    containerColor = Color.Transparent,
-                    contentWindowInsets = windowInsets,
-                ) { innerPadding ->
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding)
-                    ) {
-                        setComposeContent()
+
+                    if (useActivityScaffold()) {
+                        Scaffold(
+                            topBar = {
+                                if (showTitleView()) {
+                                    getTitleView()
+                                }
+                            },
+                            containerColor = Color.Transparent,
+                            contentWindowInsets = windowInsets,
+                        ) { innerPadding ->
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(innerPadding)
+                            ) {
+                                setComposeContent()
+                            }
+                        }
+                    } else {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .windowInsetsPadding(windowInsets)
+                        ) {
+                            setComposeContent()
+                        }
                     }
                 }
             }
@@ -189,6 +217,33 @@ abstract class BaseComposeActivity : ComponentActivity() {
     /** 子类必须实现 Compose 页面主体内容 */
     @Composable
     abstract fun setComposeContent()
+
+    /**
+     * 是否使用本类内置 [Scaffold]（顶栏 + [contentWindowInsets]）。
+     * 为 false 时仅 [ComposeMaterialTheme] + 带 [windowInsetsPadding] 的容器，避免与页面内第二层 [Scaffold] 叠床架屋；标题与顶栏需自行实现。
+     */
+    protected open fun useActivityScaffold(): Boolean = true
+
+    /**
+     * 是否在 [contentWindowInsets] 中并入 [WindowInsets.ime]。
+     * 全屏游戏/视频等可返回 false，避免键盘顶起全屏层。
+     */
+    protected open fun mergeImeIntoContentWindowInsets(): Boolean = true
+
+    /** 全局灰度 UI（如活动志哀）；与 [GrayAppAdapter] 一致。 */
+    protected open fun isAppGrayMode(): Boolean = false
+
+    /**
+     * 设计稿逻辑宽度基准（dp），用于 `scaledDensity = widthPx / designWidthDp()`。
+     * 默认 402，对齐常见 iPhone 比例稿；特殊模块可重写。
+     */
+    protected open fun designWidthDp(): Float = 402f
+
+    /** [android.app.Activity.setRequestedOrientation]；平板横屏宿主等可重写。 */
+    protected open fun requestedScreenOrientation(): Int = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
+
+    /** 为 true 时对窗口加 [WindowManager.LayoutParams.FLAG_SECURE]（防截屏/录屏，系统仍可能策略限制）。 */
+    protected open fun isSecureWindow(): Boolean = false
 
     /** 是否显示标题栏，默认显示（子类可重写） */
     protected open fun showTitleView() = true
@@ -246,6 +301,7 @@ fun CommonTitleView(
     val isDark = AppThemeType.isDark(themeType = appThemeType)
     val textColor = if (isDark) Color.White else Color.Black
     val backgroundColor = if (isDark) Color.Black else titleBackgroundColor
+    val backLabel = stringResource(R.string.comm_core_title_back)
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -256,11 +312,14 @@ fun CommonTitleView(
             .padding(horizontal = 8.dp)
     ) {
         if (showBackIcon) {
-            // 使用你的 ImageCompose（支持 tint）
             ImageCompose(
                 id = backIcon,
                 modifier = Modifier
                     .size(backIconSize)
+                    .semantics {
+                        role = Role.Button
+                        contentDescription = backLabel
+                    }
                     .clickNoRipple { backClick?.invoke() },
                 colorFilter = if (isDark) ColorFilter.tint(Color.White) else null
             )
@@ -278,7 +337,14 @@ fun CommonTitleView(
                 text = title,
                 color = textColor,
                 style = titleTextStyle,
-                maxLines = 1
+                maxLines = 1,
+                modifier = Modifier.then(
+                    if (title.isNotEmpty()) {
+                        Modifier.semantics { heading() }
+                    } else {
+                        Modifier
+                    }
+                )
             )
         }
 

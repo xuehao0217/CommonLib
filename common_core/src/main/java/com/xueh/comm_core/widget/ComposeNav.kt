@@ -3,17 +3,21 @@
  */
 package com.xueh.comm_core.widget
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -70,7 +74,7 @@ data class NavThemeColors(
  * 3. 点击 Tab 时调用 [animateScrollToPage] 切换页面
  * 4. [interceptClick] 可拦截点击，返回 true 时阻止导航切换
  *
- * @param pages 各页面对应的 Composable 内容
+ * @param pages 各页面对应的 Composable 内容，与 [navItems] **一一对应且长度必须相同**
  * @param navItems 导航项数据列表
  * @param interceptClick 点击拦截回调，返回 true 时阻止导航
  */
@@ -85,16 +89,21 @@ fun BottomNavPager(
     userScrollEnabled: Boolean = false,
     interceptClick: ((Int) -> Boolean)? = null,
 ) {
+    require(pages.size == navItems.size) {
+        "BottomNavPager: pages.size (${pages.size}) must equal navItems.size (${navItems.size})."
+    }
+
     val pagerState = rememberPagerState { pages.size }
-    val selectedIndex by remember { derivedStateOf { pagerState.currentPage } }
+    val selectedIndex = pagerState.currentPage
     val coroutineScope = rememberCoroutineScope()
 
-    // 动态日夜间状态
     val isDark = isThemeDark()
+    val barBackground = if (isDark) themeColors.darkBackground else themeColors.lightBackground
+    val selectColor = if (isDark) themeColors.darkSelectedTextColor else themeColors.lightSelectedTextColor
+    val unselectColor = if (isDark) themeColors.darkUnSelectedTextColor else themeColors.lightUnSelectedTextColor
 
     Column(modifier = modifier.fillMaxSize()) {
 
-        // ----------------- Pager -----------------
         HorizontalPager(
             state = pagerState,
             modifier = Modifier
@@ -105,25 +114,29 @@ fun BottomNavPager(
             pages[page]()
         }
 
-        // ----------------- Bottom Navigation -----------------
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp)
-                .background(if (isDark) themeColors.darkBackground else themeColors.lightBackground),
+                .background(barBackground),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
             navItems.forEachIndexed { index, nav ->
+                val selected = index == selectedIndex
                 NavItem(
                     navData = nav,
-                    selected = index == selectedIndex,
-                    selectTextColor =  if (isDark) themeColors.darkSelectedTextColor else themeColors.lightSelectedTextColor,
-                    unSelectTextColor = if (isDark) themeColors.darkUnSelectedTextColor else themeColors.lightUnSelectedTextColor,
+                    selected = selected,
+                    selectTextColor = selectColor,
+                    unSelectTextColor = unselectColor,
                     imageSize = imageSize,
                     fontSize = fontSize,
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight()
+                        .semantics {
+                            role = Role.Tab
+                            this.selected = selected
+                        }
                         .clickDebounce {
                             val intercepted = interceptClick?.invoke(index) ?: false
                             if (!intercepted) {
@@ -145,7 +158,7 @@ fun BottomNavPager(
  *
  * @param navData 导航项数据
  * @param selected 是否处于选中状态
- * @param content 自定义内容插槽，默认展示图标+文本+红点
+ * @param content 自定义内容插槽；为 null 时使用内置图标+文本+红点布局（更易保持组合稳定性）
  */
 @Composable
 fun NavItem(
@@ -156,41 +169,60 @@ fun NavItem(
     imageSize: Dp,
     fontSize: TextUnit,
     modifier: Modifier = Modifier,
-    content: @Composable BoxScope.(NavData, Boolean) -> Unit = { nav, isSelected ->
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Box(contentAlignment = Alignment.Center) {
-                // 图标
-                ImageCompose(
-                    id = if (isSelected) nav.selectIcon else nav.unSelectIcon,
-                    modifier = Modifier.size(imageSize),
-                    colorFilter = ColorFilter.tint(if (selected) selectTextColor else unSelectTextColor)
-                )
-
-                // 红点
-                if (nav.showRed) {
-                    Canvas(
-                        modifier = Modifier
-                            .size(6.dp)
-                            .align(Alignment.TopEnd)
-                    ) {
-                        drawCircle(Color.Red, radius = size.minDimension / 2)
-                    }
-                }
-            }
-
-            Text(
-                text = nav.text,
+    content: (@Composable BoxScope.(NavData, Boolean) -> Unit)? = null,
+) {
+    Box(modifier = modifier, contentAlignment = Alignment.Center) {
+        if (content != null) {
+            content(navData, selected)
+        } else {
+            DefaultNavItemContent(
+                navData = navData,
+                selected = selected,
+                selectTextColor = selectTextColor,
+                unSelectTextColor = unSelectTextColor,
+                imageSize = imageSize,
                 fontSize = fontSize,
-                color = if (isSelected) selectTextColor else unSelectTextColor
             )
         }
     }
+}
+
+@Composable
+private fun DefaultNavItemContent(
+    navData: NavData,
+    selected: Boolean,
+    selectTextColor: Color,
+    unSelectTextColor: Color,
+    imageSize: Dp,
+    fontSize: TextUnit,
 ) {
-    Box(modifier = modifier, contentAlignment = Alignment.Center) {
-        content(navData, selected)
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Box(contentAlignment = Alignment.Center) {
+            ImageCompose(
+                id = if (selected) navData.selectIcon else navData.unSelectIcon,
+                modifier = Modifier.size(imageSize),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(if (selected) selectTextColor else unSelectTextColor)
+            )
+
+            if (navData.showRed) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .size(6.dp)
+                        .background(Color.Red, CircleShape)
+                )
+            }
+        }
+
+        Text(
+            text = navData.text,
+            fontSize = fontSize,
+            color = if (selected) selectTextColor else unSelectTextColor
+        )
     }
 }

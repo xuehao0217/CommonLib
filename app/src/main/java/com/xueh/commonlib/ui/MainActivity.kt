@@ -29,12 +29,10 @@ import kotlinx.coroutines.delay
  * 应用唯一 Activity：启动闪屏 → 底部导航主界面；全屏 Web / 测试页以覆盖层呈现。
  */
 class MainActivity : BaseComposeActivity() {
-
     companion object {
         var interceptTab by mutableStateOf(false)
         var showRedPoint = mutableStateOf(false)
     }
-
     enum class RootPhase { Splash, Main }
 
     private var rootPhase by mutableStateOf(RootPhase.Splash)

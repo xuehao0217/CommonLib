@@ -8,7 +8,7 @@ package com.xueh.comm_core
  *
  * ## 分层与职责（按包）
  *
- * - **base**：`BaseApplication` 主进程初始化；`BaseComposeActivity` 沉浸式、设计稿宽度 Density、`Scaffold` 与标题栏。
+ * - **base**：`BaseApplication` 主进程初始化；`BaseComposeActivity` 沉浸式、设计稿宽度 Density、可选 `Scaffold`、`LocalBaseComposeActivity`、可重写钩子（灰度、IME、方向、`FLAG_SECURE` 等）。
  * - **base.compose.theme**：`AppThemeType` / `AppThemeColorType`、`ComposeMaterialTheme`（唯一根主题：Material3 + `AppTypography`+`Shapes` + `AppTheme` 语义 Local）、`AppThemePreferences`（按枚举 name 持久化，兼容旧 ordinal）与 `PersistAppThemePreferencesEffect`。
  * - **base.mvvm**：`AbsViewModel` → `RequestViewModel` → `BaseViewModel`；`BaseComposeViewModel` 绑定 Loading 与异常；`BaseRequstViewModel` 懒加载 API。
  * - **net**：`HttpRequest`（Retrofit 缓存、Header、Debug 日志/Chucker）、`BaseResult`、`JsonManager`。
@@ -24,7 +24,7 @@ package com.xueh.comm_core
  *    Logger、**[DataStoreUtils.init]**、**[com.xueh.comm_core.base.compose.theme.AppThemePreferences.restore]**、业务 [init]。
  * 2. 尽早调用 **[HttpRequest.init]**（BaseUrl + 可选 OkHttp/Retrofit DSL），再 [HttpRequest.getService] 拿接口实例。
  * 3. Compose 页面继承 **[BaseComposeActivity]**：`setContent` 内已注入设计稿 Density、[ComposeMaterialTheme]、
- *    [com.xueh.comm_core.base.compose.theme.PersistAppThemePreferencesEffect]；子类实现 [com.xueh.comm_core.base.compose.BaseComposeActivity.setComposeContent]。
+ *    [com.xueh.comm_core.base.compose.theme.PersistAppThemePreferencesEffect]；子类实现 [com.xueh.comm_core.base.compose.BaseComposeActivity.setComposeContent]；组合内可取 [com.xueh.comm_core.base.compose.LocalBaseComposeActivity]。
  *
  * ## 网络请求流程（ViewModel）
  *
