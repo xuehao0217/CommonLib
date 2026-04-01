@@ -1,0 +1,64 @@
+---
+description: Kotlin 和 Jetpack Compose 编码规范
+globs: "**/*.kt"
+alwaysApply: false
+---
+
+# Kotlin / Compose 规范
+
+## ViewModel
+
+- 继承 `BaseViewModel` 或 `BaseRequstViewModel<E>`，不要直接继承 ViewModel()
+- 网络请求用 `apiDSL` / `apiFlow` / `apiDslResult`，不要手动 try-catch + launch
+- 状态暴露用 StateFlow，UI 层 `collectAsState()`；loading/error 已由基类处理
+- 禁止 GlobalScope，统一用 viewModelScope
+
+```kotlin
+// ✅ 标准写法
+class FooViewModel : BaseRequstViewModel<FooApi>() {
+    override fun initApi() = HttpRequest.getService(FooApi::class.java)
+
+    val list = MutableStateFlow<List<Item>>(emptyList())
+
+    fun fetchData() = apiDSL {
+        onRequest { api.getItems() }
+        onResponse { list.value = it.data.orEmpty() }
+    }
+}
+```
+
+## Compose 状态
+
+- 业务共用状态 → ViewModel；纯 UI 状态 → `remember` / `rememberSaveable`
+- 3 个及以上同 key 的 `remember(key)` 必须收拢为 `data class` + 单个 `remember`
+- `derivedStateOf` 只订阅当前 Composable 需要的字段
+- 避免在 @Composable 里无 remember 地 `list.filter {}` 创建新集合
+
+## LazyColumn / LazyRow
+
+- items 必须提供稳定 `key`（业务 id）
+- item 内频繁变化的回调用 `rememberUpdatedState`
+
+## 副作用
+
+- 一次性副作用用 `LaunchedEffect(key)`，key 写全依赖
+- 清理用 `DisposableEffect`
+- 重 CPU / IO 不进 Composable 主路径，用 `withContext(Dispatchers.IO)`
+
+## 序列化
+
+- 数据类用 `@Serializable`（kotlinx-serialization），不用 Gson
+- JSON 配置统一用 `JsonManager.default`
+
+## 命名
+
+- Composable 函数 PascalCase：`FooScreen`、`FooCard`
+- 非 Composable 函数 camelCase
+- 常量 `private const val` 写在同文件顶部，禁止新建独立常量文件
+
+## 注释
+
+- 中文注释，英文标识符
+- 文件头 KDoc 写清职责、协作类、业务流程
+- 导航跳转写 `// NAV: 源 -> 目标 (参数)`
+- 不写废话注释（"这里在做 if 判断"）

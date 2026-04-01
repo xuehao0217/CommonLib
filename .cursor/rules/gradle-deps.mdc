@@ -1,0 +1,53 @@
+---
+description: Gradle 构建与依赖管理约定
+globs: "{**/*.gradle.kts,**/libs.versions.toml}"
+alwaysApply: false
+---
+
+# Gradle 与依赖管理
+
+## 版本目录（Version Catalog）
+
+所有依赖版本统一在 `gradle/libs.versions.toml` 管理：
+- `[versions]` 定义版本号
+- `[libraries]` 定义依赖坐标
+- `[plugins]` 定义插件
+
+在 `build.gradle.kts` 中用 `libs.xxx` 引用，**禁止**硬编码版本号。
+
+```kotlin
+// ✅
+implementation(libs.coil.compose)
+
+// ❌
+implementation("io.coil-kt.coil3:coil-compose:3.4.0")
+```
+
+## 模块依赖策略
+
+- `common_core`：基础依赖用 `api()`（暴露给 app），内部实现用 `implementation()`
+- `app`：仅 `implementation(project(":common_core"))`，app 专用依赖用 `implementation()`
+- Debug 专用：`debugApi()` / `debugImplementation()`（如 Chucker、LeakCanary）
+
+## 添加新依赖步骤
+
+1. 在 `libs.versions.toml` 的 `[versions]` 添加版本
+2. 在 `[libraries]` 添加坐标引用
+3. 在对应模块的 `build.gradle.kts` 用 `libs.xxx` 引入
+4. 如果是 Gradle 插件，在 `[plugins]` 添加，根 `build.gradle.kts` 声明 `apply false`
+
+## 仓库配置
+
+`settings.gradle.kts` 使用 `FAIL_ON_PROJECT_REPOS`，仓库统一在 settings 管理。
+已配置：Google、Maven Central、Aliyun 镜像、JitPack。
+
+## 检查更新
+
+运行 `./gradlew dependencyUpdates`（ben-manes.versions 插件）检查可用更新。
+
+## 构建配置
+
+- `compileSdk` / `targetSdk`：36
+- `minSdk`：24
+- `sourceCompatibility` / `targetCompatibility`：Java 21
+- Release 构建配置 ProGuard：`common_core` 用 `consumerProguardFiles` 随 AAR 下发

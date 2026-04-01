@@ -1,0 +1,46 @@
+---
+description: CommonLib Android 项目全局约定，AI 在每次对话中自动加载
+alwaysApply: true
+---
+
+# CommonLib 项目概览
+
+双模块 Android 项目：`app`（示例应用）+ `common_core`（共享 Compose 库）。
+
+## 技术栈
+
+- **语言**：Kotlin 2.3，Java 21 bytecode
+- **UI**：Jetpack Compose（BOM 2026.03），Material 3
+- **导航**：Navigation 3（nav3-runtime / nav3-ui）
+- **网络**：Retrofit 3 + OkHttp 5 + kotlinx-serialization
+- **图片**：Coil 3（含 SVG、OkHttp 网络层），Lottie
+- **异步**：Kotlin Coroutines + viewModelScope
+- **存储**：DataStore、MMKV、Paging 3
+- **构建**：Gradle 9.3 + AGP 9.1，compileSdk 36，minSdk 24
+
+## 模块关系
+
+- `common_core` 用 `api()` 暴露基础依赖，`app` 仅 `implementation(project(":common_core"))`
+- 新依赖版本统一在 `gradle/libs.versions.toml` 管理
+
+## 架构分层
+
+ViewModel 继承链：`AbsViewModel` → `RequestViewModel` → `BaseViewModel` → `BaseRequstViewModel<E>`
+
+- `AbsViewModel`：apiLoading / apiException 双通道（LiveData + Compose State）
+- `RequestViewModel`：apiDSL / apiFlow / apiDslResult 网络请求封装
+- `BaseViewModel`：showLoading / hideLoading
+- `BaseRequstViewModel<E>`：lazy Retrofit Service（`initApi()`）
+
+Compose Activity：`BaseComposeActivity`（edge-to-edge、设计稿宽度 Density 适配）
+
+网络层：`HttpRequest.init(url)` + `HttpRequest.getService()`，`BaseResult<T>` 标准信封（errorCode/errorMsg/data）
+
+## 编码约定
+
+- 参考 `docs/CODE_STYLE_GENERIC.md` 中的全部规范
+- 注释使用中文，标识符使用英文
+- 禁止使用 GlobalScope
+- ViewModel 只放业务共用状态，纯 UI 状态用 remember
+- 3 个及以上同 key 的 remember 必须收拢为 data class
+- 导航跳转处写 `// NAV:` 注释
