@@ -1,6 +1,6 @@
 # Cursor Rules 使用指南
 
-本项目配置了 6 个 Cursor Rules（`.cursor/rules/`），AI 会在对应场景下**自动加载**，无需手动操作。
+本项目配置了 7 个 Cursor Rules（`.cursor/rules/`），AI 会在对应场景下**自动加载**，无需手动操作。
 
 ---
 
@@ -9,11 +9,12 @@
 | 规则文件 | 触发条件 | 用途 |
 |---------|---------|------|
 | `android-project.mdc` | **每次对话自动加载** | 项目概览、技术栈、架构分层 |
+| `git-commit.mdc` | **每次对话自动加载** | Git 提交规范 |
 | `kotlin-compose.mdc` | 编辑 `*.kt` 文件时 | Kotlin/Compose 编码规范 |
 | `gradle-deps.mdc` | 编辑 `*.gradle.kts` 或 `*.toml` 时 | Gradle 依赖管理约定 |
 | `network-layer.mdc` | 编辑 `net/`、`api/`、`entity/` 下的 `.kt` 文件时 | 网络层使用约定 |
+| `navigation3.mdc` | 编辑 `navigation/`、`ui/` 下的 `.kt` 文件时 | Navigation 3 路由规范 |
 | `code-review.mdc` | 要求 review / 检查代码时 | Code Review 检查清单 |
-| `git-commit.mdc` | **每次对话自动加载** | Git 提交规范 |
 
 ---
 
@@ -82,7 +83,35 @@ AI 会按检查清单逐项审查：
 - **代码质量** — 死代码、命名、注释价值
 - **依赖管理** — 版本是否在 toml 统一管理
 
-### 5. Git 提交代码
+### 5. Navigation 3 导航
+
+编辑 `navigation/` 或 `ui/` 目录下的文件时，`navigation3.mdc` 自动加载。
+
+| 你说 | AI 自动做到 |
+|------|-----------|
+| "帮我新增一个 XXX 页面" | 在 `DemoNavDestinations.kt` 加 NavKey，在 `DemoNavDisplay.kt` 注册 |
+| "这个功能需要子导航" | 用 `sealed interface : NavKey` + 独立 `NavDisplay` |
+| "加个页面跳转" | `backStack.add(XxxRoute)` + `// NAV:` 注释 |
+
+**两种路由组织方式：**
+
+- **全局路由**：定义在 `navigation/DemoNavDestinations.kt`，注册在 `DemoNavDisplay.kt`
+- **Feature 内部路由**：用 `sealed interface : NavKey` 收拢在 feature 文件内
+
+```kotlin
+// 全局路由 — data object / data class 实现 NavKey
+@Serializable
+data object DemoFooRoute : NavKey
+
+// Feature 内部路由 — sealed interface
+@Serializable
+private sealed interface FooKey : NavKey {
+    @Serializable data object List : FooKey
+    @Serializable data object Detail : FooKey
+}
+```
+
+### 6. Git 提交代码
 
 每次对话自动加载 `git-commit.mdc`，你说"提交代码"时 AI 自动：
 
@@ -108,7 +137,7 @@ AI 会按检查清单逐项审查：
 
 可选加模块前缀：`feat(web):` `fix(net):`
 
-### 6. 搭配 @ 引用
+### 7. 搭配 @ 引用
 
 Rules 之外，你还可以在对话中用 `@` 引用更多上下文：
 

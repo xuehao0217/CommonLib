@@ -1,0 +1,80 @@
+---
+description: Navigation 3 路由定义与导航规范
+globs: "{**/navigation/**/*.kt,**/ui/**/*.kt}"
+alwaysApply: false
+---
+
+# Navigation 3 路由规范
+
+## 路由定义（NavKey）
+
+所有路由必须是 `@Serializable` 的 `NavKey`：
+
+```kotlin
+// 无参数 — data object
+@Serializable
+data object DemoFooRoute : NavKey
+
+// 有参数 — data class，提供默认值
+@Serializable
+data class DemoProfileRoute(val name: String, val age: Int = 18) : NavKey
+```
+
+## 两种路由组织方式
+
+### 全局路由（跨 feature）
+
+定义在 `navigation/DemoNavDestinations.kt`，注册在 `navigation/DemoNavDisplay.kt`。
+
+新增页面步骤：
+1. 在 `DemoNavDestinations.kt` 添加 `@Serializable data object XxxRoute : NavKey`
+2. 在 `DemoNavDisplay.kt` 的 `demoMenuEntries` 添加菜单项
+3. 在 `RouteContent` 的 `when` 分支添加对应 Composable
+4. 在 `demoEntryProvider` 添加 `entry<XxxRoute>`
+
+### Feature 内部路由（子导航）
+
+用 `sealed interface` 收拢在 feature 文件内，自带独立的 `NavDisplay`：
+
+```kotlin
+@Serializable
+private sealed interface FooSampleKey : NavKey {
+    @Serializable data object Menu : FooSampleKey
+    @Serializable data object Detail : FooSampleKey
+}
+
+@Composable
+fun FooSamples() {
+    val backStack = rememberNavBackStack(FooSampleKey.Menu)
+    NavDisplay(
+        backStack = backStack,
+        onBack = { if (backStack.size > 1) backStack.removeAt(backStack.lastIndex) },
+        transitionSpec = Nav3VerticalPushTransitionSpec,
+        popTransitionSpec = Nav3VerticalPopTransitionSpec,
+        predictivePopTransitionSpec = Nav3VerticalPredictivePopTransitionSpec,
+        entryProvider = entryProvider {
+            entry<FooSampleKey.Menu> { /* 菜单 */ }
+            entry<FooSampleKey.Detail> { /* 详情 */ }
+        },
+    )
+}
+```
+
+## 转场动画
+
+统一使用 `Nav3VerticalTransitions.kt` 中定义的三个 Spec：
+- `Nav3VerticalPushTransitionSpec` — 前进（下方滑入）
+- `Nav3VerticalPopTransitionSpec` — 返回（下方滑出）
+- `Nav3VerticalPredictivePopTransitionSpec` — 手势返回
+
+## 导航操作
+
+- 前进：`backStack.add(XxxRoute)`
+- 返回：`backStack.removeAt(backStack.lastIndex)`（先判断 `size > 1`）
+- 跳转处写注释：`// NAV: 源 -> 目标 (参数)`
+
+## 命名规范
+
+- 全局路由前缀 `Demo`：`DemoFooRoute`
+- Feature 内部用 sealed interface 名 + 功能：`FooSampleKey.Detail`
+- NavKey 文件集中放 `navigation/` 目录
