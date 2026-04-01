@@ -1,0 +1,42 @@
+---
+description: Git 提交规范，提交代码时自动应用
+alwaysApply: true
+---
+
+# Git 提交规范
+
+## Commit Message 格式
+
+```
+<type>: <简要描述>
+```
+
+多行时：
+
+```
+<type>: <简要描述>
+
+- 变更点 1
+- 变更点 2
+```
+
+## Type 类型
+
+| type | 含义 | 示例 |
+|------|------|------|
+| `feat` | 新功能 | feat: 接入 compose-webview 封装 |
+| `fix` | 修复 bug | fix: 修复列表滚动崩溃 |
+| `refactor` | 重构（不改功能） | refactor: 统一使用 mutableStateOf |
+| `docs` | 文档 | docs: 新增 Compose 状态收拢规范 |
+| `chore` | 构建/依赖/配置 | chore: 升级 AGP 至 9.1 |
+| `style` | 代码格式（不影响逻辑） | style: 格式化 import |
+| `perf` | 性能优化 | perf: LazyColumn 减少重组 |
+| `test` | 测试 | test: 添加 ViewModel 单测 |
+
+## 规则
+
+- 使用**中文**描述
+- 简要描述控制在一句话，说清**改了什么**
+- 多文件变更时用列表补充细节
+- 不要写无意义的 message（如"更新代码"、"修改"）
+- 可选加模块前缀：`feat(web):` `fix(net):`
