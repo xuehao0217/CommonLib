@@ -55,6 +55,25 @@
 ## Compose 与状态
 
 - **`data class`（组合状态）**：仅在**业务上需要多个状态字段一起表示、一起传递**时使用（例如输入栏同时有文案、选图列表、模式切换等），用 **`data class` + 默认参数** 做聚合快照。**若只有单一状态**（一个布尔、一个字符串、一个枚举），用组件内的 **`remember { mutableStateOf(...) }`** 即可，**不要**为单字段再套一层 data class。
+- **禁止同一 key 下散落多个 `remember { mutableStateOf }`**：当同一个 Composable 内**3 个及以上** `remember(sameKey)` 共享相同 key 时，**必须**收拢为一个 **`data class` + 单个 `remember`**，用 `copy()` 更新。散落的多个 `var xxx by remember` 难以维护、容易遗漏 key、且无法整体传递。
+
+  ```kotlin
+  // ❌ BAD — 散落多个 remember，难维护
+  var showPopupA by remember(id) { mutableStateOf(false) }
+  var showPopupB by remember(id) { mutableStateOf(false) }
+  var selectedIndex by remember(id) { mutableStateOf<Int?>(null) }
+  var currentKind by remember(id) { mutableStateOf<Kind?>(null) }
+
+  // ✅ GOOD — 收拢为 data class
+  data class PanelUiState(
+      val showPopupA: Boolean = false,
+      val showPopupB: Boolean = false,
+      val selectedIndex: Int? = null,
+      val currentKind: Kind? = null,
+  )
+  var panelState by remember(id) { mutableStateOf(PanelUiState()) }
+  // 更新：panelState = panelState.copy(showPopupA = true)
+  ```
 - **组件能消化的业务**：若逻辑只影响当前 subtree、且已有 `ViewModel` 入口，在**组件内**直接调用 `viewModel.xxx()`、在内部 `derivedStateOf` 派生即可，**不要**再拆成父组件状态 + 回调。
 - 派生展示用 **`remember { derivedStateOf { ... } }`**，只订阅与当前 Composable 相关的字段，避免列表项因无关状态变化大面积重组。
 - **组件内部优先**：子 Composable 若已持有 `ViewModel`，则点击、手势、子状态更新在**本组件内**完成，**不要**再向父组件暴露大量 `onClickFoo`、`onDismissBar` 等让父级转发。
