@@ -10,7 +10,7 @@ alwaysApply: false
 
 - 继承 `BaseViewModel` 或 `BaseRequstViewModel<E>`，不要直接继承 ViewModel()
 - 网络请求用 `apiDSL` / `apiFlow` / `apiDslResult`，不要手动 try-catch + launch
-- 状态暴露用 StateFlow，UI 层 `collectAsState()`；loading/error 已由基类处理
+- 状态用 `mutableStateOf`，配合 `by` 委托 + `private set`
 - 禁止 GlobalScope，统一用 viewModelScope
 
 ```kotlin
@@ -18,21 +18,41 @@ alwaysApply: false
 class FooViewModel : BaseRequstViewModel<FooApi>() {
     override fun initApi() = HttpRequest.getService(FooApi::class.java)
 
-    val list = MutableStateFlow<List<Item>>(emptyList())
+    var items by mutableStateOf<List<Item>>(emptyList())
+        private set
 
-    fun fetchData() = apiDSL {
-        onRequest { api.getItems() }
-        onResponse { list.value = it.data.orEmpty() }
-    }
+    fun fetchData() = apiFlow(
+        request = { api.getItems() },
+        result = { items = it }
+    )
 }
 ```
 
 ## Compose 状态
 
-- 业务共用状态 → ViewModel；纯 UI 状态 → `remember` / `rememberSaveable`
+- **纯 Compose 项目统一用 `mutableStateOf`**，ViewModel 和 Composable 内均可使用
+- ViewModel 中：`var xxx by mutableStateOf(初始值)` + `private set`（外部只读）
+- Composable 中：`var xxx by remember { mutableStateOf(初始值) }`
+- 需要 Flow 操作符（combine / debounce / map）时才用 `MutableStateFlow`
+- 业务共用状态 → ViewModel；纯 UI 状态（展开/折叠、动画、弹窗）→ Composable 内 `remember`
 - 3 个及以上同 key 的 `remember(key)` 必须收拢为 `data class` + 单个 `remember`
 - `derivedStateOf` 只订阅当前 Composable 需要的字段
 - 避免在 @Composable 里无 remember 地 `list.filter {}` 创建新集合
+
+```kotlin
+// ✅ ViewModel 中
+class FooViewModel : BaseViewModel() {
+    var items by mutableStateOf<List<Item>>(emptyList())
+        private set
+}
+
+// ✅ Composable 中
+@Composable
+fun FooScreen(viewModel: FooViewModel) {
+    val items = viewModel.items  // 直接读，无需 collectAsState
+    var expanded by remember { mutableStateOf(false) }
+}
+```
 
 ## LazyColumn / LazyRow
 
