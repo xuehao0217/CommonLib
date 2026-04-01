@@ -1,6 +1,6 @@
 # Cursor Rules 使用指南
 
-本项目配置了 5 个 Cursor Rules（`.cursor/rules/`），AI 会在对应场景下**自动加载**，无需手动操作。
+本项目配置了 6 个 Cursor Rules（`.cursor/rules/`），AI 会在对应场景下**自动加载**，无需手动操作。
 
 ---
 
@@ -13,6 +13,7 @@
 | `gradle-deps.mdc` | 编辑 `*.gradle.kts` 或 `*.toml` 时 | Gradle 依赖管理约定 |
 | `network-layer.mdc` | 编辑 `net/`、`api/`、`entity/` 下的 `.kt` 文件时 | 网络层使用约定 |
 | `code-review.mdc` | 要求 review / 检查代码时 | Code Review 检查清单 |
+| `git-commit.mdc` | **每次对话自动加载** | Git 提交规范 |
 
 ---
 
@@ -81,7 +82,33 @@ AI 会按检查清单逐项审查：
 - **代码质量** — 死代码、命名、注释价值
 - **依赖管理** — 版本是否在 toml 统一管理
 
-### 5. 搭配 @ 引用
+### 5. Git 提交代码
+
+每次对话自动加载 `git-commit.mdc`，你说"提交代码"时 AI 自动：
+
+- 分析改动内容，选择正确的 type
+- 用中文写简要描述
+- 多文件变更时补充列表
+
+**Commit Message 格式：**
+
+```
+<type>: <简要描述>
+```
+
+| type | 含义 | 示例 |
+|------|------|------|
+| `feat` | 新功能 | feat: 接入 compose-webview 封装 |
+| `fix` | 修复 bug | fix: 修复列表滚动崩溃 |
+| `refactor` | 重构 | refactor: 统一使用 mutableStateOf |
+| `docs` | 文档 | docs: 新增 Compose 状态收拢规范 |
+| `chore` | 构建/依赖 | chore: 升级 AGP 至 9.1 |
+| `perf` | 性能优化 | perf: LazyColumn 减少重组 |
+| `test` | 测试 | test: 添加 ViewModel 单测 |
+
+可选加模块前缀：`feat(web):` `fix(net):`
+
+### 6. 搭配 @ 引用
 
 Rules 之外，你还可以在对话中用 `@` 引用更多上下文：
 
