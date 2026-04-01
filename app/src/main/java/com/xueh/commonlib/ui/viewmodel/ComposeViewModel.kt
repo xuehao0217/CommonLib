@@ -3,7 +3,6 @@ package com.xueh.commonlib.ui.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagingData
 import com.xueh.comm_core.base.mvvm.BaseRequstViewModel
 import com.xueh.comm_core.helper.compose.pager
@@ -13,16 +12,17 @@ import com.xueh.commonlib.entity.BannerVO
 import com.xueh.commonlib.entity.HomeEntity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.onStart
 
 class ComposeViewModel : BaseRequstViewModel<RestApi>() {
     override fun initApi() = HttpRequest.getService(RestApi::class.java)
 
-    // val bannerDatas by viewModel.bannerLiveData.observeAsState()
-    val bannerLiveData = MutableLiveData<List<BannerVO>>()
-
-    var bannerMutableState by mutableStateOf<List<BannerVO>>(listOf())
+    private val _bannerList = MutableStateFlow<List<BannerVO>>(emptyList())
+    val bannerList: StateFlow<List<BannerVO>> = _bannerList.asStateFlow()
 
     fun loadDsl() {
         apiDSL {
@@ -30,7 +30,7 @@ class ComposeViewModel : BaseRequstViewModel<RestApi>() {
                 api.bannerList3().data
             }
             onResponse {
-                bannerLiveData.postValue(it)
+                _bannerList.value = it
             }
         }
     }

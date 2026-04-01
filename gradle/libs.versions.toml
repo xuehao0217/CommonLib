@@ -69,7 +69,6 @@ androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleKtx" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleKtx" }
-androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleKtx" }
 androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycleKtx" }
 #-----------------------------------------------图片加载相关-------------------------------------------------------------
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coilCompose" }
@@ -88,7 +87,6 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
 androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 compose-animation= { module = "androidx.compose.animation:animation",name = "animation" }
-compose-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata", name="runtime-livedata" }
 androidx-photopicker-compose = { module = "androidx.photopicker:photopicker-compose", version.ref = "photopickerCompose" }
 
 androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }

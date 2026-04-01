@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.*
  *
  * **流程概要**：
  * 1. 入口方法（[apiDSL]、[apiFlow] 等）先经 [runIfNetworkAvailable] 检查网络。
- * 2. 请求前调用 `apiLoading(true)` 同步 LiveData 与 [com.xueh.comm_core.base.mvvm.AbsViewModel.apiLoadingState]。
+ * 2. 请求前调用 `apiLoading(true)` 更新 [com.xueh.comm_core.base.mvvm.AbsViewModel.apiLoadingState]。
  * 3. 成功或业务错误（[BaseResult] 非成功）走 [apiError] 或自定义 [error]；最终 [apiFinally] 关闭 Loading。
  *
  * 子类典型继承链：[AbsViewModel] → **RequestViewModel** → [com.xueh.comm_core.base.mvvm.BaseViewModel]。
@@ -76,7 +76,6 @@ open class RequestViewModel : AbsViewModel() {
     // ------------------- 通用状态逻辑 -------------------
 
     open fun apiLoading(value: Boolean) {
-        apiLoading.value = value
         apiLoadingState.value = value
     }
 
@@ -86,7 +85,6 @@ open class RequestViewModel : AbsViewModel() {
         log: Boolean = true
     ) {
         val ex = e as? Exception ?: Exception(e)
-        apiException.value = ex
         apiExceptionState.value = ex
 
         if (log) Log.e("API_ERROR", ex.message ?: "未知错误", ex)
@@ -96,7 +94,6 @@ open class RequestViewModel : AbsViewModel() {
     }
 
     open fun apiFinally() {
-        apiLoading.value = false
         apiLoadingState.value = false
     }
 

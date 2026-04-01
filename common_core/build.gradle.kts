@@ -57,7 +57,6 @@ dependencies {
     api(libs.androidx.activity.ktx)
     api(libs.androidx.fragment.ktx)
     api(libs.androidx.lifecycle.runtime.ktx)
-    api(libs.androidx.lifecycle.livedata.ktx)
     api(libs.androidx.lifecycle.viewmodel.ktx)//by viewModels()
     api(libs.androidx.lifecycle.process)
     //----------------Compose相关--------------------------
@@ -76,7 +75,6 @@ dependencies {
     api(libs.compose.paging)
     api(libs.compose.lifecycle.runtime)
     api(libs.compose.lifecycle.viewmodel)
-    api(libs.compose.runtime.livedata)
     api(libs.composeViews)
 
     // 图片加载（Coil，app 模块也需要使用）

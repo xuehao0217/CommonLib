@@ -1,0 +1,86 @@
+---
+description: 网络层（Retrofit + OkHttp + kotlinx-serialization）使用约定
+globs: "{**/net/**/*.kt,**/api/**/*.kt,**/entity/**/*.kt}"
+alwaysApply: false
+---
+
+# 网络层约定
+
+## 初始化
+
+`HttpRequest.init(baseUrl) { okHttp { ... }; retrofit { ... } }` 初始化一次即可。
+通过 `HttpRequest.getService(XxxApi::class.java)` 获取 Retrofit Service。
+
+## API Service 定义
+
+Retrofit 接口，返回值统一包裹 `BaseResult<T>`（errorCode / errorMsg / data）。
+
+```kotlin
+interface FooApi {
+    @GET("foo/list")
+    suspend fun getList(@Query("page") page: Int): BaseResult<List<FooItem>>
+
+    @POST("foo/create")
+    suspend fun create(@Body body: CreateRequest): BaseResult<FooItem>
+}
+```
+
+## 数据类（Entity）
+
+- 用 `@Serializable`（kotlinx-serialization），**不用 Gson**
+- JSON 键与属性名一致时不加注解；不一致用 `@SerialName("snake_key")`
+- 兼容多种键名用 `@JsonNames("key1", "key2")`
+- 字段可空时给默认值，配合 `coerceInputValues` 容错
+
+```kotlin
+@Serializable
+data class FooItem(
+    val id: Int = 0,
+    val title: String = "",
+    val imageUrl: String? = null,
+)
+```
+
+## ViewModel 中发起请求
+
+继承 `BaseRequstViewModel<E>` 获得 lazy API 实例，三种请求方式：
+
+```kotlin
+class FooViewModel : BaseRequstViewModel<FooApi>() {
+    override fun initApi() = HttpRequest.getService(FooApi::class.java)
+
+    val items = MutableStateFlow<List<FooItem>>(emptyList())
+
+    // 方式 1：apiFlow — 推荐，简洁，自动处理 BaseResult
+    fun loadItems() = apiFlow(
+        request = { api.getList(1) },
+        result = { items.value = it }
+    )
+
+    // 方式 2：apiDslResult — DSL 风格，自动解析 BaseResult
+    fun loadItemsDsl() = apiDslResult {
+        onRequestBaseResult { api.getList(1) }
+        onResponse { items.value = it }
+    }
+
+    // 方式 3：apiDSL — 原始返回，需自行处理 BaseResult
+    fun loadItemsRaw() = apiDSL {
+        onRequest { api.getList(1).data }
+        onResponse { items.value = it }
+    }
+}
+```
+
+## Loading / Error 处理
+
+- 基类自动管理：请求前 `apiLoading(true)`，结束后 `apiFinally()`
+- 异常走 `apiError()`，默认 Toast 提示
+- UI 层用 `BaseComposeViewModel` 自动展示 Loading Dialog
+- 自定义 loading/error 时用 DSL 的 `onStart` / `onError` / `onFinally`
+
+## 禁止事项
+
+- 禁止在 ViewModel 中手动 `try-catch` + `viewModelScope.launch` 发请求，用 apiFlow / apiDSL
+- 禁止使用 Gson，统一 kotlinx-serialization
+- 禁止在 Entity 中用 `var`，数据类字段用 `val`
+- 禁止硬编码 BaseUrl，统一走 `HttpRequest`
