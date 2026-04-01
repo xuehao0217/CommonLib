@@ -1,0 +1,46 @@
+---
+description: AI Code Review 检查清单，review 代码时自动应用
+alwaysApply: false
+---
+
+# Code Review 检查清单
+
+当用户要求 review / 检查 / 审查代码时，按以下维度逐项检查，给出具体问题和修改建议。
+
+## 状态管理
+
+- [ ] ViewModel 中是否用 `mutableStateOf` + `private set`（而非 LiveData 或裸暴露）
+- [ ] 是否有 3 个以上同 key 的 `remember` 应收拢为 `data class`
+- [ ] 纯 UI 状态是否留在 Composable 内，没有错误地塞进 ViewModel
+- [ ] `derivedStateOf` 是否只订阅了必要字段，避免过大粒度重组
+
+## 网络请求
+
+- [ ] 是否使用 `apiFlow` / `apiDSL` / `apiDslResult`，而非手动 try-catch + launch
+- [ ] 数据类是否用 `@Serializable` + `val` 字段（非 Gson、非 `var`）
+- [ ] 是否有硬编码的 BaseUrl 或 API 路径拼接
+
+## Compose 性能
+
+- [ ] LazyColumn / LazyRow 的 items 是否提供了稳定 `key`
+- [ ] 是否在 @Composable 内无 `remember` 地创建新集合（`list.filter {}`）
+- [ ] `LaunchedEffect` / `DisposableEffect` 的 key 是否写全依赖
+- [ ] 是否有重 CPU/IO 操作在 Composable 主路径上（应放 ViewModel 或 withContext）
+
+## 协程安全
+
+- [ ] 是否使用了 `GlobalScope`（禁止）
+- [ ] 异步任务是否在 `viewModelScope` 中，能随页面销毁取消
+- [ ] 是否有协程泄漏风险（未取消的 Job、未 dispose 的订阅）
+
+## 代码质量
+
+- [ ] 是否有死代码、注释掉的代码块、无用 import
+- [ ] 常量是否在同文件内，而非单独的常量文件
+- [ ] 命名是否清晰（Composable 用 PascalCase，函数用 camelCase）
+- [ ] 注释是否有价值（不是废话注释），KDoc 是否写清职责和流程
+
+## 依赖与构建
+
+- [ ] 新依赖版本是否在 `libs.versions.toml` 统一管理
+- [ ] `common_core` 依赖是否用 `api()`，`app` 是否用 `implementation()`
