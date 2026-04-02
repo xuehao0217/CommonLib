@@ -14,6 +14,12 @@ indent_style = space  # 按 Tab 键插入空格，不是 Tab 字符
 indent_size = 4       # 缩进 4 个空格（Kotlin 官方风格）
 max_line_length = 120 # 单行最长 120 字符，超了考虑换行
 
+# Android Studio / IntelliJ Kotlin 专用配置（以 ij_ 开头，仅 IntelliJ 系 IDE 识别）
+ij_kotlin_allow_trailing_comma = true                # 允许尾随逗号（data class 参数、when 分支末尾加逗号，方便增删不影响 diff）
+ij_kotlin_allow_trailing_comma_on_call_site = true   # 函数调用处也允许尾随逗号
+ij_kotlin_name_count_to_use_star_import = 999        # 禁止自动星号导入（设成 999 = 永远不触发 import *）
+ij_kotlin_packages_to_use_import_on_demand =         # 留空 = 没有任何包使用 import *（配合上面的 999）
+
 # XML（布局、资源、AndroidManifest）
 [*.xml]
 indent_style = space
@@ -21,6 +27,16 @@ indent_size = 4
 
 # Gradle 版本目录
 [*.toml]
+indent_style = space
+indent_size = 4
+
+# JSON 文件（API Mock、配置文件等）
+[*.json]
+indent_style = space
+indent_size = 2  # JSON 社区惯例用 2 空格
+
+# Properties 文件（gradle.properties、local.properties）
+[*.properties]
 indent_style = space
 indent_size = 4
 
