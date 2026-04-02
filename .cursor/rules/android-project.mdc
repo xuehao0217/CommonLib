@@ -27,10 +27,12 @@ alwaysApply: true
 
 ViewModel 继承链：`AbsViewModel` → `RequestViewModel` → `BaseViewModel` → `BaseRequstViewModel<E>`
 
-- `AbsViewModel`：apiLoading / apiException 双通道（LiveData + Compose State）
+- `AbsViewModel`：apiLoadingState / apiExceptionState（Compose `mutableStateOf`）
 - `RequestViewModel`：apiDSL / apiFlow / apiDslResult 网络请求封装
 - `BaseViewModel`：showLoading / hideLoading
 - `BaseRequstViewModel<E>`：lazy Retrofit Service（`initApi()`）
+
+状态管理：纯 Compose 项目统一用 `mutableStateOf`，不使用 LiveData。
 
 Compose Activity：`BaseComposeActivity`（edge-to-edge、设计稿宽度 Density 适配）
 
