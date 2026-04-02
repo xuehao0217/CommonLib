@@ -227,12 +227,258 @@ alwaysApply: false       # true = 每次对话都加载
 
 ---
 
+## 自定义 Skill：代码生成
+
+项目配置了自定义 Skill `.cursor/skills/android-compose-codegen/`，AI 在生成代码时自动遵守项目风格。
+
+**触发方式（自动识别）：**
+
+```
+"帮我新增一个 Xxx 功能"
+"生成一个 ViewModel"
+"新增一个 Compose 页面"
+"写一个 API 接口"
+"新增一个列表组件"
+```
+
+**生成能力：**
+
+| 说 | AI 生成 |
+|----|--------|
+| "新增用户模块" | Entity + API + ViewModel + Page + Route 全套 |
+| "写个分页列表" | ViewModel（`pager`）+ Page（`PagingLazyColumn`） |
+| "加个详情接口" | API 方法 + Entity + ViewModel 调用 |
+| "写个弹窗组件" | Widget 文件，命名遵守 `Compose + 功能` 规范 |
+
+**代码风格保证：**
+- ViewModel 自动继承 `BaseRequstViewModel<E>` / `BaseViewModel`
+- 状态自动用 `mutableStateOf` + `private set`
+- 网络请求自动用 `apiFlow` 封装
+- Entity 自动加 `@Serializable`、`val` 字段、默认值
+- 组件命名自动遵守 Widget 命名规范
+
+**Skill 文件结构：**
+
+```
+.cursor/skills/android-compose-codegen/
+├── SKILL.md       # 生成规则和约定
+└── templates.md   # 10 个代码模板（ViewModel、Page、API、Entity、路由等）
+```
+
+### 示范：新增一个「文章收藏」功能
+
+假设你对 AI 说：
+
+```
+帮我新增一个文章收藏功能，需要：
+1. 收藏列表接口（分页）
+2. 添加/取消收藏接口
+3. ViewModel
+4. 收藏列表页面
+```
+
+AI 会按 Skill 中的模板和规则，生成以下代码：
+
+**第 1 步：Entity**
+
+```kotlin
+// entity/CollectArticle.kt
+@Serializable
+data class CollectArticle(
+    val id: Int = 0,
+    val title: String = "",
+    val author: String = "",
+    val link: String = "",
+    @SerialName("publish_time")
+    val publishTime: String = "",
+)
+```
+
+**第 2 步：API**
+
+```kotlin
+// api/CollectApi.kt
+interface CollectApi {
+    @GET("lg/collect/list/{page}/json")
+    suspend fun getCollectList(@Path("page") page: Int): BaseResult<PageData<CollectArticle>>
+
+    @POST("lg/collect/{id}/json")
+    suspend fun collect(@Path("id") id: Int): BaseResult<Unit>
+
+    @POST("lg/uncollect/{id}/json")
+    suspend fun uncollect(@Path("id") id: Int): BaseResult<Unit>
+}
+```
+
+**第 3 步：ViewModel**
+
+```kotlin
+// viewmodel/CollectViewModel.kt
+class CollectViewModel : BaseRequstViewModel<CollectApi>() {
+    override fun initApi() = HttpRequest.getService(CollectApi::class.java)
+
+    fun getCollectList() = pager { page ->
+        api.getCollectList(page).data.datas
+    }
+
+    fun toggleCollect(id: Int, collected: Boolean) = apiFlow(
+        request = {
+            if (collected) api.uncollect(id) else api.collect(id)
+        },
+        result = { /* 刷新列表或通知 UI */ },
+    )
+}
+```
+
+**第 4 步：Page**
+
+```kotlin
+// ui/CollectPage.kt
+@Composable
+fun CollectPage(viewModel: CollectViewModel = viewModel()) {
+    val pagingItems = viewModel.getCollectList().collectAsLazyPagingItems()
+
+    PagingLazyColumn(pagingItems) { _, item ->
+        CollectItemCard(
+            article = item,
+            onToggle = { viewModel.toggleCollect(item.id, true) },
+        )
+    }
+}
+
+@Composable
+private fun CollectItemCard(
+    article: CollectArticle,
+    onToggle: () -> Unit,
+) {
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(article.title, style = MaterialTheme.typography.titleMedium)
+                Text(article.author, style = MaterialTheme.typography.bodySmall)
+            }
+            IconButton(onClick = onToggle) {
+                Icon(Icons.Default.Favorite, contentDescription = "取消收藏")
+            }
+        }
+    }
+}
+```
+
+**第 5 步：Route**
+
+```kotlin
+// DemoNavDestinations.kt 中添加
+@Serializable
+data object CollectRoute : NavKey
+
+// DemoNavDisplay.kt 中注册
+entry<CollectRoute>(metadata = Nav3VerticalPushTransitionSpec) {
+    CollectPage()
+}
+
+// 跳转处
+// NAV: MinePage -> CollectRoute
+backStack.add(CollectRoute)
+```
+
+### 示范：生成单个 ViewModel
+
+```
+帮我写一个管理用户设置的 ViewModel，不需要网络请求，
+需要管理：主题模式（深色/浅色）、字体大小、通知开关
+```
+
+AI 生成：
+
+```kotlin
+class SettingsViewModel : BaseViewModel() {
+    var isDarkMode by mutableStateOf(false)
+        private set
+
+    var fontSize by mutableStateOf(16)
+        private set
+
+    var notificationEnabled by mutableStateOf(true)
+        private set
+
+    fun toggleDarkMode() {
+        isDarkMode = !isDarkMode
+    }
+
+    fun updateFontSize(size: Int) {
+        fontSize = size
+    }
+
+    fun toggleNotification() {
+        notificationEnabled = !notificationEnabled
+    }
+}
+```
+
+注意 AI 自动做到了：继承 `BaseViewModel`（无网络）、`mutableStateOf` + `private set`、camelCase 命名。
+
+### 示范：新增 Widget 组件
+
+```
+帮我封装一个通用的空状态组件，显示图片 + 文字 + 重试按钮
+```
+
+AI 生成文件 `common_core/widget/ComposeEmptyState.kt`（遵守 `Compose + 功能` 命名）：
+
+```kotlin
+/**
+ * 通用空状态组件
+ *
+ * 用于列表为空、加载失败等场景，显示居中图片 + 提示文字 + 可选重试按钮
+ */
+@Composable
+fun ComposeEmptyState(
+    message: String,
+    modifier: Modifier = Modifier,
+    @DrawableRes imageRes: Int? = null,
+    onRetry: (() -> Unit)? = null,
+) {
+    Column(
+        modifier = modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        imageRes?.let {
+            Image(
+                painter = painterResource(it),
+                contentDescription = null,
+                modifier = Modifier.size(120.dp),
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+        Text(
+            text = message,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        onRetry?.let {
+            Spacer(modifier = Modifier.height(24.dp))
+            OutlinedButton(onClick = it) {
+                Text("重试")
+            }
+        }
+    }
+}
+```
+
+---
+
 ## 配合 CODE_STYLE_GENERIC.md
 
 `docs/CODE_STYLE_GENERIC.md` 是完整的编码风格文档，Cursor Rules 是其中核心规则的**精简版**。关系：
 
 - **User Rules** — 全局生效，所有项目通用的个人偏好（仅存本机）
 - **Project Rules**（`.cursor/rules/`）— 项目级，AI 按场景自动加载，精简可执行
+- **Project Skills**（`.cursor/skills/`）— 复杂任务的专用工作流（如代码生成）
 - **CODE_STYLE_GENERIC.md** — 完整参考文档，需要时用 `@` 手动引用
 
-三者互补，不冲突。优先级：User Rules（最高） → Project Rules → 手动 `@` 引用。
+四者互补，不冲突。优先级：User Rules（最高） → Project Rules / Skills → 手动 `@` 引用。
