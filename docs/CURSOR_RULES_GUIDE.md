@@ -167,11 +167,72 @@ alwaysApply: false       # true = 每次对话都加载
 
 ---
 
+## 全局 User Rules（跨项目通用）
+
+除了项目级 Rules（`.cursor/rules/`），Cursor 还支持**全局 User Rules**，对所有项目生效。
+
+**设置路径：** Cursor Settings → Rules → User Rules
+
+> ⚠️ User Rules **只存本机，不跟账号同步**。换电脑 / 重装 Cursor 需要重新配置。
+> 以下内容备份在此，方便复制粘贴。
+
+```
+## 身份与语言
+- 我是 Android 开发，使用 Kotlin + Jetpack Compose（纯 Compose，无 XML 布局）
+- 回复使用中文
+- 代码注释使用中文，标识符（变量名、函数名、类名）使用英文
+- 不要过度解释简单代码，不要加多余的注释
+
+## 技术栈约束
+- 语言：Kotlin，禁止 Java
+- UI：Jetpack Compose + Material 3，禁止 Material 2、禁止 XML 布局
+- 导航：Navigation 3（androidx.navigation3），不是 Navigation 2
+- 网络：Retrofit 3 + OkHttp 5 + kotlinx-serialization，禁止 Gson、禁止 Moshi
+- 异步：Kotlin Coroutines + viewModelScope，禁止 RxJava、禁止 GlobalScope
+- 状态管理：mutableStateOf（ViewModel 和 Composable 均可），禁止 LiveData
+- 构建：Gradle Kotlin DSL + Version Catalog（libs.versions.toml），禁止 Groovy DSL
+- 分页：Paging 3
+
+## 代码风格
+- 缩进 4 空格，最大行宽 120
+- data class / 函数参数使用尾随逗号
+- 禁止 import *（星号导入）
+- 字符串拼接优先用模板 "$xxx" 或 "${xxx.bar}"
+- when 优先于 if-else if 链
+- 空安全：优先 ?.let / ?: / orEmpty()，避免 !!
+- 集合操作优先用 Kotlin 标准库（map / filter / groupBy），不手写 for 循环
+- 命名：类 PascalCase，函数/变量 camelCase，常量 UPPER_SNAKE_CASE
+- Composable 函数名 PascalCase，非 Composable 函数名 camelCase
+
+## ViewModel 规范
+- ViewModel 状态用 var xxx by mutableStateOf() + private set
+- 网络请求用 apiDSL / apiFlow / apiDslResult 封装，不要手动 try-catch + launch
+- 统一用 viewModelScope，禁止 GlobalScope
+
+## Compose 规范
+- LazyColumn / LazyRow 的 items 必须提供 key
+- remember 内不做耗时操作
+- 同一 key 下 3 个以上 remember { mutableStateOf } 收拢为 data class
+- derivedStateOf 只订阅必要字段
+- Side Effect 选择：一次性 → LaunchedEffect，生命周期 → DisposableEffect
+
+## 序列化
+- 实体类加 @Serializable，字段用 val 不用 var
+- JSON 字段映射用 @SerialName，不用 @JsonNames（除非需要多别名兼容）
+
+## 格式与生成
+- 生成代码时遵守 .editorconfig 格式配置
+- Git commit 信息格式：<type>: <中文描述>（type = feat/fix/refactor/docs/chore/style/perf）
+```
+
+---
+
 ## 配合 CODE_STYLE_GENERIC.md
 
 `docs/CODE_STYLE_GENERIC.md` 是完整的编码风格文档，Cursor Rules 是其中核心规则的**精简版**。关系：
 
-- **Rules** — AI 自动加载，精简可执行，覆盖最高频场景
-- **CODE_STYLE_GENERIC.md** — 完整参考，需要时用 `@` 手动引用
+- **User Rules** — 全局生效，所有项目通用的个人偏好（仅存本机）
+- **Project Rules**（`.cursor/rules/`）— 项目级，AI 按场景自动加载，精简可执行
+- **CODE_STYLE_GENERIC.md** — 完整参考文档，需要时用 `@` 手动引用
 
-两者互补，不冲突。
+三者互补，不冲突。优先级：User Rules（最高） → Project Rules → 手动 `@` 引用。
