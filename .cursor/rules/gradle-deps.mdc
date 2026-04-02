@@ -51,3 +51,19 @@ implementation("io.coil-kt.coil3:coil-compose:3.4.0")
 - `minSdk`：24
 - `sourceCompatibility` / `targetCompatibility`：Java 21
 - Release 构建配置 ProGuard：`common_core` 用 `consumerProguardFiles` 随 AAR 下发
+
+## ProGuard / R8 规则
+
+项目采用**双文件分治**，不要把所有规则堆在一个文件里：
+
+| 文件 | 职责 | 维护原则 |
+|------|------|---------|
+| `common_core/proguard-rules.pro` | 库依赖的 keep 规则（kotlinx-serialization、Retrofit、OkHttp、Coil、MMKV 等） | 通过 `consumerProguardFiles` 随 AAR 自动合并到 app，app 不需要重复写 |
+| `app/proguard-rules.pro` | app 模块自身：业务 Entity、Retrofit 接口、Application、ViewModel、WebView | 只写 app 模块特有的规则 |
+
+### 添加新依赖时的 ProGuard 检查
+
+1. 查看库的 README 或 Maven 元数据，确认是否自带 consumer rules
+2. 若不自带，在 `common_core/proguard-rules.pro` 对应分区补充 keep 规则
+3. 使用 `# ---- 库名 ----` 分区注释，保持与现有格式一致
+4. 新增 `@Serializable` 数据类时，确保包名在 `-keep @kotlinx.serialization.Serializable class com.xueh.**` 范围内

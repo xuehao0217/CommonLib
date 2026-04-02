@@ -76,6 +76,18 @@ fun FooScreen(viewModel: FooViewModel) {
 - 非 Composable 函数 camelCase
 - 常量 `private const val` 写在同文件顶部，禁止新建独立常量文件
 
+### Widget 文件命名（`common_core/widget/`）
+
+新增 widget 文件按以下规范命名：
+
+| 类型 | 命名格式 | 示例 |
+|------|---------|------|
+| 单一组件封装 | `Compose + 功能` | `ComposeImage.kt`、`ComposeDialog.kt`、`ComposeLottie.kt` |
+| Modifier 扩展 | `ComposeExt.kt`（统一） | `clickNoRipple`、`debounceClick` |
+| 同类组件集合 | `功能 + Widgets` | `SpacerWidgets.kt`、`TextSpanWidgets.kt`、`BoxTextWidgets.kt` |
+| Paging 相关 | `Paging + 功能` | `PagingWidget.kt`、`PagingHelper.kt` |
+| Tab / Pager 相关 | `Compose + 功能` 或 `功能 + 组件` | `ComposeTab.kt`、`PagerTabIndicator.kt` |
+
 ## 注释
 
 - 中文注释，英文标识符

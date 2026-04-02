@@ -32,6 +32,17 @@
 - **`manager/`、`repository/`、`data/`**：长生命周期、IO、数据源；**与 UI 状态边界**见下节。
 - **`helper/` 与 `utils/`（或项目统一其一）**：**与具体页面无关**的纯工具——时间/格式化、通用扩展、节流、轻量封装（如震动、剪贴板封装）等；**单一职责、无业务状态**，与某业务强绑定的逻辑**不要**塞进「大杂烩」工具类，应留在对应 feature 或 `Manager`。若 `helper` 随项目变大，**按领域分子包**（例如 `helper/time/`、`helper/analytics/`），**不要**在单文件里无限堆 `fun`，避免 **God Helper**。
 
+  **已有 `helper/` 拆分参考**（`common_core`）：
+
+  | 子包 / 文件 | 职责 | 说明 |
+  |-------------|------|------|
+  | `ExtHelper.kt` | Null 校验、文件操作、Boolean DSL、Toast、时间格式化 | 历史大杂烩，新增工具**不要**往里堆，按领域拆到子包 |
+  | `helper/compose/` | Compose 专用：权限、截图、Paging、滚动监听、`OrderedStateMap` | 与 Compose Runtime 耦合的工具 |
+  | `helper/coroutine/` | `launchSafety`、`GlobalCoroutineExceptionHandler` | 协程基础设施 |
+  | `helper/activityresult/` | 拍照、裁剪等 ActivityResult 封装 | 与 Activity 生命周期相关 |
+
+  **新增工具函数时**：先判断属于哪个领域子包，放到对应位置；不属于已有子包时新建子包，而非继续往 `ExtHelper.kt` 里追加。
+
 **公用封装原则**：抽离后**依赖方向清晰**（工具不反向依赖具体 `ViewModel` / 页面）；命名能一眼看出用途；需要被多模块引用时考虑 `internal` / `api` 模块边界。
 
 **跨模块 UI 组件（`ui/components/` 等）的 API 演进**：参数或行为发生**破坏性变更**时，须在 KDoc 写清**迁移方式**，或先 **`@Deprecated`** 保留旧入口、给调用方缓冲期；避免多 feature 同时编译失败或线上行为静默变化。
