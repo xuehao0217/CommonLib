@@ -3,6 +3,7 @@ package com.xueh.commonlib.ui
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
@@ -12,7 +13,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.sp
 import com.blankj.utilcode.util.AppUtils
@@ -108,6 +108,7 @@ class MainActivity : BaseComposeActivity() {
 
 @Composable
 private fun MainTabShell() {
+    val scheme = MaterialTheme.colorScheme
     val pages = listOf<@Composable () -> Unit>(
         { HomePage() },
         { MinePage() },
@@ -146,12 +147,12 @@ private fun MainTabShell() {
         navItems = navItems,
         fontSize = 12.sp,
         themeColors = NavThemeColors(
-            lightBackground = Color(0xFFF7F7F9),
-            darkBackground = Color(0xFF1C1B1F),
-            lightUnSelectedTextColor = Color(0xFF5F6368),
-            darkUnSelectedTextColor = Color(0xFFC4C7C5),
-            lightSelectedTextColor = Color(0xFF0B57D0),
-            darkSelectedTextColor = Color(0xFFA8C7FA),
+            lightBackground = scheme.surfaceContainerLow,
+            darkBackground = scheme.surfaceContainerLow,
+            lightUnSelectedTextColor = scheme.onSurfaceVariant,
+            darkUnSelectedTextColor = scheme.onSurfaceVariant,
+            lightSelectedTextColor = scheme.primary,
+            darkSelectedTextColor = scheme.primary,
         ),
         interceptClick = { index ->
             MainActivity.interceptTab && index == 2

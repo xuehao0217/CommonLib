@@ -13,13 +13,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.xueh.comm_core.base.compose.theme.AppTheme
 import com.xueh.comm_core.base.compose.theme.AppThemeType
 import com.xueh.comm_core.base.compose.theme.appThemeType
 import com.xueh.comm_core.widget.clickNoRipple
 import com.xueh.commonlib.ui.compose.DemoListRow
+import com.xueh.commonlib.ui.compose.DemoScreenIntro
 
 /**
  * 「我的」页：调试入口（Tab 拦截、主题、AgentWeb 等）。
@@ -29,18 +29,13 @@ fun MinePage() {
     val shell = LocalAppShell.current
     Column(
         Modifier
+            .background(MaterialTheme.colorScheme.surface)
             .statusBarsPadding()
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 0.dp, vertical = 8.dp)
     ) {
-        Text(
+        DemoScreenIntro(
             text = "调试与外链；完整演示请从「首页」进入。",
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 8.dp),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Start,
         )
         SectionLabel("外链")
         DemoListRow(title = "AgentWeb + Compose 标题栏（透明标题/分享）") {
@@ -75,15 +70,13 @@ fun TabPage3() {
     val shell = LocalAppShell.current
     Column(
         Modifier
+            .background(MaterialTheme.colorScheme.surface)
             .statusBarsPadding()
             .verticalScroll(rememberScrollState())
             .padding(vertical = 8.dp),
     ) {
-        Text(
-            text = "主题与测试页",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
+        DemoScreenIntro(
+            text = "主题模式切换与全屏覆盖层测试；与 TopAppBar 主题色独立。",
         )
         DemoListRow(title = "切换为深色 Theme") {
             appThemeType = AppThemeType.Dark

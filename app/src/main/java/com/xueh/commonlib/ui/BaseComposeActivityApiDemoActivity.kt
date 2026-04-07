@@ -38,6 +38,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import com.xueh.comm_core.base.compose.BaseComposeActivity
 import com.xueh.comm_core.base.compose.LocalBaseComposeActivity
+import com.xueh.commonlib.ui.compose.DemoScreenIntro
 
 /**
  * 独立 Activity：用按钮切换 [BaseComposeActivity] 文档中的各项 API，验证边到边、Insets、标题栏与键盘等行为。
@@ -355,27 +356,36 @@ fun BaseComposeActivityApiDemoRoute() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp)
+            .background(MaterialTheme.colorScheme.surface)
             .verticalScroll(scroll),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Text(
-            text = "在独立 Activity 中测试边到边、沉浸式、IME、标题栏、灰度、设计稿宽度、方向与 FLAG_SECURE 等。",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        DemoScreenIntro(
+            text = "在独立 Activity 中测试边到边、IME、标题栏、灰度、设计稿宽度、方向与 FLAG_SECURE 等。",
         )
-        val ctx = LocalContext.current
-        Button(
-            onClick = { BaseComposeActivityApiDemoActivity.start(ctx) },
-            modifier = Modifier.fillMaxWidth(),
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 20.dp, vertical = 12.dp)
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Text("打开 API 实验室")
-        }
-        OutlinedButton(
-            onClick = { BaseComposeActivityApiDemoActivity.startSecureSample(ctx) },
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text("打开并默认开启防截屏（EXTRA）")
+            Text(
+                text = "以下入口将打开 BaseComposeActivityApiDemoActivity。",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            val ctx = LocalContext.current
+            Button(
+                onClick = { BaseComposeActivityApiDemoActivity.start(ctx) },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text("打开 API 实验室")
+            }
+            OutlinedButton(
+                onClick = { BaseComposeActivityApiDemoActivity.startSecureSample(ctx) },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text("打开并默认开启防截屏（EXTRA）")
+            }
         }
     }
 }

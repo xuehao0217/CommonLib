@@ -2,11 +2,11 @@ package com.xueh.commonlib.ui.compose
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,13 +22,12 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,16 +41,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ConvertUtils
@@ -99,7 +97,9 @@ fun TabPageList(ids: List<String>, pagingStateList: List<Flow<PagingData<HomeEnt
     val scope: CoroutineScope = rememberCoroutineScope()
 
     Box(
-        Modifier.fillMaxSize()
+        Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surface),
     ) {
 
         val pagerState = rememberPagerState(pageCount = {
@@ -136,15 +136,20 @@ fun TabPageList(ids: List<String>, pagingStateList: List<Flow<PagingData<HomeEnt
         }
 
         Box {
+            val scheme = MaterialTheme.colorScheme
             val bgColor by animateColorAsState(
-                targetValue = lerp(Color.Black, Color.White, titleBarAlpha)
+                targetValue = lerp(scheme.inverseSurface, scheme.surface, titleBarAlpha),
             )
 
             val selectColor by animateColorAsState(
-                targetValue = lerp(Color.White, Color.Black, titleBarAlpha)
+                targetValue = lerp(scheme.inverseOnSurface, scheme.onSurface, titleBarAlpha),
             )
             val unSelectColor by animateColorAsState(
-                targetValue = lerp(Color.White, Color.Black, titleBarAlpha)
+                targetValue = lerp(
+                    scheme.inverseOnSurface.copy(alpha = 0.75f),
+                    scheme.onSurfaceVariant,
+                    titleBarAlpha,
+                ),
             )
 
             NewsTab(
@@ -249,28 +254,16 @@ fun HomeList(
     }
 
     lazyPagingItemsState.PagingRefresh {
-        it.PagingLazyColumn(lazyListState = lazyListState) {
-            Box(
-                modifier = Modifier
-                    .padding(10.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primary)
-                    .fillMaxWidth()
-                    .height(50.dp)
-                    .border(
-                        1.5.dp,
-                        androidx.compose.material.MaterialTheme.colors.secondary,
-                        shape = CircleShape
-                    ),
-
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = it.title,
-                    color = Color.White,
-                    textAlign = TextAlign.Center,
-                )
-            }
+        it.PagingLazyColumn(
+            lazyListState = lazyListState,
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            key = lazyPagingItemsState.itemKey { it.id },
+        ) {
+            DemoArticleListCard(
+                idText = "${it.id}",
+                title = it.title,
+            )
         }
     }
 }
@@ -289,8 +282,16 @@ fun OrderedTabsExample() {
         tabs.put("Tabs${it}", "Tabs ID ${it}")
     }
 
-    Column(modifier = Modifier.padding(16.dp)) {
-        // 动态 Tab 行
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surface)
+            .padding(16.dp),
+    ) {
+        DemoScreenIntro(
+            text = "横向滚动 Tab 芯片，支持删除与在首位插入；下方为有序键值展示。",
+        )
+        Spacer(modifier = Modifier.height(12.dp))
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -310,7 +311,10 @@ fun OrderedTabsExample() {
             Button(onClick = {
                 tabs.addAt(0, "Add Tabs", "Add Tab ID")
             }) {
-                Text("Add Tabs")
+                Text(
+                    text = "Add Tabs",
+                    style = MaterialTheme.typography.labelLarge,
+                )
             }
         }
 
@@ -318,7 +322,11 @@ fun OrderedTabsExample() {
 
         // 内容展示
         for ((key, value) in tabs.orderedEntries()) {
-            Text(text = "$key -> $value")
+            Text(
+                text = "$key -> $value",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
     }
 }
@@ -328,13 +336,24 @@ fun TabItem(title: String, onRemove: () -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .background(Color.LightGray, RoundedCornerShape(8.dp))
+            .background(
+                MaterialTheme.colorScheme.surfaceContainerHigh,
+                RoundedCornerShape(8.dp),
+            )
             .padding(horizontal = 8.dp, vertical = 4.dp)
     ) {
-        Text(text = title)
+        Text(
+            text = title,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+        )
         Spacer(modifier = Modifier.width(4.dp))
         IconButton(onClick = onRemove) {
-            Icon(Icons.Default.Close, contentDescription = "Remove")
+            Icon(
+                Icons.Default.Close,
+                contentDescription = "Remove",
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
     }
 }

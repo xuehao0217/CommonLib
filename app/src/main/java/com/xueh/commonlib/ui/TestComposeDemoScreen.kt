@@ -4,11 +4,14 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.xueh.comm_core.base.compose.LocalBaseComposeActivity
 import com.xueh.comm_core.widget.clickNoRipple
 
@@ -23,7 +26,7 @@ fun TestComposeDemoScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF1565C0))
+            .background(MaterialTheme.colorScheme.primaryContainer)
             .clickNoRipple {
                 activity?.let { it.isSystemBarLight = !it.isSystemBarLight }
             },
@@ -31,7 +34,10 @@ fun TestComposeDemoScreen() {
     ) {
         Text(
             text = "TestCompose 演示\n点击切换状态栏图标颜色\n再按系统返回关闭",
-            color = Color.White,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(24.dp),
         )
     }
 }

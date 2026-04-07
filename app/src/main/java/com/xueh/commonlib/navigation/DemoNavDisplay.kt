@@ -1,13 +1,16 @@
 package com.xueh.commonlib.navigation
 
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -37,6 +40,7 @@ import com.xueh.commonlib.ui.compose.CommonTabPage
 import com.xueh.commonlib.ui.compose.ConstraintPage
 import com.xueh.commonlib.ui.compose.DialogPage
 import com.xueh.commonlib.ui.compose.DemoListRow
+import com.xueh.commonlib.ui.compose.DemoScreenIntro
 import com.xueh.commonlib.ui.compose.NavigateParams1View
 import com.xueh.commonlib.ui.compose.NavigateParams2View
 import com.xueh.commonlib.ui.compose.OrderedTabsExample
@@ -78,7 +82,12 @@ private class DemoNavHostContext(
 
     @Composable
     fun RouteContent(routeKey: NavKey) {
-        when (routeKey) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface),
+        ) {
+            when (routeKey) {
             is DemoRefreshLoad -> RefreshLoadUse()
             is DemoConstraintSet -> ConstraintPage()
             is DemoProfileRoute ->
@@ -110,7 +119,10 @@ private class DemoNavHostContext(
                 Text(
                     text = "未注册的路由: ${routeKey::class.simpleName}",
                     modifier = Modifier.padding(24.dp),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
+            }
         }
     }
 }
@@ -125,15 +137,14 @@ private fun DemoAgentWebPanel(onClose: () -> Unit) {
         Text(
             text = "需要 ComponentActivity 环境",
             modifier = Modifier.padding(24.dp),
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.error,
         )
         return
     }
     Column(Modifier.fillMaxSize()) {
-        Text(
+        DemoScreenIntro(
             text = "需联网；修改 URL 后点「加载」切换页面。支持查询参数 hideTitle、showShare（与全屏 AgentWeb 一致）。",
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
         )
         OutlinedTextField(
             value = draftUrl,
@@ -146,7 +157,9 @@ private fun DemoAgentWebPanel(onClose: () -> Unit) {
         )
         OutlinedButton(
             onClick = { loadedUrl = draftUrl.trim() },
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .fillMaxWidth(),
         ) {
             Text("加载此地址")
         }
@@ -176,11 +189,8 @@ private fun DemoParkComposeWebPanel() {
     var draftUrl by rememberSaveable { mutableStateOf("https://m.baidu.com") }
     var loadedUrl by rememberSaveable { mutableStateOf("https://m.baidu.com") }
     Column(Modifier.fillMaxSize()) {
-        Text(
-            text = "需联网。此为 Jetpack Compose 用 WebView 库（与 AgentWeb 不同栈），封装见 common_core [ParkComposeWebViewScaffold]。",
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+        DemoScreenIntro(
+            text = "需联网。此为 Jetpack Compose 用 WebView 库（与 AgentWeb 不同栈），封装见 common_core ParkComposeWebViewScaffold。",
         )
         OutlinedTextField(
             value = draftUrl,
@@ -193,7 +203,9 @@ private fun DemoParkComposeWebPanel() {
         )
         OutlinedButton(
             onClick = { loadedUrl = draftUrl.trim() },
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .fillMaxWidth(),
         ) {
             Text("加载此地址")
         }
@@ -233,14 +245,28 @@ private fun demoEntryProvider(
     val ctx = DemoNavHostContext(backStack, navigateParamResult)
     entry<DemoActionList> {
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface),
+            contentPadding = PaddingValues(bottom = 32.dp),
         ) {
             item {
                 Text(
                     text = "全部示例",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 12.dp, bottom = 4.dp),
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 8.dp),
+                )
+            }
+            item {
+                DemoScreenIntro(
+                    text = "以下为 CommonLib 功能演示入口；与 Material 3 色板、导航 3 配套。",
+                )
+            }
+            item {
+                HorizontalDivider(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                    color = MaterialTheme.colorScheme.outlineVariant,
                 )
             }
             itemsIndexed(

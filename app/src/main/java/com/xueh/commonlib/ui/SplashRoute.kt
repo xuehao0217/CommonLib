@@ -1,12 +1,16 @@
 package com.xueh.commonlib.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,32 +26,52 @@ import kotlinx.coroutines.delay
  */
 @Composable
 fun SplashRoute(onFinished: () -> Unit) {
+    val scheme = MaterialTheme.colorScheme
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(scheme.background),
         contentAlignment = Alignment.Center,
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(20.dp),
-            modifier = Modifier.padding(24.dp),
+        Surface(
+            shape = RoundedCornerShape(28.dp),
+            color = scheme.surfaceContainerLow,
+            tonalElevation = 2.dp,
+            shadowElevation = 0.dp,
+            modifier = Modifier.padding(horizontal = 36.dp),
         ) {
-            Text(
-                text = "CommonLib",
-                style = MaterialTheme.typography.headlineMedium,
-                textAlign = TextAlign.Center,
-            )
-            Text(
-                text = "演示工程 · Compose · 单 Activity",
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center,
-            )
-            Text(
-                text = "版本 ${BuildConfig.VERSION_NAME}",
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center,
-            )
-            CircularProgressIndicator()
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier.padding(horizontal = 36.dp, vertical = 40.dp),
+            ) {
+                Text(
+                    text = "CommonLib",
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = scheme.primary,
+                    textAlign = TextAlign.Center,
+                )
+                Text(
+                    text = "演示工程 · Compose · 单 Activity",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = scheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                )
+                Text(
+                    text = "版本 ${BuildConfig.VERSION_NAME}",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = scheme.outline,
+                    textAlign = TextAlign.Center,
+                )
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                        .size(40.dp),
+                    color = scheme.primary,
+                    trackColor = scheme.surfaceContainerHighest,
+                    strokeWidth = 3.dp,
+                )
+            }
         }
     }
     LaunchedEffect(Unit) {

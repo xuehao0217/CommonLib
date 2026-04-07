@@ -18,10 +18,10 @@ package androidx.paging.compose.samples
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,19 +30,16 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -63,9 +60,10 @@ import com.xueh.comm_core.widget.PagingLazyColumn
 import com.xueh.comm_core.widget.PagingRefreshColumn
 import com.xueh.comm_core.widget.PagingVerticalGrid
 import com.xueh.comm_core.widget.PagingVerticalPager
-import com.xueh.comm_core.widget.SpacerH
 import com.xueh.commonlib.entity.HomeEntity
+import com.xueh.commonlib.ui.compose.DemoArticleListCard
 import com.xueh.commonlib.ui.compose.DemoListRow
+import com.xueh.commonlib.ui.compose.DemoScreenIntro
 import com.xueh.commonlib.ui.viewmodel.ComposeViewModel
 import kotlinx.coroutines.launch
 
@@ -108,7 +106,14 @@ fun ComposePaging() {
         predictivePopTransitionSpec = Nav3VerticalPredictivePopTransitionSpec,
         entryProvider = entryProvider {
             entry<PagingSampleKey.Menu> {
-                Column(Modifier.fillMaxSize()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.surface),
+                ) {
+                    DemoScreenIntro(
+                        text = "Paging3 与 LazyGrid / Pager / 自定义 PullToRefresh 组合示例；点击进入子页。",
+                    )
                     DemoListRow(title = "PagingWithHorizontalPager") {
                         backStack.add(PagingSampleKey.PagingWithHorizontalPager)
                     }
@@ -144,16 +149,39 @@ fun ComposePaging() {
 fun CustomRefreshSample() {
     BaseComposeViewModel<ComposeViewModel> {
         val lazyPagingItems = it.getListDatas().collectAsLazyPagingItems()
-        lazyPagingItems.PagingRefreshColumn(refreshHeader = {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface),
+        ) {
+            DemoScreenIntro(
+                text = "PagingRefreshColumn：Material 3 色刷新头 + 分页网格。",
+            )
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp)
-                    .background(Color.Yellow)
-            )
-        }) {
-            it.PagingVerticalGrid {
-                PagingItem(it)
+                    .weight(1f)
+                    .fillMaxWidth(),
+            ) {
+                lazyPagingItems.PagingRefreshColumn(refreshHeader = {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(88.dp)
+                            .background(MaterialTheme.colorScheme.secondaryContainer),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            text = "刷新头 · secondaryContainer",
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                }) {
+                    it.PagingVerticalGrid {
+                        PagingItem(it)
+                    }
+                }
             }
         }
     }
@@ -164,26 +192,53 @@ fun CustomRefreshSample() {
 fun RefreshPagingListSample() {
     BaseComposeViewModel<ComposeViewModel> {
         val lazyPagingItems = it.getListDatas().collectAsLazyPagingItems()
-        lazyPagingItems.PagingRefreshColumn(refreshHeader = {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface),
+        ) {
+            DemoScreenIntro(
+                text = "列表 PullToRefresh + 滚动监听（停滑可见项 / 方向）。",
+            )
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp)
-                    .background(Color.Blue)
-            )
-        }) {
-            val state = rememberLazyListState()
-            state.onScrollStopVisibleList {
-                ToastUtils.showShort("onScrollStopVisibleList==${it.toList()}")
-            }
-            state.onScrollDirectionChanged { up->
-                LogUtils.iTag("AAA", "onScrollDirection==${up}")
-            }
-            lazyPagingItems.PagingLazyColumn(state) {
-                PagingItem(it)
+                    .weight(1f)
+                    .fillMaxWidth(),
+            ) {
+                lazyPagingItems.PagingRefreshColumn(refreshHeader = {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(88.dp)
+                            .background(MaterialTheme.colorScheme.primaryContainer),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            text = "刷新头 · primaryContainer",
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                }) {
+                    val state = rememberLazyListState()
+                    state.onScrollStopVisibleList { vis ->
+                        ToastUtils.showShort("onScrollStopVisibleList==${vis.toList()}")
+                    }
+                    state.onScrollDirectionChanged { up ->
+                        LogUtils.iTag("AAA", "onScrollDirection==${up}")
+                    }
+                    lazyPagingItems.PagingLazyColumn(
+                        lazyListState = state,
+                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                        key = lazyPagingItems.itemKey { it.id },
+                    ) {
+                        PagingItem(it)
+                    }
+                }
             }
         }
-
     }
 }
 
@@ -192,29 +247,65 @@ fun PagingWithHorizontalPager() {
     BaseComposeViewModel<ComposeViewModel> {
         val lazyPagingItems = it.getListDatas().collectAsLazyPagingItems()
         val pagerState = rememberPagerState { lazyPagingItems.itemCount }
-
-        HorizontalPager(
-            modifier = Modifier.fillMaxSize(),
-            state = pagerState,
-            pageSize = PageSize.Fixed(200.dp),
-            key = lazyPagingItems.itemKey { it.id }
-        ) { index ->
-            val item = lazyPagingItems[index]
-            PagingItem(item)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface),
+        ) {
+            DemoScreenIntro(
+                text = "横向分页器展示分页项，固定页宽 200dp。",
+            )
+            HorizontalPager(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+                state = pagerState,
+                pageSize = PageSize.Fixed(200.dp),
+                key = lazyPagingItems.itemKey { it.id },
+            ) { index ->
+                val item = lazyPagingItems[index]
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    PagingItem(item)
+                }
+            }
         }
     }
-
 }
 
 @Composable
 fun PagingWithVerticalPager() {
     BaseComposeViewModel<ComposeViewModel> {
         val lazyPagingItems = it.getListDatas().collectAsLazyPagingItems()
-        lazyPagingItems.PagingVerticalPager() { }
-        lazyPagingItems.PagingVerticalPager {
-            PagingItem(it)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface),
+        ) {
+            DemoScreenIntro(
+                text = "纵向 PagingVerticalPager：上下滑动翻页。",
+            )
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+            ) {
+                lazyPagingItems.PagingVerticalPager {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        PagingItem(it)
+                    }
+                }
+            }
         }
-
     }
 }
 
@@ -222,8 +313,23 @@ fun PagingWithVerticalPager() {
 fun PagingWithLazyGrid() {
     BaseComposeViewModel<ComposeViewModel> {
         val lazyPagingItems = it.getListDatas().collectAsLazyPagingItems()
-        lazyPagingItems.PagingVerticalGrid {
-            PagingItem(it)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface),
+        ) {
+            DemoScreenIntro(
+                text = "双列网格加载分页数据。",
+            )
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+            ) {
+                lazyPagingItems.PagingVerticalGrid {
+                    PagingItem(it)
+                }
+            }
         }
     }
 }
@@ -236,119 +342,111 @@ fun PagingWithLazyList() {
             it.id
         }
 
-        var scope = rememberCoroutineScope()
+        val scope = rememberCoroutineScope()
 
         val lazyPagingItems = _modifier.flow.collectAsLazyPagingItems()
 
-        Column {
-            Column {
-                Box(
-                    modifier = Modifier
-                        .background(Color.Red)
-                        .fillMaxWidth()
-                        .clickable {
-                            _modifier.update(
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface),
+        ) {
+            DemoScreenIntro(
+                text = "演示本地增删改分页数据：update / remove / addHeader / addFooter 等。",
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                PagingDebugTonalButton(
+                    text = "update 首条标题",
+                    onClick = {
+                        _modifier.update(
+                            HomeEntity.Data(
+                                title = "AAAAAAAAAAAAAAA",
+                                id = lazyPagingItems.get(0)?.id ?: 0,
+                            ),
+                        )
+                    },
+                )
+                PagingDebugTonalButton(
+                    text = "remove 首条",
+                    onClick = {
+                        _modifier.remove(lazyPagingItems.get(0)?.id ?: 0)
+                    },
+                )
+                PagingDebugTonalButton(
+                    text = "removeAddHeader",
+                    onClick = {
+                        _modifier.removeAddHeader(1111)
+                    },
+                )
+                PagingDebugTonalButton(
+                    text = "addHeader",
+                    onClick = {
+                        scope.launch {
+                            _modifier.addHeader(
                                 HomeEntity.Data(
-                                    title = "AAAAAAAAAAAAAAA",
-                                    id = lazyPagingItems.get(0)?.id ?: 0
-                                )
+                                    title = "addHeader-DATA",
+                                    id = 1111,
+                                ),
                             )
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(text = "update", fontSize = 32.sp)
-                }
-                SpacerH( 16)
-                Box(
-                    modifier = Modifier
-                        .background(Color.Red)
-                        .fillMaxWidth()
-                        .clickable {
-                            _modifier.remove(lazyPagingItems.get(0)?.id ?: 0)
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(text = "remove ", fontSize = 32.sp)
-                }
-
-                SpacerH( 16)
-                Box(
-                    modifier = Modifier
-                        .background(Color.Red)
-                        .fillMaxWidth()
-                        .clickable {
-                            _modifier.removeAddHeader(1111)
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(text = "removeAddHeader ", fontSize = 32.sp)
-                }
-                SpacerH(16)
-
-                Box(
-                    modifier = Modifier
-                        .background(Color.Red)
-                        .fillMaxWidth()
-                        .clickable {
-                            scope.launch {
-                                _modifier.addHeader(
-                                    HomeEntity.Data(
-                                        title = "addHeader-DATA",
-                                        id = 1111
-                                    )
-                                )
-                            }
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(text = "addHeader ", fontSize = 32.sp)
-                }
-                SpacerH(16)
-                Box(
-                    modifier = Modifier
-                        .background(Color.Red)
-                        .fillMaxWidth()
-                        .clickable {
-                            scope.launch {
-                                _modifier.addFooter(
-                                    HomeEntity.Data(
-                                        title = "addFooter-DATA",
-                                    )
-                                )
-                            }
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(text = "addFooter ", fontSize = 32.sp)
-                }
+                        }
+                    },
+                )
+                PagingDebugTonalButton(
+                    text = "addFooter",
+                    onClick = {
+                        scope.launch {
+                            _modifier.addFooter(
+                                HomeEntity.Data(
+                                    title = "addFooter-DATA",
+                                ),
+                            )
+                        }
+                    },
+                )
             }
 
-            lazyPagingItems.PagingLazyColumn {
+            lazyPagingItems.PagingLazyColumn(
+                lazyListState = rememberLazyListState(),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                key = lazyPagingItems.itemKey { it.id },
+            ) {
                 PagingItem(it)
             }
-
         }
     }
 }
 
 @Composable
-private fun PagingItem(item: HomeEntity.Data?) {
-    Box(
+private fun PagingDebugTonalButton(
+    text: String,
+    onClick: () -> Unit,
+) {
+    FilledTonalButton(
+        onClick = onClick,
         modifier = Modifier
-            .padding(10.dp)
-            .clip(CircleShape)
-            .background(androidx.compose.material3.MaterialTheme.colorScheme.primary)
             .fillMaxWidth()
-            .height(50.dp)
-            .border(1.5.dp, MaterialTheme.colors.secondary, shape = CircleShape),
-
-        contentAlignment = Alignment.Center
+            .height(52.dp),
     ) {
         Text(
-            text = item?.title ?: "",
-            color = Color.White,
-            textAlign = TextAlign.Center,
+            text = text,
+            style = MaterialTheme.typography.labelLarge,
         )
     }
 }
 
+@Composable
+private fun PagingItem(item: HomeEntity.Data?) {
+    DemoArticleListCard(
+        idText = "${item?.id ?: "—"}",
+        title = item?.title ?: "",
+    )
+}
