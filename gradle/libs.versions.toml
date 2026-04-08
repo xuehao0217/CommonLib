@@ -29,6 +29,7 @@ coreKtx = "1.18.0"
 activityKtx = "1.13.0"
 fragmentKtx = "1.8.9"
 lifecycleKtx = "2.10.0"
+exifInterface = "1.4.2"
 #--------------Compose相关-----------------
 coilCompose = "3.4.0"
 constraintLayoutCompose = "1.1.1"
@@ -68,6 +69,7 @@ androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleKtx" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleKtx" }
 androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycleKtx" }
+androidx-exifinterface = { module = "androidx.exifinterface:exifinterface", version.ref = "exifInterface" }
 #-----------------------------------------------图片加载相关-------------------------------------------------------------
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coilCompose" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }

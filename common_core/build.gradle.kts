@@ -59,6 +59,7 @@ dependencies {
     api(libs.androidx.lifecycle.runtime.ktx)
     api(libs.androidx.lifecycle.viewmodel.ktx)//by viewModels()
     api(libs.androidx.lifecycle.process)
+    api(libs.androidx.exifinterface)
     //----------------Compose相关--------------------------
     // 核心 Compose 库（需要暴露给 app 模块）
     api(platform(libs.androidx.compose.bom))

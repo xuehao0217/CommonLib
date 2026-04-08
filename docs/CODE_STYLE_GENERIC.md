@@ -40,6 +40,7 @@
   | `helper/compose/` | Compose 专用：权限、截图、Paging、滚动监听、`OrderedStateMap` | 与 Compose Runtime 耦合的工具 |
   | `helper/coroutine/` | `launchSafety`、`GlobalCoroutineExceptionHandler` | 协程基础设施 |
   | （已删）`helper/activityresult/` | — | 曾含 TakeCameraUri / CROP 封装；已废弃，请直接使用 `ActivityResultContracts`，演示见 app `PhotoFilePickerDemoScreen` |
+  | `widget/crop/` | 方形裁切 Dialog、解码 + EXIF、像素映射裁图 | `SquareImageCropperDialog`、`loadBitmapPairForSquareCrop` |
 
   **新增工具函数时**：先判断属于哪个领域子包，放到对应位置；不属于已有子包时新建子包，而非继续往 `ExtHelper.kt` 里追加。
 

@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -31,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -41,21 +43,28 @@ import androidx.core.content.FileProvider
 import coil3.compose.AsyncImage
 import com.blankj.utilcode.util.ToastUtils
 import com.blankj.utilcode.util.Utils
+import com.xueh.comm_core.widget.crop.SquareImageCropperDialog
+import com.xueh.comm_core.widget.crop.loadBitmapPairForSquareCrop
 import java.io.File
+import kotlinx.coroutines.launch
 
 /**
  * 相册与文件选择：`PickVisualMedia` / `PickMultipleVisualMedia` 走系统 Photo Picker；
- * `OpenDocument` 选通用文件；拍照使用 [ActivityResultContracts.TakePicture] 与 MediaStore / FileProvider 输出 Uri。
+ * `OpenDocument` 选通用文件；拍照使用 [ActivityResultContracts.TakePicture]；单图可选 [SquareImageCropperDialog] 方形裁剪（common_core 封装）。
  */
 @Composable
 fun PhotoFilePickerDemoScreen() {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     var singleImageUri by remember { mutableStateOf<Uri?>(null) }
     var multiImageUris by remember { mutableStateOf<List<Uri>>(emptyList()) }
     var documentUri by remember { mutableStateOf<Uri?>(null) }
     var lastMime by remember { mutableStateOf<String?>(null) }
     var cameraUri by remember { mutableStateOf<Uri?>(null) }
     var pendingCaptureUri by remember { mutableStateOf<Uri?>(null) }
+    var squareCropPair by remember { mutableStateOf<Pair<Bitmap, Bitmap>?>(null) }
+    var squareCroppedBitmap by remember { mutableStateOf<Bitmap?>(null) }
+    var squareCropLoading by remember { mutableStateOf(false) }
 
     val takePicture = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture(),
@@ -84,6 +93,8 @@ fun PhotoFilePickerDemoScreen() {
     val pickSingleImage = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
     ) { uri ->
+        squareCroppedBitmap?.recycle()
+        squareCroppedBitmap = null
         singleImageUri = uri
     }
 
@@ -110,6 +121,28 @@ fun PhotoFilePickerDemoScreen() {
         takePicture.launch(out)
     }
 
+    fun tryStartSquareCrop(uri: Uri?) {
+        if (uri == null) {
+            ToastUtils.showShort("请先选择或拍摄一张图片")
+            return
+        }
+        if (squareCropLoading) return
+        scope.launch {
+            squareCropLoading = true
+            try {
+                ToastUtils.showShort("正在加载原图…")
+                val pair = loadBitmapPairForSquareCrop(context, uri)
+                if (pair == null) {
+                    ToastUtils.showShort("解码失败：请换 JPEG/PNG，或检查相册权限后重试")
+                } else {
+                    squareCropPair = pair
+                }
+            } finally {
+                squareCropLoading = false
+            }
+        }
+    }
+
     val scroll = rememberScrollState()
     Column(
         modifier = Modifier
@@ -120,7 +153,8 @@ fun PhotoFilePickerDemoScreen() {
     ) {
         Spacer(modifier = Modifier.height(8.dp))
         DemoScreenIntro(
-            text = "单图/多图使用 Photo Picker；「文件」使用 OpenDocument。拍照使用官方 TakePicture 契约：Android 10+ 写入 MediaStore DCIM，低版本使用 UtilCode FileProvider 缓存路径。",
+            text = "单图/多图使用 Photo Picker；「文件」使用 OpenDocument。拍照使用 TakePicture。" +
+                "选图或拍照成功后，在同一区块点「方形裁剪」进入全屏裁切（会先 Toast「正在加载原图」）。若无任何反应请看是否解码失败 Toast。",
         )
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
@@ -154,6 +188,19 @@ fun PhotoFilePickerDemoScreen() {
                     .height(200.dp),
                 contentScale = ContentScale.Fit,
             )
+            FilledTonalButton(
+                onClick = { tryStartSquareCrop(uri) },
+                enabled = !squareCropLoading,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(
+                    if (squareCropLoading) {
+                        "加载中…"
+                    } else {
+                        "方形裁剪（当前拍照）"
+                    },
+                )
+            }
         }
 
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
@@ -176,6 +223,34 @@ fun PhotoFilePickerDemoScreen() {
             AsyncImage(
                 model = uri,
                 contentDescription = "单选预览",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
+                contentScale = ContentScale.Fit,
+            )
+            FilledTonalButton(
+                onClick = { tryStartSquareCrop(uri) },
+                enabled = !squareCropLoading,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(
+                    if (squareCropLoading) {
+                        "加载中…"
+                    } else {
+                        "方形裁剪（Compose 封装）"
+                    },
+                )
+            }
+        }
+        squareCroppedBitmap?.let { bmp ->
+            Text(
+                "裁剪结果 ${bmp.width}×${bmp.height}",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.primary,
+            )
+            AsyncImage(
+                model = bmp,
+                contentDescription = "裁剪结果",
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp),
@@ -256,6 +331,26 @@ fun PhotoFilePickerDemoScreen() {
         }
 
         Spacer(modifier = Modifier.height(24.dp))
+    }
+
+    squareCropPair?.let { (src, prev) ->
+        SquareImageCropperDialog(
+            sourceBitmap = src,
+            previewBitmap = prev,
+            onDismiss = {
+                src.recycle()
+                prev.recycle()
+                squareCropPair = null
+            },
+            onCropped = { out ->
+                src.recycle()
+                prev.recycle()
+                squareCropPair = null
+                squareCroppedBitmap?.recycle()
+                squareCroppedBitmap = out
+                ToastUtils.showShort("裁剪完成 ${out.width}×${out.height}")
+            },
+        )
     }
 }
 

@@ -16,7 +16,7 @@ package com.xueh.comm_core
  * - **helper**：`launchSafety`；`helper.compose` 下分页、权限、截图、`OrderedStateMap` 等。
  * - **web**：**[com.xueh.comm_core.web.AgentWebScaffold]**（AgentWeb）；**[com.xueh.comm_core.web.ParkComposeWebViewScaffold]**（[parkwoocheol/compose-webview](https://github.com/parkwoocheol/compose-webview)）；[AgentComposeWebActivity] 全屏打开。
  * - **utils**：`DataStoreUtils`、`MMKVUtil`、`Lunar` 等。
- * - **widget**：图片、弹窗、底部导航、Tab、分页占位与 `Modifier` 扩展。
+ * - **widget**：图片、弹窗、底部导航、Tab、分页占位与 `Modifier` 扩展；**widget.crop** 下 [SquareImageCropperDialog] 与 [loadBitmapPairForSquareCrop]（方形裁切 + EXIF 转正）。
  *
  * ## 推荐启动流程（主进程）
  *
