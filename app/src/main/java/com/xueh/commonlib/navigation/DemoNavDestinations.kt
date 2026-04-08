@@ -17,6 +17,9 @@ data object DemoRefreshLoad : NavKey
 data object DemoLoginCompose : NavKey
 
 @Serializable
+data object DemoMaterial3Playground : NavKey
+
+@Serializable
 data object DemoConstraintSet : NavKey
 
 @Serializable

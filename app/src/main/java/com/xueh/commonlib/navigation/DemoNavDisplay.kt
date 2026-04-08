@@ -42,11 +42,11 @@ import com.xueh.commonlib.ui.compose.DialogPage
 import com.xueh.commonlib.ui.compose.DemoListRow
 import com.xueh.commonlib.ui.compose.DemoScreenIntro
 import com.xueh.commonlib.ui.compose.LoginComposeDemoScreen
+import com.xueh.commonlib.ui.compose.playground.Material3PlaygroundDemoScreen
 import com.xueh.commonlib.ui.compose.NavigateParams1View
 import com.xueh.commonlib.ui.compose.NavigateParams2View
 import com.xueh.commonlib.ui.compose.OrderedTabsExample
 import com.xueh.commonlib.ui.compose.PageTwo
-import com.xueh.commonlib.ui.compose.PagerPage
 import com.xueh.commonlib.ui.compose.PermissionPageContent
 import com.xueh.commonlib.ui.compose.RefreshLoadUse
 import com.xueh.commonlib.ui.compose.TabPage
@@ -64,6 +64,7 @@ private val demoMenuEntries: List<Pair<String, NavKey>> = listOf(
     "跳转互传参数" to DemoNavigateParam1,
     "下拉加载使用" to DemoRefreshLoad,
     "登录 · Autofill / 省略号 / animateBounds" to DemoLoginCompose,
+    "Material3 组件汇演（导航·抽屉·Search·动效）" to DemoMaterial3Playground,
     "Compose 权限申请" to DemoComposePermission,
     "AgentWeb（内嵌）" to DemoAgentWeb,
     "Park Compose WebView" to DemoParkComposeWeb,
@@ -92,6 +93,7 @@ private class DemoNavHostContext(
             when (routeKey) {
             is DemoRefreshLoad -> RefreshLoadUse()
             is DemoLoginCompose -> LoginComposeDemoScreen()
+            is DemoMaterial3Playground -> Material3PlaygroundDemoScreen()
             is DemoConstraintSet -> ConstraintPage()
             is DemoProfileRoute ->
                 PageTwo(name = routeKey.name, age = routeKey.age) { pop() }
@@ -247,6 +249,17 @@ private fun demoEntryProvider(
 ) = entryProvider {
     val ctx = DemoNavHostContext(backStack, navigateParamResult)
     entry<DemoActionList> {
+        var menuFilter by rememberSaveable { mutableStateOf("") }
+        val filteredEntries = remember(menuFilter) {
+            val q = menuFilter.trim()
+            if (q.isEmpty()) {
+                demoMenuEntries
+            } else {
+                demoMenuEntries.filter { (title, _) ->
+                    title.contains(q, ignoreCase = true)
+                }
+            }
+        }
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -267,25 +280,49 @@ private fun demoEntryProvider(
                 )
             }
             item {
+                OutlinedTextField(
+                    value = menuFilter,
+                    onValueChange = { menuFilter = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 4.dp),
+                    singleLine = true,
+                    label = { Text("筛选标题") },
+                    placeholder = { Text("输入关键字，例如 Dialog、Paging") },
+                )
+            }
+            item {
                 HorizontalDivider(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                     color = MaterialTheme.colorScheme.outlineVariant,
                 )
             }
-            itemsIndexed(
-                items = demoMenuEntries,
-                key = { index, pair -> "${index}_${pair.second::class.simpleName}" },
-            ) { index, (title, key) ->
-                DemoListRow(
-                    title = title,
-                    leadingIndex = index + 1,
-                    onClick = { backStack.add(key) },
-                )
+            if (filteredEntries.isEmpty()) {
+                item(key = "empty_filter") {
+                    Text(
+                        text = "无匹配示例，请换关键字或清空筛选。",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp),
+                    )
+                }
+            } else {
+                itemsIndexed(
+                    items = filteredEntries,
+                    key = { _, pair -> pair.first },
+                ) { index, (title, key) ->
+                    DemoListRow(
+                        title = title,
+                        leadingIndex = index + 1,
+                        onClick = { backStack.add(key) },
+                    )
+                }
             }
         }
     }
     entry<DemoRefreshLoad> { ctx.RouteContent(DemoRefreshLoad) }
     entry<DemoLoginCompose> { ctx.RouteContent(DemoLoginCompose) }
+    entry<DemoMaterial3Playground> { ctx.RouteContent(DemoMaterial3Playground) }
     entry<DemoConstraintSet> { ctx.RouteContent(DemoConstraintSet) }
     entry<DemoProfileRoute> { key -> ctx.RouteContent(key) }
     entry<DemoNavigateParam1> { ctx.RouteContent(DemoNavigateParam1) }
