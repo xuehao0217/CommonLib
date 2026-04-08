@@ -39,7 +39,7 @@
   | `ExtHelper.kt` | Null 校验、文件操作、Boolean DSL、Toast、时间格式化 | 历史大杂烩，新增工具**不要**往里堆，按领域拆到子包 |
   | `helper/compose/` | Compose 专用：权限、截图、Paging、滚动监听、`OrderedStateMap` | 与 Compose Runtime 耦合的工具 |
   | `helper/coroutine/` | `launchSafety`、`GlobalCoroutineExceptionHandler` | 协程基础设施 |
-  | `helper/activityresult/` | 拍照、裁剪等 ActivityResult 封装 | 与 Activity 生命周期相关 |
+  | （已删）`helper/activityresult/` | — | 曾含 TakeCameraUri / CROP 封装；已废弃，请直接使用 `ActivityResultContracts`，演示见 app `PhotoFilePickerDemoScreen` |
 
   **新增工具函数时**：先判断属于哪个领域子包，放到对应位置；不属于已有子包时新建子包，而非继续往 `ExtHelper.kt` 里追加。
 
