@@ -41,6 +41,9 @@ data object DemoCarousel : NavKey
 data object DemoComposePermission : NavKey
 
 @Serializable
+data object DemoPhotoFilePicker : NavKey
+
+@Serializable
 data object DemoAgentWeb : NavKey
 
 @Serializable

@@ -48,6 +48,7 @@ import com.xueh.commonlib.ui.compose.NavigateParams2View
 import com.xueh.commonlib.ui.compose.OrderedTabsExample
 import com.xueh.commonlib.ui.compose.PageTwo
 import com.xueh.commonlib.ui.compose.PermissionPageContent
+import com.xueh.commonlib.ui.compose.PhotoFilePickerDemoScreen
 import com.xueh.commonlib.ui.compose.RefreshLoadUse
 import com.xueh.commonlib.ui.compose.TabPage
 import com.xueh.commonlib.ui.compose.VisibilityChangedDemo
@@ -66,6 +67,7 @@ private val demoMenuEntries: List<Pair<String, NavKey>> = listOf(
     "登录 · Autofill / 省略号 / animateBounds" to DemoLoginCompose,
     "Material3 组件汇演（导航·抽屉·Search·动效）" to DemoMaterial3Playground,
     "Compose 权限申请" to DemoComposePermission,
+    "相册 / 文件选择（Photo Picker · OpenDocument）" to DemoPhotoFilePicker,
     "AgentWeb（内嵌）" to DemoAgentWeb,
     "Park Compose WebView" to DemoParkComposeWeb,
     "ComposeTab 分页加载" to DemoComposeTab,
@@ -113,6 +115,7 @@ private class DemoNavHostContext(
             is DemoCommonTabPager -> CommonTabPage()
             is DemoCarousel -> CarouselExamples()
             is DemoComposePermission -> PermissionPageContent()
+            is DemoPhotoFilePicker -> PhotoFilePickerDemoScreen()
             is DemoAgentWeb -> DemoAgentWebPanel(onClose = { pop() })
             is DemoParkComposeWeb -> DemoParkComposeWebPanel()
             is DemoComposeTab -> TabPage()
@@ -331,6 +334,7 @@ private fun demoEntryProvider(
     entry<DemoCommonTabPager> { ctx.RouteContent(DemoCommonTabPager) }
     entry<DemoCarousel> { ctx.RouteContent(DemoCarousel) }
     entry<DemoComposePermission> { ctx.RouteContent(DemoComposePermission) }
+    entry<DemoPhotoFilePicker> { ctx.RouteContent(DemoPhotoFilePicker) }
     entry<DemoAgentWeb> { ctx.RouteContent(DemoAgentWeb) }
     entry<DemoParkComposeWeb> { ctx.RouteContent(DemoParkComposeWeb) }
     entry<DemoComposeTab> { ctx.RouteContent(DemoComposeTab) }
