@@ -8,7 +8,7 @@ versionCode = "1"
 versionName = "1.0.0"
 
 agp = "9.1.0"
-kotlin = "2.3.10"
+kotlin = "2.3.20"
 kotlinCoroutinesVersion = "1.10.2"
 composeBom = "2026.03.01"
 #--------------基础库相关-----------------
@@ -36,8 +36,8 @@ nav3Core = "1.0.1"
 paging = "3.4.2"
 any_pop_dialog_compose = "1.0.4"
 composeviews = "1.10.0.2"
-parkwoocheolComposeWebview = "1.8.1"
-refresh = "1.4.2"
+parkwoocheolComposeWebview = "1.8.2"
+refresh = "1.5.0"
 photopickerCompose = "1.0.0-alpha01"
 #--------------网络相关-----------------
 retrofit = "3.0.0"
@@ -45,13 +45,11 @@ okhttpVersion = "5.3.2"
 logginginterceptor = "1.6.14"
 
 kotlinxSerialization = "1.10.0"
-kotlinSerialization = "2.3.10"
 
 progressmanagerVersion = "1.5.0"
 
 chucker = "4.3.1"
 leakcanaryAndroidVersion = "2.14"
-foundation = "1.10.1"
 
 [libraries]
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
@@ -84,7 +82,7 @@ androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
-androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
+androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
 androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 compose-animation= { module = "androidx.compose.animation:animation",name = "animation" }
 androidx-photopicker-compose = { module = "androidx.photopicker:photopicker-compose", version.ref = "photopickerCompose" }
@@ -133,5 +131,5 @@ androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerialization"}
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin"}
 

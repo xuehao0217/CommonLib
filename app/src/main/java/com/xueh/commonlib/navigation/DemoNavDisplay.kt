@@ -41,6 +41,7 @@ import com.xueh.commonlib.ui.compose.ConstraintPage
 import com.xueh.commonlib.ui.compose.DialogPage
 import com.xueh.commonlib.ui.compose.DemoListRow
 import com.xueh.commonlib.ui.compose.DemoScreenIntro
+import com.xueh.commonlib.ui.compose.LoginComposeDemoScreen
 import com.xueh.commonlib.ui.compose.NavigateParams1View
 import com.xueh.commonlib.ui.compose.NavigateParams2View
 import com.xueh.commonlib.ui.compose.OrderedTabsExample
@@ -62,6 +63,7 @@ private val demoMenuEntries: List<Pair<String, NavKey>> = listOf(
     "路由传参" to DemoProfileRoute(name = "Kevin", age = 18),
     "跳转互传参数" to DemoNavigateParam1,
     "下拉加载使用" to DemoRefreshLoad,
+    "登录 · Autofill / 省略号 / animateBounds" to DemoLoginCompose,
     "Compose 权限申请" to DemoComposePermission,
     "AgentWeb（内嵌）" to DemoAgentWeb,
     "Park Compose WebView" to DemoParkComposeWeb,
@@ -89,6 +91,7 @@ private class DemoNavHostContext(
         ) {
             when (routeKey) {
             is DemoRefreshLoad -> RefreshLoadUse()
+            is DemoLoginCompose -> LoginComposeDemoScreen()
             is DemoConstraintSet -> ConstraintPage()
             is DemoProfileRoute ->
                 PageTwo(name = routeKey.name, age = routeKey.age) { pop() }
@@ -282,6 +285,7 @@ private fun demoEntryProvider(
         }
     }
     entry<DemoRefreshLoad> { ctx.RouteContent(DemoRefreshLoad) }
+    entry<DemoLoginCompose> { ctx.RouteContent(DemoLoginCompose) }
     entry<DemoConstraintSet> { ctx.RouteContent(DemoConstraintSet) }
     entry<DemoProfileRoute> { key -> ctx.RouteContent(key) }
     entry<DemoNavigateParam1> { ctx.RouteContent(DemoNavigateParam1) }

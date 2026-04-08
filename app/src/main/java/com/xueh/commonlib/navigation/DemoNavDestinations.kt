@@ -14,6 +14,9 @@ data class DemoProfileRoute(val name: String, val age: Int = 18) : NavKey
 data object DemoRefreshLoad : NavKey
 
 @Serializable
+data object DemoLoginCompose : NavKey
+
+@Serializable
 data object DemoConstraintSet : NavKey
 
 @Serializable
