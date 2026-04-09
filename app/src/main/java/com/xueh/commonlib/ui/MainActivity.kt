@@ -1,5 +1,7 @@
 package com.xueh.commonlib.ui
 
+import android.content.Intent
+import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.navigation3.runtime.NavKey
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.sp
@@ -23,6 +26,7 @@ import com.xueh.comm_core.widget.BottomNavPager
 import com.xueh.comm_core.widget.NavData
 import com.xueh.comm_core.widget.NavThemeColors
 import com.xueh.commonlib.R
+import com.xueh.commonlib.navigation.resolveLauncherShortcutNavKey
 import kotlinx.coroutines.delay
 
 /**
@@ -32,6 +36,9 @@ class MainActivity : BaseComposeActivity() {
     companion object {
         var interceptTab by mutableStateOf(false)
         var showRedPoint = mutableStateOf(false)
+
+        /** 桌面长按快捷方式请求打开的 [NavKey]，由首页 [com.xueh.commonlib.navigation.DemoNavDisplay] 消费后请置 null。 */
+        val launcherShortcutTarget = mutableStateOf<NavKey?>(null)
     }
     enum class RootPhase { Splash, Main }
 
@@ -40,6 +47,24 @@ class MainActivity : BaseComposeActivity() {
     private val shellController by lazy { AppShellController(overlayState) }
 
     override fun showTitleView() = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        // 须在 super.onCreate（触发 setContent）之前写入，否则首页首次组合拿不到快捷方式目标
+        applyLauncherShortcutIntent(intent)
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        applyLauncherShortcutIntent(intent)
+    }
+
+    private fun applyLauncherShortcutIntent(intent: Intent?) {
+        resolveLauncherShortcutNavKey(intent)?.let { dest ->
+            launcherShortcutTarget.value = dest
+        }
+    }
 
     private var backPressedTime: Long = 0
 

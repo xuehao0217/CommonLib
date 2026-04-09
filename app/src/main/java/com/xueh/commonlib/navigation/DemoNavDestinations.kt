@@ -66,3 +66,7 @@ data object DemoOrderedTabs : NavKey
 
 @Serializable
 data object DemoBaseComposeActivityApi : NavKey
+
+/** 说明：桌面长按应用图标时的静态快捷方式（见 `res/xml/app_shortcuts.xml`）。 */
+@Serializable
+data object DemoAppShortcutsInfo : NavKey

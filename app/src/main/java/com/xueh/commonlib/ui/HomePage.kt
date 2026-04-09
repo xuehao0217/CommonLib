@@ -49,6 +49,7 @@ import com.xueh.commonlib.navigation.DemoNavDisplay
 @Composable
 fun HomePage() {
     var paletteMenuExpanded by remember { mutableStateOf(false) }
+    val shortcutRequest by MainActivity.launcherShortcutTarget
     val isDarkTheme = AppThemeType.isDark(themeType = appThemeType)
     val scheme = MaterialTheme.colorScheme
 
@@ -132,7 +133,11 @@ fun HomePage() {
                 .fillMaxSize()
                 .background(scheme.surface),
         ) {
-            DemoNavDisplay(Modifier.fillMaxSize())
+            DemoNavDisplay(
+                modifier = Modifier.fillMaxSize(),
+                launcherShortcutRequest = shortcutRequest,
+                onLauncherShortcutConsumed = { MainActivity.launcherShortcutTarget.value = null },
+            )
         }
     }
 }

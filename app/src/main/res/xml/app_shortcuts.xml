@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="static_material3"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher"
+        android:shortcutShortLabel="@string/shortcut_material3_short"
+        android:shortcutLongLabel="@string/shortcut_material3_long">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.xueh.commonlib"
+            android:targetClass="com.xueh.commonlib.ui.MainActivity"
+            android:data="commonlib://shortcut/material3">
+            <categories android:name="android.intent.category.DEFAULT" />
+            <categories android:name="android.intent.category.BROWSABLE" />
+        </intent>
+    </shortcut>
+    <shortcut
+        android:shortcutId="static_media3"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher"
+        android:shortcutShortLabel="@string/shortcut_media3_short"
+        android:shortcutLongLabel="@string/shortcut_media3_long">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.xueh.commonlib"
+            android:targetClass="com.xueh.commonlib.ui.MainActivity"
+            android:data="commonlib://shortcut/media3">
+            <categories android:name="android.intent.category.DEFAULT" />
+            <categories android:name="android.intent.category.BROWSABLE" />
+        </intent>
+    </shortcut>
+    <shortcut
+        android:shortcutId="static_dialog"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher"
+        android:shortcutShortLabel="@string/shortcut_dialog_short"
+        android:shortcutLongLabel="@string/shortcut_dialog_long">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.xueh.commonlib"
+            android:targetClass="com.xueh.commonlib.ui.MainActivity"
+            android:data="commonlib://shortcut/dialog">
+            <categories android:name="android.intent.category.DEFAULT" />
+            <categories android:name="android.intent.category.BROWSABLE" />
+        </intent>
+    </shortcut>
+</shortcuts>

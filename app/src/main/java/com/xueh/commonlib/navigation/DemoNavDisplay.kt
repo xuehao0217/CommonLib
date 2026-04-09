@@ -21,6 +21,7 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -39,6 +40,7 @@ import com.xueh.commonlib.ui.compose.CarouselExamples
 import com.xueh.commonlib.ui.compose.CommonTabPage
 import com.xueh.commonlib.ui.compose.ConstraintPage
 import com.xueh.commonlib.ui.compose.DialogPage
+import com.xueh.commonlib.ui.compose.AppShortcutsDemoScreen
 import com.xueh.commonlib.ui.compose.DemoListRow
 import com.xueh.commonlib.ui.compose.DemoScreenIntro
 import com.xueh.commonlib.ui.compose.LoginComposeDemoScreen
@@ -58,6 +60,7 @@ import com.xueh.commonlib.ui.compose.VisibilityChangedDemo
  * 主导航菜单顺序与可跳转 [NavKey] 的**唯一数据源**；增删示例只改此列表 + [DemoNavHostContext.RouteContent] 中对应分支。
  */
 private val demoMenuEntries: List<Pair<String, NavKey>> = listOf(
+    "桌面快捷方式（长按图标）" to DemoAppShortcutsInfo,
     "Dialog" to DemoDialog,
     "公用 CommonTabPager" to DemoCommonTabPager,
     "CarouselExamples" to DemoCarousel,
@@ -126,6 +129,7 @@ private class DemoNavHostContext(
             is DemoVisibilityChanged -> VisibilityChangedDemo()
             is DemoOrderedTabs -> OrderedTabsExample()
             is DemoBaseComposeActivityApi -> BaseComposeActivityApiDemoRoute()
+            is DemoAppShortcutsInfo -> AppShortcutsDemoScreen()
             else ->
                 Text(
                     text = "未注册的路由: ${routeKey::class.simpleName}",
@@ -231,9 +235,25 @@ private fun DemoParkComposeWebPanel() {
 }
 
 @Composable
-fun DemoNavDisplay(modifier: Modifier = Modifier) {
+fun DemoNavDisplay(
+    modifier: Modifier = Modifier,
+    launcherShortcutRequest: NavKey? = null,
+    onLauncherShortcutConsumed: () -> Unit = {},
+) {
     val backStack = rememberNavBackStack(DemoActionList)
     val navigateParamResult = remember { mutableStateOf("未返回数据") }
+    LaunchedEffect(launcherShortcutRequest) {
+        val dest = launcherShortcutRequest ?: return@LaunchedEffect
+        if (backStack.isNotEmpty() && backStack.last() == dest) {
+            onLauncherShortcutConsumed()
+            return@LaunchedEffect
+        }
+        while (backStack.size > 1) {
+            backStack.removeAt(backStack.lastIndex)
+        }
+        backStack.add(dest)
+        onLauncherShortcutConsumed()
+    }
     NavDisplay(
         backStack = backStack,
         modifier = modifier,
@@ -346,4 +366,5 @@ private fun demoEntryProvider(
     entry<DemoVisibilityChanged> { ctx.RouteContent(DemoVisibilityChanged) }
     entry<DemoOrderedTabs> { ctx.RouteContent(DemoOrderedTabs) }
     entry<DemoBaseComposeActivityApi> { ctx.RouteContent(DemoBaseComposeActivityApi) }
+    entry<DemoAppShortcutsInfo> { ctx.RouteContent(DemoAppShortcutsInfo) }
 }

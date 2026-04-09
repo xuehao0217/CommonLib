@@ -4,4 +4,11 @@
     <string name="default_notification_channel_id">newsday_notification_channel</string>
     <string name="default_notification_channel_name">newsday_notification_channel</string>
 
+    <string name="shortcut_material3_short">M3 汇演</string>
+    <string name="shortcut_material3_long">Material3 组件汇演</string>
+    <string name="shortcut_media3_short">Media3</string>
+    <string name="shortcut_media3_long">Media3 ExoPlayer 演示</string>
+    <string name="shortcut_dialog_short">Dialog</string>
+    <string name="shortcut_dialog_long">Dialog 示例</string>
+
 </resources>
