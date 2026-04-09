@@ -1,8 +1,11 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.compose.compiler)
-
     alias(libs.plugins.kotlin.serialization)
+}
+
+kotlin {
+    jvmToolchain(21)
 }
 
 android {
@@ -31,9 +34,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
-//    kotlinOptions {
-//        jvmTarget = "21"
-//    }
     buildFeatures {
         compose = true
         buildConfig = true

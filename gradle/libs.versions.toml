@@ -9,6 +9,7 @@ versionName = "1.0.0"
 
 agp = "9.1.0"
 kotlin = "2.3.20"
+benManesVersions = "0.53.0"
 kotlinCoroutinesVersion = "1.10.2"
 composeBom = "2026.03.01"
 #--------------基础库相关-----------------
@@ -33,7 +34,7 @@ exifInterface = "1.4.2"
 #--------------Compose相关-----------------
 coilCompose = "3.4.0"
 constraintLayoutCompose = "1.1.1"
-nav3Core = "1.0.1"
+nav3Core = "1.1.0"
 paging = "3.4.2"
 any_pop_dialog_compose = "1.0.4"
 composeviews = "1.10.0.2"
@@ -140,5 +141,6 @@ androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin"}
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ben-manes-versions = { id = "com.github.ben-manes.versions", version.ref = "benManesVersions" }
 

@@ -8,6 +8,10 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
+kotlin {
+    jvmToolchain(21)
+}
+
 android {
     namespace = "com.xueh.commonlib"
     compileSdk = libs.versions.compileSdk.get().toInt()
@@ -53,9 +57,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
-//    kotlinOptions {
-//        jvmTarget = "21"
-//    }
     buildFeatures {
         compose = true
         buildConfig = true
@@ -63,12 +64,6 @@ android {
 
     base {
         archivesName = "${libs.versions.appName.get()}-v${libs.versions.versionName.get()}-${SimpleDateFormat("yyyy.MMdd.HH.mm.ss").format(Date())}"
-    }
-
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
     }
 
 //    android.applicationVariants.all {
@@ -85,9 +80,8 @@ android {
 
     packaging {
         resources {
-            pickFirsts += setOf(
-                "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
-            )
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            pickFirsts += "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
         }
     }
 }
