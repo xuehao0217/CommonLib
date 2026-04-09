@@ -1,6 +1,7 @@
 package com.xueh.commonlib.navigation
 
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
@@ -42,6 +42,7 @@ import com.xueh.commonlib.ui.compose.DialogPage
 import com.xueh.commonlib.ui.compose.DemoListRow
 import com.xueh.commonlib.ui.compose.DemoScreenIntro
 import com.xueh.commonlib.ui.compose.LoginComposeDemoScreen
+import com.xueh.commonlib.ui.compose.Media3ExoPlayerDemoScreen
 import com.xueh.commonlib.ui.compose.playground.Material3PlaygroundDemoScreen
 import com.xueh.commonlib.ui.compose.NavigateParams1View
 import com.xueh.commonlib.ui.compose.NavigateParams2View
@@ -68,6 +69,7 @@ private val demoMenuEntries: List<Pair<String, NavKey>> = listOf(
     "Material3 组件汇演（导航·抽屉·Search·动效）" to DemoMaterial3Playground,
     "Compose 权限申请" to DemoComposePermission,
     "相册 / 文件选择（Photo Picker · OpenDocument）" to DemoPhotoFilePicker,
+    "Media3 ExoPlayer · Compose（ContentFrame + M3 控件）" to DemoMedia3ExoPlayer,
     "AgentWeb（内嵌）" to DemoAgentWeb,
     "Park Compose WebView" to DemoParkComposeWeb,
     "ComposeTab 分页加载" to DemoComposeTab,
@@ -116,6 +118,7 @@ private class DemoNavHostContext(
             is DemoCarousel -> CarouselExamples()
             is DemoComposePermission -> PermissionPageContent()
             is DemoPhotoFilePicker -> PhotoFilePickerDemoScreen()
+            is DemoMedia3ExoPlayer -> Media3ExoPlayerDemoScreen()
             is DemoAgentWeb -> DemoAgentWebPanel(onClose = { pop() })
             is DemoParkComposeWeb -> DemoParkComposeWebPanel()
             is DemoComposeTab -> TabPage()
@@ -138,7 +141,7 @@ private class DemoNavHostContext(
 /** Nav3 内嵌 [AgentWebScaffold]：可改 URL，与 MainActivity 覆盖层 Web 共用同一套实现。 */
 @Composable
 private fun DemoAgentWebPanel(onClose: () -> Unit) {
-    val activity = LocalContext.current as? ComponentActivity
+    val activity = LocalActivity.current as? ComponentActivity
     var draftUrl by rememberSaveable { mutableStateOf("https://m.baidu.com") }
     var loadedUrl by rememberSaveable { mutableStateOf("https://m.baidu.com") }
     if (activity == null) {
@@ -335,6 +338,7 @@ private fun demoEntryProvider(
     entry<DemoCarousel> { ctx.RouteContent(DemoCarousel) }
     entry<DemoComposePermission> { ctx.RouteContent(DemoComposePermission) }
     entry<DemoPhotoFilePicker> { ctx.RouteContent(DemoPhotoFilePicker) }
+    entry<DemoMedia3ExoPlayer> { ctx.RouteContent(DemoMedia3ExoPlayer) }
     entry<DemoAgentWeb> { ctx.RouteContent(DemoAgentWeb) }
     entry<DemoParkComposeWeb> { ctx.RouteContent(DemoParkComposeWeb) }
     entry<DemoComposeTab> { ctx.RouteContent(DemoComposeTab) }

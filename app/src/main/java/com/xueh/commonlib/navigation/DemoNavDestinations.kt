@@ -44,6 +44,9 @@ data object DemoComposePermission : NavKey
 data object DemoPhotoFilePicker : NavKey
 
 @Serializable
+data object DemoMedia3ExoPlayer : NavKey
+
+@Serializable
 data object DemoAgentWeb : NavKey
 
 @Serializable

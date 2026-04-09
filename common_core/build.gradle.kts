@@ -85,6 +85,12 @@ dependencies {
     api(libs.coil3.coil.svg)
     api(libs.lottie.compose)
 
+    api(libs.androidx.media3.exoplayer)
+    api(libs.androidx.media3.exoplayer.hls)
+    api(libs.androidx.media3.exoplayer.dash)
+    api(libs.androidx.media3.ui.compose)
+    api(libs.androidx.media3.ui.compose.material3)
+
     // 仅 common_core 内部使用的 Compose 库
     implementation(libs.any.pop.dialog.compose)    //https://github.com/TheMelody/AnyPopDialog-Compose
     implementation(libs.parkwoocheol.compose.webview.android) // https://github.com/parkwoocheol/compose-webview
