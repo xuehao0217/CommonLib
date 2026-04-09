@@ -1,5 +1,7 @@
 package com.xueh.comm_core.widget.media3
 
+// 演示向整体壳子：内部组合 Media3PlayerContent + 片源/倍速/地址/底栏传输；正式业务可只用 Media3PlayerContent。
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -43,7 +45,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -53,8 +54,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -66,7 +65,6 @@ import androidx.media3.common.PlaybackException
 import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.ui.compose.ContentFrame
 import androidx.media3.ui.compose.SURFACE_TYPE_SURFACE_VIEW
 import androidx.media3.ui.compose.SURFACE_TYPE_TEXTURE_VIEW
 import androidx.media3.ui.compose.material3.buttons.MuteButton
@@ -76,11 +74,8 @@ import androidx.media3.ui.compose.material3.buttons.PreviousButton
 import androidx.media3.ui.compose.material3.buttons.RepeatButton
 import androidx.media3.ui.compose.material3.buttons.SeekBackButton
 import androidx.media3.ui.compose.material3.buttons.SeekForwardButton
-import androidx.media3.ui.compose.material3.indicator.PositionAndDurationText
-import androidx.media3.ui.compose.material3.indicator.ProgressSlider
-import androidx.media3.ui.compose.material3.indicator.RemainingDurationText
 
-/** 单条流预设（标签 + URL），用于芯片快速切换。 */
+/** 片源芯片展示用：短标题 + 可加载的流媒体地址。 */
 data class Media3StreamPreset(
     val label: String,
     val uri: String,
@@ -88,10 +83,12 @@ data class Media3StreamPreset(
 
 private val speedStops = listOf(0.5f, 1f, 1.25f, 1.5f, 2f)
 
+// 水平边距、视频圆角卡片、底栏仅顶角圆角
 private val PanelHorizontalPadding = 20.dp
 private val VideoCardShape = RoundedCornerShape(20.dp)
 private val ControlDockShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
 
+/** 分区标题行（可选左侧图标）。 */
 @Composable
 private fun Media3SectionTitle(
     text: String,
@@ -113,6 +110,7 @@ private fun Media3SectionTitle(
     }
 }
 
+/** 整行横向滚动，承载多枚 FilterChip。 */
 @Composable
 private fun Media3ChipRowScroll(content: @Composable () -> Unit) {
     Row(
@@ -127,10 +125,16 @@ private fun Media3ChipRowScroll(content: @Composable () -> Unit) {
 }
 
 /**
- * Media3 ExoPlayer + Material3 Compose 封装：预设列表、自定义 URL、可选两段连播、倍速、Surface、
- * Fit/Crop、reset 留画、全套传输控件与进度。生命周期 ON_STOP 暂停，销毁时 release。
+ * Media3 演示向整体布局：视频区为 [Media3PlayerContent]；下方为可滚动工具条与贴底传输栏。
+ * 内部自建 [ExoPlayer]：`ON_STOP` 暂停，`dispose` 时 [Player.release]。
  *
- * M3U8 等业务需在模块中依赖 `media3-exoplayer-hls` 等；本组件不创建 ExoPlayer 以外的依赖。
+ * M3U8 等需在模块依赖 `media3-exoplayer-hls` 等渲染模块。
+ *
+ * @param modifier 根 Column 修饰，一般为 `fillMaxSize()` 或与 `weight` 组合。
+ * @param presets 横向片源芯片；空列表则整段不展示。
+ * @param initialUri 首次进入时 applied 地址与输入框初始文案。
+ * @param dualPlaylistUris 非 null 时展示「两段连播」芯片，并以 Pair 内两 URI 建列表。
+ * @param topContent 置于最上方的插槽（如说明条）。
  */
 @Composable
 fun Media3PlayerScaffold(
@@ -150,6 +154,7 @@ fun Media3PlayerScaffold(
         }
     }
 
+    // 进程后台时暂停，避免继续解码；页面销毁时释放 native 资源
     DisposableEffect(lifecycleOwner, player) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_STOP) {
@@ -163,10 +168,12 @@ fun Media3PlayerScaffold(
         }
     }
 
+    // 地址草稿 / 实际加载 / 是否走两段列表
     var draftUrl by rememberSaveable { mutableStateOf(initialUri) }
     var appliedUrl by rememberSaveable { mutableStateOf(initialUri) }
     var dualPlaylistMode by rememberSaveable { mutableStateOf(false) }
 
+    // 传入 Media3PlayerContent：Surface 类型、Fit/Crop、reset 是否留末帧
     var surfaceType by rememberSaveable { mutableIntStateOf(SURFACE_TYPE_SURFACE_VIEW) }
     var useCropScale by rememberSaveable { mutableStateOf(false) }
     var keepContentOnReset by rememberSaveable { mutableStateOf(false) }
@@ -174,10 +181,12 @@ fun Media3PlayerScaffold(
     var selectedSpeed by rememberSaveable { mutableFloatStateOf(1f) }
     var advancedExpanded by rememberSaveable { mutableStateOf(false) }
 
+    // 状态文案、错误信息、圆点是否视为播放中
     var statusLine by remember { mutableStateOf("") }
     var lastError by remember { mutableStateOf<String?>(null) }
     var isPlayingUi by remember { mutableStateOf(false) }
 
+    // 播放状态、列表索引、错误回调 → 刷新文案与错误条
     DisposableEffect(player) {
         fun syncLabel() {
             isPlayingUi = player.isPlaying
@@ -225,9 +234,11 @@ fun Media3PlayerScaffold(
     }
 
     LaunchedEffect(selectedSpeed, player) {
+        // 倍速变更即时作用到同一 Player
         player.playbackParameters = PlaybackParameters(selectedSpeed)
     }
 
+    // 单地址或两段列表切换时重建 MediaItem 并重新 prepare
     LaunchedEffect(appliedUrl, dualPlaylistMode, dualPlaylistUris, player) {
         lastError = null
         player.stop()
@@ -252,7 +263,7 @@ fun Media3PlayerScaffold(
     ) {
         topContent?.invoke()
 
-        // 画面占满 weight(1f) 卡片全部宽高；ContentFrame 随容器尺寸自适应（Fit/Crop），进度叠在底部
+        // 主画面：weight(1f) 吃满除工具条与底栏外的竖直空间
         OutlinedCard(
             modifier = Modifier
                 .weight(1f)
@@ -261,55 +272,16 @@ fun Media3PlayerScaffold(
             shape = VideoCardShape,
             colors = CardDefaults.outlinedCardColors(containerColor = scheme.surface),
         ) {
-            Box(Modifier.fillMaxSize()) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(scheme.surfaceContainerHighest),
-                ) {
-                    key(surfaceType, contentScale, keepContentOnReset) {
-                        ContentFrame(
-                            player = player,
-                            modifier = Modifier.fillMaxSize(),
-                            surfaceType = surfaceType,
-                            contentScale = contentScale,
-                            keepContentOnReset = keepContentOnReset,
-                        )
-                    }
-                }
-                Column(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .fillMaxWidth()
-                        .background(
-                            Brush.verticalGradient(
-                                colors = listOf(
-                                    Color.Transparent,
-                                    Color.Black.copy(alpha = 0.62f),
-                                ),
-                            ),
-                        )
-                        .padding(start = 14.dp, end = 14.dp, top = 28.dp, bottom = 12.dp),
-                ) {
-                    ProgressSlider(
-                        player = player,
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        PositionAndDurationText(
-                            player = player,
-                            modifier = Modifier.weight(1f),
-                        )
-                        RemainingDurationText(player = player)
-                    }
-                }
-            }
+            Media3PlayerContent(
+                player = player,
+                modifier = Modifier.fillMaxSize(),
+                surfaceType = surfaceType,
+                contentScale = contentScale,
+                keepContentOnReset = keepContentOnReset,
+            )
         }
 
+        // 片源、倍速、高级渲染选项、状态、地址（限高可纵向滚动）
         val toolsScroll = rememberScrollState()
         Column(
             modifier = Modifier
@@ -555,6 +527,7 @@ fun Media3PlayerScaffold(
             Spacer(Modifier.height(6.dp))
         }
 
+        // Material3 媒体按钮：上/下一首、快退快进、播放暂停、循环、静音
         Surface(
             modifier = Modifier.fillMaxWidth(),
             shape = ControlDockShape,

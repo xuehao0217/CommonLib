@@ -1,5 +1,7 @@
 package com.xueh.commonlib.ui.compose
 
+// 主导航入口：只拼装 DemoScreenIntro + Media3PlayerScaffold；预设 URL 为演示直连，与库内 Scaffold 解耦。
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,6 +10,7 @@ import androidx.compose.ui.Modifier
 import com.xueh.comm_core.widget.media3.Media3PlayerScaffold
 import com.xueh.comm_core.widget.media3.Media3StreamPreset
 
+/** 默认打开的海洋短片（HTTP，需 cleartext 或按域名放开）。 */
 private const val DefaultDemoMp4 = "http://vjs.zencdn.net/v/oceans.mp4"
 private const val SampleMp4Oceans = DefaultDemoMp4
 private const val SampleMp4Xgplayer360p =
@@ -23,6 +26,7 @@ private const val SampleM3u8Xgplayer =
     "https://sf1-cdn-tos.huoshanstatic.com/obj/media-fe/xgplayer_doc_video/hls/xgplayer-demo.m3u8"
 private const val SampleM3u8MuxBbb = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
 
+/** 与 Media3PlayerScaffold 的芯片列表一一对应，便于改地址只改此处。 */
 private val demoPresets = listOf(
     Media3StreamPreset("MP4 · 海洋", SampleMp4Oceans),
     Media3StreamPreset("MP4 · 西瓜 Demo", SampleMp4Xgplayer360p),
