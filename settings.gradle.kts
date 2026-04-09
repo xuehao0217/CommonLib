@@ -10,12 +10,20 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
 
-        maven { url = uri("https://maven.aliyun.com/repository/public/") }
-        maven { url = uri("https://maven.aliyun.com/repository/central") }
-        maven { url = uri("https://maven.aliyun.com/repository/google") }
-        maven { url = uri("https://maven.aliyun.com/repository/gradle-plugin") }
-        maven { url = uri("https://repo1.maven.org/maven2/") }
-        maven { url = uri("https://jitpack.io") }
+        // 仅 GitHub 生态：避免与 google / mavenCentral 重复全量走镜像
+        maven(url = uri("https://maven.aliyun.com/repository/public/")) {
+            content {
+                includeGroupByRegex("com\\.github\\..*")
+                includeGroupByRegex("io\\.github\\..*")
+                // progressmanager 等未进 Maven Central，公库镜像仍可提供
+                includeGroup("me.jessyan")
+            }
+        }
+        maven(url = uri("https://jitpack.io")) {
+            content {
+                includeGroupByRegex("com\\.github\\..*")
+            }
+        }
     }
 }
 dependencyResolutionManagement {
@@ -24,12 +32,18 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
 
-        maven { url = uri("https://maven.aliyun.com/repository/public/") }
-        maven { url = uri("https://maven.aliyun.com/repository/central") }
-        maven { url = uri("https://maven.aliyun.com/repository/google") }
-        maven { url = uri("https://maven.aliyun.com/repository/gradle-plugin") }
-        maven { url = uri("https://repo1.maven.org/maven2/") }
-        maven { url = uri("https://jitpack.io") }
+        maven(url = uri("https://maven.aliyun.com/repository/public/")) {
+            content {
+                includeGroupByRegex("com\\.github\\..*")
+                includeGroupByRegex("io\\.github\\..*")
+                includeGroup("me.jessyan")
+            }
+        }
+        maven(url = uri("https://jitpack.io")) {
+            content {
+                includeGroupByRegex("com\\.github\\..*")
+            }
+        }
     }
 }
 
