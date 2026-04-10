@@ -1,8 +1,6 @@
 package com.xueh.comm_core.base
 
 import android.app.Application
-import androidx.multidex.MultiDex
-import androidx.multidex.MultiDexApplication
 import com.blankj.utilcode.util.ProcessUtils
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
@@ -18,7 +16,7 @@ import com.xueh.comm_core.utils.DataStoreUtils
  * 3. [AppThemePreferences.restore] —— 恢复亮暗色与主题色枚举
  * 4. [init] —— 子类实现：如 [HttpRequest.init]、推送、埋点等
  */
-abstract class BaseApplication : MultiDexApplication() {
+abstract class BaseApplication : Application() {
     abstract fun init()
     override fun onCreate() {
         super.onCreate()

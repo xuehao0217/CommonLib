@@ -14,7 +14,6 @@ kotlinCoroutinesVersion = "1.10.2"
 composeBom = "2026.03.01"
 #--------------基础库相关-----------------
 junit = "4.13.2"
-multidex = "2.0.1"
 datastore = "1.2.1"
 #--------------工具相关-----------------
 interval = "1.0.3"
@@ -60,7 +59,6 @@ kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutinesVersion" }
 #-----------------------------------------------基础库相关-------------------------------------------------------------
 junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-multidex = { module = "androidx.multidex:multidex", version.ref = "multidex" }
 androidx-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 androidx-paging-common = { module = "androidx.paging:paging-common", version.ref = "paging" }
 androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }

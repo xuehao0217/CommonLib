@@ -23,11 +23,14 @@ import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.animation.core.tween
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.ExperimentalMotionApi
 import androidx.constraintlayout.compose.Dimension
 import com.xueh.commonlib.R
+import kotlin.OptIn
 
 /**
  * 创 建 人: xueh
@@ -62,6 +65,7 @@ fun constraint() {
 }
 
 
+@OptIn(ExperimentalMotionApi::class)
 @Composable
 fun ConstraintPage() {
     val orientation = remember { mutableStateOf(1) }
@@ -76,16 +80,16 @@ fun ConstraintPage() {
             text = "点击上图切换图文排版：ConstraintLayout 约束在竖排 / 横排间动画切换。",
         )
         ConstraintLayout(
-            getConstraintLayout(orientation),
-            Modifier
+            constraintSet = getConstraintLayout(orientation),
+            modifier = Modifier
                 .padding(16.dp, 12.dp, 16.dp, 0.dp)
                 .background(
                     color = MaterialTheme.colorScheme.surfaceContainerLow,
                     shape = RoundedCornerShape(12.dp),
                 )
                 .fillMaxWidth()
-                .padding(12.dp, 12.dp, 12.dp, 12.dp), animateChanges = true
-
+                .padding(12.dp),
+            animateChangesSpec = tween(durationMillis = 320),
         ) {
         Image(
             painter = painterResource(id = R.drawable.ic_launcher),

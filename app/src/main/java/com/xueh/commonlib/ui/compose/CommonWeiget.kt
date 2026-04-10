@@ -73,8 +73,8 @@ fun CommonTabPage() {
 fun CarouselExample_MultiBrowse() {
     data class CarouselItem(
         val id: Int,
-        @DrawableRes val imageResId: Int,
-        val contentDescription: String
+        @param:DrawableRes val imageResId: Int,
+        val contentDescription: String,
     )
 
     val items = remember {
@@ -115,8 +115,8 @@ fun CarouselExample_MultiBrowse() {
 fun CarouselExample() {
     data class CarouselItem(
         val id: Int,
-        @DrawableRes val imageResId: Int,
-        val contentDescription: String
+        @param:DrawableRes val imageResId: Int,
+        val contentDescription: String,
     )
 
     val carouselItems = remember {

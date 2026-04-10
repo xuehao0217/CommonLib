@@ -23,11 +23,14 @@ object MMKVUtil {
             is Double -> mmkv.encode(key, value)
             is ByteArray -> mmkv.encode(key, value)
             is Parcelable -> mmkv.encode(key, value)
-            else -> mmkv.encode(key, GsonUtils.toJson(key))
+            else -> mmkv.encode(key, GsonUtils.toJson(value))
         }
     }
 
-
+    /**
+     * 各分支按 [defaultValue] 的运行时类型读取，返回类型与默认值一致；[as T] 由分支穷尽保证安全。
+     */
+    @Suppress("UNCHECKED_CAST")
     private fun <T> getValue(key: String, defaultValue: T): T {
         return when (defaultValue) {
             is String -> mmkv.decodeString(key, defaultValue) as T

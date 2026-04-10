@@ -14,9 +14,6 @@ android {
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
         // 随 AAR 下发：app 开启 minify 时自动合并，无需在 app 重复抄写第三方与 common_core 网络栈规则
         consumerProguardFiles("proguard-rules.pro")
     }
@@ -47,7 +44,6 @@ android {
 
 dependencies {
     //----------------基本库相关--------------------------
-    api(libs.androidx.multidex)
     testImplementation(libs.junit)
     api(libs.androidx.datastore)
     api(libs.androidx.paging.common)
