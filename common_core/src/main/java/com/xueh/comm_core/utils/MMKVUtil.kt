@@ -2,18 +2,26 @@ package com.xueh.comm_core.utils
 
 import android.content.Context
 import android.os.Parcelable
-import com.blankj.utilcode.util.GsonUtils
 import com.tencent.mmkv.MMKV
+import com.xueh.comm_core.net.JsonManager
+import kotlin.PublishedApi
 
 /**
- * MMKV 键值存取封装：[set]/[get] 按运行时类型分发 encode/decode；支持 [Parcelable] 与 JSON 回退（见实现）。
+ * MMKV 键值存取封装：[set]/[get] 按运行时类型分发 encode/decode；支持 [Parcelable]。
+ * 需存 [@Serializable][kotlinx.serialization.Serializable] 模型时使用 [setSerializable] / [getSerializable]（与 [JsonManager] 一致，不用 Gson）。
  */
 object MMKVUtil {
-    private val mmkv by lazy {
-        MMKV.defaultMMKV()
-    }
 
-    private fun <T> putValue(key: String, value: T) {
+    private val mmkvLazy = lazy { MMKV.defaultMMKV() }
+
+    private val mmkv: MMKV get() = mmkvLazy.value
+
+    /** public inline 仅能调用可见 API，故通过 internal + [PublishedApi] 暴露同一 [MMKV] 实例。 */
+    @PublishedApi
+    internal fun mmkvForInline(): MMKV = mmkvLazy.value
+
+    @JvmStatic
+    fun set(key: String, value: Any) {
         when (value) {
             is String -> mmkv.encode(key, value)
             is Float -> mmkv.encode(key, value)
@@ -23,8 +31,28 @@ object MMKVUtil {
             is Double -> mmkv.encode(key, value)
             is ByteArray -> mmkv.encode(key, value)
             is Parcelable -> mmkv.encode(key, value)
-            else -> mmkv.encode(key, GsonUtils.toJson(value))
+            else -> throw IllegalArgumentException(
+                "MMKVUtil.set 仅支持基础类型与 Parcelable；@Serializable 类型请使用 setSerializable(key, value)",
+            )
         }
+    }
+
+    /**
+     * 将 [T] 以 [JsonManager.default] 序列化为 JSON 字符串写入 MMKV（适用于 [@Serializable] 类型）。
+     */
+    inline fun <reified T> setSerializable(key: String, value: T) {
+        mmkvForInline().encode(key, JsonManager.default.encodeToString(value))
+    }
+
+    /**
+     * 读取由 [setSerializable] 写入的 JSON；解析失败或缺键时返回 [defaultValue]。
+     */
+    inline fun <reified T> getSerializable(key: String, defaultValue: T): T {
+        val store = mmkvForInline()
+        if (!store.containsKey(key)) return defaultValue
+        val raw = store.decodeString(key, "") ?: return defaultValue
+        if (raw.isEmpty()) return defaultValue
+        return runCatching { JsonManager.default.decodeFromString<T>(raw) }.getOrElse { defaultValue }
     }
 
     /**
@@ -41,13 +69,8 @@ object MMKVUtil {
             is Double -> mmkv.decodeDouble(key, defaultValue) as T
             is ByteArray -> mmkv.decodeBytes(key, defaultValue) as T
             is Parcelable -> mmkv.decodeParcelable(key, defaultValue.javaClass) as T
-            else -> defaultValue  // 如果无法匹配类型，返回默认值
+            else -> defaultValue
         }
-    }
-
-    @JvmStatic
-    fun set(key: String, value: Any) {
-        putValue(key, value)
     }
 
     @JvmStatic
@@ -77,7 +100,7 @@ object MMKVUtil {
         mmkv.clearAll()
     }
 
-    fun init(context: Context){
+    fun init(context: Context) {
         MMKV.initialize(context)
     }
 }
