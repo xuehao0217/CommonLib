@@ -1,3 +1,6 @@
+import java.text.SimpleDateFormat
+import java.util.Date
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.compose.compiler)
@@ -45,17 +48,20 @@ android {
         buildConfig = true
     }
 
-    // 产物基名：appName + versionName（无时间戳，构建可复现）。若需自定义 APK 名，请用 AGP 9+ androidComponents + Artifacts API，勿使用 applicationVariants。
-    base {
-        archivesName = "${libs.versions.appName.get()}-v${libs.versions.versionName.get()}"
-    }
-
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
             pickFirsts += "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
         }
     }
+}
+
+base {
+    archivesName.set(
+        "${libs.versions.appName.get()}-v${android.defaultConfig.versionName}-${
+            SimpleDateFormat("yyyy.MMdd.HH.mm.ss").format(Date())
+        }"
+    )
 }
 
 dependencies {
