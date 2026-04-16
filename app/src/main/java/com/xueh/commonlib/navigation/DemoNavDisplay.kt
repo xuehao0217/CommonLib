@@ -27,6 +27,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
@@ -57,7 +58,12 @@ import com.xueh.commonlib.ui.compose.TabPage
 import com.xueh.commonlib.ui.compose.VisibilityChangedDemo
 
 /**
- * 主导航菜单顺序与可跳转 [NavKey] 的**唯一数据源**；增删示例只改此列表 + [DemoNavHostContext.RouteContent] 中对应分支。
+ * CommonLib 演示应用主导航：Navigation 3（[NavDisplay]、[rememberNavBackStack]、[entryProvider]）。
+ *
+ * - **类型安全路由**：[DemoNavDestinations] 中目的地均为 `@Serializable` + [NavKey]，满足可保存回栈。
+ * - **菜单与跳转**：本列表为标题与 [NavKey] 的**唯一数据源**；增删示例须同步 [DemoNavHostContext.RouteContent] 与 [demoEntryProvider] 中对应 `entry<…>`。
+ * - **导航安全**：入栈、出栈与系统返回使用 [androidx.lifecycle.compose.dropUnlessResumed]，避免非 `RESUMED` 时重复操作。
+ * - **桌面快捷方式**：`com.xueh.commonlib.ui.MainActivity` 经 `launcherShortcutRequest` 传入目标；[resolveLauncherShortcutNavKey] 解析 `Intent`，由 [DemoNavDisplay] 内 `LaunchedEffect` 清栈并 `add` 目标键。
  */
 private val demoMenuEntries: List<Pair<String, NavKey>> = listOf(
     "桌面快捷方式（长按图标）" to DemoAppShortcutsInfo,
@@ -86,12 +92,12 @@ private class DemoNavHostContext(
     val backStack: NavBackStack<NavKey>,
     val navigateParamResult: MutableState<String>,
 ) {
-    fun pop() {
-        if (backStack.size > 1) backStack.removeAt(backStack.lastIndex)
-    }
-
     @Composable
     fun RouteContent(routeKey: NavKey) {
+        // NAV: 与官方 Nav3 示例一致，避免 STOPPED 等状态下重复入栈/出栈
+        val pop = dropUnlessResumed {
+            if (backStack.size > 1) backStack.removeAt(backStack.lastIndex)
+        }
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -103,18 +109,18 @@ private class DemoNavHostContext(
             is DemoMaterial3Playground -> Material3PlaygroundDemoScreen()
             is DemoConstraintSet -> ConstraintPage()
             is DemoProfileRoute ->
-                PageTwo(name = routeKey.name, age = routeKey.age) { pop() }
+                PageTwo(name = routeKey.name, age = routeKey.age, onBack = pop)
             is DemoNavigateParam1 -> {
                 val result by navigateParamResult
                 NavigateParams1View(
                     resultText = result,
-                    onOpenSecond = { backStack.add(DemoNavigateParam2) },
+                    onOpenSecond = dropUnlessResumed { backStack.add(DemoNavigateParam2) },
                 )
             }
             is DemoNavigateParam2 ->
                 NavigateParams2View(
                     onDeliverResult = { navigateParamResult.value = "Hello world to you" },
-                    onPop = { pop() },
+                    onPop = pop,
                 )
             is DemoDialog -> DialogPage()
             is DemoCommonTabPager -> CommonTabPage()
@@ -122,7 +128,7 @@ private class DemoNavHostContext(
             is DemoComposePermission -> PermissionPageContent()
             is DemoPhotoFilePicker -> PhotoFilePickerDemoScreen()
             is DemoMedia3ExoPlayer -> Media3ExoPlayerDemoScreen()
-            is DemoAgentWeb -> DemoAgentWebPanel(onClose = { pop() })
+            is DemoAgentWeb -> DemoAgentWebPanel(onClose = pop)
             is DemoParkComposeWeb -> DemoParkComposeWebPanel()
             is DemoComposeTab -> TabPage()
             is DemoComposePaging -> ComposePaging()
@@ -257,7 +263,7 @@ fun DemoNavDisplay(
     NavDisplay(
         backStack = backStack,
         modifier = modifier,
-        onBack = {
+        onBack = dropUnlessResumed {
             if (backStack.size > 1) {
                 backStack.removeAt(backStack.lastIndex)
             }
@@ -340,7 +346,7 @@ private fun demoEntryProvider(
                     DemoListRow(
                         title = title,
                         leadingIndex = index + 1,
-                        onClick = { backStack.add(key) },
+                        onClick = dropUnlessResumed { backStack.add(key) },
                     )
                 }
             }
