@@ -1,28 +1,16 @@
 # =============================================================================
 # app 模块（com.xueh.commonlib）
-# common_core 已通过 consumerProguardFiles 提供：协程、kotlinx.serialization、Retrofit/OkHttp、
-# Coil、MMKV、AgentWeb、Utilcodex、ProgressManager、XXPermissions、Chucker 等规则，此处勿重复堆砌。
+# common_core 已通过 consumerProguardFiles 合并：kotlinx.serialization、Retrofit/OkHttp、
+# Coil、MMKV 等；此处只保留 app 侧最小补充，避免与清单/依赖自带规则重复。
 # =============================================================================
 
-# -----------------------------------------------------------------------------
-# 本模块：序列化模型、Retrofit 接口、Application（启动与初始化）
-# -----------------------------------------------------------------------------
--keep @kotlinx.serialization.Serializable class com.xueh.commonlib.** { *; }
+# kotlinx.serialization：$serializer 与 Companion 由 common_core 的 com.xueh.** 规则 + 库自带规则覆盖；
+# 若 release 出现反序列化/多态异常，再按需为具体包增加 -keep @kotlinx.serialization.Serializable。
+# （此前整包 com.xueh.commonlib.** { *; } 已删除以缩小保留范围。）
 
-# Retrofit 通过反射解析接口方法签名；保留接口声明（实现由 Retrofit 生成）
--keep interface com.xueh.commonlib.api.** { *; }
+# Retrofit 3 自带 consumer 规则，无需再 keep 接口。
 
--keep class com.xueh.commonlib.MyApplication { *; }
-
-# -----------------------------------------------------------------------------
-# Lifecycle / ViewModel（Compose + ViewModel 工厂）
-# -----------------------------------------------------------------------------
--keep class * extends androidx.lifecycle.ViewModel {
-    <init>(...);
-}
--keep class * extends androidx.lifecycle.AndroidViewModel {
-    <init>(android.app.Application);
-}
+# Application 由 AndroidManifest 引用，R8 会保留入口类。
 
 # -----------------------------------------------------------------------------
 # 崩溃还原：行号（源文件名可选隐藏）
@@ -30,11 +18,10 @@
 -keepattributes SourceFile,LineNumberTable
 -renamesourcefileattribute SourceFile
 
-# 发布 mapping（路径相对 app 模块；CI 可归档该文件）
 -printmapping proguard-mapping.txt
 
 # -----------------------------------------------------------------------------
-# WebView（AgentWeb / 系统 WebViewClient）
+# WebView（JS 桥与 WebViewClient；AgentWeb / 系统 WebView 运行时）
 # -----------------------------------------------------------------------------
 -keepclassmembers class * {
     @android.webkit.JavascriptInterface <methods>;
@@ -44,36 +31,7 @@
     public boolean *(android.webkit.WebView, java.lang.String);
 }
 
-# -----------------------------------------------------------------------------
-# Android 组件与常见模板（与 proguard-android-optimize 互补）
-# -----------------------------------------------------------------------------
--keep public class * extends android.app.Activity
--keep public class * extends android.app.Service
--keep public class * extends android.content.BroadcastReceiver
--keep public class * extends android.content.ContentProvider
-
+# JNI（依赖库若含 native 方法）
 -keepclasseswithmembernames class * {
     native <methods>;
-}
-
--keepclassmembers enum * {
-    public static **[] values();
-    public static ** valueOf(java.lang.String);
-}
-
--keep class * implements android.os.Parcelable {
-    public static final android.os.Parcelable$Creator *;
-}
-
--keepclassmembers class * implements java.io.Serializable {
-    static final long serialVersionUID;
-    private static final java.io.ObjectStreamField[] serialPersistentFields;
-    private void writeObject(java.io.ObjectOutputStream);
-    private void readObject(java.io.ObjectInputStream);
-    java.lang.Object writeReplace();
-    java.lang.Object readResolve();
-}
-
--keepclassmembers class **.R$* {
-    public static <fields>;
 }

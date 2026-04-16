@@ -39,7 +39,7 @@ fun Modifier.clickDebounce(
     millis: Long = 400,
     onClick: () -> Unit,
 ): Modifier = composed {
-    var lastClickTime by remember { mutableStateOf(0L) }
+    var lastClickTime by remember { mutableLongStateOf(0L) }
     val currentOnClick by rememberUpdatedState(onClick)
 
     clickNoRipple {

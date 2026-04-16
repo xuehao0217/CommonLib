@@ -31,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -103,10 +104,10 @@ private fun BoxScope.InnerDialog(
     content: @Composable () -> Unit,
 ) {
     var offsetY by remember {
-        mutableStateOf(0f)
+        mutableFloatStateOf(0f)
     }
     val offsetYAnimate by animateFloatAsState(targetValue = offsetY)
-    var bottomSheetHeight by remember { mutableStateOf(0f) }
+    var bottomSheetHeight by remember { mutableFloatStateOf(0f) }
     AnimatedVisibility(
         modifier = Modifier
             .clickNoRipple { }
@@ -175,10 +176,10 @@ fun CustomDialog(
             backgroundColor = dialogBackgroundColor,
         )
         var offsetY by remember {
-            mutableStateOf(0f)
+            mutableFloatStateOf(0f)
         }
         val offsetYAnimate by animateFloatAsState(targetValue = offsetY)
-        var bottomSheetHeight by remember { mutableStateOf(0f) }
+        var bottomSheetHeight by remember { mutableFloatStateOf(0f) }
         AnimatedVisibility(
             modifier = Modifier
                 .clickNoRipple { }

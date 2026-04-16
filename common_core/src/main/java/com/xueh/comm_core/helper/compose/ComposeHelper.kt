@@ -134,7 +134,7 @@ fun LazyStaggeredGridState.onScrollStopVisibleList(onStop: (List<Int>) -> Unit) 
 // =========================
 @Composable
 fun LazyListState.onScrollDirectionChanged(onDirectionChanged: (Boolean) -> Unit) {
-    var lastIndex by remember { mutableStateOf(firstVisibleItemIndex) }
+    var lastIndex by remember { mutableIntStateOf(firstVisibleItemIndex) }
     val callback by rememberUpdatedState(onDirectionChanged)
     LaunchedEffect(this) {
         snapshotFlow { firstVisibleItemIndex }
@@ -169,12 +169,12 @@ fun LogCompositions(
     color: Color = Color.Yellow,
     logTag: String = "RecompositionLog",
 ) {
-    val count = remember { mutableStateOf(0) }
+    val count = remember { mutableIntStateOf(0) }
     SideEffect {
-        count.value++
-        Log.d(logTag, "$msg 重组次数 ${count.value}")
+        count.intValue++
+        Log.d(logTag, "$msg 重组次数 ${count.intValue}")
     }
-    Text(text = "$msg 重组次数 ${count.value}", color = color)
+    Text(text = "$msg 重组次数 ${count.intValue}", color = color)
 }
 
 // =========================

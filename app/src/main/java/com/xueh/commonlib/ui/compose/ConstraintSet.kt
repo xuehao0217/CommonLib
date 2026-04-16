@@ -13,8 +13,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.MutableIntState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -68,7 +68,7 @@ fun constraint() {
 @OptIn(ExperimentalMotionApi::class)
 @Composable
 fun ConstraintPage() {
-    val orientation = remember { mutableStateOf(1) }
+    val orientation = remember { mutableIntStateOf(1) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -98,11 +98,7 @@ fun ConstraintPage() {
                 .layoutId("imageRef")
                 .fillMaxWidth()
                 .clickable {
-                    if (orientation.value == 0) {
-                        orientation.value = 1
-                    } else {
-                        orientation.value = 0
-                    }
+                    orientation.intValue = if (orientation.intValue == 0) 1 else 0
                 }
                 .clip(shape = RoundedCornerShape(5)),
             contentScale = ContentScale.FillWidth
@@ -114,19 +110,19 @@ fun ConstraintPage() {
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Left,
             overflow = TextOverflow.Ellipsis,
-            maxLines = if (orientation.value == 0) Int.MAX_VALUE else 4,
+            maxLines = if (orientation.intValue == 0) Int.MAX_VALUE else 4,
         )
         }
     }
 }
 
 
-private fun getConstraintLayout(orientation: MutableState<Int>): androidx.constraintlayout.compose.ConstraintSet {
+private fun getConstraintLayout(orientation: MutableIntState): androidx.constraintlayout.compose.ConstraintSet {
     return androidx.constraintlayout.compose.ConstraintSet {
         val imageRef = createRefFor("imageRef")
         val titleRef = createRefFor("titleRef")
 
-        if (orientation.value == 0) {
+        if (orientation.intValue == 0) {
             constrain(imageRef) {
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
