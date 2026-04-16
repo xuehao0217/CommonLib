@@ -83,6 +83,12 @@ data class Media3StreamPreset(
 
 private val speedStops = listOf(0.5f, 1f, 1.25f, 1.5f, 2f)
 
+private data class Media3PlaybackLabelState(
+    val statusLine: String = "",
+    val lastError: String? = null,
+    val isPlayingUi: Boolean = false,
+)
+
 // 水平边距、视频圆角卡片、底栏仅顶角圆角
 private val PanelHorizontalPadding = 20.dp
 private val VideoCardShape = RoundedCornerShape(20.dp)
@@ -182,30 +188,30 @@ fun Media3PlayerScaffold(
     var advancedExpanded by rememberSaveable { mutableStateOf(false) }
 
     // 状态文案、错误信息、圆点是否视为播放中
-    var statusLine by remember { mutableStateOf("") }
-    var lastError by remember { mutableStateOf<String?>(null) }
-    var isPlayingUi by remember { mutableStateOf(false) }
+    var playbackLabels by remember { mutableStateOf(Media3PlaybackLabelState()) }
 
     // 播放状态、列表索引、错误回调 → 刷新文案与错误条
     DisposableEffect(player) {
         fun syncLabel() {
-            isPlayingUi = player.isPlaying
-            statusLine = buildString {
-                append(
-                    when (player.playbackState) {
-                        Player.STATE_IDLE -> "空闲"
-                        Player.STATE_BUFFERING -> "缓冲中"
-                        Player.STATE_READY ->
-                            if (player.isPlaying) "播放中" else "已暂停"
-                        Player.STATE_ENDED -> "已播完"
-                        else -> "未知"
-                    },
-                )
-                append(" · ${"%.2f".format(player.playbackParameters.speed)}x")
-                if (player.mediaItemCount > 1) {
-                    append(" · 第 ${player.currentMediaItemIndex + 1}/${player.mediaItemCount} 段")
-                }
-            }
+            playbackLabels = playbackLabels.copy(
+                isPlayingUi = player.isPlaying,
+                statusLine = buildString {
+                    append(
+                        when (player.playbackState) {
+                            Player.STATE_IDLE -> "空闲"
+                            Player.STATE_BUFFERING -> "缓冲中"
+                            Player.STATE_READY ->
+                                if (player.isPlaying) "播放中" else "已暂停"
+                            Player.STATE_ENDED -> "已播完"
+                            else -> "未知"
+                        },
+                    )
+                    append(" · ${"%.2f".format(player.playbackParameters.speed)}x")
+                    if (player.mediaItemCount > 1) {
+                        append(" · 第 ${player.currentMediaItemIndex + 1}/${player.mediaItemCount} 段")
+                    }
+                },
+            )
         }
         syncLabel()
         val listener = object : Player.Listener {
@@ -226,7 +232,9 @@ fun Media3PlayerScaffold(
             }
 
             override fun onPlayerError(error: PlaybackException) {
-                lastError = error.message ?: error.errorCodeName
+                playbackLabels = playbackLabels.copy(
+                    lastError = error.message ?: error.errorCodeName,
+                )
             }
         }
         player.addListener(listener)
@@ -240,7 +248,7 @@ fun Media3PlayerScaffold(
 
     // 单地址或两段列表切换时重建 MediaItem 并重新 prepare
     LaunchedEffect(appliedUrl, dualPlaylistMode, dualPlaylistUris, player) {
-        lastError = null
+        playbackLabels = playbackLabels.copy(lastError = null)
         player.stop()
         val dual = dualPlaylistUris
         if (dualPlaylistMode && dual != null) {
@@ -462,20 +470,20 @@ fun Media3PlayerScaffold(
                         .clip(CircleShape)
                         .background(
                             when {
-                                lastError != null -> scheme.error
-                                isPlayingUi == true -> scheme.primary
+                                playbackLabels.lastError != null -> scheme.error
+                                playbackLabels.isPlayingUi -> scheme.primary
                                 else -> scheme.outline
                             },
                         ),
                 )
                 Text(
-                    text = statusLine,
+                    text = playbackLabels.statusLine,
                     style = MaterialTheme.typography.bodyMedium,
                     color = scheme.onSurfaceVariant,
                     modifier = Modifier.weight(1f),
                 )
             }
-            lastError?.let { err ->
+            playbackLabels.lastError?.let { err ->
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()

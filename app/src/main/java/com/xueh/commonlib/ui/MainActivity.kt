@@ -61,6 +61,7 @@ class MainActivity : BaseComposeActivity() {
     }
 
     private fun applyLauncherShortcutIntent(intent: Intent?) {
+        // NAV: Intent(ACTION_VIEW) -> NavKey -> launcherShortcutTarget，由 HomePage/DemoNavDisplay 消费
         resolveLauncherShortcutNavKey(intent)?.let { dest ->
             launcherShortcutTarget.value = dest
         }

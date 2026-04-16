@@ -32,6 +32,14 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.xueh.comm_core.widget.BottomSheetDialog
 import com.xueh.comm_core.widget.CustomDialog
 
+private data class DialogPageUiState(
+    val alertVisible: Boolean = false,
+    val fullScreenVisible: Boolean = false,
+    val bottomSheetDialog: Boolean = false,
+    val customDialog: Boolean = false,
+    val showBottomSheet: Boolean = false,
+)
+
 /**
  * 各类 Dialog / BottomSheet 演示（Material 3）。
  */
@@ -39,11 +47,7 @@ import com.xueh.comm_core.widget.CustomDialog
 @Preview
 @Composable
 fun DialogPage() {
-    val alertDialog = remember { mutableStateOf(false) }
-    val fullScreenDialog = remember { mutableStateOf(false) }
-    var bottomSheetDialog by remember { mutableStateOf(false) }
-    var customDialog by remember { mutableStateOf(false) }
-    var showBottomSheet by remember { mutableStateOf(false) }
+    var dialogUi by remember { mutableStateOf(DialogPageUiState()) }
     val sheetState = androidx.compose.material3.rememberModalBottomSheetState(
         skipPartiallyExpanded = false,
     )
@@ -60,14 +64,27 @@ fun DialogPage() {
         DemoScreenIntro(
             text = "点击按钮打开对应弹层；Modal BottomSheet 使用 Material3 组件。",
         )
-        DialogLaunchButton(text = "Alert Dialog") { alertDialog.value = true }
-        DialogLaunchButton(text = "FullScreenDialog") { fullScreenDialog.value = true }
-        DialogLaunchButton(text = "BottomSheetDialog（业务封装）") { bottomSheetDialog = true }
-        DialogLaunchButton(text = "CustomDialog") { customDialog = true }
-        DialogLaunchButton(text = "ModalBottomSheet（M3）") { showBottomSheet = true }
+        DialogLaunchButton(text = "Alert Dialog") {
+            dialogUi = dialogUi.copy(alertVisible = true)
+        }
+        DialogLaunchButton(text = "FullScreenDialog") {
+            dialogUi = dialogUi.copy(fullScreenVisible = true)
+        }
+        DialogLaunchButton(text = "BottomSheetDialog（业务封装）") {
+            dialogUi = dialogUi.copy(bottomSheetDialog = true)
+        }
+        DialogLaunchButton(text = "CustomDialog") {
+            dialogUi = dialogUi.copy(customDialog = true)
+        }
+        DialogLaunchButton(text = "ModalBottomSheet（M3）") {
+            dialogUi = dialogUi.copy(showBottomSheet = true)
+        }
     }
 
-    MyDialog(alertDialog) {
+    MyDialog(
+        visible = dialogUi.alertVisible,
+        onDismissRequest = { dialogUi = dialogUi.copy(alertVisible = false) },
+    ) {
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxWidth()
@@ -78,7 +95,10 @@ fun DialogPage() {
         }
     }
 
-    FullScreenDialog(fullScreenDialog) {
+    FullScreenDialog(
+        visible = dialogUi.fullScreenVisible,
+        onDismissRequest = { dialogUi = dialogUi.copy(fullScreenVisible = false) },
+    ) {
         ConstraintLayout(
             modifier = Modifier
                 .clip(RoundedCornerShape(18.dp))
@@ -89,13 +109,13 @@ fun DialogPage() {
 
     BottomSheetDialog(
         modifier = Modifier,
-        visible = bottomSheetDialog,
+        visible = dialogUi.bottomSheetDialog,
         cancelable = true,
         canceledOnTouchOutside = true,
-        onDismissRequest = { bottomSheetDialog = false },
+        onDismissRequest = { dialogUi = dialogUi.copy(bottomSheetDialog = false) },
     ) {
         DialogContent {
-            bottomSheetDialog = false
+            dialogUi = dialogUi.copy(bottomSheetDialog = false)
         }
     }
 
@@ -103,10 +123,10 @@ fun DialogPage() {
         contentAlignment = Alignment.Center,
         dialogBackgroundColor = Color.Transparent,
         modifier = Modifier,
-        visible = customDialog,
+        visible = dialogUi.customDialog,
         cancelable = true,
         canceledOnTouchOutside = true,
-        onDismissRequest = { customDialog = false },
+        onDismissRequest = { dialogUi = dialogUi.copy(customDialog = false) },
     ) {
         ConstraintLayout(
             modifier = Modifier
@@ -119,11 +139,11 @@ fun DialogPage() {
         }
     }
 
-    if (showBottomSheet) {
+    if (dialogUi.showBottomSheet) {
         ModalBottomSheet(
             modifier = Modifier.fillMaxHeight(),
             sheetState = sheetState,
-            onDismissRequest = { showBottomSheet = false },
+            onDismissRequest = { dialogUi = dialogUi.copy(showBottomSheet = false) },
         ) {
             Text(
                 text = "Swipe up to open sheet. Swipe down to dismiss.",
@@ -179,15 +199,14 @@ private fun DialogContent(onDismissRequest: () -> Unit) {
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun MyDialog(
-    alertDialog: MutableState<Boolean>,
+    visible: Boolean,
+    onDismissRequest: () -> Unit,
     properties: DialogProperties = DialogProperties(usePlatformDefaultWidth = false),
     content: @Composable () -> Unit,
 ) {
-    if (alertDialog.value) {
+    if (visible) {
         Dialog(
-            onDismissRequest = {
-                alertDialog.value = false
-            },
+            onDismissRequest = onDismissRequest,
             properties = properties,
         ) {
             content()
@@ -197,12 +216,14 @@ private fun MyDialog(
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun FullScreenDialog(alertDialog: MutableState<Boolean>, content: @Composable () -> Unit) {
-    if (alertDialog.value) {
+fun FullScreenDialog(
+    visible: Boolean,
+    onDismissRequest: () -> Unit,
+    content: @Composable () -> Unit,
+) {
+    if (visible) {
         Dialog(
-            onDismissRequest = {
-                alertDialog.value = false
-            },
+            onDismissRequest = onDismissRequest,
             properties = DialogProperties(
                 usePlatformDefaultWidth = false,
                 decorFitsSystemWindows = false,

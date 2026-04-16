@@ -133,6 +133,7 @@ fun HomePage() {
                 .fillMaxSize()
                 .background(scheme.surface),
         ) {
+            // NAV: 主内容区 -> DemoNavDisplay（全部示例列表 + Nav3 子页）
             DemoNavDisplay(
                 modifier = Modifier.fillMaxSize(),
                 launcherShortcutRequest = shortcutRequest,

@@ -38,6 +38,9 @@ fun CommonLazyColumn(
     }
 }
 
+/**
+ * @param itemContent 若行内需调用随重组频繁变化的回调，调用方应在 Composable 内用 [androidx.compose.runtime.rememberUpdatedState] 包一层再读。
+ */
 @Composable
 fun <T> CommonLazyColumnData(
     data: List<T>,

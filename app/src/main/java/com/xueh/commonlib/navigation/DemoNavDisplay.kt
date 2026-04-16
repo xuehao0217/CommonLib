@@ -114,6 +114,7 @@ private class DemoNavHostContext(
                 val result by navigateParamResult
                 NavigateParams1View(
                     resultText = result,
+                    // NAV: DemoNavigateParam1 -> DemoNavigateParam2（互传参数演示）
                     onOpenSecond = dropUnlessResumed { backStack.add(DemoNavigateParam2) },
                 )
             }
@@ -257,6 +258,7 @@ fun DemoNavDisplay(
         while (backStack.size > 1) {
             backStack.removeAt(backStack.lastIndex)
         }
+        // NAV: 桌面快捷方式 -> DemoActionList 重置后 push(dest)
         backStack.add(dest)
         onLauncherShortcutConsumed()
     }
@@ -346,6 +348,7 @@ private fun demoEntryProvider(
                     DemoListRow(
                         title = title,
                         leadingIndex = index + 1,
+                        // NAV: DemoActionList -> 各示例 NavKey
                         onClick = dropUnlessResumed { backStack.add(key) },
                     )
                 }

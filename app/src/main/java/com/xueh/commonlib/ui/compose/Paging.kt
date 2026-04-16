@@ -95,6 +95,7 @@ private sealed interface PagingSampleKey : NavKey {
 @Composable
 fun ComposePaging() {
     val backStack = rememberNavBackStack(PagingSampleKey.Menu)
+    // NAV: Paging 演示 Menu -> 各子页 PagingSampleKey
     NavDisplay(
         backStack = backStack,
         onBack = dropUnlessResumed {
