@@ -246,7 +246,10 @@ fun BaseAnyPopDialog(
 @Composable
 fun BaseComposeDialog(
     alertDialog: MutableState<Boolean>,
-    properties: DialogProperties = DialogProperties(usePlatformDefaultWidth = false),
+    properties: DialogProperties = DialogProperties(
+        usePlatformDefaultWidth = false,
+        decorFitsSystemWindows = false,
+    ),
     onDismiss: () -> Unit = {},
     content: @Composable () -> Unit,
 ) {
@@ -266,7 +269,10 @@ fun BaseComposeDialog(
 @Composable
 fun ComposeLoadingDialog(
     alertDialog: MutableState<Boolean>,
-    properties: DialogProperties = DialogProperties(usePlatformDefaultWidth = false),
+    properties: DialogProperties = DialogProperties(
+        usePlatformDefaultWidth = false,
+        decorFitsSystemWindows = false,
+    ),
     onDismiss: () -> Unit = {},
 ) {
     if (alertDialog.value) {

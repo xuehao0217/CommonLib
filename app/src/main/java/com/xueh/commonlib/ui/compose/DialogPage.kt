@@ -203,7 +203,10 @@ fun FullScreenDialog(alertDialog: MutableState<Boolean>, content: @Composable ()
             onDismissRequest = {
                 alertDialog.value = false
             },
-            properties = DialogProperties(usePlatformDefaultWidth = false),
+            properties = DialogProperties(
+                usePlatformDefaultWidth = false,
+                decorFitsSystemWindows = false,
+            ),
         ) {
             Surface(
                 modifier = Modifier.fillMaxSize(),

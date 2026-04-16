@@ -1,6 +1,7 @@
 package com.xueh.comm_core.base.compose
 
 import android.content.pm.ActivityInfo
+import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
@@ -83,6 +84,11 @@ abstract class BaseComposeActivity : ComponentActivity() {
         requestedOrientation = requestedScreenOrientation()
 
         super.onCreate(savedInstanceState)
+
+        // 底部导航/自定义底栏与手势条同色延伸时，关闭系统强制对比度_scrim（API 29+）
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            window.isNavigationBarContrastEnforced = false
+        }
 
         if (isSecureWindow()) {
             window.setFlags(
