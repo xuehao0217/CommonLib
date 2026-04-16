@@ -1,4 +1,5 @@
 [versions]
+# --- App / SDK ---
 compileSdk = "36"
 minSdk = "24"
 targetSdk = "36"
@@ -7,138 +8,151 @@ appName = "commonlib"
 versionCode = "1"
 versionName = "1.0.0"
 
+# --- 构建链 ---
 agp = "9.1.0"
 kotlin = "2.3.20"
 benManesVersions = "0.53.0"
-kotlinCoroutinesVersion = "1.10.2"
-composeBom = "2026.03.01"
-#--------------基础库相关-----------------
-junit = "4.13.2"
+
+# --- Kotlin 生态 ---
+kotlinxCoroutines = "1.10.2"
+kotlinxSerialization = "1.10.0"
+
+# --- AndroidX（非 Compose）---
+coreKtx = "1.18.0"
+activityKtx = "1.13.0"
+fragmentKtx = "1.8.9"
+lifecycleKtx = "2.10.0"
+exifInterface = "1.4.2"
 datastore = "1.2.1"
-#--------------工具相关-----------------
+paging = "3.4.2"
+
+# --- Jetpack Compose 生态 ---
+composeBom = "2026.03.01"
+constraintLayoutCompose = "1.1.1"
+nav3 = "1.1.0"
+coil = "3.4.0"
+lottie = "6.7.1"
+anyPopDialogCompose = "1.0.4"
+composeViews = "1.10.0.2"
+parkwoocheolComposeWebview = "1.8.2"
+refresh = "1.5.0"
+photopickerCompose = "1.0.0-alpha01"
+
+# --- Media3 ---
+media3 = "1.10.0"
+
+# --- 网络 ---
+retrofit = "3.0.0"
+okhttp = "5.3.2"
+loggingInterceptor = "1.6.14"
+okhttpProfiler = "1.1.1"
+progressmanager = "1.5.0"
+
+# --- 通用工具 ---
 interval = "1.0.3"
 utilcodex = "1.31.1"
 agentweb = "v5.1.1-androidx"
 xxpermissions = "28.0"
 logger = "2.2.0"
 mmkv = "2.4.0"
-lottie = "6.7.1"
-okhttpProfiler = "1.1.1"
-#--------------KTX相关-----------------
-coreKtx = "1.18.0"
-activityKtx = "1.13.0"
-fragmentKtx = "1.8.9"
-lifecycleKtx = "2.10.0"
-exifInterface = "1.4.2"
-#--------------Compose相关-----------------
-coilCompose = "3.4.0"
-constraintLayoutCompose = "1.1.1"
-nav3Core = "1.1.0"
-paging = "3.4.2"
-any_pop_dialog_compose = "1.0.4"
-composeviews = "1.10.0.2"
-parkwoocheolComposeWebview = "1.8.2"
-refresh = "1.5.0"
-photopickerCompose = "1.0.0-alpha01"
-media3 = "1.10.0"
-#--------------网络相关-----------------
-retrofit = "3.0.0"
-okhttpVersion = "5.3.2"
-logginginterceptor = "1.6.14"
 
-kotlinxSerialization = "1.10.0"
-
-progressmanagerVersion = "1.5.0"
-
+# --- 仅 debug ---
 chucker = "4.3.1"
-leakcanaryAndroidVersion = "2.14"
+leakcanary = "2.14"
+
+# --- 测试 ---
+junit = "4.13.2"
 
 [libraries]
+# Kotlin
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
-kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinCoroutinesVersion" }
-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutinesVersion" }
-#-----------------------------------------------基础库相关-------------------------------------------------------------
-junit = { group = "junit", name = "junit", version.ref = "junit" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+
+# AndroidX：DataStore / Paging / KTX / Lifecycle / Exif
 androidx-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 androidx-paging-common = { module = "androidx.paging:paging-common", version.ref = "paging" }
 androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
-#-----------------------------------------------KTX相关-------------------------------------------------------------
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleKtx" }
+androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleKtx" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleKtx" }
 androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycleKtx" }
 androidx-exifinterface = { module = "androidx.exifinterface:exifinterface", version.ref = "exifInterface" }
-#-----------------------------------------------图片加载相关-------------------------------------------------------------
-coil = { module = "io.coil-kt.coil3:coil", version.ref = "coilCompose" }
-coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
-coil-compose-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilCompose" }
-coil3-coil-svg = { module = "io.coil-kt.coil3:coil-svg", version.ref = "coilCompose" }
-lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
-#-----------------------------------------------Compose相关-------------------------------------------------------------
-androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityKtx" }
-androidx-ui = { group = "androidx.compose.ui", name = "ui" }
-androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
-androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
-androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
-androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
-compose-animation= { module = "androidx.compose.animation:animation",name = "animation" }
+
+# Jetpack Compose（无版本行由 BOM 约束）
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityKtx" }
+androidx-ui = { module = "androidx.compose.ui:ui" }
+androidx-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
+androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+androidx-material3 = { module = "androidx.compose.material3:material3" }
+androidx-compose-foundation = { module = "androidx.compose.foundation:foundation" }
+androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
+compose-animation = { module = "androidx.compose.animation:animation" }
 androidx-photopicker-compose = { module = "androidx.photopicker:photopicker-compose", version.ref = "photopickerCompose" }
 
-androidx-media3-exoplayer = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "media3" }
-androidx-media3-exoplayer-hls = { group = "androidx.media3", name = "media3-exoplayer-hls", version.ref = "media3" }
-androidx-media3-exoplayer-dash = { group = "androidx.media3", name = "media3-exoplayer-dash", version.ref = "media3" }
-androidx-media3-ui-compose = { group = "androidx.media3", name = "media3-ui-compose", version.ref = "media3" }
-androidx-media3-ui-compose-material3 = { group = "androidx.media3", name = "media3-ui-compose-material3", version.ref = "media3" }
+# Navigation 3
+androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3" }
+androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3" }
 
-androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
-androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
+# Media3
+androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
+androidx-media3-exoplayer-hls = { module = "androidx.media3:media3-exoplayer-hls", version.ref = "media3" }
+androidx-media3-exoplayer-dash = { module = "androidx.media3:media3-exoplayer-dash", version.ref = "media3" }
+androidx-media3-ui-compose = { module = "androidx.media3:media3-ui-compose", version.ref = "media3" }
+androidx-media3-ui-compose-material3 = { module = "androidx.media3:media3-ui-compose-material3", version.ref = "media3" }
 
+# 图片：Coil / Lottie
+coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-compose-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
+coil3-coil-svg = { module = "io.coil-kt.coil3:coil-svg", version.ref = "coil" }
+lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
+
+# Compose 扩展与第三方 UI
 constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose-android", version.ref = "constraintLayoutCompose" }
 compose-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleKtx" }
 compose-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleKtx" }
 compose-paging = { module = "androidx.paging:paging-compose", version.ref = "paging" }
+any-pop-dialog-compose = { module = "io.github.TheMelody:any_pop_dialog_compose", version.ref = "anyPopDialogCompose" }
+compose-views = { module = "io.github.ltttttttttttt:ComposeViews", version.ref = "composeViews" }
+parkwoocheol-compose-webview-android = { module = "io.github.parkwoocheol:compose-webview-android", version.ref = "parkwoocheolComposeWebview" }
 refresh = { module = "com.github.jenly1314.UltraSwipeRefresh:refresh", version.ref = "refresh" }
 refresh-indicator = { module = "com.github.jenly1314.UltraSwipeRefresh:refresh-indicator-classic", version.ref = "refresh" }
 
-any_pop_dialog_compose = { module = "io.github.TheMelody:any_pop_dialog_compose", version.ref = "any_pop_dialog_compose" }
-composeViews = { module = "io.github.ltttttttttttt:ComposeViews", version.ref = "composeviews" }
-parkwoocheol-compose-webview-android = { module = "io.github.parkwoocheol:compose-webview-android", version.ref = "parkwoocheolComposeWebview" }
-
-#-----------------------------------------------网络相关-------------------------------------------------------------
-okhttp3-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttpVersion" }
-okhttp3-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttpVersion" }
+# 网络
+okhttp3-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
+okhttp3-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
-
-kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
-retrofit-converter-kotlinx-serialization = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit" }
-
+retrofit-converter-kotlinx-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
+saf-logging-interceptor = { module = "com.github.fengzhizi715:saf-logginginterceptor", version.ref = "loggingInterceptor" }
 okhttp-profiler = { module = "io.nerdythings:okhttp-profiler", version.ref = "okhttpProfiler" }
+progressmanager = { module = "me.jessyan:progressmanager", version.ref = "progressmanager" }
 
-
+# 网络调试（仅 debug / release 占位）
 chucker-no-op = { module = "com.github.chuckerteam.chucker:library-no-op", version.ref = "chucker" }
 chucker = { module = "com.github.chuckerteam.chucker:library", version.ref = "chucker" }
-progressmanager = { module = "me.jessyan:progressmanager", version.ref = "progressmanagerVersion" }
-logginginterceptor = { module = "com.github.fengzhizi715:saf-logginginterceptor", version.ref = "logginginterceptor" }
 
-#------------------------------------------------非 Compose--------------------------------------------------------------
+# 通用工具（非 UI 专属）
 interval = { module = "com.github.liangjingkanji:Interval", version.ref = "interval" }
 utilcodex = { module = "com.blankj:utilcodex", version.ref = "utilcodex" }
 agentweb = { module = "io.github.justson:agentweb-core", version.ref = "agentweb" }
-xxPermissions = { module = "com.github.getActivity:XXPermissions", version.ref = "xxpermissions" }
+xx-permissions = { module = "com.github.getActivity:XXPermissions", version.ref = "xxpermissions" }
 logger = { module = "com.orhanobut:logger", version.ref = "logger" }
-squareup-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanaryAndroidVersion" }
 mmkv = { module = "com.tencent:mmkv", version.ref = "mmkv" }
-#------------------------------------------------plugins--------------------------------------------------------------
+squareup-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanary" }
+
+# 测试
+junit = { module = "junit:junit", version.ref = "junit" }
+
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ben-manes-versions = { id = "com.github.ben-manes.versions", version.ref = "benManesVersions" }
-
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }

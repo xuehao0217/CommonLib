@@ -43,43 +43,44 @@ android {
 }
 
 dependencies {
-    //----------------基本库相关--------------------------
     testImplementation(libs.junit)
+
+    // AndroidX：DataStore / Paging / KTX / Lifecycle / Exif
     api(libs.androidx.datastore)
     api(libs.androidx.paging.common)
     api(libs.androidx.paging.runtime)
-    //----------------KTX相关--------------------------
     api(libs.androidx.core.ktx)
     api(libs.androidx.activity.ktx)
     api(libs.androidx.fragment.ktx)
     api(libs.androidx.lifecycle.runtime.ktx)
-    api(libs.androidx.lifecycle.viewmodel.ktx)//by viewModels()
+    api(libs.androidx.lifecycle.viewmodel.ktx)
     api(libs.androidx.lifecycle.process)
     api(libs.androidx.exifinterface)
-    //----------------Compose相关--------------------------
-    // 核心 Compose 库（需要暴露给 app 模块）
+
+    api(libs.kotlin.stdlib)
+    api(libs.kotlinx.coroutines.core)
+    api(libs.kotlinx.coroutines.android)
+
+    // Jetpack Compose（BOM + 暴露给 app 的 UI 栈）
     api(platform(libs.androidx.compose.bom))
-    api(libs.constraintlayout.compose)
     api(libs.androidx.ui)
     api(libs.androidx.compose.foundation)
-    api(libs.androidx.material.icons.extended)
     api(libs.androidx.material3)
-    api(libs.androidx.ui.tooling.preview)
+    api(libs.androidx.material.icons.extended)
     api(libs.androidx.ui.graphics)
     api(libs.androidx.ui.tooling)
+    api(libs.androidx.ui.tooling.preview)
     api(libs.compose.animation)
     api(libs.androidx.activity.compose)
     api(libs.compose.paging)
     api(libs.compose.lifecycle.runtime)
     api(libs.compose.lifecycle.viewmodel)
-    api(libs.composeViews)
+    api(libs.constraintlayout.compose)
+    api(libs.compose.views)
+    // api(libs.androidx.photopicker.compose)
 
-    // 图片加载（Coil，app 模块也需要使用）
-    api(libs.coil)
-    api(libs.coil.compose)
-    api(libs.coil.compose.okhttp)
-    api(libs.coil3.coil.svg)
-    api(libs.lottie.compose)
+    api(libs.androidx.navigation3.runtime)
+    api(libs.androidx.navigation3.ui)
 
     api(libs.androidx.media3.exoplayer)
     api(libs.androidx.media3.exoplayer.hls)
@@ -87,46 +88,39 @@ dependencies {
     api(libs.androidx.media3.ui.compose)
     api(libs.androidx.media3.ui.compose.material3)
 
-    // 仅 common_core 内部使用的 Compose 库
-    implementation(libs.any.pop.dialog.compose)    //https://github.com/TheMelody/AnyPopDialog-Compose
-    implementation(libs.parkwoocheol.compose.webview.android) // https://github.com/parkwoocheol/compose-webview
-    implementation(libs.refresh)
-    implementation(libs.refresh.indicator)
+    api(libs.coil)
+    api(libs.coil.compose)
+    api(libs.coil.compose.okhttp)
+    api(libs.coil3.coil.svg)
+    api(libs.lottie.compose)
 
-//    api(libs.androidx.photopicker.compose)
-
-    api(libs.androidx.navigation3.runtime)
-    api(libs.androidx.navigation3.ui)
-    //----------------Kotlin相关--------------------------
-    api(libs.kotlin.stdlib)
-    api(libs.kotlinx.coroutines.core)
-    api(libs.kotlinx.coroutines.android)
-
-    //----------------网络请求相关--------------------------
+    // Retrofit / OkHttp / kotlinx-serialization
     api(libs.okhttp3.okhttp)
-    api(libs.retrofit)
     api(libs.okhttp3.logging.interceptor)
-    api(libs.logginginterceptor)
-
+    api(libs.retrofit)
     api(libs.retrofit.converter.kotlinx.serialization)
     api(libs.kotlinx.serialization.json)
-
-    //网络请求查看日志相关
+    api(libs.saf.logging.interceptor)
+    api(libs.okhttp.profiler)
     debugApi(libs.chucker)
     releaseApi(libs.chucker.no.op)
 
-    //---------------工具类的库--------------------------
-    debugApi (libs.squareup.leakcanary)
-    api (libs.interval)
-    api(libs.utilcodex){
+    // 工具（api 随 AAR 暴露；debug 专用单独列出）
+    api(libs.interval)
+    api(libs.utilcodex) {
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-android-extensions-runtime")
     }
     api(libs.progressmanager)
-    api(libs.xxPermissions)
+    api(libs.xx.permissions)
     api(libs.logger)
     api(libs.mmkv)
     api(libs.agentweb)
+    debugApi(libs.squareup.leakcanary)
 
-    api(libs.okhttp.profiler)
+    // 仅本模块内部使用，不 api 给 app
+    implementation(libs.any.pop.dialog.compose)
+    implementation(libs.parkwoocheol.compose.webview.android)
+    implementation(libs.refresh)
+    implementation(libs.refresh.indicator)
 }
 

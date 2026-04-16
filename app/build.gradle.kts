@@ -1,6 +1,3 @@
-import java.text.SimpleDateFormat
-import java.util.Date
-
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.compose.compiler)
@@ -25,27 +22,16 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         ndk {
-            abiFilters.addAll(arrayOf( "arm64-v8a"))
+            abiFilters += "arm64-v8a"
         }
     }
-    //签名配置  https://blog.csdn.net/kongqwesd12/article/details/133313123
-    // https://blog.csdn.net/jdsjlzx/article/details/136030728
-//    signingConfigs {
-//        create("release") {
-//            keyAlias = "keyAlias"
-//            keyPassword = "keyPassword"
-//            storeFile =  file("../common.jks")
-//            storePassword ="storePassword"
-//        }
-//    }
 
     buildTypes {
         release {
-//            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -59,21 +45,10 @@ android {
         buildConfig = true
     }
 
+    // 产物基名：appName + versionName（无时间戳，构建可复现）。若需自定义 APK 名，请用 AGP 9+ androidComponents + Artifacts API，勿使用 applicationVariants。
     base {
-        archivesName = "${libs.versions.appName.get()}-v${libs.versions.versionName.get()}-${SimpleDateFormat("yyyy.MMdd.HH.mm.ss").format(Date())}"
+        archivesName = "${libs.versions.appName.get()}-v${libs.versions.versionName.get()}"
     }
-
-//    android.applicationVariants.all {
-//        outputs.all {
-//            if (this is ApkVariantOutputImpl) {
-//                val config = project.android.defaultConfig
-//                val versionName = config.versionName
-//                val formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd.HH.mm")
-//                val createTime = LocalDateTime.now().format(formatter)
-//                this.outputFileName = "${libs.versions.appName.get()}_${this.name}_${versionName}_$createTime.apk"
-//            }
-//        }
-//    }
 
     packaging {
         resources {
@@ -87,4 +62,3 @@ dependencies {
     implementation(project(":common_core"))
     testImplementation(libs.junit)
 }
-

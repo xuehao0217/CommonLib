@@ -5,6 +5,5 @@ plugins {
     alias(libs.plugins.androidLibrary) apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.parcelize) apply false
-    // 应用在根工程，供 ./gradlew dependencyUpdates 使用（勿加 apply false）
-    alias(libs.plugins.ben.manes.versions)
+    alias(libs.plugins.ben.manes.versions) // 根工程：./gradlew dependencyUpdates（勿 apply false）
 }
