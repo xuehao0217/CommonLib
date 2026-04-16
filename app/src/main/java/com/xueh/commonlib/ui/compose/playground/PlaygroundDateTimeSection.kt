@@ -25,73 +25,66 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-private data class PlaygroundDateTimeUiState(
-    val showDate: Boolean = false,
-    val showTime: Boolean = false,
-    val pickedMillis: Long? = null,
-    val timeLabel: String? = null,
-)
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlaygroundDateTimeSection() {
     PlaygroundSectionTitle("DatePickerDialog / TimePickerDialog")
     PlaygroundSectionCaption("确认后可在下方看到当前选择的日期毫秒（演示用 SimpleDateFormat）。")
-    var dt by remember { mutableStateOf(PlaygroundDateTimeUiState()) }
+    var showDate by remember { mutableStateOf(false) }
+    var showTime by remember { mutableStateOf(false) }
     val dateState = rememberDatePickerState()
     val timeState = rememberTimePickerState(is24Hour = true)
+    var pickedMillis by remember { mutableStateOf<Long?>(null) }
+    var timeLabel by remember { mutableStateOf<String?>(null) }
 
     val dateFormat = remember { SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()) }
 
     Row(
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
     ) {
-        Button(onClick = { dt = dt.copy(showDate = true) }) { Text("选择日期") }
+        Button(onClick = { showDate = true }) { Text("选择日期") }
         Button(
-            onClick = { dt = dt.copy(showTime = true) },
+            onClick = { showTime = true },
             modifier = Modifier.padding(start = 8.dp),
         ) { Text("选择时间") }
     }
 
-    if (dt.showDate) {
+    if (showDate) {
         DatePickerDialog(
-            onDismissRequest = { dt = dt.copy(showDate = false) },
+            onDismissRequest = { showDate = false },
             confirmButton = {
                 TextButton(
                     onClick = {
-                        val ms = dateState.selectedDateMillis
-                        dt = dt.copy(
-                            pickedMillis = ms ?: dt.pickedMillis,
-                            showDate = false,
-                        )
+                        dateState.selectedDateMillis?.let { pickedMillis = it }
+                        showDate = false
                     },
                 ) { Text("确定") }
             },
             dismissButton = {
-                TextButton(onClick = { dt = dt.copy(showDate = false) }) { Text("取消") }
+                TextButton(onClick = { showDate = false }) { Text("取消") }
             },
         ) {
             DatePicker(state = dateState)
         }
     }
-    if (dt.showTime) {
+    if (showTime) {
         TimePickerDialog(
-            onDismissRequest = { dt = dt.copy(showTime = false) },
+            onDismissRequest = { showTime = false },
             confirmButton = {
                 TextButton(
                     onClick = {
-                        val label = String.format(
+                        timeLabel = String.format(
                             Locale.getDefault(),
                             "%02d:%02d",
                             timeState.hour,
                             timeState.minute,
                         )
-                        dt = dt.copy(timeLabel = label, showTime = false)
+                        showTime = false
                     },
                 ) { Text("确定") }
             },
             dismissButton = {
-                TextButton(onClick = { dt = dt.copy(showTime = false) }) { Text("取消") }
+                TextButton(onClick = { showTime = false }) { Text("取消") }
             },
             title = { Text("选择时间") },
             content = { TimePicker(state = timeState) },
@@ -99,14 +92,14 @@ fun PlaygroundDateTimeSection() {
     }
 
     Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)) {
-        dt.pickedMillis?.let { ms ->
+        pickedMillis?.let { ms ->
             Text(
                 text = "已选日期：${dateFormat.format(Date(ms))}（$ms）",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
-        dt.timeLabel?.let { t ->
+        timeLabel?.let { t ->
             Text(
                 text = "已选时间：$t",
                 style = MaterialTheme.typography.bodySmall,

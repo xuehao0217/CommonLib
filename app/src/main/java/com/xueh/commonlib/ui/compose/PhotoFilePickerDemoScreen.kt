@@ -48,18 +48,6 @@ import com.xueh.comm_core.widget.crop.loadBitmapPairForSquareCrop
 import java.io.File
 import kotlinx.coroutines.launch
 
-private data class PhotoFilePickerUiState(
-    val singleImageUri: Uri? = null,
-    val multiImageUris: List<Uri> = emptyList(),
-    val documentUri: Uri? = null,
-    val lastMime: String? = null,
-    val cameraUri: Uri? = null,
-    val pendingCaptureUri: Uri? = null,
-    val squareCropPair: Pair<Bitmap, Bitmap>? = null,
-    val squareCroppedBitmap: Bitmap? = null,
-    val squareCropLoading: Boolean = false,
-)
-
 /**
  * 相册与文件选择：`PickVisualMedia` / `PickMultipleVisualMedia` 走系统 Photo Picker；
  * `OpenDocument` 选通用文件；拍照使用 [ActivityResultContracts.TakePicture]；单图可选 [SquareImageCropperDialog] 方形裁剪（common_core 封装）。
@@ -68,16 +56,23 @@ private data class PhotoFilePickerUiState(
 fun PhotoFilePickerDemoScreen() {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    var ui by remember { mutableStateOf(PhotoFilePickerUiState()) }
+    var singleImageUri by remember { mutableStateOf<Uri?>(null) }
+    var multiImageUris by remember { mutableStateOf<List<Uri>>(emptyList()) }
+    var documentUri by remember { mutableStateOf<Uri?>(null) }
+    var lastMime by remember { mutableStateOf<String?>(null) }
+    var cameraUri by remember { mutableStateOf<Uri?>(null) }
+    var pendingCaptureUri by remember { mutableStateOf<Uri?>(null) }
+    var squareCropPair by remember { mutableStateOf<Pair<Bitmap, Bitmap>?>(null) }
+    var squareCroppedBitmap by remember { mutableStateOf<Bitmap?>(null) }
+    var squareCropLoading by remember { mutableStateOf(false) }
 
     val takePicture = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture(),
     ) { success ->
-        val pending = ui.pendingCaptureUri
-        ui = ui.copy(
-            cameraUri = if (success && pending != null) pending else ui.cameraUri,
-            pendingCaptureUri = null,
-        )
+        if (success) {
+            pendingCaptureUri?.let { cameraUri = it }
+        }
+        pendingCaptureUri = null
     }
     val requestCameraPermission = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
@@ -87,7 +82,7 @@ fun PhotoFilePickerDemoScreen() {
             if (out == null) {
                 ToastUtils.showShort("无法创建拍照输出 Uri")
             } else {
-                ui = ui.copy(pendingCaptureUri = out)
+                pendingCaptureUri = out
                 takePicture.launch(out)
             }
         } else {
@@ -98,23 +93,22 @@ fun PhotoFilePickerDemoScreen() {
     val pickSingleImage = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
     ) { uri ->
-        ui.squareCroppedBitmap?.recycle()
-        ui = ui.copy(squareCroppedBitmap = null, singleImageUri = uri)
+        squareCroppedBitmap?.recycle()
+        squareCroppedBitmap = null
+        singleImageUri = uri
     }
 
     val pickMultipleImages = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickMultipleVisualMedia(maxItems = 5),
     ) { uris ->
-        ui = ui.copy(multiImageUris = uris)
+        multiImageUris = uris
     }
 
     val openDocument = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument(),
     ) { uri ->
-        ui = ui.copy(
-            documentUri = uri,
-            lastMime = uri?.let { context.contentResolver.getType(it) },
-        )
+        documentUri = uri
+        lastMime = uri?.let { context.contentResolver.getType(it) }
     }
 
     fun launchCamera() {
@@ -123,7 +117,7 @@ fun PhotoFilePickerDemoScreen() {
             ToastUtils.showShort("无法创建拍照输出 Uri")
             return
         }
-        ui = ui.copy(pendingCaptureUri = out)
+        pendingCaptureUri = out
         takePicture.launch(out)
     }
 
@@ -132,19 +126,19 @@ fun PhotoFilePickerDemoScreen() {
             ToastUtils.showShort("请先选择或拍摄一张图片")
             return
         }
-        if (ui.squareCropLoading) return
+        if (squareCropLoading) return
         scope.launch {
-            ui = ui.copy(squareCropLoading = true)
+            squareCropLoading = true
             try {
                 ToastUtils.showShort("正在加载原图…")
                 val pair = loadBitmapPairForSquareCrop(context, uri)
                 if (pair == null) {
                     ToastUtils.showShort("解码失败：请换 JPEG/PNG，或检查相册权限后重试")
                 } else {
-                    ui = ui.copy(squareCropPair = pair)
+                    squareCropPair = pair
                 }
             } finally {
-                ui = ui.copy(squareCropLoading = false)
+                squareCropLoading = false
             }
         }
     }
@@ -184,7 +178,7 @@ fun PhotoFilePickerDemoScreen() {
         ) {
             Text("打开相机拍照")
         }
-        ui.cameraUri?.let { uri ->
+        cameraUri?.let { uri ->
             UriSummary(uri = uri, mime = context.contentResolver.getType(uri))
             AsyncImage(
                 model = uri,
@@ -196,11 +190,11 @@ fun PhotoFilePickerDemoScreen() {
             )
             FilledTonalButton(
                 onClick = { tryStartSquareCrop(uri) },
-                enabled = !ui.squareCropLoading,
+                enabled = !squareCropLoading,
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
-                    if (ui.squareCropLoading) {
+                    if (squareCropLoading) {
                         "加载中…"
                     } else {
                         "方形裁剪（当前拍照）"
@@ -224,7 +218,7 @@ fun PhotoFilePickerDemoScreen() {
         ) {
             Text("PickVisualMedia（仅图片）")
         }
-        ui.singleImageUri?.let { uri ->
+        singleImageUri?.let { uri ->
             UriSummary(uri = uri, mime = context.contentResolver.getType(uri))
             AsyncImage(
                 model = uri,
@@ -236,11 +230,11 @@ fun PhotoFilePickerDemoScreen() {
             )
             FilledTonalButton(
                 onClick = { tryStartSquareCrop(uri) },
-                enabled = !ui.squareCropLoading,
+                enabled = !squareCropLoading,
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
-                    if (ui.squareCropLoading) {
+                    if (squareCropLoading) {
                         "加载中…"
                     } else {
                         "方形裁剪（Compose 封装）"
@@ -248,7 +242,7 @@ fun PhotoFilePickerDemoScreen() {
                 )
             }
         }
-        ui.squareCroppedBitmap?.let { bmp ->
+        squareCroppedBitmap?.let { bmp ->
             Text(
                 "裁剪结果 ${bmp.width}×${bmp.height}",
                 style = MaterialTheme.typography.bodySmall,
@@ -280,9 +274,9 @@ fun PhotoFilePickerDemoScreen() {
         ) {
             Text("PickMultipleVisualMedia")
         }
-        if (ui.multiImageUris.isNotEmpty()) {
+        if (multiImageUris.isNotEmpty()) {
             Text(
-                "已选 ${ui.multiImageUris.size} 张",
+                "已选 ${multiImageUris.size} 张",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -291,8 +285,7 @@ fun PhotoFilePickerDemoScreen() {
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 items(
-                    items = ui.multiImageUris,
-                    // Lazy key：系统返回的 Uri 无业务 id；同一会话内 toString 可作稳定键
+                    items = multiImageUris,
                     key = { it.toString() },
                 ) { uri ->
                     AsyncImage(
@@ -323,9 +316,9 @@ fun PhotoFilePickerDemoScreen() {
         ) {
             Text("OpenDocument（图/视频/PDF/文本）")
         }
-        ui.documentUri?.let { uri ->
-            UriSummary(uri = uri, mime = ui.lastMime)
-            if (ui.lastMime?.startsWith("image/") == true) {
+        documentUri?.let { uri ->
+            UriSummary(uri = uri, mime = lastMime)
+            if (lastMime?.startsWith("image/") == true) {
                 AsyncImage(
                     model = uri,
                     contentDescription = "文档预览（图）",
@@ -340,20 +333,21 @@ fun PhotoFilePickerDemoScreen() {
         Spacer(modifier = Modifier.height(24.dp))
     }
 
-    ui.squareCropPair?.let { (src, prev) ->
+    squareCropPair?.let { (src, prev) ->
         SquareImageCropperDialog(
             sourceBitmap = src,
             previewBitmap = prev,
             onDismiss = {
                 src.recycle()
                 prev.recycle()
-                ui = ui.copy(squareCropPair = null)
+                squareCropPair = null
             },
             onCropped = { out ->
                 src.recycle()
                 prev.recycle()
-                ui.squareCroppedBitmap?.recycle()
-                ui = ui.copy(squareCropPair = null, squareCroppedBitmap = out)
+                squareCropPair = null
+                squareCroppedBitmap?.recycle()
+                squareCroppedBitmap = out
                 ToastUtils.showShort("裁剪完成 ${out.width}×${out.height}")
             },
         )

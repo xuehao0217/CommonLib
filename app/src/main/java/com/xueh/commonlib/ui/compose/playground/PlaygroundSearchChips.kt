@@ -35,12 +35,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.unit.dp
 
-private data class PlaygroundChipSectionUiState(
-    val filterTags: Set<String> = emptySet(),
-    val assistHint: String? = null,
-    val inputSelected: Boolean = false,
-)
-
 @Composable
 fun PlaygroundSearchBarSection() {
     PlaygroundSectionTitle("SearchBar + SearchBarDefaults")
@@ -50,9 +44,6 @@ fun PlaygroundSearchBarSection() {
     var query by remember { mutableStateOf("") }
     var active by remember { mutableStateOf(false) }
     val suggestions = remember { listOf("Compose", "Material3", "Navigation3", "Paging", "DataStore") }
-    val filteredSuggestions = remember(query, suggestions) {
-        suggestions.filter { it.contains(query, ignoreCase = true) }
-    }
 
     SearchBar(
         inputField = {
@@ -84,7 +75,7 @@ fun PlaygroundSearchBarSection() {
             .heightIn(max = 400.dp)
             .semantics { traversalIndex = -1f },
     ) {
-        filteredSuggestions.forEach { s ->
+        suggestions.filter { it.contains(query, ignoreCase = true) }.forEach { s ->
             ListItem(
                 headlineContent = { Text(s) },
                 modifier = Modifier
@@ -102,7 +93,7 @@ fun PlaygroundSearchBarSection() {
 fun PlaygroundChipSection() {
     PlaygroundSectionTitle("FilterChip / AssistChip / InputChip")
     PlaygroundSectionCaption("Filter 多选；Assist 可带图标；InputChip 常配合关闭或选中态。")
-    var chipUi by remember { mutableStateOf(PlaygroundChipSectionUiState()) }
+    var filterTags by remember { mutableStateOf(setOf<String>()) }
     val options = listOf("Kotlin", "Compose", "Android", "KMP")
     Row(
         modifier = Modifier
@@ -112,33 +103,28 @@ fun PlaygroundChipSection() {
     ) {
         options.forEach { tag ->
             FilterChip(
-                selected = chipUi.filterTags.contains(tag),
+                selected = filterTags.contains(tag),
                 onClick = {
-                    val tags = chipUi.filterTags
-                    chipUi = chipUi.copy(
-                        filterTags = if (tags.contains(tag)) tags - tag else tags + tag,
-                    )
+                    filterTags = if (filterTags.contains(tag)) filterTags - tag else filterTags + tag
                 },
                 label = { Text(tag) },
             )
         }
     }
     Text(
-        text = "已选：${if (chipUi.filterTags.isEmpty()) "无" else chipUi.filterTags.sorted().joinToString("，")}",
+        text = "已选：${if (filterTags.isEmpty()) "无" else filterTags.sorted().joinToString("，")}",
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
     )
+    var assistHint by remember { mutableStateOf<String?>(null) }
+    var inputSelected by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             AssistChip(
-                onClick = {
-                    chipUi = chipUi.copy(
-                        assistHint = "AssistChip：建议型操作，与 Filter 的选中语义不同。",
-                    )
-                },
+                onClick = { assistHint = "AssistChip：建议型操作，与 Filter 的选中语义不同。" },
                 label = { Text("Assist") },
                 leadingIcon = {
                     Icon(
@@ -149,12 +135,12 @@ fun PlaygroundChipSection() {
                 colors = AssistChipDefaults.assistChipColors(),
             )
             InputChip(
-                selected = chipUi.inputSelected,
-                onClick = { chipUi = chipUi.copy(inputSelected = !chipUi.inputSelected) },
+                selected = inputSelected,
+                onClick = { inputSelected = !inputSelected },
                 label = { Text("InputChip") },
             )
         }
-        chipUi.assistHint?.let { hint ->
+        assistHint?.let { hint ->
             Text(
                 text = hint,
                 style = MaterialTheme.typography.labelSmall,

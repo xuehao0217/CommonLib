@@ -40,7 +40,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -95,10 +94,9 @@ private sealed interface PagingSampleKey : NavKey {
 @Composable
 fun ComposePaging() {
     val backStack = rememberNavBackStack(PagingSampleKey.Menu)
-    // NAV: Paging 演示 Menu -> 各子页 PagingSampleKey
     NavDisplay(
         backStack = backStack,
-        onBack = dropUnlessResumed {
+        onBack = {
             if (backStack.size > 1) {
                 backStack.removeAt(backStack.lastIndex)
             }
@@ -116,30 +114,24 @@ fun ComposePaging() {
                     DemoScreenIntro(
                         text = "Paging3 与 LazyGrid / Pager / 自定义 PullToRefresh 组合示例；点击进入子页。",
                     )
-                    DemoListRow(
-                        title = "PagingWithHorizontalPager",
-                        onClick = dropUnlessResumed { backStack.add(PagingSampleKey.PagingWithHorizontalPager) },
-                    )
-                    DemoListRow(
-                        title = "PagingWithVerticalPager",
-                        onClick = dropUnlessResumed { backStack.add(PagingSampleKey.PagingWithVerticalPager) },
-                    )
-                    DemoListRow(
-                        title = "PagingWithLazyGrid",
-                        onClick = dropUnlessResumed { backStack.add(PagingSampleKey.PagingWithLazyGrid) },
-                    )
-                    DemoListRow(
-                        title = "PagingWithLazyList",
-                        onClick = dropUnlessResumed { backStack.add(PagingSampleKey.PagingWithLazyList) },
-                    )
-                    DemoListRow(
-                        title = "CustomRefresh",
-                        onClick = dropUnlessResumed { backStack.add(PagingSampleKey.CustomRefresh) },
-                    )
-                    DemoListRow(
-                        title = "RefreshPagingListSample",
-                        onClick = dropUnlessResumed { backStack.add(PagingSampleKey.RefreshPagingListSample) },
-                    )
+                    DemoListRow(title = "PagingWithHorizontalPager") {
+                        backStack.add(PagingSampleKey.PagingWithHorizontalPager)
+                    }
+                    DemoListRow(title = "PagingWithVerticalPager") {
+                        backStack.add(PagingSampleKey.PagingWithVerticalPager)
+                    }
+                    DemoListRow(title = "PagingWithLazyGrid") {
+                        backStack.add(PagingSampleKey.PagingWithLazyGrid)
+                    }
+                    DemoListRow(title = "PagingWithLazyList") {
+                        backStack.add(PagingSampleKey.PagingWithLazyList)
+                    }
+                    DemoListRow(title = "CustomRefresh") {
+                        backStack.add(PagingSampleKey.CustomRefresh)
+                    }
+                    DemoListRow(title = "RefreshPagingListSample") {
+                        backStack.add(PagingSampleKey.RefreshPagingListSample)
+                    }
                 }
             }
             entry<PagingSampleKey.PagingWithLazyList> { PagingWithLazyList() }
