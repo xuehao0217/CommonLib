@@ -132,6 +132,8 @@ private fun XxxItemCard(item: XxxItem) {
 
 组件放 `common_core/widget/`，跨模块复用的抽到 `common_core`。
 
+生成或封装可复用 Widget 时，公共参数设计与命名遵循 [compose-component-api](../compose-component-api/SKILL.md)：`modifier: Modifier = Modifier` 作为首个可选参数、优先无状态与状态提升、调用处命名参数可读、避免多个独立 Boolean（改用 sealed / enum / 单一状态类型）、暴露语义而非底层绘制细节。
+
 ### 6. Navigation 3 路由
 
 ```kotlin
@@ -172,4 +174,5 @@ data class XxxDetailRoute(val id: Int) : NavKey
 
 - 完整模板和示例 → [templates.md](templates.md)
 - 项目代码风格 → `docs/CODE_STYLE_GENERIC.md`
+- Compose 可复用组件 API 设计 → [compose-component-api](../compose-component-api/SKILL.md)
 - Cursor 项目规则 → `.cursor/rules/`
